@@ -17,21 +17,21 @@ public class Weather {
     /**
      * API Key for Weather API [Too lazy to hide it + we won't be using it regularly so won't use a .gitignore]
      */
-    String API_key = "04decf0c05e44c028f211659231302";
+    private String API_key = "04decf0c05e44c028f211659231302";
     /**
      * URL for Weather API GET request for our purposes (simple current weather request)
      */
-    String GET_URL = "http://api.weatherapi.com/v1/current.json?key=" + API_key + "&q=N6A3K7";
+    private String GET_URL = "http://api.weatherapi.com/v1/current.json?key=" + API_key + "&q=N6A3K7";
     /**
      * String to hold JSON object retrieved from constructor
      */
-    StringBuffer json = new StringBuffer();
+    private StringBuffer json = new StringBuffer();
     /**
      * Variables to hold weather data
      */
-    String temp_c;
-    String condition;
-    String conditionIcon;
+    private String temp_c;
+    private String condition;
+    private String conditionIcon;
 
     /**
      * Constructor for Weather object
