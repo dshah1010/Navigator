@@ -1,11 +1,13 @@
 package com.javan.dev;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
-
+import java.util.ArrayList;
+import org.json.JSONObject;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 
@@ -45,4 +47,39 @@ public class DataProcessor {
         User user = gson.fromJson(reader, User.class);
         return user;
     }
+
+    /**
+     * Function to parse JSON string to get the current weather at Western University
+     * @param String json, the json string to be parsed
+     * @return the current weather at Western University (temperature and condition) as a String
+     */
+    public ArrayList<String> parseWeather(StringBuffer json) {
+        /**
+         * Create JSON object with org.json library
+         */
+        String data = json.toString();
+        JSONObject obj = new JSONObject(data);
+        /**
+         * Initialize ArrayList to hold the two strings
+         */
+        ArrayList<String> weather = new ArrayList<String>();
+
+        /**
+         * Get temperature and condition
+         */
+        JSONObject current = obj.getJSONObject("current");
+        JSONObject condition = current.getJSONObject("condition");
+        Number temp = current.getNumber("temp_c");
+
+        /**
+         * Add temperature (as a string -> number in celsius) to weather ArrayList.
+         * Add condition (text) to weather ArrayList
+         * Add condition (icon) link to weather ArrayList
+         */
+        weather.add(temp.toString());
+        weather.add(condition.getString("text"));
+        weather.add(condition.getString("icon"));
+
+        return weather;
+    }  
 }
