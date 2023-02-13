@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 public class CampusMap {
     /**
-     * Declaring the username and password of the user.
+     * Declaring the name and BuildingArray of the Campus.
      */
     private String campusName;
     private ArrayList<BuildingMap> BuildingArray = new ArrayList<>;
@@ -44,7 +44,7 @@ public class CampusMap {
     }
 
     /**
-     * Getter for the PointOfInterest
+     * Getter for the BuildingMap
      * @param PointOfInterest
      * @return POI
      */

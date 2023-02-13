@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 public class FloorMap {
     /**
-     * Declaring the username and password of the user.
+     * Declaring the name, Id and Point of Interest array of the Floor.
      */
     private String floorName;
     private int floorId;

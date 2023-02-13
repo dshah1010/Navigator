@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 public class BuildingMap {
     /**
-     * Declaring the username and password of the user.
+     * Declaring the name, Id and FloorArray of the Building.
      */
     private String buildingName;
     private int buildingId;
@@ -45,7 +45,7 @@ public class BuildingMap {
     }
 
     /**
-     * Getter for the PointOfInterest
+     * Getter for the Floor
      * @param FloorId
      * @return FloorMap
      */
