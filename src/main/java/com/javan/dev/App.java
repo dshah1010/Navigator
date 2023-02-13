@@ -2,6 +2,7 @@ package com.javan.dev;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import com.google.gson.JsonIOException;
 
 /**
@@ -19,10 +20,14 @@ public class App
      * <p>
      * @param args, none of which will be necessary to run the application.
      * @return None
+     * @throws IOException
+     * @throws MalformedURLException
      */
-    public static void main( String[] args )
+    public static void main( String[] args ) throws MalformedURLException, IOException
     {
         System.out.println( "Hello World!" );
-        LoginPage login = new LoginPage();
+        // Create Weather object to get weather data from API -> this will remain for the session
+        Weather weather = new Weather();
+        weather.parseWeather();
     }
 }

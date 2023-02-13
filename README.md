@@ -18,6 +18,8 @@ User information (passwords) are encrypted for the safety of users of this appli
 ### Required Libraries / Third-Party Tools
 ---
 * **Gson** (Version 2.9.0 and newer)
+* **org.json** (Version 20220924)
+* **JUnit 5** (Version 5.9.1)
 
 <br/><br/>
 
