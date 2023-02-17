@@ -172,4 +172,5 @@ public class UserInterface extends JFrame implements ActionListener {
         frame.revalidate();
         frame.repaint();
         return mapComponent;
+    }
 }
