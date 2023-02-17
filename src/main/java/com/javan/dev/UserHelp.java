@@ -210,7 +210,6 @@ public class UserHelp extends JFrame {
          * Set the JFrame to visible
          */
         frame.setVisible(true);
-
      }
 
     /**

@@ -4,6 +4,8 @@ package com.javan.dev;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -18,24 +20,6 @@ public class LoginComponent extends JPanel implements ActionListener, FocusListe
     private boolean passwordFlag;
     private boolean confirmPassFlag;
     private JPasswordField passwordInput;
-    /**
-     * JPanel cards holding login components
-     */
-    private JPanel card1;
-    private JPanel card2;
-    private JPanel card3;
-    private JPanel card4;
-    private JPanel card5;
-    private JPanel card6;
-    /**
-     * JPanel cards holding create account components
-     */
-    private JPanel createCard1;
-    private JPanel createCard2;
-    private JPanel createCard3;
-    private JPanel createCard4;
-    private JPanel createCard5;
-    private JPanel createCard6;
     /**
      * Variables for login components
      */
@@ -73,21 +57,26 @@ public class LoginComponent extends JPanel implements ActionListener, FocusListe
          */
         loginPanel = new JPanel();
         loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.Y_AXIS));
+        /**
+        * Initialize a list of JPanel objects for cards 1-6
+        */
+        List<JPanel> cards = new ArrayList<JPanel>();
+        for (int i = 0; i < 6; i++) {
+            cards.add(new JPanel());
+        }
 
         /**
          * JLabel to hold the title of the login component. Set the font and alignment of the title.
          */
-        card1 = new JPanel();
         loginTitle = new JLabel("Campus Navigation System");
         loginTitle.setFont(new java.awt.Font("Georgia", 1, 40));
         loginTitle.setHorizontalAlignment(JLabel.CENTER);
         loginTitle.setVerticalAlignment(JLabel.TOP);
-        card1.add(loginTitle);
+        cards.get(0).add(loginTitle);
 
         /**
          * JLabel to hold the username text and JTextField to hold the username input
          */
-        card2 = new JPanel();
         usernameInput = new JTextField(30);
         usernameInput.setText("Username:");
         usernameInput.setPreferredSize(new Dimension(150, 40));
@@ -97,12 +86,11 @@ public class LoginComponent extends JPanel implements ActionListener, FocusListe
          * Action listener to username field to show default text of Username when focus is gained
          */
         usernameInput.addFocusListener(this);
-        card2.add(usernameInput);
+        cards.get(1).add(usernameInput);
 
         /**
          * JLabel to hold the password text and JPasswordField to hold the password input
          */
-        card3 = new JPanel();
         passwordInput = new JPasswordField(30);
         passwordInput.setText("Password:");
         passwordInput.setPreferredSize(new Dimension(150, 40));
@@ -114,13 +102,12 @@ public class LoginComponent extends JPanel implements ActionListener, FocusListe
         passwordInput.addFocusListener(this);
         passwordInput.setEchoChar((char) 0);
         passwordFlag = true;
-        card3.add(passwordInput);
+        cards.get(2).add(passwordInput);
 
         /**
          * JButton for the login button that will be used to login to the system, deferring to the action listener
          * where other classes will authenticate the login request
          */
-        card4 = new JPanel();
         loginButton = new JButton("Login");
         loginButton.addActionListener(this);
         /**
@@ -133,43 +120,33 @@ public class LoginComponent extends JPanel implements ActionListener, FocusListe
         loginButton.setForeground(Color.WHITE);
         loginButton.setFocusPainted(false);
         loginButton.addMouseListener(this);
-        card4.add(loginButton);
+        cards.get(3).add(loginButton);
 
         /**
          * "Forgot your password" Label that allows a user to reset their password
          */
-        card5 = new JPanel();
         forgotPassword = new JLabel("Forgot your password?");
         forgotPassword.setFont(new Font("Georgia", 1, 15));
         forgotPassword.setForeground(Color.RED);
         forgotPassword.addMouseListener(this);
-        card5.add(forgotPassword);
+        cards.get(4).add(forgotPassword);
 
         /**
          * "New User? Create Account" Label that will update the UI to switch to a create account panel
          */
-        card6 = new JPanel();
         createAccount = new JLabel("New User? Create Account");
         createAccount.setFont(new Font("Georgia", 1, 15));
         createAccount.addMouseListener(this);
-        card6.add(createAccount);
+        cards.get(5).add(createAccount);
 
         /**
-         * Adding the cards to the login panel -> ensure adequate vertical spacing
+         * Adding the cards to the login panel with a loop, adding vertical spacing between each card
          */
-        loginPanel.add(card1);
-        loginPanel.add(Box.createVerticalStrut(80));
-        loginPanel.add(card2);
-        loginPanel.add(Box.createVerticalStrut(50));
-        loginPanel.add(card3);
-        loginPanel.add(Box.createVerticalStrut(25));
-        loginPanel.add(card4);
-        loginPanel.add(Box.createVerticalStrut(15));
-        loginPanel.add(card5);
-        loginPanel.add(Box.createVerticalStrut(15));
-        loginPanel.add(card6);
-
-
+        int[] verticalSpacing = {80, 50, 25, 15, 15, 0};
+        for (int i = 0; i < cards.size(); i++) {
+            loginPanel.add(cards.get(i));
+            loginPanel.add(Box.createVerticalStrut(verticalSpacing[i]));
+        }
         /**
          * Adding the login panel to the UserInterface frame
          */
@@ -217,6 +194,14 @@ public class LoginComponent extends JPanel implements ActionListener, FocusListe
         remove(loginPanel);
 
         /**
+        * Initialize a list of JPanel objects for cards 1-6
+        */
+        List<JPanel> createAccCards = new ArrayList<JPanel>();
+        for (int i = 0; i < 6; i++) {
+            createAccCards.add(new JPanel());
+        }
+
+        /**
          * Create a new JPanel to hold the create account components
          */
         createAccountPanel = new JPanel();
@@ -225,17 +210,15 @@ public class LoginComponent extends JPanel implements ActionListener, FocusListe
         /**
          * JLabel to hold the title of the create account component. Set the font and alignment of the title.
          */
-        createCard1 = new JPanel();
         createAccountTitle = new JLabel("Create Account");
         createAccountTitle.setFont(new java.awt.Font("Georgia", 1, 40));
         createAccountTitle.setHorizontalAlignment(JLabel.CENTER);
         createAccountTitle.setVerticalAlignment(JLabel.TOP);
-        createCard1.add(createAccountTitle);
+        createAccCards.get(0).add(createAccountTitle);
 
         /**
          * JLabel to hold the username text and JTextField to hold the username input
          */
-        createCard2 = new JPanel();
         createAccountUsername = new JTextField(30);
         createAccountUsername.setText("Username:");
         createAccountUsername.setPreferredSize(new Dimension(150, 40));
@@ -245,12 +228,11 @@ public class LoginComponent extends JPanel implements ActionListener, FocusListe
          * Action listener to username field to show default text of Username when focus is gained
          */
         createAccountUsername.addFocusListener(this);
-        createCard2.add(createAccountUsername);
+        createAccCards.get(1).add(createAccountUsername);
 
         /**
          * JLabel to hold the password text and JPasswordField to hold the password input
          */
-        createCard3 = new JPanel();
         createAccountPassword = new JPasswordField(30);
         createAccountPassword.setText("Password:");
         createAccountPassword.setPreferredSize(new Dimension(150, 40));
@@ -262,12 +244,11 @@ public class LoginComponent extends JPanel implements ActionListener, FocusListe
         createAccountPassword.addFocusListener(this);
         createAccountPassword.setEchoChar((char) 0);
         passwordFlag = true;
-        createCard3.add(createAccountPassword);
+        createAccCards.get(2).add(createAccountPassword);
 
         /**
          * JLabel to hold the confirm password text and JPasswordField to hold the confirm password input
          */
-        createCard4 = new JPanel();
         createAccountConfirmPassword = new JPasswordField(30);
         createAccountConfirmPassword.setText("Confirm Password:");
         createAccountConfirmPassword.setPreferredSize(new Dimension(150, 40));
@@ -280,13 +261,12 @@ public class LoginComponent extends JPanel implements ActionListener, FocusListe
         createAccountConfirmPassword.addFocusListener(this);
         createAccountConfirmPassword.setEchoChar((char) 0);
         confirmPassFlag = true;
-        createCard4.add(createAccountConfirmPassword);
+        createAccCards.get(3).add(createAccountConfirmPassword);
 
         /**
          * JButton for the create account button that will be used to create an account, deferring to the action listener
          * where other classes will authenticate the create account request
          */
-        createCard5 = new JPanel();
         createAccountButton = new JButton("Create Account");
         createAccountButton.addActionListener(this);
         createAccountButton.setPreferredSize(new Dimension(120, 45));
@@ -296,31 +276,24 @@ public class LoginComponent extends JPanel implements ActionListener, FocusListe
         createAccountButton.setForeground(Color.WHITE);
         createAccountButton.setFocusPainted(false);
         createAccountButton.addMouseListener(this);
-        createCard5.add(createAccountButton);
+        createAccCards.get(4).add(createAccountButton);
 
         /**
          * JLabel to hold the "Already have an account? Login" text that will update the UI to switch to a login panel
          */
-        createCard6 = new JPanel();
         loginLabel = new JLabel("Already have an account? Login");
         loginLabel.setFont(new Font("Georgia", 1, 15));
         loginLabel.addMouseListener(this);
-        createCard6.add(loginLabel);
+        createAccCards.get(5).add(loginLabel);
 
         /**
-         * Adding the cards to the create account panel -> ensure adequate vertical spacing
+         * Loop to add the cards to the create account panel
          */
-        createAccountPanel.add(createCard1);
-        createAccountPanel.add(Box.createVerticalStrut(80));
-        createAccountPanel.add(createCard2);
-        createAccountPanel.add(Box.createVerticalStrut(50));
-        createAccountPanel.add(createCard3);
-        createAccountPanel.add(Box.createVerticalStrut(50));
-        createAccountPanel.add(createCard4);
-        createAccountPanel.add(Box.createVerticalStrut(15));
-        createAccountPanel.add(createCard5);
-        createAccountPanel.add(Box.createVerticalStrut(15));
-        createAccountPanel.add(createCard6);
+        int[] cardSpacing = {80, 50, 50, 15, 15, 0};
+        for (int i = 0; i < createAccCards.size(); i++) {
+            createAccountPanel.add(createAccCards.get(i));
+            createAccountPanel.add(Box.createVerticalStrut(cardSpacing[i]));
+        }
 
         /**
          * Adding the create account panel to the UserInterface frame
