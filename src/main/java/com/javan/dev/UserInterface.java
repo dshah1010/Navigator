@@ -99,7 +99,8 @@ public class UserInterface extends JFrame implements ActionListener {
          * Go to UserHelp page when help menu is clicked
          */
         if (e.getSource() == helpItem) {
-            //UserHelp helpMenu = new UserHelp();
+            UserHelp helpMenu = new UserHelp();
+            helpMenu.getFrame().setLocationRelativeTo(frame);
         }
         /**
          * Go to LoginComponent page when logout is clicked
@@ -136,13 +137,13 @@ public class UserInterface extends JFrame implements ActionListener {
          * Create a new JPanel to hold the login component, then add the LoginComponent to it
          */
         loginPanel = new JPanel();
-        LoginComponent login = new LoginComponent();
-        loginPanel.add(login);
+        loginComponent = new LoginComponent();
+        loginPanel.add(loginComponent);
 
         /**
          * Add the loginPanel to the UI
          */
         frame.add(loginPanel);
-        return login;
+        return loginComponent;
     }
 }
