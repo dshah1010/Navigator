@@ -23,6 +23,7 @@ public class UserInterface extends JFrame implements ActionListener {
     private JMenuItem exit;
     private JPanel loginPanel;
     private LoginComponent loginComponent;
+    private MapComponent mapComponent;
     
     /**
      * Constructor to create Main Frame of UI. This will be the main frame that will be used throughout the session.
@@ -146,4 +147,29 @@ public class UserInterface extends JFrame implements ActionListener {
         frame.add(loginPanel);
         return loginComponent;
     }
+
+    /**
+     * Method that opens a MapComponent to the UI, allowing the user to view maps
+     * This method will open the map component inside the same window as the main UI
+     */
+    public MapComponent openMapComponent() {
+        /**
+         * Remove the login component from the UI
+         */
+        frame.getContentPane().removeAll();
+
+        /**
+         * Create a new JPanel to hold the map component, then add the MapComponent to it
+         */
+        JPanel mapPanel = new JPanel();
+        mapComponent = new MapComponent();
+        mapPanel.add(mapComponent);
+
+        /**
+         * Add the mapPanel to the UI
+         */
+        frame.add(mapPanel);
+        frame.revalidate();
+        frame.repaint();
+        return mapComponent;
 }
