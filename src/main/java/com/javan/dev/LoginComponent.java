@@ -348,6 +348,7 @@ public class LoginComponent extends JPanel implements ActionListener, FocusListe
              * If username or password field are empty (the defaults), do nothing
              */
             if (usernameInput.getText().contains("Username:") || new String(passwordInput.getPassword()).contains("Password:")) {
+                JOptionPane.showMessageDialog(null, "Please enter a username and password");
                 return;
             }
 
@@ -388,6 +389,7 @@ public class LoginComponent extends JPanel implements ActionListener, FocusListe
              * If username, password, or confirm password field are empty (the defaults), do nothing
              */
             if (createAccountUsername.getText().contains("Username:") || new String(createAccountPassword.getPassword()).contains("Password:") || new String(createAccountConfirmPassword.getPassword()).contains("Password:")) {
+                JOptionPane.showMessageDialog(null, "Please enter a username and password");
                 return;
             }
 
