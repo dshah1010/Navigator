@@ -122,4 +122,14 @@ public class DataProcessor {
         }
         return universalPOIs;
     }
+
+    /**
+     * TODO: Method to get the POI's x and y coordinates when given the POI name
+     * @param poiName
+     * @return coords, int[] of x and y coordinates
+     */
+    public int[] getPOIPosition(String poiName) {
+        int[] coords = {100, 100};
+        return coords;
+    }
 }

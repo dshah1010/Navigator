@@ -645,7 +645,7 @@ public class POIComponent extends JPanel implements ActionListener, MouseListene
             /**
              * Pass POI name to the MapPanel to be highlighted on the map
              */
-            // TODO: mapPanel.navigateToPOI(poiName); // add navigation to POI by name (get coordinates fron DataProcessor and handle)
+            mapPanel.navigateToPOI(poiName);
         }
     }
 

@@ -180,7 +180,14 @@ public class Weather {
         JLabel label = new JLabel(new ImageIcon(newImage));
         label.setBackground(Color.WHITE);
         imageFrame.setBackground(Color.WHITE);
-        imageFrame.add(label);
+
+        /**
+         * Remove spacing around the image
+         */
+        label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+
+
+         imageFrame.add(label);
 
         /**
          * Add it all to the weatherInfoPanel

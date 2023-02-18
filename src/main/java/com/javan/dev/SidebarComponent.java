@@ -318,10 +318,11 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
         button.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
         button.setFocusPainted(false);
         button.setFont(new Font("Georgia", Font.PLAIN, 12));
-        button.setPreferredSize(new Dimension(200, 30));
-        button.setMaximumSize(new Dimension(200, 30));
-        button.setMinimumSize(new Dimension(200, 30));
+        button.setPreferredSize(new Dimension(150, 30));
+        button.setMaximumSize(new Dimension(150, 30));
+        button.setMinimumSize(new Dimension(150, 30));
         button.setSelected(true);
+
         return button;
     }
 
