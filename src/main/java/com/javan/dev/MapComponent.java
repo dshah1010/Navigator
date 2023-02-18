@@ -25,7 +25,7 @@ public class MapComponent extends JPanel implements ActionListener, MouseListene
          */
         mapPanel = new JPanel();
         mapPanel.addMouseListener(this);
-        mapPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        mapPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
         /**
          * Fill with test content

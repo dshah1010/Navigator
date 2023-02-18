@@ -214,7 +214,7 @@ public class UserInterface extends JFrame implements ActionListener {
          */
         mapComponent = new MapComponent();
         c.fill = GridBagConstraints.BOTH;
-        c.weightx = 0.75;
+        c.weightx = 0.95;
         c.weighty = 1.0;
         c.gridx = 0;
         c.gridy = 0;
@@ -225,7 +225,7 @@ public class UserInterface extends JFrame implements ActionListener {
          */
         sidebarComponent = new SidebarComponent();
         c.fill = GridBagConstraints.BOTH;
-        c.weightx = 0.25;
+        c.weightx = 0.05;
         c.weighty = 1.0;
         c.gridx = 1;
         c.gridy = 0;

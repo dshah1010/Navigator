@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.List;
+
 import org.json.JSONObject;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
@@ -81,5 +83,43 @@ public class DataProcessor {
         weather.add(condition.getString("icon"));
 
         return weather;
+    }
+
+    /**
+     * Method to return the favourite POIs of a user // TODO: TEMPORARY FOR TESTING
+     * @return List of favourite POIs
+     */
+    public static List<PointOfInterest> getFavouritePOIs() {
+        List<PointOfInterest> favouritePOIs = new ArrayList<PointOfInterest>();
+
+        // TODO: THIS IS TEMPORARY FOR TESTING
+        for (int i = 0; i < 10; i++) {
+            favouritePOIs.add(new PointOfInterest("Favourite Test"));
+        }
+        return favouritePOIs;
+    }
+
+    /**
+     * Method to return the POIs created by a user // TODO: TEMPORARY FOR RESTING
+     * @return List of user-created POIs
+     */
+    public static List<PointOfInterest> getUserPOIs() {
+        List<PointOfInterest> userPOIs = new ArrayList<PointOfInterest>();
+
+        // TODO: THIS IS TEMPORARY FOR TESTING
+        for (int i = 0; i < 10; i++) {
+            userPOIs.add(new PointOfInterest("User Test"));
+        }
+        return userPOIs;
     }  
+
+    public static List<PointOfInterest> getUniversalPOIs() {
+        List<PointOfInterest> universalPOIs = new ArrayList<PointOfInterest>();
+
+        // TODO: THIS IS TEMPORARY FOR TESTING
+        for (int i = 0; i < 40; i++) {
+            universalPOIs.add(new PointOfInterest("Universal Test"));
+        }
+        return universalPOIs;
+    }
 }

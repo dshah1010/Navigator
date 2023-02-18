@@ -1,7 +1,6 @@
 package com.javan.dev;
 
 import javax.imageio.ImageIO;
-// Import Swing Components
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -17,7 +16,7 @@ import java.util.List;
  * @version: 1.0
  * @since: 1.0
  */
-public class SidebarComponent extends JPanel implements ActionListener, MouseListener {
+public class SidebarComponent extends JPanel implements ActionListener, MouseListener, FocusListener {
     /**
      * Initialize private variables for the UI
      */
@@ -27,10 +26,15 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
     private JToggleButton weatherInfo;
     private JPanel poiLayersPanel;
     private JPanel poiListPanel;
-    private JPanel weatherInfoPanel;
     private JPanel poiLayersContentPanel;
     private JPanel poiListContentPanel;
     private JPanel weatherInfoContentPanel;
+    private JPanel weatherInfoPanel;
+    private JTextField searchText;
+    private JButton searchButton;
+    private Weather weather;
+    private JPanel searchBar;
+    private DataProcessor process;
 
     /**
      * Constructor to initialize the sidebar component
@@ -42,37 +46,33 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
          * Create a new JPanel for the map
          */
         sidebarPanel = new JPanel();
-        sidebarPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        sidebarPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        sidebarPanel.setBackground(Color.WHITE);
 
         /**
-         * Create 3 buttons that can toggle their state on and off for display
-         * 1. POI Layers
-         * 2. Points of Interest List
-         * 3. Weather Information
+         * Create a JPanel for the search bar
          */
-        poiLayers = createToggleButton("POI Layers");
+        searchBar = createSearchBar();
+
+        /**
+         * Create 2 buttons that can toggle their state on and off for display
+         * 1. POI Information
+         * 2. Weather Information
+         */
         poiList = createToggleButton("Points of Interest");
         weatherInfo = createToggleButton("Weather Information");
-        weatherInfo.setHorizontalAlignment(SwingConstants.LEFT);
 
         /**
-         * Create a JPanel for the POI Layers
-         */
-        poiLayersContentPanel = new JPanel();
-        poiLayersPanel = new JPanel();
-        poiLayersPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
-        poiLayersContentPanel.add(poiLayers);
-        poiLayersContentPanel.add(poiLayersPanel);
-        poiLayersContentPanel.setLayout(new BoxLayout(poiLayersContentPanel, BoxLayout.Y_AXIS));
-
-        /**
-         * Create a JPanel for the Points of Interest List
+         * Create a JPanel for the Points of Interest Content
          */
         poiListContentPanel = new JPanel();
-        poiListPanel = new JPanel();
+        poiListContentPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+        POIComponent poiComponent = new POIComponent();
+        poiListPanel = poiComponent.getPOIPanel();
         poiListPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
         poiListContentPanel.add(poiList);
         poiListContentPanel.add(poiListPanel);
+        poiListContentPanel.setBackground(Color.WHITE);
         poiListContentPanel.setLayout(new BoxLayout(poiListContentPanel, BoxLayout.Y_AXIS));
 
         /**
@@ -80,24 +80,28 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
          */
         weatherInfoContentPanel = new JPanel();
         weatherInfoPanel = new JPanel();
-        addWeatherInfo();
-        weatherInfoPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+        weather = new Weather();
+        weather.parseWeather();
+        weatherInfoPanel.add(weather.addWeatherInfo());
         weatherInfoPanel.setLayout(new BoxLayout(weatherInfoPanel, BoxLayout.Y_AXIS));
         weatherInfoPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 150));
         weatherInfoContentPanel.add(weatherInfo);
         weatherInfoContentPanel.add(weatherInfoPanel);
+        weatherInfoContentPanel.setBackground(Color.WHITE);
         weatherInfoContentPanel.setLayout(new BoxLayout(weatherInfoContentPanel, BoxLayout.Y_AXIS));
 
         /**
          * Add the different panels to the sidebar
          */
-        sidebarPanel.add(poiLayersContentPanel);
+        sidebarPanel.add(searchBar);
         sidebarPanel.add(poiListContentPanel);
         sidebarPanel.add(weatherInfoContentPanel);
+
         /**
          * Display the three panels on top of one another with layout manager
          */
         sidebarPanel.setLayout(new BoxLayout(sidebarPanel, BoxLayout.Y_AXIS));
+
         /**
          * Set visible
          */
@@ -106,34 +110,94 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
 
     /**
      * Getter for sidebarPanel
+     * @param None
+     * @return JPanel of the sidebar
      */
     public JPanel getSidebarPanel() {
         return sidebarPanel;
     }
 
-    public void mouseClicked(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void mousePressed(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void mouseReleased(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
-    }
-
+    /**
+     * Method to change cursor when search button is entered
+     * @param e
+     * @return None
+     */
     public void mouseEntered(MouseEvent e) {
-        // TODO Auto-generated method stub
+        /**
+         * If mouse enters the search button, change to a hold icon
+         */
+        if (e.getSource() == searchButton) {
+            searchButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        /**
+         * If the mouse hovers over either Points of Interest or Weather Information buttons, change cursor to hold and background to gray
+         */
+        if (e.getSource() == poiList || e.getSource() == weatherInfo) {
+            ((Component) e.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            ((JComponent) e.getSource()).setBackground(Color.LIGHT_GRAY);
+        }
         
     }
 
-    public void mouseExited(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
+    /**
+     * Method to create a search bar for searching within the MapComponent for different Points of Interest in the application
+     * @param None
+     * @return JPanel
+     */
+    public JPanel createSearchBar() {
+        /**
+         * JPanel to hold the entire search bar
+         */
+        JPanel searchBarPanel = new JPanel();
+        searchBarPanel.setLayout(new BoxLayout(searchBarPanel, BoxLayout.X_AXIS));
+        searchBarPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        searchBarPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30)); // Occupy entire horizontal space but limit vertical
+
+        /**
+         * Create a JTextField for the search bar
+         */
+        searchText = new JTextField();
+        searchText.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30)); // Occupy entire horizontal space but limit vertical
+        /**
+         * Style the text field
+         */
+        searchText.setFont(new Font("Georgia", Font.PLAIN, 12));
+        searchText.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        searchText.setText("Search for a Point of Interest");
+
+        /**
+         * Add listeners to the search bar text field
+         */
+        searchText.addMouseListener(this);
+        searchText.addFocusListener(this);
+
+        /**
+         * Create a JButton for the search bar
+         */
+        searchButton = new JButton();
+        ImageIcon searchIcon = new ImageIcon("data\\images\\search.png");
+        /**
+         * Limit size of search icon and then button
+         */
+        searchIcon = new ImageIcon(searchIcon.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+        searchButton.setIcon(searchIcon);
+        searchButton.setMaximumSize(new Dimension(30, 30));
+        searchButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        searchButton.setBackground(Color.WHITE);
+
+        /**
+         * Add listeners to the search button
+         */
+        searchButton.addActionListener(this);
+        searchButton.addMouseListener(this);
+
+        searchBarPanel.add(searchText);
+        searchBarPanel.add(searchButton);
+
+        /**
+         * Return the JPanel
+         */
+        return searchBarPanel;
     }
 
     /**
@@ -149,17 +213,10 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
             JToggleButton button = (JToggleButton) e.getSource();
             if (button.isSelected()) {
                 /**
-                 * Set the JToggleButton background colour and text colour
-                 */
-                button.setBackground(Color.BLACK);
-                button.setForeground(Color.WHITE);
-                /**
                  * Get the name of the button and show the JFrame associated with it
                  */
                 String buttonName = button.getText();
-                if (buttonName.equals("POI Layers")) {
-                    poiLayersPanel.setVisible(true);
-                } else if (buttonName.equals("Points of Interest")) {
+                if (buttonName.equals("Points of Interest")) {
                     poiListPanel.setVisible(true);
                 } else if (buttonName.equals("Weather Information")) {
                     weatherInfoPanel.setVisible(true);
@@ -183,6 +240,47 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
                 }
             }
         }
+        /**
+         * Button is the search button
+         */
+        else if (e.getSource() instanceof JButton) {
+            JButton button = (JButton) e.getSource();
+            /**
+             * Get the text from the search bar and then empty the search bar
+             */
+            String text = searchText.getText();
+            searchText.setText("");
+
+            /**
+             * If the text is not empty / the default text, search for the POI
+             */
+            if ((!text.equals("")) && (!text.equals("Search for a Point of Interest"))) {
+                /**
+                 * Search for the POI
+                 */
+                process = new DataProcessor();
+                // TODO: PointOfInterest poi = process.searchPOI(text); // Need to search for POI on the currently displayed map
+                /**
+                 * If the POI is not null, display it on the map
+                 */
+                Integer poi = null; // TEMPORARY
+                if (poi != null) {
+                    // mapComponent.displayPOI(poi); // need to interact with UI to display on MapComponent
+                }
+                else {
+                    /**
+                     * Display a JOptionPane to the user to inform them that the POI was not found
+                     */
+                    JOptionPane.showMessageDialog(null, "The Point of Interest you searched for was not found.", "Point of Interest Not Found", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            else {
+                /**
+                 * Inform user that the search bar is empty
+                 */
+                JOptionPane.showMessageDialog(null, "The search bar is empty. Please enter a Point of Interest to search for.", "Search Bar Empty", JOptionPane.ERROR_MESSAGE);
+            }
+        }
 
 
         
@@ -196,11 +294,15 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
      */
     public JToggleButton createToggleButton(String text) {
         JToggleButton button = new JToggleButton(text);
+        /**
+         * Add listeners to the button for interactive UI
+         */
         button.addActionListener(this);
         button.addMouseListener(this);
+        /**
+         * Add styling (border, background/foreground, font, size, etc.)
+         */
         button.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
-        button.setBackground(Color.BLACK);
-        button.setForeground(Color.WHITE);
         button.setFocusPainted(false);
         button.setFont(new Font("Georgia", Font.PLAIN, 12));
         button.setPreferredSize(new Dimension(200, 30));
@@ -211,44 +313,61 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
     }
 
     /**
-     * Method to add information to the Weather Information panel using the Weather class getTempC and getConditionIcon
-     * Reads getConditionIcon URL and convert to BufferedImage for use in UI.
-     * @throws IOException
-     * @throws MalformedURLException
+     * Method to change search bar text when it is focused on
+     * @param e
+     * @return None
      */
-    private void addWeatherInfo() throws MalformedURLException, IOException {
-        Weather weather = new Weather();
-        weather.parseWeather();
+    public void focusGained(FocusEvent e) {
         /**
-         * Get the temperature and icon link from the Weather class
+         * Set to empty string when the search bar is clicked
          */
-        String temp = weather.getTempC();
-        String iconLink = weather.getConditionIcon();
-        iconLink = "http:" + iconLink;
-
-        /**
-         * Read the URL and convert to BufferedImage
-         */
-        URL url = new URL(iconLink);
-        BufferedImage image = ImageIO.read(url);
-        Image newImage = image.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-
-        /**
-         * Add the image and temperature to the panel
-         */
-        JPanel tempFrame = new JPanel();
-        JLabel tempLabel = new JLabel(temp);
-        tempLabel.setFont(new Font("Georgia", Font.PLAIN, 35));
-        tempFrame.add(tempLabel);
-
-        JPanel imageFrame = new JPanel();
-        JLabel label = new JLabel(new ImageIcon(newImage));
-        imageFrame.add(label);
-
-        weatherInfoPanel.add(imageFrame);
-        weatherInfoPanel.add(tempFrame);
-        weatherInfoPanel.setVisible(true);
+        if (e.getSource() == searchText) {
+            ((JTextField) e.getSource()).setText("");
+        }
     }
-    
 
+    /**
+     * Method to change search bar text when it is no longer focused on
+     * @param e
+     * @return None
+     */
+    public void focusLost(FocusEvent e) {
+        /**
+         * Set to "Search for a Point of Interest" when the search bar is no longer clicked and is empty
+         */
+        if (e.getSource() == searchText) {
+            if (((JTextField) e.getSource()).getText().length() == 0) {
+                ((JTextField) e.getSource()).setText("Search for a Point of Interest");
+            }
+        }   
+    }
+
+    public void mouseExited(MouseEvent e) {
+        /**
+         * When the mouse exits from the POI or Weather button, change the background colour to white
+        */
+        if (e.getSource() instanceof JToggleButton) {
+            JToggleButton button = (JToggleButton) e.getSource();
+            button.setBackground(Color.WHITE);
+        }
+        
+    }
+
+    /**
+     * Unused method from MouseListener interface
+     */
+    public void mouseClicked(MouseEvent e) {
+    }
+
+    /**
+     * Unused method from MouseListener interface
+     */
+    public void mousePressed(MouseEvent e) {
+    }
+
+    /**
+     * Unused method from MouseListener interface
+     */
+    public void mouseReleased(MouseEvent e) {
+    }
 }

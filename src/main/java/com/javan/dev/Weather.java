@@ -8,6 +8,15 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.awt.*;
+
+
 /**
  * @author: Riley Emma Gavigan <rgavigan@uwo.ca>
  * @version: 1.0
@@ -32,6 +41,10 @@ public class Weather {
     private String temp_c;
     private String condition;
     private String conditionIcon;
+    /**
+     * Weather panel
+     */
+    private JPanel weatherInfoPanel;
 
     /**
      * Constructor for Weather object
@@ -119,5 +132,63 @@ public class Weather {
      */
     public String getConditionIcon() {
         return this.conditionIcon;
+    }
+
+    /**
+     * Getter for the weather info panel
+     * @return JPanel weather info panel for UI
+     */
+    public JPanel getWeatherInfoPanel() {
+        return this.weatherInfoPanel;
+    }
+
+    /**
+     * Method to add information to the Weather Information panel using the Weather class getTempC and getConditionIcon
+     * Reads getConditionIcon URL and convert to BufferedImage for use in UI.
+     * @throws IOException
+     * @throws MalformedURLException
+     */
+    public JPanel addWeatherInfo() throws MalformedURLException, IOException {
+        weatherInfoPanel = new JPanel();
+        Weather weather = new Weather();
+        weather.parseWeather();
+        /**
+         * Get the temperature and icon link from the Weather class
+         */
+        String temp = weather.getTempC();
+        String iconLink = weather.getConditionIcon();
+        iconLink = "http:" + iconLink;
+
+        /**
+         * Read the URL and convert to BufferedImage
+         */
+        URL url = new URL(iconLink);
+        BufferedImage image = ImageIO.read(url);
+        Image newImage = image.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+
+        /**
+         * Add the image and temperature to the panel
+         */
+        JPanel tempFrame = new JPanel();
+        JLabel tempLabel = new JLabel(temp);
+        tempLabel.setFont(new Font("Georgia", Font.PLAIN, 35));
+        tempLabel.setBackground(Color.WHITE);
+        tempFrame.setBackground(Color.WHITE);
+        tempFrame.add(tempLabel);
+
+        JPanel imageFrame = new JPanel();
+        JLabel label = new JLabel(new ImageIcon(newImage));
+        label.setBackground(Color.WHITE);
+        imageFrame.setBackground(Color.WHITE);
+        imageFrame.add(label);
+
+        /**
+         * Add it all to the weatherInfoPanel
+         */
+        weatherInfoPanel.add(imageFrame);
+        weatherInfoPanel.add(tempFrame);
+        weatherInfoPanel.setBackground(Color.WHITE);
+        weatherInfoPanel.setVisible(true);
+        return weatherInfoPanel;
     }
 }
