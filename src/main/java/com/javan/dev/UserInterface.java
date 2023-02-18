@@ -4,6 +4,8 @@ package com.javan.dev;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.net.MalformedURLException;
 
 /**
  * @author: Riley Emma Gavigan <rgavigan@uwo.ca>
@@ -24,13 +26,16 @@ public class UserInterface extends JFrame implements ActionListener {
     private JPanel loginPanel;
     private LoginComponent loginComponent;
     private MapComponent mapComponent;
+    private SidebarComponent sidebarComponent;
     
     /**
      * Constructor to create Main Frame of UI. This will be the main frame that will be used throughout the session.
      * @param None
      * @return None
+     * @throws IOException
+     * @throws MalformedURLException
      */
-    UserInterface() {
+    UserInterface() throws MalformedURLException, IOException {
         /**
          * Create JFrame Window
          */
@@ -80,14 +85,50 @@ public class UserInterface extends JFrame implements ActionListener {
         /**
          * Application initally opens with LoginComponent panel visible
          */
-        loginComponent = openLoginComponent();
+        openLoginComponent();
 
         /**
          * Set the frame as visible after adding everything to it
-         */
+        */
         frame.setJMenuBar(menuBar);
         frame.setVisible(true);
         frame.requestFocusInWindow();
+
+        /**
+         * Loop throughout program lifespan, keeping UI open with the MapComponent if its open, but if the user hits
+         * logout then go back to loginComponent and loop around again
+         */
+        while(true) {
+
+            /**
+             * If LoginComponent has user log in, then open the MapComponent
+             */
+            while (!loginComponent.getLoginStatus()) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            /**
+             * Open MapComponent once user has logged in
+             */
+            frame.getContentPane().removeAll();
+            openMapComponent();
+            frame.revalidate();
+            frame.repaint();
+
+            /**
+             * Loop until user logs out, then go back to LoginComponent
+             */
+            while (loginComponent.getLoginStatus()) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     /**
@@ -111,7 +152,7 @@ public class UserInterface extends JFrame implements ActionListener {
              * Remove any other frames in the UI, then add login component to UI
              */
             frame.getContentPane().removeAll();
-            loginComponent = openLoginComponent();
+            openLoginComponent();
             frame.revalidate();
             frame.repaint();
         }
@@ -133,7 +174,7 @@ public class UserInterface extends JFrame implements ActionListener {
      * Method that opens a LoginComponent to the UI, allowing the user to login
      * This method will open the login component inside the same window as the main UI
      */
-    public LoginComponent openLoginComponent() {
+    public void openLoginComponent() {
         /**
          * Create a new JPanel to hold the login component, then add the LoginComponent to it
          */
@@ -145,32 +186,54 @@ public class UserInterface extends JFrame implements ActionListener {
          * Add the loginPanel to the UI
          */
         frame.add(loginPanel);
-        return loginComponent;
     }
 
     /**
      * Method that opens a MapComponent to the UI, allowing the user to view maps
      * This method will open the map component inside the same window as the main UI
+     * @throws IOException
+     * @throws MalformedURLException
      */
-    public MapComponent openMapComponent() {
+    public void openMapComponent() throws MalformedURLException, IOException {
         /**
          * Remove the login component from the UI
          */
         frame.getContentPane().removeAll();
+        System.out.println("Login Successful! Opening Map...");
+
 
         /**
          * Create a new JPanel to hold the map component, then add the MapComponent to it
          */
         JPanel mapPanel = new JPanel();
+        mapPanel.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        
+        /**
+         * Have map component take up the leftmost 75% of the panel
+         */
         mapComponent = new MapComponent();
-        mapPanel.add(mapComponent);
+        c.fill = GridBagConstraints.BOTH;
+        c.weightx = 0.75;
+        c.weighty = 1.0;
+        c.gridx = 0;
+        c.gridy = 0;
+        mapPanel.add(mapComponent.getMapPanel(), c);
+
+        /**
+         * Have sidebar component take up rightmost 25% of the panel
+         */
+        sidebarComponent = new SidebarComponent();
+        c.fill = GridBagConstraints.BOTH;
+        c.weightx = 0.25;
+        c.weighty = 1.0;
+        c.gridx = 1;
+        c.gridy = 0;
+        mapPanel.add(sidebarComponent.getSidebarPanel(), c);
 
         /**
          * Add the mapPanel to the UI
          */
         frame.add(mapPanel);
-        frame.revalidate();
-        frame.repaint();
-        return mapComponent;
     }
 }

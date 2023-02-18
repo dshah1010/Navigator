@@ -14,7 +14,39 @@ public class MapComponent extends JPanel implements ActionListener, MouseListene
     /**
      * Initialize private variables for the UI
      */
+    private JPanel mapPanel;
 
+    /**
+     * Constructor to initialize the map component
+     */
+    public MapComponent() {
+        /**
+         * Create a new JPanel for the map
+         */
+        mapPanel = new JPanel();
+        mapPanel.addMouseListener(this);
+        mapPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+
+        /**
+         * Fill with test content
+         */
+        JLabel testLabel = new JLabel("Map Component"); // TEMPORARY
+        testLabel.setHorizontalAlignment(JLabel.CENTER); // TEMPORARY
+        mapPanel.add(testLabel); // TEMPORARY
+ 
+        /**
+         * Set visible
+         */
+        mapPanel.setVisible(true);
+    }
+
+    /**
+     * Getter for map panel
+     * @return mapPanel
+     */
+    public JPanel getMapPanel() {
+        return mapPanel;
+    }
 
      /**
       * Constructor to create the MapComponent within the UI
