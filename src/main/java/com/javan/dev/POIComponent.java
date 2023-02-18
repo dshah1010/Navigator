@@ -28,7 +28,7 @@ public class POIComponent extends JPanel implements ActionListener, MouseListene
     private List<JPanel> favouritePOIPanels = new ArrayList<JPanel>();
     private List<PointOfInterest> favouritePOIList;
     private List<String> favouritePOIStrings = new ArrayList<String>();
-    private MapComponent mapPanel;
+    private MapComponent mapPanel = new MapComponent();
     private List<JPanel> userPOIPanels = new ArrayList<JPanel>();
     private List<PointOfInterest> userPOIList;
     private List<String> userPOIStrings = new ArrayList<String>();
@@ -646,7 +646,7 @@ public class POIComponent extends JPanel implements ActionListener, MouseListene
             /**
              * Pass POI name to the MapPanel to be highlighted on the map
              */
-            // TODO: mapPanel.navigateToPOI(poiName); // add navigation to POI by name (get coordinates fron DataProcessor and handle)
+            mapPanel.navigateToPOI(poiName);
         }
     }
 

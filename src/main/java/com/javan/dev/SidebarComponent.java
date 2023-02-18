@@ -74,6 +74,11 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
         poiListContentPanel.add(poiListPanel);
         poiListContentPanel.setBackground(Color.WHITE);
         poiListContentPanel.setLayout(new BoxLayout(poiListContentPanel, BoxLayout.Y_AXIS));
+        /**
+         * Center elements in center of panel
+         */
+        poiListContentPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
 
         /**
          * Create a JPanel for the Weather Information
@@ -89,6 +94,10 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
         weatherInfoContentPanel.add(weatherInfoPanel);
         weatherInfoContentPanel.setBackground(Color.WHITE);
         weatherInfoContentPanel.setLayout(new BoxLayout(weatherInfoContentPanel, BoxLayout.Y_AXIS));
+        /**
+         * Center elements in center of panel
+         */
+        weatherInfoContentPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         /**
          * Add the different panels to the sidebar
@@ -305,10 +314,11 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
         button.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
         button.setFocusPainted(false);
         button.setFont(new Font("Georgia", Font.PLAIN, 12));
-        button.setPreferredSize(new Dimension(200, 30));
-        button.setMaximumSize(new Dimension(200, 30));
-        button.setMinimumSize(new Dimension(200, 30));
+        button.setPreferredSize(new Dimension(150, 30));
+        button.setMaximumSize(new Dimension(150, 30));
+        button.setMinimumSize(new Dimension(150, 30));
         button.setSelected(true);
+
         return button;
     }
 
