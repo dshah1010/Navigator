@@ -50,11 +50,6 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
         sidebarPanel.setBackground(Color.WHITE);
 
         /**
-         * Create a JPanel for the search bar
-         */
-        searchBar = createSearchBar();
-
-        /**
          * Create 2 buttons that can toggle their state on and off for display
          * 1. POI Information
          * 2. Weather Information
@@ -63,7 +58,7 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
         weatherInfo = createToggleButton("Weather Information");
 
         /**
-         * Create a JPanel for the Points of Interest Content
+         * Create a JPanel for the Search Bar, Points of Interest Content and Weather Content
          */
         poiListContentPanel = new JPanel();
         poiListContentPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
@@ -74,12 +69,7 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
         poiListContentPanel.add(poiListPanel);
         poiListContentPanel.setBackground(Color.WHITE);
         poiListContentPanel.setLayout(new BoxLayout(poiListContentPanel, BoxLayout.Y_AXIS));
-        /**
-         * Center elements in center of panel
-         */
         poiListContentPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-
         /**
          * Create a JPanel for the Weather Information
          */
@@ -94,11 +84,7 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
         weatherInfoContentPanel.add(weatherInfoPanel);
         weatherInfoContentPanel.setBackground(Color.WHITE);
         weatherInfoContentPanel.setLayout(new BoxLayout(weatherInfoContentPanel, BoxLayout.Y_AXIS));
-        /**
-         * Center elements in center of panel
-         */
         weatherInfoContentPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
         /**
          * Add the different panels to the sidebar
          */
@@ -208,6 +194,45 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
          */
         return searchBarPanel;
     }
+
+    /**
+     * Method to create POI List Panel
+     * @param None
+     * @return None
+     */
+    public void createPOIListPanel() {
+        poiListContentPanel = new JPanel();
+        poiListContentPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+        POIComponent poiComponent = new POIComponent();
+        poiListPanel = poiComponent.getPOIPanel();
+        poiListPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+        poiListContentPanel.add(poiList);
+        poiListContentPanel.add(poiListPanel);
+        poiListContentPanel.setBackground(Color.WHITE);
+        poiListContentPanel.setLayout(new BoxLayout(poiListContentPanel, BoxLayout.Y_AXIS));
+    }
+
+    /**
+     * Method to create Weather Info Panel
+     * @throws IOException
+     * @throws MalformedURLException
+     * @param None
+     * @return None
+     */
+    public void createWeatherInfoPanel() throws MalformedURLException, IOException {
+        weatherInfoContentPanel = new JPanel();
+        weatherInfoPanel = new JPanel();
+        weather = new Weather();
+        weather.parseWeather();
+        weatherInfoPanel.add(weather.addWeatherInfo());
+        weatherInfoPanel.setLayout(new BoxLayout(weatherInfoPanel, BoxLayout.Y_AXIS));
+        weatherInfoPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 150));
+        weatherInfoContentPanel.add(weatherInfo);
+        weatherInfoContentPanel.add(weatherInfoPanel);
+        weatherInfoContentPanel.setBackground(Color.WHITE);
+        weatherInfoContentPanel.setLayout(new BoxLayout(weatherInfoContentPanel, BoxLayout.Y_AXIS));
+    }
+
 
     /**
      * Method to handle the action of a button being toggled on or off
