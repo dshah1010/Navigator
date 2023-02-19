@@ -207,29 +207,29 @@ public class UserInterface extends JFrame implements ActionListener {
          */
         JPanel mapPanel = new JPanel();
         mapPanel.setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
+        GridBagConstraints gridConstraints = new GridBagConstraints();
         
         /**
          * Have map component take up the leftmost 75% of the panel
          */
         mapComponent = new MapComponent();
-        c.fill = GridBagConstraints.BOTH;
-        c.weightx = 0.95;
-        c.weighty = 1.0;
-        c.gridx = 0;
-        c.gridy = 0;
-        mapPanel.add(mapComponent.getMapPanel(), c);
+        gridConstraints.fill = GridBagConstraints.BOTH;
+        gridConstraints.weightx = 0.95;
+        gridConstraints.weighty = 1.0;
+        gridConstraints.gridx = 0;
+        gridConstraints.gridy = 0;
+        mapPanel.add(mapComponent.getMapPanel(), gridConstraints);
 
         /**
          * Have sidebar component take up rightmost 25% of the panel
          */
         sidebarComponent = new SidebarComponent();
-        c.fill = GridBagConstraints.BOTH;
-        c.weightx = 0.05;
-        c.weighty = 1.0;
-        c.gridx = 1;
-        c.gridy = 0;
-        mapPanel.add(sidebarComponent.getSidebarPanel(), c);
+        gridConstraints.fill = GridBagConstraints.BOTH;
+        gridConstraints.weightx = 0.05;
+        gridConstraints.weighty = 1.0;
+        gridConstraints.gridx = 1;
+        gridConstraints.gridy = 0;
+        mapPanel.add(sidebarComponent.getSidebarPanel(), gridConstraints);
 
         /**
          * Add the mapPanel to the UI
