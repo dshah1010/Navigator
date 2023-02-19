@@ -207,7 +207,7 @@ public class UserInterface extends JFrame implements ActionListener {
          */
         JPanel mapPanel = new JPanel();
         mapPanel.setLayout(new GridBagLayout());
-        GridBagConstraints gridConstraints = new GridBagConstraints();
+        GridBagConstraints c = new GridBagConstraints();
         
         /**
          * Have map component take up the leftmost majority
