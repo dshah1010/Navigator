@@ -40,9 +40,10 @@ public class LoginComponent extends JPanel implements ActionListener, FocusListe
     private JLabel createAccountTitle;
     private JLabel loginLabel;
     /**
-     * Boolean to check if the login window is open
+     * Boolean to check if the login window is open and a boolean to check if logged in is true
      */
     private boolean isLoginWindowOpen;
+    private boolean isLoggedIn;
 
 
     /**
@@ -52,6 +53,10 @@ public class LoginComponent extends JPanel implements ActionListener, FocusListe
      * @return None
      */
     public LoginComponent() {
+        /**
+         * Initialize logged in as false
+         */
+        isLoggedIn = false;
         /**
          * JPanel to hold the login components with BoxLayout vertically
          */
@@ -180,6 +185,13 @@ public class LoginComponent extends JPanel implements ActionListener, FocusListe
         else {
             return getCreateAccountPanel();
         }
+    }
+
+    /**
+     * Getter for login status
+     */
+    public boolean getLoginStatus() {
+        return isLoggedIn;
     }
 
     /**
@@ -342,10 +354,15 @@ public class LoginComponent extends JPanel implements ActionListener, FocusListe
             /**
              * If the login is valid (isValid != 0), then remove the login panel from the frame and add the main panel
              */
-            boolean isValid = false;
+            boolean isValid = true; // TEMPORARY
             if (isValid == true) {
-                loginPanel.setVisible(false);
-                // TODO: add(new MapComponent()); // To implement in the future
+                /**
+                 * Remove the login panel from the frame and set loggedIn to true for the rest of the program
+                 */
+                remove(loginPanel);
+                revalidate();
+                repaint();
+                isLoggedIn = true;
             }
             else {
                 /**
@@ -386,8 +403,22 @@ public class LoginComponent extends JPanel implements ActionListener, FocusListe
                  */
                 DataProcessor process = new DataProcessor();
                 // TODO: process.createAccount(username password); // To implement in the future
+                /**
+                 * Bring user to login screen
+                 */
+                createAccountPanel.setVisible(false);
+                /**
+                 * Make the loginPanel visible on the screen again
+                 */
+                loginPanel.setVisible(true);
+                add(loginPanel);
+                revalidate();
+                repaint();
+                /**
+                 * Reset password flag
+                 */
+                passwordFlag = true;
             }
-
         }
     }
 
@@ -546,6 +577,7 @@ public class LoginComponent extends JPanel implements ActionListener, FocusListe
              */
             loginPanel.setVisible(true);
             add(loginPanel);
+            isLoggedIn = false;
             revalidate();
             repaint();
             /**
