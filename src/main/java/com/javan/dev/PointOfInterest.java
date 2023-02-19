@@ -25,5 +25,14 @@ public class PointOfInterest {
     public void setName(String name) {
         this.name = name; // TODO: TEMPORARY FOR TESTING
     }
+
+    /**
+     * Getter for coordinates of the POI
+     * @return int[] of the x and y coordinates
+     */
+    public int[] getCoordinates() {
+        int[] coords = {100, 100};
+        return coords;
+    }
     
 }

@@ -22,19 +22,19 @@ public class POIComponent extends JPanel implements ActionListener, MouseListene
      * Initialize private variables for the POIComponent
      */
     private JPanel POIPanel;
-    private ArrayList<JPanel> POIPanels = new ArrayList<JPanel>(); // {POILayerPanel, FavouritePOIPanel, UserPOIPanel, OtherPOIPanel}
-    private ArrayList<JScrollPane> POIScrollPanes = new ArrayList<JScrollPane>(); // {POILayerScrollPane, FavouritePOIScrollPane, UserPOIScrollPane, OtherPOIScrollPane}
+    private List<JPanel> POIPanels = new ArrayList<JPanel>(); // {POILayerPanel, FavouritePOIPanel, UserPOIPanel, OtherPOIPanel}
+    private List<JScrollPane> POIScrollPanes = new ArrayList<JScrollPane>(); // {POILayerScrollPane, FavouritePOIScrollPane, UserPOIScrollPane, OtherPOIScrollPane}
     private JList<String> favouriteList;
-    private ArrayList<JPanel> favouritePOIPanels = new ArrayList<JPanel>();
-    private ArrayList<PointOfInterest> favouritePOIList;
-    private ArrayList<String> favouritePOIStrings = new ArrayList<String>();
-    private MapComponent mapPanel;
-    private ArrayList<JPanel> userPOIPanels = new ArrayList<JPanel>();
-    private ArrayList<PointOfInterest> userPOIList;
-    private ArrayList<String> userPOIStrings = new ArrayList<String>();
-    private ArrayList<JPanel> otherPOIPanels = new ArrayList<JPanel>();
-    private ArrayList<PointOfInterest> otherPOIList;
-    private ArrayList<String> otherPOIStrings = new ArrayList<String>();
+    private List<JPanel> favouritePOIPanels = new ArrayList<JPanel>();
+    private List<PointOfInterest> favouritePOIList;
+    private List<String> favouritePOIStrings = new ArrayList<String>();
+    private MapComponent mapPanel = new MapComponent();
+    private List<JPanel> userPOIPanels = new ArrayList<JPanel>();
+    private List<PointOfInterest> userPOIList;
+    private List<String> userPOIStrings = new ArrayList<String>();
+    private List<JPanel> otherPOIPanels = new ArrayList<JPanel>();
+    private List<PointOfInterest> otherPOIList;
+    private List<String> otherPOIStrings = new ArrayList<String>();
 
     /**
      * Constructor to create POIPanel that holds the four other panels vertically, allowing them to display their information
@@ -133,66 +133,66 @@ public class POIComponent extends JPanel implements ActionListener, MouseListene
          * Put the buttons into POIPanels.get(0), the POI Layer Panel
          */
         GridBagLayout grid = new GridBagLayout();
-        GridBagConstraints gridConstraints = new GridBagConstraints();
+        GridBagConstraints c = new GridBagConstraints();
 
         POIPanels.get(0).setLayout(grid);
         /**
          * Have the title take up 2 columns 1 row
          * Have the first four buttons take up 2 rows, 2 in each row, and the last button take up 2 columns 1 row
          */
-        gridConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridConstraints.gridx = 0;
-        gridConstraints.gridy = 0;
-        gridConstraints.gridwidth = 2;
-        gridConstraints.gridheight = 1;
-        gridConstraints.weightx = 1;
-        gridConstraints.weighty = 0.25;
-        POIPanels.get(0).add(titleLayer, gridConstraints);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 0;
+        c.gridwidth = 2;
+        c.gridheight = 1;
+        c.weightx = 1;
+        c.weighty = 0.25;
+        POIPanels.get(0).add(titleLayer, c);
 
-        gridConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridConstraints.gridx = 0;
-        gridConstraints.gridy = 1;
-        gridConstraints.gridwidth = 1;
-        gridConstraints.gridheight = 1;
-        gridConstraints.weightx = 0.5;
-        gridConstraints.weighty = 0.25;
-        POIPanels.get(0).add(accessibilityButton, gridConstraints);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 1;
+        c.gridwidth = 1;
+        c.gridheight = 1;
+        c.weightx = 0.5;
+        c.weighty = 0.25;
+        POIPanels.get(0).add(accessibilityButton, c);
 
-        gridConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridConstraints.gridx = 1;
-        gridConstraints.gridy = 1;
-        gridConstraints.gridwidth = 1;
-        gridConstraints.gridheight = 1;
-        gridConstraints.weightx = 0.5;
-        gridConstraints.weighty = 0.25;
-        POIPanels.get(0).add(restaurantsButton, gridConstraints);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 1;
+        c.gridwidth = 1;
+        c.gridheight = 1;
+        c.weightx = 0.5;
+        c.weighty = 0.25;
+        POIPanels.get(0).add(restaurantsButton, c);
 
-        gridConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridConstraints.gridx = 0;
-        gridConstraints.gridy = 2;
-        gridConstraints.gridwidth = 1;
-        gridConstraints.gridheight = 1;
-        gridConstraints.weightx = 0.5;
-        gridConstraints.weighty = 0.25;
-        POIPanels.get(0).add(classroomsButton, gridConstraints);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 2;
+        c.gridwidth = 1;
+        c.gridheight = 1;
+        c.weightx = 0.5;
+        c.weighty = 0.25;
+        POIPanels.get(0).add(classroomsButton, c);
 
-        gridConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridConstraints.gridx = 1;
-        gridConstraints.gridy = 2;
-        gridConstraints.gridwidth = 1;
-        gridConstraints.gridheight = 1;
-        gridConstraints.weightx = 0.5;
-        gridConstraints.weighty = 0.25;
-        POIPanels.get(0).add(labsButton, gridConstraints);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 2;
+        c.gridwidth = 1;
+        c.gridheight = 1;
+        c.weightx = 0.5;
+        c.weighty = 0.25;
+        POIPanels.get(0).add(labsButton, c);
 
-        gridConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridConstraints.gridx = 0;
-        gridConstraints.gridy = 3;
-        gridConstraints.gridwidth = 2;
-        gridConstraints.gridheight = 1;
-        gridConstraints.weightx = 1.0;
-        gridConstraints.weighty = 0.25;
-        POIPanels.get(0).add(userButton, gridConstraints);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 3;
+        c.gridwidth = 2;
+        c.gridheight = 1;
+        c.weightx = 1.0;
+        c.weighty = 0.25;
+        POIPanels.get(0).add(userButton, c);
 
 
 
@@ -274,8 +274,9 @@ public class POIComponent extends JPanel implements ActionListener, MouseListene
      * Method to update the favourites POI list by calling DataProcessor to get a user's favourite POIs
      */
     public void updateFavouritePOIList() {
+
         /**
-         * Get list of favourite PointOfInterest objects from DataProcessor
+         * Get list of strings of favourite POIs from DataProcessor
          */
          favouritePOIList = DataProcessor.getFavouritePOIs();
 
@@ -481,6 +482,7 @@ public class POIComponent extends JPanel implements ActionListener, MouseListene
         POILayerToggleButton.setMinimumSize(new Dimension(75, 40));
         POILayerToggleButton.setFont(new Font("Georgia", Font.PLAIN, 15));
         POILayerToggleButton.setFocusPainted(false);
+        //POILayerToggleButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         POILayerToggleButton.addActionListener(this);
         POILayerToggleButton.addMouseListener(this);
         POILayerToggleButton.setSelected(true);
@@ -645,7 +647,7 @@ public class POIComponent extends JPanel implements ActionListener, MouseListene
             /**
              * Pass POI name to the MapPanel to be highlighted on the map
              */
-            // TODO: mapPanel.navigateToPOI(poiName); // add navigation to POI by name (get coordinates fron DataProcessor and handle)
+            mapPanel.navigateToPOI(poiName);
         }
     }
 

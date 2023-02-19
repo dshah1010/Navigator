@@ -89,8 +89,8 @@ public class DataProcessor {
      * Method to return the favourite POIs of a user // TODO: TEMPORARY FOR TESTING
      * @return List of favourite POIs
      */
-    public static ArrayList<PointOfInterest> getFavouritePOIs() {
-        ArrayList<PointOfInterest> favouritePOIs = new ArrayList<PointOfInterest>();
+    public static List<PointOfInterest> getFavouritePOIs() {
+        List<PointOfInterest> favouritePOIs = new ArrayList<PointOfInterest>();
 
         // TODO: THIS IS TEMPORARY FOR TESTING
         for (int i = 0; i < 10; i++) {
@@ -103,8 +103,8 @@ public class DataProcessor {
      * Method to return the POIs created by a user // TODO: TEMPORARY FOR RESTING
      * @return List of user-created POIs
      */
-    public static ArrayList<PointOfInterest> getUserPOIs() {
-        ArrayList<PointOfInterest> userPOIs = new ArrayList<PointOfInterest>();
+    public static List<PointOfInterest> getUserPOIs() {
+        List<PointOfInterest> userPOIs = new ArrayList<PointOfInterest>();
 
         // TODO: THIS IS TEMPORARY FOR TESTING
         for (int i = 0; i < 10; i++) {
@@ -113,13 +113,59 @@ public class DataProcessor {
         return userPOIs;
     }  
 
-    public static ArrayList<PointOfInterest> getUniversalPOIs() {
-        ArrayList<PointOfInterest> universalPOIs = new ArrayList<PointOfInterest>();
+    public static List<PointOfInterest> getUniversalPOIs() {
+        List<PointOfInterest> universalPOIs = new ArrayList<PointOfInterest>();
 
         // TODO: THIS IS TEMPORARY FOR TESTING
-        for (int i = 0; i < 40; i++) {
+        for (int i = 0; i < 20; i++) {
             universalPOIs.add(new PointOfInterest("Universal Test"));
         }
         return universalPOIs;
+    }
+
+    /**
+     * TODO: Method to get the POI's x and y coordinates when given the POI name
+     * @param poiName
+     * @return coords, int[] of x and y coordinates
+     */
+    public int[] getPOIPosition(String poiName) {
+        int[] coords = {100, 100};
+        return coords;
+    }
+
+    /**
+     * TODO: Method that checks if there is a floor above the current one.
+     * @param currentMapID
+     * @return boolean indicating if there is a floor above or not
+     */
+    public boolean checkFloorUp(int currentMapID) {
+        return false;
+    }
+
+    /**
+     * TODO: Method that checks if there is a floor below the current one.
+     * @param currentMapID
+     * @return boolean indicating if there is a floor below or not
+     */
+    public boolean checkFloorDown(int currentMapID) {
+        return false;
+    }
+
+    /**
+     * TODO: Method that gets the Map of the floor above the current one
+     * @param currentMapID
+     * @return Map object of the floor above
+     */
+    public Map getFloorUp(int currentMapID) {
+        return null;
+    }
+
+    /**
+     * TODO: Method that gets the Map of the floor below the current one
+     * @param currentMapID
+     * @return Map object of the floor below
+     */
+    public Map getFloorDown(int currentMapID) {
+        return null;
     }
 }
