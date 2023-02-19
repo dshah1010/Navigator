@@ -31,7 +31,13 @@ public class PointOfInterest {
      * @return int[] of the x and y coordinates
      */
     public int[] getCoordinates() {
-        int[] coords = {100, 100};
+        /**
+         * Get 2 random integers between 0 and 1000
+         */
+        int x = (int) (Math.random() * 1000);
+        int y = (int) (Math.random() * 1000);
+
+        int[] coords = {x, y};
         return coords;
     }
 

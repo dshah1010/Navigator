@@ -215,7 +215,6 @@ public class UserInterface extends JFrame implements ActionListener {
         /**
          * Have sidebar component take up rightmost remainder of the display
          */
-        sidebarComponent = new SidebarComponent();
         gridConstraints.fill = GridBagConstraints.BOTH;
         gridConstraints.weightx = 0.10;
         gridConstraints.weighty = 1.0;

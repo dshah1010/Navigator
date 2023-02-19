@@ -49,6 +49,8 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      */
     private DataProcessor dataProcessor = DataProcessor.getInstance();
 
+    private Map campus;
+
 
     /**
      * Constructor to initialize the map component
@@ -66,18 +68,17 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          */
         buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(1, 3));
-        floorAbove = new JButton("Floor Up");
-        floorBelow = new JButton("Floor Down");
-        campusMap = new JButton("Campus Map");
-        changeButtonStyle(floorAbove);
-        changeButtonStyle(floorBelow);
-        changeButtonStyle(campusMap);
+
+        campusMap = createMapButton("Campus Map");
+        floorBelow = createMapButton("Floor Down");
+        floorAbove = createMapButton("Floor Up");
+
         buttonPanel.add(campusMap);
         buttonPanel.add(floorBelow);
         buttonPanel.add(floorAbove);
 
         /**
-         * Add scroll bars for the map panel
+         * Add scroll bars for the map panel as required
          */
         scrollPane = new JScrollPane();
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -87,7 +88,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          * Add the default campus map image to the image panel
          */
         imagePanel = new JPanel();
-        mapImg = new ImageIcon("data\\images\\campusMap.png");
+        mapImg = new ImageIcon("data\\images\\campusMap.png"); // TODO: Get Campus Map from backend and use that
         isCampusMap = true;
         currentMapID = 1; // TODO: Get Map ID from backend - whatever it is determined to be
         map = new JLabel(mapImg);
@@ -150,9 +151,41 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     }
 
     /**
-     * Function to change the style of a button
+     * Getter for isCampusMap boolean
+     * @return isCampusMap
      */
-    public void changeButtonStyle(JButton button) {
+    public boolean getIsCampusMap() {
+        return isCampusMap;
+    }
+
+    /**
+     * Getter for the current Map object
+     * @return mapObject
+     */
+    public Map getMapObject() {
+        return mapObject;
+    }
+
+    /**
+     * Setter for the Map object and Map ID, and isCampusMap status
+     * @param mapObject
+     */
+    public void setMapDetails(Map newMap) {
+        this.mapObject = newMap;
+        currentMapID = newMap.getMapID();
+        if (currentMapID != 1) {
+            isCampusMap = false;
+        }
+        else {
+            isCampusMap = true;
+        }
+    }
+
+    /**
+     * Function to create a new button and style it
+     */
+    public JButton createMapButton(String text) {
+        JButton button = new JButton(text);
         button.setBackground(Color.WHITE);
         button.setForeground(Color.BLACK);
         button.setFocusPainted(false);
@@ -160,6 +193,8 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         button.setFont(new Font("Georgia", Font.PLAIN, 17));
         button.addActionListener(this);
         button.addMouseListener(this);
+
+        return button;
     }
 
     /**
@@ -167,11 +202,11 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * @param filepath, mapID
      * @return None
      */
-    public void changeMap(String filepath, int mapID) {
+    public void changeMap(Map newMap) {
         /**
-         * Update the current map ID
+         * Set map details
          */
-        currentMapID = mapID;
+        setMapDetails(newMap);
 
         /**
          * Remove the current map image from the image panel
@@ -181,7 +216,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         /**
          * Add the new map image to the image panel
          */
-        mapImg = new ImageIcon(filepath);
+        mapImg = new ImageIcon(newMap.getFilePath());
         map = new JLabel(mapImg);
         imagePanel.add(map);
 
@@ -207,15 +242,6 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         isFloorBelow();
 
         /**
-         * Change boolean to reflect if campus map or not
-         */
-        if (mapID == 1) {
-            isCampusMap = true;
-        } else {
-            isCampusMap = false;
-        }
-
-        /**
          * Display the POIs for the map
          */
         // TODO: Fix displayPOIs();
@@ -234,6 +260,8 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          * Get the POI's coordinates
          */
         int[] coordinates = dataProcessor.getPOIPosition(poiID);
+        System.out.println(coordinates[0]);
+        System.out.println(coordinates[1]);
 
         /**
          * Navigate to the POI's coordinates
@@ -295,7 +323,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
             /**
              * Change the map
              */
-            changeMap(mapObject.getFilePath(), mapObject.getMapID());
+            changeMap(mapObject);
         }
     }
 
@@ -309,12 +337,12 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
             /**
              * Get the map of the floor below
              */
-            Map map = dataProcessor.getfloorBelow(currentMapID);
+            mapObject = dataProcessor.getfloorBelow(currentMapID);
 
             /**
              * Change the map
              */
-            changeMap(map.getFilePath(), map.getMapID());
+            changeMap(mapObject);
         }
     }
 
@@ -378,7 +406,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          * If the button text is "Campus Map", change the map to the campus map
          */
         if (buttonText.equals("Campus Map")) {
-            changeMap("data\\images\\campusMap.png", 1);
+            changeMap(campus);
         }
         /**
          * If the button text is "Floor Down", change the map to the floor below the current map
