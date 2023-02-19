@@ -8,20 +8,17 @@ import java.util.ArrayList;
  */
 public class FloorMap {
     /**
-     * Declaring the name, Id and Point of Interest array of the Floor.
+     * Declaring the Id, Point of Interest array and layers array of the Floor.
      */
-    private String floorName;
     private int floorId;
     private ArrayList<PointOfInterest> POIs = new ArrayList<>;
     // TODO: add variale to contain map of floor
 
     /**
-     * Constructor for the FloorMap class to initialize the name/ ID
-     * @param floorName
+     * Constructor for the FloorMap class to initialize the ID
      * @param floorId
      */
-    public FloorMap(String floorName, int floorId) {
-        this.floorName = floorName;
+    public FloorMap(int floorId) {
         this.floorId = floorId;
     }
 
@@ -31,7 +28,7 @@ public class FloorMap {
      * @param None
      * @return floorName
      */
-    public String getFloorName() {
+    public String getName() {
         return this.floorName;
     }
 
@@ -40,7 +37,7 @@ public class FloorMap {
      * @param None
      * @return floorId
      */
-    public int getFloorId() {
+    public int getId() {
         return this.floorId;
     }
 
