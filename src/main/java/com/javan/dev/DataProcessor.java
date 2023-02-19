@@ -124,11 +124,11 @@ public class DataProcessor {
     }
 
     /**
-     * TODO: Method to get the POI's x and y coordinates when given the POI name
-     * @param poiName
+     * TODO: Method to get the POI's x and y coordinates when given the POI ID
+     * @param poiID - the ID of the POI
      * @return coords, int[] of x and y coordinates
      */
-    public int[] getPOIPosition(String poiName) {
+    public int[] getPOIPosition(int poiID) {
         int[] coords = {100, 100};
         return coords;
     }
@@ -138,7 +138,7 @@ public class DataProcessor {
      * @param currentMapID
      * @return boolean indicating if there is a floor above or not
      */
-    public boolean checkFloorUp(int currentMapID) {
+    public boolean checkfloorAbove(int currentMapID) {
         return false;
     }
 
@@ -147,7 +147,7 @@ public class DataProcessor {
      * @param currentMapID
      * @return boolean indicating if there is a floor below or not
      */
-    public boolean checkFloorDown(int currentMapID) {
+    public boolean checkfloorBelow(int currentMapID) {
         return false;
     }
 
@@ -156,7 +156,7 @@ public class DataProcessor {
      * @param currentMapID
      * @return Map object of the floor above
      */
-    public Map getFloorUp(int currentMapID) {
+    public Map getfloorAbove(int currentMapID) {
         return null;
     }
 
@@ -165,7 +165,7 @@ public class DataProcessor {
      * @param currentMapID
      * @return Map object of the floor below
      */
-    public Map getFloorDown(int currentMapID) {
+    public Map getfloorBelow(int currentMapID) {
         return null;
     }
 }

@@ -34,5 +34,13 @@ public class PointOfInterest {
         int[] coords = {100, 100};
         return coords;
     }
+
+    /**
+     * Getter for the ID of the POI
+     * @return
+     */
+    public int getID() {
+        return 12;
+    }
     
 }

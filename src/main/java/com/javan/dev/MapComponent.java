@@ -24,8 +24,8 @@ public class MapComponent extends JPanel implements ActionListener, MouseListene
     private int currentMapID;
     private DataProcessor dataProcessor = new DataProcessor();
     private Map mapObject;
-    private JButton floorUp;
-    private JButton floorDown;
+    private JButton floorAbove;
+    private JButton floorBelow;
     private JButton campusMap;
     private JPanel buttonPanel;
     private List<PointOfInterest> pois;
@@ -48,15 +48,15 @@ public class MapComponent extends JPanel implements ActionListener, MouseListene
          */
         buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(1, 3));
-        floorUp = new JButton("Floor Up");
-        floorDown = new JButton("Floor Down");
+        floorAbove = new JButton("Floor Up");
+        floorBelow = new JButton("Floor Down");
         campusMap = new JButton("Campus Map");
-        changeButtonStyle(floorUp);
-        changeButtonStyle(floorDown);
+        changeButtonStyle(floorAbove);
+        changeButtonStyle(floorBelow);
         changeButtonStyle(campusMap);
         buttonPanel.add(campusMap);
-        buttonPanel.add(floorDown);
-        buttonPanel.add(floorUp);
+        buttonPanel.add(floorBelow);
+        buttonPanel.add(floorAbove);
 
         /**
          * Add scroll bars for the map panel
@@ -88,7 +88,7 @@ public class MapComponent extends JPanel implements ActionListener, MouseListene
          * Check for floor above/below
          */
         isFloorAbove();
-        isFloorDown();
+        isFloorBelow();
 
         /**
          * Display POIs
@@ -174,7 +174,7 @@ public class MapComponent extends JPanel implements ActionListener, MouseListene
          * Check for floor above/below
          */
         isFloorAbove();
-        isFloorDown();
+        isFloorBelow();
 
         /**
          * Display the POIs for the map
@@ -190,11 +190,11 @@ public class MapComponent extends JPanel implements ActionListener, MouseListene
     /**
      * Method to navigate to a POI's coordinates on the map when given the POI name by using DataProcessor to retrieve the POI's coordinates
      */
-    public void navigateToPOI(String name) {
+    public void navigateToPOI(int poiID) {
         /**
          * Get the POI's coordinates
          */
-        int[] coordinates = dataProcessor.getPOIPosition(name);
+        int[] coordinates = dataProcessor.getPOIPosition(poiID);
 
         /**
          * Navigate to the POI's coordinates
@@ -210,14 +210,14 @@ public class MapComponent extends JPanel implements ActionListener, MouseListene
      * @return None
      */
     private void isFloorAbove() {
-        if (dataProcessor.checkFloorUp(currentMapID)) {
+        if (dataProcessor.checkfloorAbove(currentMapID)) {
             /**
              * Enable the button "Floor Up"
              */
-            floorUp.setEnabled(true);
+            floorAbove.setEnabled(true);
 
         } else {
-            floorUp.setEnabled(false);
+            floorAbove.setEnabled(false);
         }
     }
 
@@ -228,15 +228,15 @@ public class MapComponent extends JPanel implements ActionListener, MouseListene
      * @param None
      * @return None
      */
-    private void isFloorDown() {
-        if (dataProcessor.checkFloorDown(currentMapID)) {
+    private void isFloorBelow() {
+        if (dataProcessor.checkfloorBelow(currentMapID)) {
             /**
              * Enable the button "Floor Down"
              */
-            floorDown.setEnabled(true);
+            floorBelow.setEnabled(true);
 
         } else {
-            floorDown.setEnabled(false);
+            floorBelow.setEnabled(false);
         }
     }
 
@@ -246,12 +246,12 @@ public class MapComponent extends JPanel implements ActionListener, MouseListene
      * @param None
      * @return None
      */
-    private void floorUp() {
-        if (dataProcessor.checkFloorUp(currentMapID)) {
+    private void navigateToFloorAbove() {
+        if (dataProcessor.checkfloorAbove(currentMapID)) {
             /**
              * Get the map of the floor above
              */
-            mapObject = dataProcessor.getFloorUp(currentMapID);
+            mapObject = dataProcessor.getfloorAbove(currentMapID);
 
             /**
              * Change the map
@@ -265,12 +265,12 @@ public class MapComponent extends JPanel implements ActionListener, MouseListene
      * @param None
      * @return None
      */
-    private void floorDown() {
-        if (dataProcessor.checkFloorDown(currentMapID)) {
+    private void navigateToFloorBelow() {
+        if (dataProcessor.checkfloorBelow(currentMapID)) {
             /**
              * Get the map of the floor below
              */
-            Map map = dataProcessor.getFloorDown(currentMapID);
+            Map map = dataProcessor.getfloorBelow(currentMapID);
 
             /**
              * Change the map
@@ -345,13 +345,13 @@ public class MapComponent extends JPanel implements ActionListener, MouseListene
          * If the button text is "Floor Down", change the map to the floor below the current map
          */
         else if (buttonText.equals("Floor Down")) {
-            floorDown();
+            navigateToFloorBelow();
         }
         /**
          * If the button text is "Floor Up", change the map to the floor above the current map
          */
         else if (buttonText.equals("Floor Up")) {
-            floorUp();
+            navigateToFloorAbove();
         }
     }
 

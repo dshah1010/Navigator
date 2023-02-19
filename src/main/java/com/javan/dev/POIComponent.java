@@ -231,34 +231,11 @@ public class POIComponent extends JPanel implements ActionListener, MouseListene
         updateFavouritePOIList();
         
         /**
-         * Loop through all Strings in the list and add JPanels to the Favourite POI Panel on top of one another
+         * Add the POIs to the panel
          */
-        for (String poi : favouritePOIStrings) {
-            JPanel favouritePOI = new JPanel();
-            JLabel favouritePOIName = new JLabel(poi);
-            favouritePOIName.setHorizontalAlignment(JLabel.CENTER);
-            favouritePOIName.setFont(new Font("Georgia", Font.PLAIN, 15));
-            favouritePOIName.setAlignmentX(Component.CENTER_ALIGNMENT);
-            favouritePOI.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-            favouritePOI.setBackground(Color.WHITE);
-            favouritePOI.add(favouritePOIName);
-            /**
-             * Add listeners to each name to allow for clicking on the name to open the POI
-             */
-            favouritePOI.addMouseListener(this);
-            gridDisplay.add(favouritePOI);
-        }
+        int numRows = addPOIsToPanel(gridDisplay, favouritePOIList);
 
-        /**
-         * Layout Favourite POI panel, adding two POIs per row
-         */
-        int numRows = favouritePOIStrings.size();
-        if (numRows % 2 == 1) {
-            numRows = numRows / 2 + 1;
-        }
-        else {
-            numRows = numRows / 2;
-        }
+
         GridLayout grid = new GridLayout(numRows, 2);
         gridDisplay.setLayout(grid);
         POIPanels.get(1).add(gridDisplay);
@@ -320,34 +297,11 @@ public class POIComponent extends JPanel implements ActionListener, MouseListene
         updateUserPOIList();
 
         /**
-         * Loop through all Strings in the list and add JPanels to the User POI Panel on top of one another
+         * Add the POIs to the panel
          */
-        for (String poi : userPOIStrings) {
-            JPanel userPOI = new JPanel();
-            JLabel userPOIName = new JLabel(poi);
-            userPOIName.setHorizontalAlignment(JLabel.CENTER);
-            userPOIName.setFont(new Font("Georgia", Font.PLAIN, 15));
-            userPOIName.setAlignmentX(Component.CENTER_ALIGNMENT);
-            userPOI.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-            userPOI.setBackground(Color.WHITE);
-            userPOI.add(userPOIName);
-            /**
-             * Add listeners to each name to allow for clicking on the name to open the POI
-             */
-            userPOI.addMouseListener(this);
-            gridDisplay.add(userPOI);
-        }
+        int numRows = addPOIsToPanel(gridDisplay, favouritePOIList);
 
-        /**
-         * Layout User POI panel, adding two POIs per row
-         */
-        int numRows = userPOIStrings.size();
-        if (numRows % 2 == 1) {
-            numRows = numRows / 2 + 1;
-        }
-        else {
-            numRows = numRows / 2;
-        }
+
         GridLayout grid = new GridLayout(numRows, 2);
         gridDisplay.setLayout(grid);
         POIPanels.get(2).add(gridDisplay);
@@ -403,34 +357,10 @@ public class POIComponent extends JPanel implements ActionListener, MouseListene
         updateOtherPOIList();
 
         /**
-         * Loop through all Strings in the list and add JPanels to the Other POI Panel on top of one another
+         * Add the POIs to the panel
          */
-        for (String poi : otherPOIStrings) {
-            JPanel otherPOI = new JPanel();
-            JLabel otherPOIName = new JLabel(poi);
-            otherPOIName.setHorizontalAlignment(JLabel.CENTER);
-            otherPOIName.setFont(new Font("Georgia", Font.PLAIN, 15));
-            otherPOIName.setAlignmentX(Component.CENTER_ALIGNMENT);
-            otherPOI.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-            otherPOI.setBackground(Color.WHITE);
-            otherPOI.add(otherPOIName);
-            /**
-             * Add listeners to each name to allow for clicking on the name to open the POI
-             */
-            otherPOI.addMouseListener(this);
-            gridDisplay.add(otherPOI);
-        }
+        int numRows = addPOIsToPanel(gridDisplay, favouritePOIList);
 
-        /**
-         * Layout Other POI panel, adding two POIs per row
-         */
-        int numRows = otherPOIStrings.size();
-        if (numRows % 2 == 1) {
-            numRows = numRows / 2 + 1;
-        }
-        else {
-            numRows = numRows / 2;
-        }
         GridLayout grid = new GridLayout(numRows, 2);
         gridDisplay.setLayout(grid);
         POIPanels.get(3).add(gridDisplay);
@@ -458,6 +388,52 @@ public class POIComponent extends JPanel implements ActionListener, MouseListene
         for (PointOfInterest poi : otherPOIList) {
             otherPOIStrings.add(poi.getName());
         }
+    }
+
+    /**
+     * Function to loop through list of POIs and add them to the POI panel (showing their string that is visible and POI id invisible)
+     * @param POIList
+     * @return numRows to add
+     */
+    private int addPOIsToPanel(JPanel gridDisplay, ArrayList<PointOfInterest> POIList) {
+
+        /**
+         * Loop through all POIs in the list and add JPanels to the POI Panel on top of one another
+         */
+        for (PointOfInterest poi : POIList) {
+            JPanel favouritePOI = new JPanel();
+            JLabel favouritePOIName = new JLabel(poi.getName());
+            favouritePOIName.setHorizontalAlignment(JLabel.CENTER);
+            favouritePOIName.setFont(new Font("Georgia", Font.PLAIN, 15));
+            favouritePOIName.setAlignmentX(Component.CENTER_ALIGNMENT);
+            favouritePOI.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+            favouritePOI.setBackground(Color.WHITE);
+            favouritePOI.add(favouritePOIName);
+            /**
+             * Get the ID of the POI and add it to the name as invisible text
+             */
+            JLabel favouritePOIID = new JLabel(String.valueOf((poi.getID())));
+            favouritePOIID.setVisible(false);
+            favouritePOI.add(favouritePOIID);
+            
+            /**
+             * Add listeners to each name to allow for clicking on the name to open the POI
+             */
+            favouritePOI.addMouseListener(this);
+            gridDisplay.add(favouritePOI);
+        }
+
+        /**
+         * Layout POI panel, adding two POIs per row
+         */
+        int numRows = POIList.size();
+        if (numRows % 2 == 1) {
+            numRows = numRows / 2 + 1;
+        }
+        else {
+            numRows = numRows / 2;
+        }
+        return numRows;
     }
 
     /**
@@ -639,14 +615,15 @@ public class POIComponent extends JPanel implements ActionListener, MouseListene
          */
         if (e.getSource() instanceof JPanel) {
             JPanel panel = (JPanel) e.getSource();
-            JLabel label = (JLabel) panel.getComponent(0);
+            JLabel label = (JLabel) panel.getComponent(1);
             String poiName = label.getText();
+            int poiID = Integer.parseInt(poiName);
 
-            System.out.println("Sending POI name to MapComponent: " + poiName + "");
+            System.out.println("Sending POI name to MapComponent: " + String.valueOf(poiID) + "");
             /**
              * Pass POI name to the MapPanel to be highlighted on the map
              */
-            mapPanel.navigateToPOI(poiName);
+            mapPanel.navigateToPOI(poiID);
         }
     }
 
