@@ -33,6 +33,6 @@ public class App
         // weather.parseWeather();
 
         // Create UserInterface object to create the UI -> this will remain for the session
-        UserInterface ui = new UserInterface();
+        UserInterface ui = UserInterface.getInstance();
     }
 }

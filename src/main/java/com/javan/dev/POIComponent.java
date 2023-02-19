@@ -28,7 +28,7 @@ public class POIComponent extends JPanel implements ActionListener, MouseListene
     private ArrayList<JPanel> favouritePOIPanels = new ArrayList<JPanel>();
     private ArrayList<PointOfInterest> favouritePOIList;
     private ArrayList<String> favouritePOIStrings = new ArrayList<String>();
-    private MapComponent mapPanel = new MapComponent();
+    private MapComponent mapPanel = MapComponent.getInstance();
     private ArrayList<JPanel> userPOIPanels = new ArrayList<JPanel>();
     private ArrayList<PointOfInterest> userPOIList;
     private ArrayList<String> userPOIStrings = new ArrayList<String>();

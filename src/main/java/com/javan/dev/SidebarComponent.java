@@ -37,6 +37,11 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
     private DataProcessor process;
 
     /**
+     * Private Singleton instance of the SidebarCOmponent
+     */
+    private static SidebarComponent INSTANCE;
+
+    /**
      * Constructor to initialize the sidebar component
      * @throws IOException
      * @throws MalformedURLException
@@ -69,7 +74,9 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
          */
         sidebarPanel.add(searchBar);
         sidebarPanel.add(poiListContentPanel);
-        sidebarPanel.add(weatherInfoContentPanel);
+        if (weatherInfoContentPanel != null) {
+            sidebarPanel.add(weatherInfoContentPanel);
+        }
 
         /**
          * Display the three panels on top of one another with layout manager
@@ -80,6 +87,23 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
          * Set visible
          */
         sidebarPanel.setVisible(true);
+    }
+
+    /**
+     * Getter for the instance of SidebarComponent
+     * @return SidebarComponent instance
+     */
+    public static SidebarComponent getInstance() {
+        if (INSTANCE == null) {
+            try {
+                INSTANCE = new SidebarComponent();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return INSTANCE;
     }
 
 
@@ -204,7 +228,21 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
         weatherInfoPanel = new JPanel();
         weather = new Weather();
         weather.parseWeather();
-        weatherInfoPanel.add(weather.addWeatherInfo());
+        JPanel weatherContent = weather.addWeatherInfo();
+
+        /**
+         * If there is no weather information, do not add the weather panel to the sidebar
+         */
+        if (weatherContent == null) {
+            weatherInfoContentPanel = null;
+            weatherInfoPanel = null;
+            return;
+        }
+
+        /**
+         * Add content to weather panel
+         */
+        weatherInfoPanel.add(weatherContent);
         weatherInfoPanel.setLayout(new BoxLayout(weatherInfoPanel, BoxLayout.Y_AXIS));
         weatherInfoPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 150));
         weatherInfoContentPanel.add(weatherInfo);

@@ -155,8 +155,19 @@ public class Weather {
         /**
          * Get the temperature and icon link from the Weather class
          */
-        String temp = weather.getTempC();
+        String temp = weather.getTempC() + "°C";
         String iconLink = weather.getConditionIcon();
+
+        /**
+         * If the temperature or icon are null, simply return null to not display weather information
+         */
+        if (temp == null || iconLink == null) {
+            return null;
+        }
+
+        /**
+         * Process iconLink to allow it to be read by ImageIO
+         */
         iconLink = "http:" + iconLink;
 
         /**
@@ -171,7 +182,7 @@ public class Weather {
          */
         JPanel tempFrame = new JPanel();
         JLabel tempLabel = new JLabel(temp);
-        tempLabel.setFont(new Font("Georgia", Font.PLAIN, 35));
+        tempLabel.setFont(new Font("Georgia", Font.PLAIN, 25));
         tempLabel.setBackground(Color.WHITE);
         tempFrame.setBackground(Color.WHITE);
         tempFrame.add(tempLabel);

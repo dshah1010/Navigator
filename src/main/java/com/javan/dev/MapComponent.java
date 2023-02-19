@@ -4,7 +4,6 @@ package com.javan.dev;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.awt.*;
 
 /**
@@ -12,7 +11,7 @@ import java.awt.*;
  * @version: 1.0
  * @since: 1.0
  */
-public class MapComponent extends JPanel implements ActionListener, MouseListener {
+public final class MapComponent extends JPanel implements ActionListener, MouseListener {
     /**
      * Initialize private variables for the UI
      */
@@ -28,14 +27,24 @@ public class MapComponent extends JPanel implements ActionListener, MouseListene
     private JButton floorBelow;
     private JButton campusMap;
     private JPanel buttonPanel;
-    private List<PointOfInterest> pois;
+    private ArrayList<PointOfInterest> pois;
     private ImageIcon flag = new ImageIcon("data\\images\\flag.png");
+
+    /**
+     * Singleton instance variable
+     */
+    private static MapComponent INSTANCE;
+
+    /**
+     * Boolean to hold the status of whether the map being displayed is the campus map (to relay to SidebarComponent for display)
+     */
+    private boolean isCampusMap;
 
 
     /**
      * Constructor to initialize the map component
      */
-    public MapComponent() {
+    private MapComponent() {
         /**
          * Create a new JPanel for the map
          */
@@ -70,6 +79,7 @@ public class MapComponent extends JPanel implements ActionListener, MouseListene
          */
         imagePanel = new JPanel();
         mapImg = new ImageIcon("data\\images\\campusMap.png");
+        isCampusMap = true;
         currentMapID = 1; // TODO: Get Map ID from backend - whatever it is determined to be
         map = new JLabel(mapImg);
         imagePanel.add(map);
@@ -101,6 +111,17 @@ public class MapComponent extends JPanel implements ActionListener, MouseListene
         mapPanel.setLayout(new BorderLayout());
         mapPanel.add(buttonPanel, BorderLayout.NORTH);
         mapPanel.add(scrollPane, BorderLayout.CENTER);
+    }
+    
+    /**
+     * Getter for the instance of the MapComponent
+     * @return MapComponent Instance
+     */
+    public static MapComponent getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new MapComponent();
+        }
+        return INSTANCE;
     }
 
     /**
@@ -175,6 +196,15 @@ public class MapComponent extends JPanel implements ActionListener, MouseListene
          */
         isFloorAbove();
         isFloorBelow();
+
+        /**
+         * Change boolean to reflect if campus map or not
+         */
+        if (mapID == 1) {
+            isCampusMap = true;
+        } else {
+            isCampusMap = false;
+        }
 
         /**
          * Display the POIs for the map
