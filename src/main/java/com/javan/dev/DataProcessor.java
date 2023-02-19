@@ -65,6 +65,14 @@ public final class DataProcessor {
         return user;
     }
 
+    public Map loadMap(int mapID) throws FileNotFoundException {
+        Gson gson = new Gson();
+        Reader reader = new FileReader("group1\\data\\users" + "\\" + mapID + ".json");
+        Map map = gson.fromJson(reader, Map.class);
+        return map;
+    }
+
+
     /**
      * Function to parse JSON string to get the current weather at Western University
      * @param String json, the json string to be parsed

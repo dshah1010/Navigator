@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * @version: 1.0
  * @since: 1.0
  */
-public class CampusMap {
+public class CampusMap implements Map{
     /**
      * Declaring the name and BuildingArray of the Campus.
      */
@@ -55,5 +55,11 @@ public class CampusMap {
             }
         }
         return null;
+    }
+
+    public static void main (int mapID) {
+        Map campus = new Map();
+        DataProcessor processor = DataProcessor.getInstance();
+        campus.CampusMap(processor.loadMap(mapID));
     }
 }

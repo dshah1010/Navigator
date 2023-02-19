@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * @version: 1.0
  * @since: 1.0
  */
-public class BuildingMap {
+public class BuildingMap implements Map {
     /**
      * Declaring the name, Id and FloorArray of the Building.
      */
@@ -56,5 +56,11 @@ public class BuildingMap {
             }
         }
         return null;
+    }
+    
+    public static void main (int mapID) {
+        Map buiilding = new Map();
+        DataProcessor processor = DataProcessor.getInstance();
+        building.BuildingMap(processor.loadMap(mapID));
     }
 }
