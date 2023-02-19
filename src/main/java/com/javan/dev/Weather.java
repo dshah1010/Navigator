@@ -1,5 +1,8 @@
 package com.javan.dev;
 
+/**
+ * Include necessary imports
+ */
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,10 +10,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -22,7 +23,7 @@ import java.awt.*;
  * @version: 1.0
  * @since: 1.0
  */
-public class Weather {
+public final class Weather {
     /**
      * API Key for Weather API [Too lazy to hide it + we won't be using it regularly so won't use a .gitignore]
      */
@@ -47,11 +48,21 @@ public class Weather {
     private JPanel weatherInfoPanel;
 
     /**
+     * Private variable to hold the Weather singleton instance
+     */
+    private static Weather INSTANCE;
+
+    /**
+     * DataProcessor instance to be used
+     */
+    private DataProcessor processor = DataProcessor.getInstance();
+
+    /**
      * Constructor for Weather object
      * @throws IOException
      * @throws MalformedURLException
      */
-    public Weather() throws IOException, MalformedURLException {
+    private Weather() throws IOException, MalformedURLException {
         /**
          * Turn GET request URL into a URL object
          */
@@ -89,6 +100,21 @@ public class Weather {
     }
 
     /**
+     * Getter for the singleton instance
+     * @return Weather instance
+     */
+    public static Weather getInstance() {
+        if (INSTANCE == null) {
+            try {
+                INSTANCE = new Weather();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return INSTANCE;
+    }
+
+    /**
      * Getter for the JSON object retrieved from the constructor
      * @return String json, the unprocessed JSON object
      */
@@ -100,7 +126,6 @@ public class Weather {
      * Function to use DataProcessor to parse the weather JSON object
      */
     public void parseWeather() {
-        DataProcessor processor = new DataProcessor();
         /**
          * Get the parsed data and store it in the current Weather objet
          */
@@ -166,7 +191,7 @@ public class Weather {
         }
 
         /**
-         * Process iconLink to allow it to be read by ImageIO
+         * processor iconLink to allow it to be read by ImageIO
          */
         iconLink = "http:" + iconLink;
 

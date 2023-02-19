@@ -34,7 +34,11 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
     private JButton searchButton;
     private Weather weather;
     private JPanel searchBar;
-    private DataProcessor process;
+
+    /**
+     * DataProcessor instance to be used
+     */
+    private DataProcessor processor = DataProcessor.getInstance();
 
     /**
      * Private Singleton instance of the SidebarCOmponent
@@ -226,7 +230,7 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
     public void createWeatherInfoPanel() throws MalformedURLException, IOException {
         weatherInfoContentPanel = new JPanel();
         weatherInfoPanel = new JPanel();
-        weather = new Weather();
+        weather = Weather.getInstance();
         weather.parseWeather();
         JPanel weatherContent = weather.addWeatherInfo();
 
@@ -309,8 +313,7 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
                 /**
                  * Search for the POI
                  */
-                process = new DataProcessor();
-                // TODO: PointOfInterest poi = process.searchPOI(text); // Need to search for POI on the currently displayed map
+                // TODO: PointOfInterest poi = processor.searchPOI(text); // Need to search for POI on the currently displayed map
                 /**
                  * If the POI is not null, display it on the map
                  */

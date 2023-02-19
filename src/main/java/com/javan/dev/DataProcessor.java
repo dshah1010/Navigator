@@ -17,7 +17,23 @@ import com.google.gson.JsonIOException;
  * @version: 1.0
  * @since: 1.0
  */
-public class DataProcessor {
+public final class DataProcessor {
+    /**
+     * Private variable to hold the DataProcessor singleton instance
+     */
+    private static DataProcessor INSTANCE;
+
+    /**
+     * Getter for the DataProcessor singleton instance
+     */
+    public static DataProcessor getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new DataProcessor();
+        }
+        return INSTANCE;
+    }
+
+
     /**
      * Function to store user info as a JSON object using Gson
      * @param user, the user object to be stored as a JSON string

@@ -65,10 +65,6 @@ public class UserInterface extends JFrame implements ActionListener {
          * Create the menu bar and add it to the frame
          */
         createMenuBar();
-
-        /**
-         * Application initally opens with LoginComponent panel visible
-         */
         openLoginComponent();
 
         /**
@@ -83,7 +79,6 @@ public class UserInterface extends JFrame implements ActionListener {
          * logout then go back to loginComponent and loop around again
          */
         while(true) {
-
             /**
              * If LoginComponent has user log in, then open the MapComponent
              */
@@ -108,7 +103,7 @@ public class UserInterface extends JFrame implements ActionListener {
              */
             while (loginComponent.getLoginStatus()) {
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(10);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -154,6 +149,7 @@ public class UserInterface extends JFrame implements ActionListener {
              */
             frame.getContentPane().removeAll();
             openLoginComponent();
+            loginComponent.setLoginStatus(false);
 
             frame.revalidate();
             frame.repaint();

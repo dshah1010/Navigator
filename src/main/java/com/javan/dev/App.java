@@ -28,10 +28,6 @@ public class App
         // Test print statement
         System.out.println( "Hello World!" );
 
-        // Create Weather object to get weather data from API -> this will remain for the session
-        // Weather weather = new Weather();
-        // weather.parseWeather();
-
         // Create UserInterface object to create the UI -> this will remain for the session
         UserInterface ui = UserInterface.getInstance();
     }

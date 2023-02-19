@@ -13,20 +13,22 @@ import java.awt.*;
  */
 public final class MapComponent extends JPanel implements ActionListener, MouseListener {
     /**
-     * Initialize private variables for the UI
+     * Initialize private variables for the map UI
      */
     private JPanel mapPanel;
     private ImageIcon mapImg;
     private JLabel map;
     private JPanel imagePanel;
     private JScrollPane scrollPane;
-    private int currentMapID;
-    private DataProcessor dataProcessor = new DataProcessor();
-    private Map mapObject;
+
+    /**
+     * Buttons to go on top of the map
+     */
     private JButton floorAbove;
     private JButton floorBelow;
     private JButton campusMap;
     private JPanel buttonPanel;
+
     private ArrayList<PointOfInterest> pois;
     private ImageIcon flag = new ImageIcon("data\\images\\flag.png");
 
@@ -36,9 +38,16 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     private static MapComponent INSTANCE;
 
     /**
-     * Boolean to hold the status of whether the map being displayed is the campus map (to relay to SidebarComponent for display)
+     * variables to hold the current map and whether or not it is the campus map
      */
     private boolean isCampusMap;
+    private int currentMapID;
+    private Map mapObject;
+
+    /**
+     * DataProcessor instance
+     */
+    private DataProcessor dataProcessor = DataProcessor.getInstance();
 
 
     /**

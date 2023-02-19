@@ -57,6 +57,11 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
      */
     private static LoginComponent INSTANCE;
 
+    /**
+     * Private variable to hold the instance of the data processor
+     */
+    private DataProcessor processor = DataProcessor.getInstance();
+
 
     /**
      * Constructor to create Login Component of the UI. This will be in the main frame when the application is opened,
@@ -141,6 +146,13 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
     }
 
     /**
+     * Setter for login status
+     */
+    public void setLoginStatus(boolean status) {
+        isLoggedIn = status;
+    }
+
+    /**
      * Method to open the login panel
      */
     public void openLoginPanel() {
@@ -156,6 +168,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
          * Set the login window to open
          */
         isLoginWindowOpen = true;
+        isLoggedIn = false;
     }
 
     /**
@@ -174,6 +187,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
          * Set the login window to closed
          */
         isLoginWindowOpen = false;
+        isLoggedIn = false;
     }
 
     /**
@@ -429,8 +443,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
              */
             String username = usernameInput.getText();
             String password = new String(passwordInput.getPassword());
-            DataProcessor process = new DataProcessor();
-            // TODO: boolean isValid = process.authenticateLogin(username, password); // To implement in the future
+            // TODO: boolean isValid = processor.authenticateLogin(username, password); // To implement in the future
 
             /**
              * Empty text fields
@@ -488,8 +501,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
                 /**
                  * Create a user account and JSON storage of the user account using the DataProcessor class
                  */
-                DataProcessor process = new DataProcessor();
-                // TODO: process.createAccount(username password); // To implement in the future
+                // TODO: processor.createAccount(username password); // To implement in the future
                 /**
                  * Bring user to login screen
                  */
@@ -634,8 +646,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
             /**
              * Get the password from the database and display it to the user
              */
-            DataProcessor process = new DataProcessor();
-            // TODO: String password = process.getPasswordFromUserName(username); // To implement in the future
+            // TODO: String password = processor.getPasswordFromUserName(username); // To implement in the future
             JOptionPane.showMessageDialog(null, "Your password is: " + "password"); // TODO: Update to password variable after implemented
         }
         else if (e.getSource() == createAccount) {
