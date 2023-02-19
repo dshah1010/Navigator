@@ -274,6 +274,7 @@ public class POIComponent extends JPanel implements ActionListener, MouseListene
      * Method to update the favourites POI list by calling DataProcessor to get a user's favourite POIs
      */
     public void updateFavouritePOIList() {
+
         /**
          * Get list of favourite PointOfInterest objects from DataProcessor
          */
