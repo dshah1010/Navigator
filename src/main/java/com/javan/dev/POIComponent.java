@@ -25,16 +25,16 @@ public class POIComponent extends JPanel implements ActionListener, MouseListene
     private List<JPanel> POIPanels = new ArrayList<JPanel>(); // {POILayerPanel, FavouritePOIPanel, UserPOIPanel, OtherPOIPanel}
     private List<JScrollPane> POIScrollPanes = new ArrayList<JScrollPane>(); // {POILayerScrollPane, FavouritePOIScrollPane, UserPOIScrollPane, OtherPOIScrollPane}
     private JList<String> favouriteList;
-    private ArrayList<JPanel> favouritePOIPanels = new ArrayList<JPanel>();
-    private ArrayList<PointOfInterest> favouritePOIList;
-    private ArrayList<String> favouritePOIStrings = new ArrayList<String>();
-    private MapComponent mapPanel;
-    private ArrayList<JPanel> userPOIPanels = new ArrayList<JPanel>();
-    private ArrayList<PointOfInterest> userPOIList;
-    private ArrayList<String> userPOIStrings = new ArrayList<String>();
-    private ArrayList<JPanel> otherPOIPanels = new ArrayList<JPanel>();
-    private ArrayList<PointOfInterest> otherPOIList;
-    private ArrayList<String> otherPOIStrings = new ArrayList<String>();
+    private List<JPanel> favouritePOIPanels = new ArrayList<JPanel>();
+    private List<PointOfInterest> favouritePOIList;
+    private List<String> favouritePOIStrings = new ArrayList<String>();
+    private MapComponent mapPanel = new MapComponent();
+    private List<JPanel> userPOIPanels = new ArrayList<JPanel>();
+    private List<PointOfInterest> userPOIList;
+    private List<String> userPOIStrings = new ArrayList<String>();
+    private List<JPanel> otherPOIPanels = new ArrayList<JPanel>();
+    private List<PointOfInterest> otherPOIList;
+    private List<String> otherPOIStrings = new ArrayList<String>();
 
     /**
      * Constructor to create POIPanel that holds the four other panels vertically, allowing them to display their information

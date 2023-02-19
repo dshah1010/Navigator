@@ -213,23 +213,23 @@ public class UserInterface extends JFrame implements ActionListener {
          * Have map component take up the leftmost majority
          */
         mapComponent = new MapComponent();
-        gridConstraints.fill = GridBagConstraints.BOTH;
-        gridConstraints.weightx = 0.95;
-        gridConstraints.weighty = 1.0;
-        gridConstraints.gridx = 0;
-        gridConstraints.gridy = 0;
-        mapPanel.add(mapComponent.getMapPanel(), gridConstraints);
+        c.fill = GridBagConstraints.BOTH;
+        c.weightx = 0.75;
+        c.weighty = 1.0;
+        c.gridx = 0;
+        c.gridy = 0;
+        mapPanel.add(mapComponent.getMapPanel(), c);
 
         /**
          * Have sidebar component take up rightmost remainder
          */
         sidebarComponent = new SidebarComponent();
-        gridConstraints.fill = GridBagConstraints.BOTH;
-        gridConstraints.weightx = 0.05;
-        gridConstraints.weighty = 1.0;
-        gridConstraints.gridx = 1;
-        gridConstraints.gridy = 0;
-        mapPanel.add(sidebarComponent.getSidebarPanel(), gridConstraints);
+        c.fill = GridBagConstraints.BOTH;
+        c.weightx = 0.10;
+        c.weighty = 1.0;
+        c.gridx = 1;
+        c.gridy = 0;
+        mapPanel.add(sidebarComponent.getSidebarPanel(), c);
 
         /**
          * Add the mapPanel to the UI
