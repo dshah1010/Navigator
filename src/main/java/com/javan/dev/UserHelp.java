@@ -22,17 +22,11 @@ public final class UserHelp extends JFrame {
     private JPanel search;
     private JPanel favourite;
     private JPanel browse;
-    private BoxLayout box;
     private JLabel generalTitle;
-    private BoxLayout box2;
     private JLabel loginTitle;
-    private BoxLayout box3;
     private JLabel navigateTitle;
-    private BoxLayout box4;
     private JLabel searchTitle;
-    private BoxLayout box5;
     private JLabel favouriteTitle;
-    private BoxLayout box6;
     private JLabel browseTitle;
 
     /**
@@ -126,8 +120,7 @@ public final class UserHelp extends JFrame {
         /**
          * Setting layout of general tab and title
          */
-        box = new BoxLayout(general, BoxLayout.Y_AXIS);
-        general.setLayout(box);
+        general.setLayout(new BoxLayout(general, BoxLayout.Y_AXIS));
         generalTitle = new JLabel("Welcome to the Enhanced Campus Navigation System!");
         generalTitle.setFont(new Font("Georgia", Font.BOLD, 25));
         general.add(generalTitle);
@@ -161,8 +154,7 @@ public final class UserHelp extends JFrame {
         /**
          * Setting layout of login tab and title
          */
-        box2 = new BoxLayout(login, BoxLayout.Y_AXIS);
-        login.setLayout(box2);
+        login.setLayout(new BoxLayout(login, BoxLayout.Y_AXIS));
         loginTitle = new JLabel("Logging In");
         loginTitle.setFont(new Font("Georgia", Font.BOLD, 25));
         login.add(loginTitle);
@@ -189,8 +181,7 @@ public final class UserHelp extends JFrame {
         /**
          * Setting layout of navigate tab and title
          */
-        box3 = new BoxLayout(navigate, BoxLayout.Y_AXIS);
-        navigate.setLayout(box3);
+        navigate.setLayout(new BoxLayout(navigate, BoxLayout.Y_AXIS));
         navigateTitle = new JLabel("Navigating");
         navigateTitle.setFont(new Font("Georgia", Font.BOLD, 25));
         navigate.add(navigateTitle);
@@ -220,8 +211,7 @@ public final class UserHelp extends JFrame {
         /**
          * Setting layout of search tab and title
          */
-        box4 = new BoxLayout(search, BoxLayout.Y_AXIS);
-        search.setLayout(box4);
+        search.setLayout(new BoxLayout(search, BoxLayout.Y_AXIS));
         searchTitle = new JLabel("Searching");
         searchTitle.setFont(new Font("Georgia", Font.BOLD, 25));
         search.add(searchTitle);
@@ -246,8 +236,7 @@ public final class UserHelp extends JFrame {
         /**
          * Setting layout of favourites tab and title
          */
-        box5 = new BoxLayout(favourite, BoxLayout.Y_AXIS);
-        favourite.setLayout(box5);
+        favourite.setLayout(new BoxLayout(favourite, BoxLayout.Y_AXIS));
         favouriteTitle = new JLabel("Favourites");
         favouriteTitle.setFont(new Font("Georgia", Font.BOLD, 25));
         favourite.add(favouriteTitle);
@@ -278,8 +267,7 @@ public final class UserHelp extends JFrame {
         /**
          * Setting layout of browse tab and title
          */
-        box6 = new BoxLayout(browse, BoxLayout.Y_AXIS);
-        browse.setLayout(box6);
+        browse.setLayout(new BoxLayout(browse, BoxLayout.Y_AXIS));
         browseTitle = new JLabel("Browsing Maps");
         browseTitle.setFont(new Font("Georgia", Font.BOLD, 25));
         browse.add(browseTitle);
