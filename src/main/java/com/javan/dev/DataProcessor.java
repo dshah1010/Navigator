@@ -89,8 +89,8 @@ public class DataProcessor {
      * Method to return the favourite POIs of a user // TODO: TEMPORARY FOR TESTING
      * @return List of favourite POIs
      */
-    public static List<PointOfInterest> getFavouritePOIs() {
-        List<PointOfInterest> favouritePOIs = new ArrayList<PointOfInterest>();
+    public static ArrayList<PointOfInterest> getFavouritePOIs() {
+        ArrayList<PointOfInterest> favouritePOIs = new ArrayList<PointOfInterest>();
 
         // TODO: THIS IS TEMPORARY FOR TESTING
         for (int i = 0; i < 10; i++) {
@@ -103,8 +103,8 @@ public class DataProcessor {
      * Method to return the POIs created by a user // TODO: TEMPORARY FOR RESTING
      * @return List of user-created POIs
      */
-    public static List<PointOfInterest> getUserPOIs() {
-        List<PointOfInterest> userPOIs = new ArrayList<PointOfInterest>();
+    public static ArrayList<PointOfInterest> getUserPOIs() {
+        ArrayList<PointOfInterest> userPOIs = new ArrayList<PointOfInterest>();
 
         // TODO: THIS IS TEMPORARY FOR TESTING
         for (int i = 0; i < 10; i++) {
@@ -113,8 +113,8 @@ public class DataProcessor {
         return userPOIs;
     }  
 
-    public static List<PointOfInterest> getUniversalPOIs() {
-        List<PointOfInterest> universalPOIs = new ArrayList<PointOfInterest>();
+    public static ArrayList<PointOfInterest> getUniversalPOIs() {
+        ArrayList<PointOfInterest> universalPOIs = new ArrayList<PointOfInterest>();
 
         // TODO: THIS IS TEMPORARY FOR TESTING
         for (int i = 0; i < 40; i++) {

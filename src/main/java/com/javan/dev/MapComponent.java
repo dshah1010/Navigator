@@ -93,7 +93,7 @@ public class MapComponent extends JPanel implements ActionListener, MouseListene
         /**
          * Display POIs
          */
-        displayPOIs();
+        // TODO: Fix displayPOIs();
 
         /**
          * Fill the entire display with the campus map
@@ -179,7 +179,7 @@ public class MapComponent extends JPanel implements ActionListener, MouseListene
         /**
          * Display the POIs for the map
          */
-        displayPOIs();
+        // TODO: Fix displayPOIs();
 
         /**
          * Set visible
