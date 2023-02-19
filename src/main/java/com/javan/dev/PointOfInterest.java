@@ -34,8 +34,8 @@ public class PointOfInterest {
         /**
          * Get 2 random integers between 0 and 1000
          */
-        int x = (int) (Math.random() * 1000);
-        int y = (int) (Math.random() * 1000);
+        int x = (int) (Math.random() * 2500);
+        int y = (int) (Math.random() * 2500);
 
         int[] coords = {x, y};
         return coords;
@@ -47,6 +47,11 @@ public class PointOfInterest {
      */
     public int getID() {
         return 12;
+    }
+
+    public String getDescription() {
+        String test = "This is a test description";
+        return test;
     }
     
 }

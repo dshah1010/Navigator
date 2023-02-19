@@ -88,11 +88,19 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          * Add the default campus map image to the image panel
          */
         imagePanel = new JPanel();
+        imagePanel.setLayout(null);
         mapImg = new ImageIcon("data\\images\\campusMap.png"); // TODO: Get Campus Map from backend and use that
         isCampusMap = true;
         currentMapID = 1; // TODO: Get Map ID from backend - whatever it is determined to be
         map = new JLabel(mapImg);
+        map.setLayout(null);
+        map.setBounds(0, 0, mapImg.getIconWidth(), mapImg.getIconHeight());
+        imagePanel.setPreferredSize(new Dimension(mapImg.getIconWidth(), mapImg.getIconHeight()));
         imagePanel.add(map);
+        /**
+         * Display POIs
+         */
+        displayPOIs();
 
         /**
          * Add the scroll pane to the map panel
@@ -107,13 +115,8 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         /**
          * Check for floor above/below
          */
-        isFloorAbove();
-        isFloorBelow();
-
-        /**
-         * Display POIs
-         */
-        // TODO: Fix displayPOIs();
+        // isFloorAbove(); TODO: Wait for implementation to be finished from FloorMap
+        // isFloorBelow(); TODO: Wait for implementation to be finished from FloorMap
 
         /**
          * Fill the entire display with the campus map
@@ -218,6 +221,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          */
         mapImg = new ImageIcon(newMap.getFilePath());
         map = new JLabel(mapImg);
+        map.setLayout(null);
         imagePanel.add(map);
 
         /**
@@ -238,13 +242,13 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         /**
          * Check for floor above/below
          */
-        isFloorAbove();
-        isFloorBelow();
+        // isFloorAbove(); TODO: Wait for implementation to be finished from FloorMap
+        // isFloorBelow(); TODO: Wait for implementation to be finished from FloorMap
 
         /**
          * Display the POIs for the map
          */
-        // TODO: Fix displayPOIs();
+        displayPOIs();
 
         /**
          * Set visible
@@ -277,7 +281,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * @return None
      */
     private void isFloorAbove() {
-        if (dataProcessor.checkfloorAbove(currentMapID)) {
+        if (mapObject.checkfloorAbove(currentMapID)) {
             /**
              * Enable the button "Floor Up"
              */
@@ -296,7 +300,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * @return None
      */
     private void isFloorBelow() {
-        if (dataProcessor.checkfloorBelow(currentMapID)) {
+        if (mapObject.checkfloorBelow(currentMapID)) {
             /**
              * Enable the button "Floor Down"
              */
@@ -314,11 +318,11 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * @return None
      */
     private void navigateToFloorAbove() {
-        if (dataProcessor.checkfloorAbove(currentMapID)) {
+        if (mapObject.checkfloorAbove(currentMapID)) {
             /**
              * Get the map of the floor above
              */
-            mapObject = dataProcessor.getfloorAbove(currentMapID);
+            mapObject = mapObject.getfloorAbove(currentMapID);
 
             /**
              * Change the map
@@ -333,11 +337,11 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * @return None
      */
     private void navigateToFloorBelow() {
-        if (dataProcessor.checkfloorBelow(currentMapID)) {
+        if (mapObject.checkfloorBelow(currentMapID)) {
             /**
              * Get the map of the floor below
              */
-            mapObject = dataProcessor.getfloorBelow(currentMapID);
+            mapObject = mapObject.getfloorBelow(currentMapID);
 
             /**
              * Change the map
@@ -347,23 +351,44 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     }
 
     /**
-     * Method to change mouse cursor when button hovered over
+     * Method to change mouse cursor when button hovered over and when a POI flag is hovered over
      */
     public void mouseEntered(MouseEvent e) {
+        /**
+         * Button hover
+         */
         if (e.getSource() instanceof JButton) {
             JButton button = (JButton) e.getSource();
             button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        }
+        /**
+         * POI Flag hovered over
+         */
+        else if (e.getSource() instanceof JLabel) {
+            JLabel label = (JLabel) e.getSource();
+            label.setCursor(new Cursor(Cursor.HAND_CURSOR));
         }
     }
 
     /**
      * Method to change mouse cursor back to default when button not hovered over
+     * Also changes back to default when POI flag not hovered over
      */
     public void mouseExited(MouseEvent e) {
+        /**
+         * Button hover off
+         */
         if (e.getSource() instanceof JButton) {
             JButton button = (JButton) e.getSource();
             button.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         } 
+        /**
+         * POI Flag hover off
+         */
+        else if (e.getSource() instanceof JLabel) {
+            JLabel label = (JLabel) e.getSource();
+            label.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        }
     }
 
     /**
@@ -373,7 +398,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         /**
          * Get the POIs for the current map
          */
-        pois = DataProcessor.getUniversalPOIs();
+        pois = dataProcessor.getUniversalPOIs();
 
         /**
          * Loop through the POIs and add a flag icon to the map at the POI's coordinates
@@ -385,11 +410,44 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
             int[] coordinates = poi.getCoordinates();
 
             /**
-             * Add the flag icon to the map at the POI's coordinates
+             * Add the flag icon to the map at the POI's coordinates (x and y position)
              */
-            JLabel flagLabel = new JLabel(flag);
-            flagLabel.setBounds(coordinates[0], coordinates[1], 25, 25);
-            imagePanel.add(flagLabel);
+            ImageIcon flagIcon = flag;
+            /**
+             * Get scaled version of 40x40 pixels as ImageIcon
+             */
+            Image scaledFlag = flagIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+
+            /**
+             * Create a JLabel with the scaled flag icon
+             */
+            JLabel flag = new JLabel(new ImageIcon(scaledFlag));
+
+            /**
+             * Add the ID of the POI to the flag icon as metadata
+             */
+            flag.setText(Integer.toString(poi.getID()));
+
+
+            flag.setBounds(coordinates[0], coordinates[1], 40, 40);
+            
+            /**
+             * Add a mouse listener to the flag icon to navigate to the POI when clicked
+             */
+            flag.addMouseListener(this);
+
+            /**
+             * Add the flag icon to the map
+             */
+            map.add(flag);
+
+            /**
+             * Repaint the map panel
+             */
+            mapPanel.repaint();
+            flag.setVisible(true);
+            imagePanel.setVisible(true);
+
         }
     }
 
@@ -422,9 +480,35 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         }
     }
 
+    /**
+     * Method to handle mouse clicks on a POI on the map. When a POI is clicked, opens up a small pop-up window with the POI's information
+     */
     public void mouseClicked(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
+        /**
+         * Get the label that was clicked
+         */
+        JLabel label = (JLabel) e.getSource();
+
+        /**
+         * Get the POI Id of the label
+         */
+        String id = label.getText();
+
+        /**
+         * Get the POI object from the POI Id
+         */
+        PointOfInterest poi = dataProcessor.getPOI(Integer.parseInt(id));
+
+        /**
+         * Create a new POIInfoWindow object and pass the POI object to it
+         */
+        POIInfoWindow poiInfoWindow = new POIInfoWindow(poi);
+
+        /**
+         * Display the POIInfoWindow right on top of the map
+         */
+        poiInfoWindow.getFrame().setLocationRelativeTo(mapPanel);
+        poiInfoWindow.setVisibleFrame();
     }
 
     public void mousePressed(MouseEvent e) {

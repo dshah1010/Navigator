@@ -13,5 +13,13 @@ public interface Map {
      * @return map id int
      */
     int getMapID();
+
+    boolean checkfloorAbove(int currentMapID);
+
+    boolean checkfloorBelow(int currentMapID);
+
+    Map getfloorAbove(int currentMapID);
+
+    Map getfloorBelow(int currentMapID);
     
 }

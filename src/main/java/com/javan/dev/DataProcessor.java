@@ -128,7 +128,7 @@ public final class DataProcessor {
         return userPOIs;
     }  
 
-    public static ArrayList<PointOfInterest> getUniversalPOIs() {
+    public ArrayList<PointOfInterest> getUniversalPOIs() {
         ArrayList<PointOfInterest> universalPOIs = new ArrayList<PointOfInterest>();
 
         // TODO: THIS IS TEMPORARY FOR TESTING
@@ -184,5 +184,10 @@ public final class DataProcessor {
      */
     public Map getfloorBelow(int currentMapID) {
         return null;
+    }
+
+
+    public PointOfInterest getPOI(int parseInt) {
+        return new PointOfInterest("Test");
     }
 }

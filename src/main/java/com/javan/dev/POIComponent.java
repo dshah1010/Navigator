@@ -37,6 +37,11 @@ public class POIComponent extends JPanel implements ActionListener, MouseListene
     private ArrayList<String> otherPOIStrings = new ArrayList<String>();
 
     /**
+     * DataProcessor instance
+     */
+    private DataProcessor dataProcessor = DataProcessor.getInstance();
+
+    /**
      * Constructor to create POIPanel that holds the four other panels vertically, allowing them to display their information
      */
     public POIComponent() {
@@ -375,7 +380,7 @@ public class POIComponent extends JPanel implements ActionListener, MouseListene
         /**
          * Get list of strings of other POIs from DataProcessor
          */
-         otherPOIList = DataProcessor.getUniversalPOIs();
+         otherPOIList = dataProcessor.getUniversalPOIs();
 
          /**
           * Empty out otherPOIStrings before adding updated list of other POIs
