@@ -132,4 +132,40 @@ public class DataProcessor {
         int[] coords = {100, 100};
         return coords;
     }
+
+    /**
+     * TODO: Method that checks if there is a floor above the current one.
+     * @param currentMapID
+     * @return boolean indicating if there is a floor above or not
+     */
+    public boolean checkFloorUp(int currentMapID) {
+        return false;
+    }
+
+    /**
+     * TODO: Method that checks if there is a floor below the current one.
+     * @param currentMapID
+     * @return boolean indicating if there is a floor below or not
+     */
+    public boolean checkFloorDown(int currentMapID) {
+        return false;
+    }
+
+    /**
+     * TODO: Method that gets the Map of the floor above the current one
+     * @param currentMapID
+     * @return Map object of the floor above
+     */
+    public Map getFloorUp(int currentMapID) {
+        return null;
+    }
+
+    /**
+     * TODO: Method that gets the Map of the floor below the current one
+     * @param currentMapID
+     * @return Map object of the floor below
+     */
+    public Map getFloorDown(int currentMapID) {
+        return null;
+    }
 }
