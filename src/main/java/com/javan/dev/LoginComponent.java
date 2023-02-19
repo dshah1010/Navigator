@@ -5,7 +5,6 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -13,13 +12,19 @@ import java.util.List;
  * @version: 1.0
  * @since: 1.0
  */
-public class LoginComponent extends JPanel implements ActionListener, FocusListener, MouseListener {
+public final class LoginComponent extends JPanel implements ActionListener, FocusListener, MouseListener {
     /**
      * Initialize private variables for the UI
      */
     private boolean passwordFlag;
     private boolean confirmPassFlag;
     private JPasswordField passwordInput;
+
+    /**
+     * Initialize main panel that alternates between holding login and create account panel
+     */
+    private JPanel mainPanel;
+
     /**
      * Variables for login components
      */
@@ -28,22 +33,34 @@ public class LoginComponent extends JPanel implements ActionListener, FocusListe
     private JTextField usernameInput;
     private JButton loginButton;
     private JLabel forgotPassword;
+
     /**
      * Variables for create account components
      */
-    private JLabel createAccount;
     private JPanel createAccountPanel;
+    private JLabel createAccountTitle;
+    private JLabel createAccount;
     private JTextField createAccountUsername;
     private JPasswordField createAccountPassword;
     private JPasswordField createAccountConfirmPassword;
     private JButton createAccountButton;
-    private JLabel createAccountTitle;
     private JLabel loginLabel;
+
     /**
      * Boolean to check if the login window is open and a boolean to check if logged in is true
      */
     private boolean isLoginWindowOpen;
     private boolean isLoggedIn;
+
+    /**
+     * Private variable to hold the instance of the login component
+     */
+    private static LoginComponent INSTANCE;
+
+    /**
+     * Private variable to hold the instance of the data processor
+     */
+    private DataProcessor processor = DataProcessor.getInstance();
 
 
     /**
@@ -52,110 +69,44 @@ public class LoginComponent extends JPanel implements ActionListener, FocusListe
      * @param None
      * @return None
      */
-    public LoginComponent() {
+    private LoginComponent() {
         /**
-         * Initialize logged in as false
+         * Initialize logged in set to false
          */
         isLoggedIn = false;
+
         /**
-         * JPanel to hold the login components with BoxLayout vertically
+         * Create both the login panel and create account panel
          */
-        loginPanel = new JPanel();
-        loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.Y_AXIS));
+        loginPanel();
+        createAccountPanel();
+
         /**
-        * Initialize a list of JPanel objects for cards 1-6
-        */
-        List<JPanel> cards = new ArrayList<JPanel>();
-        for (int i = 0; i < 6; i++) {
-            cards.add(new JPanel());
+         * Initialize the main panel to hold login panel
+         */
+        mainPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout());
+        mainPanel.add(loginPanel, BorderLayout.CENTER);
+
+        /**
+         * Set the login window to open by default
+         */
+        isLoginWindowOpen = true;
+    }
+
+    public static LoginComponent getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new LoginComponent();
         }
+        return INSTANCE;
+    }
 
-        /**
-         * JLabel to hold the title of the login component. Set the font and alignment of the title.
-         */
-        loginTitle = new JLabel("Campus Navigation System");
-        loginTitle.setFont(new java.awt.Font("Georgia", 1, 40));
-        loginTitle.setHorizontalAlignment(JLabel.CENTER);
-        loginTitle.setVerticalAlignment(JLabel.TOP);
-        cards.get(0).add(loginTitle);
-
-        /**
-         * JLabel to hold the username text and JTextField to hold the username input
-         */
-        usernameInput = new JTextField(30);
-        usernameInput.setText("Username:");
-        usernameInput.setPreferredSize(new Dimension(150, 40));
-        usernameInput.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        usernameInput.setFont(new Font("Georgia", 1, 15));
-        /**
-         * Action listener to username field to show default text of Username when focus is gained
-         */
-        usernameInput.addFocusListener(this);
-        cards.get(1).add(usernameInput);
-
-        /**
-         * JLabel to hold the password text and JPasswordField to hold the password input
-         */
-        passwordInput = new JPasswordField(30);
-        passwordInput.setText("Password:");
-        passwordInput.setPreferredSize(new Dimension(150, 40));
-        passwordInput.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        passwordInput.setFont(new Font("Georgia", 1, 15));
-        /**
-         * Add action listener to password field to show default text of Password when focus is gained
-         */
-        passwordInput.addFocusListener(this);
-        passwordInput.setEchoChar((char) 0);
-        passwordFlag = true;
-        cards.get(2).add(passwordInput);
-
-        /**
-         * JButton for the login button that will be used to login to the system, deferring to the action listener
-         * where other classes will authenticate the login request
-         */
-        loginButton = new JButton("Login");
-        loginButton.addActionListener(this);
-        /**
-         * Customize the login button
-         */
-        loginButton.setPreferredSize(new Dimension(120, 45));
-        loginButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        loginButton.setFont(new Font("Georgia", 1, 15));
-        loginButton.setBackground(Color.BLACK);
-        loginButton.setForeground(Color.WHITE);
-        loginButton.setFocusPainted(false);
-        loginButton.addMouseListener(this);
-        cards.get(3).add(loginButton);
-
-        /**
-         * "Forgot your password" Label that allows a user to reset their password
-         */
-        forgotPassword = new JLabel("Forgot your password?");
-        forgotPassword.setFont(new Font("Georgia", 1, 15));
-        forgotPassword.setForeground(Color.RED);
-        forgotPassword.addMouseListener(this);
-        cards.get(4).add(forgotPassword);
-
-        /**
-         * "New User? Create Account" Label that will update the UI to switch to a create account panel
-         */
-        createAccount = new JLabel("New User? Create Account");
-        createAccount.setFont(new Font("Georgia", 1, 15));
-        createAccount.addMouseListener(this);
-        cards.get(5).add(createAccount);
-
-        /**
-         * Adding the cards to the login panel with a loop, adding vertical spacing between each card
-         */
-        int[] verticalSpacing = {80, 50, 25, 15, 15, 0};
-        for (int i = 0; i < cards.size(); i++) {
-            loginPanel.add(cards.get(i));
-            loginPanel.add(Box.createVerticalStrut(verticalSpacing[i]));
-        }
-        /**
-         * Adding the login panel to the UserInterface frame
-         */
-        add(loginPanel);
+    /**
+     * Getter for the main JPanel
+     * @return
+     */
+    public JPanel getMainPanel() {
+        return mainPanel;
     }
 
     /**
@@ -195,29 +146,224 @@ public class LoginComponent extends JPanel implements ActionListener, FocusListe
     }
 
     /**
-     * Method to transform the loginPanel into a createAccountPanel when the "New User? Create Account" label is clicked
-     * @param None
-     * @return None
+     * Setter for login status
      */
-    public void createAccountPanel() {
+    public void setLoginStatus(boolean status) {
+        isLoggedIn = status;
+    }
+
+    /**
+     * Method to open the login panel
+     */
+    public void openLoginPanel() {
         /**
-         * Remove the login panel from the frame
+         * Have the main panel hold the login panel
          */
-        remove(loginPanel);
+        mainPanel.removeAll();
+        mainPanel.add(loginPanel, BorderLayout.CENTER);
+        mainPanel.revalidate();
+        mainPanel.repaint();
+
+        /**
+         * Set the login window to open
+         */
+        isLoginWindowOpen = true;
+        isLoggedIn = false;
+    }
+
+    /**
+     * Method to open the create account panel
+     */
+    public void openCreateAccountPanel() {
+        /**
+         * Have the main panel hold the create account panel
+         */
+        mainPanel.removeAll();
+        mainPanel.add(createAccountPanel, BorderLayout.CENTER);
+        mainPanel.revalidate();
+        mainPanel.repaint();
+
+        /**
+         * Set the login window to closed
+         */
+        isLoginWindowOpen = false;
+        isLoggedIn = false;
+    }
+
+    /**
+     * Method to create the Login and Create Account buttons and style them appropriately
+     * @param None
+     * @return JButton of the button
+     */
+    private JButton createButton(String text) {
+        /**
+         * Create the button
+         */
+        JButton newButton = new JButton(text);
+
+        /**
+         * Customize the button
+         */
+        newButton.setPreferredSize(new Dimension(120, 45));
+        newButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        newButton.setFont(new Font("Georgia", 1, 15));
+        newButton.setBackground(Color.BLACK);
+        newButton.setForeground(Color.WHITE);
+        newButton.setFocusPainted(false);
+
+        /**
+         * Add listeners to the button
+         */
+        newButton.addMouseListener(this);
+        newButton.addActionListener(this);
+
+        return newButton;
+    }
+
+    /**
+     * Method to create JTextField for username input
+     * @param String text
+     * @return JTextField of the text field
+     */
+    private JTextField createTextField(String text) {
+        /**
+         * Create the new text field
+         */
+        JTextField newTextField = new JTextField(30);
+        newTextField.setText(text);
+        newTextField.setPreferredSize(new Dimension(150, 40));
+        newTextField.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        newTextField.setFont(new Font("Georgia", 1, 15));
+
+        /**
+         * Focus listener to handle what text appears and when for the text field
+         */
+        newTextField.addFocusListener(this);
+
+        return newTextField;
+    }
+
+    /**
+     * Method to create JPasswordField for password input
+     * @param String text
+     * @return JPasswordField of the password field
+     */
+    private JPasswordField createPasswordField(String text) {
+        /**
+         * Create the password field
+         */
+        JPasswordField passwordInput = new JPasswordField(30);
+        passwordInput.setText(text);
+
+        /**
+         * Style the password field
+         */
+        passwordInput.setPreferredSize(new Dimension(150, 40));
+        passwordInput.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        passwordInput.setFont(new Font("Georgia", 1, 15));
+
+        /**
+         * Add action listener to password field to show default text of Password when focus is gained
+         */
+        passwordInput.addFocusListener(this);
+        passwordInput.setEchoChar((char) 0);
+
+        return passwordInput;
+    }
+
+    /**
+     * Method to create the Login panel
+     */
+    private void loginPanel() {
+        /**
+         * JPanel to hold the login components with BoxLayout vertically
+         */
+        loginPanel = new JPanel();
+        loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.Y_AXIS));
 
         /**
         * Initialize a list of JPanel objects for cards 1-6
         */
-        List<JPanel> createAccCards = new ArrayList<JPanel>();
+        ArrayList<JPanel> cards = new ArrayList<JPanel>();
         for (int i = 0; i < 6; i++) {
-            createAccCards.add(new JPanel());
+            cards.add(new JPanel());
         }
 
         /**
-         * Create a new JPanel to hold the create account components
+         * JLabel to hold the title of the login component. Set the font and alignment of the title.
+         */
+        loginTitle = new JLabel("Campus Navigation System");
+        loginTitle.setFont(new java.awt.Font("Georgia", 1, 40));
+        loginTitle.setHorizontalAlignment(JLabel.CENTER);
+        loginTitle.setVerticalAlignment(JLabel.TOP);
+        cards.get(0).add(loginTitle);
+
+        /**
+         * JLabel to hold the username text and JTextField to hold the username input
+         */
+        usernameInput = createTextField("Username:");
+        cards.get(1).add(usernameInput);
+
+        /**
+         * JLabel to hold the password text and JPasswordField to hold the password input
+         */
+        passwordInput = createPasswordField("Password:");
+        passwordFlag = true;
+        cards.get(2).add(passwordInput);
+
+        /**
+         * Login button creation and addition to the login panel
+         */
+        loginButton = createButton("Login");
+        cards.get(3).add(loginButton);
+
+        /**
+         * "Forgot your password" Label that allows a user to reset their password
+         */
+        forgotPassword = new JLabel("Forgot your password?");
+        forgotPassword.setFont(new Font("Georgia", 1, 15));
+        forgotPassword.setForeground(Color.RED);
+        forgotPassword.addMouseListener(this);
+        cards.get(4).add(forgotPassword);
+
+        /**
+         * "New User? Create Account" Label that will update the UI to switch to a create account panel
+         */
+        createAccount = new JLabel("New User? Create Account");
+        createAccount.setFont(new Font("Georgia", 1, 15));
+        createAccount.addMouseListener(this);
+        cards.get(5).add(createAccount);
+
+        /**
+         * Adding the cards to the login panel with a loop, adding vertical spacing between each card
+         */
+        int[] verticalSpacing = {80, 50, 25, 15, 15, 0};
+        for (int i = 0; i < cards.size(); i++) {
+            loginPanel.add(cards.get(i));
+            loginPanel.add(Box.createVerticalStrut(verticalSpacing[i]));
+        }
+    }
+
+
+    /**
+     * Method to create the Create Account panel
+     * @param None
+     * @return None
+     */
+    private void createAccountPanel() {
+        /**
+         * JPanel to hold the create account components with BoxLayout vertically
          */
         createAccountPanel = new JPanel();
         createAccountPanel.setLayout(new BoxLayout(createAccountPanel, BoxLayout.Y_AXIS));
+
+        /**
+        * Initialize a list of JPanel objects for cards 1-6
+        */
+        ArrayList<JPanel> createAccCards = new ArrayList<JPanel>();
+        for (int i = 0; i < 6; i++) {
+            createAccCards.add(new JPanel());
+        }
 
         /**
          * JLabel to hold the title of the create account component. Set the font and alignment of the title.
@@ -231,63 +377,27 @@ public class LoginComponent extends JPanel implements ActionListener, FocusListe
         /**
          * JLabel to hold the username text and JTextField to hold the username input
          */
-        createAccountUsername = new JTextField(30);
-        createAccountUsername.setText("Username:");
-        createAccountUsername.setPreferredSize(new Dimension(150, 40));
-        createAccountUsername.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        createAccountUsername.setFont(new Font("Georgia", 1, 15));
-        /**
-         * Action listener to username field to show default text of Username when focus is gained
-         */
-        createAccountUsername.addFocusListener(this);
+        createAccountUsername = createTextField("Username:");
         createAccCards.get(1).add(createAccountUsername);
 
         /**
          * JLabel to hold the password text and JPasswordField to hold the password input
          */
-        createAccountPassword = new JPasswordField(30);
-        createAccountPassword.setText("Password:");
-        createAccountPassword.setPreferredSize(new Dimension(150, 40));
-        createAccountPassword.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        createAccountPassword.setFont(new Font("Georgia", 1, 15));
-        /**
-         * Add action listener to password field to show default text of Password when focus is gained
-         */
-        createAccountPassword.addFocusListener(this);
-        createAccountPassword.setEchoChar((char) 0);
+        createAccountPassword = createPasswordField("Password:");
         passwordFlag = true;
         createAccCards.get(2).add(createAccountPassword);
 
         /**
          * JLabel to hold the confirm password text and JPasswordField to hold the confirm password input
          */
-        createAccountConfirmPassword = new JPasswordField(30);
-        createAccountConfirmPassword.setText("Confirm Password:");
-        createAccountConfirmPassword.setPreferredSize(new Dimension(150, 40));
-        createAccountConfirmPassword.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        createAccountConfirmPassword.setFont(new Font("Georgia", 1, 15));
-
-        /**
-         * Add action listener to confirm password field to show default text of Password when focus is gained
-         */
-        createAccountConfirmPassword.addFocusListener(this);
-        createAccountConfirmPassword.setEchoChar((char) 0);
+        createAccountConfirmPassword = createPasswordField("Confirm Password:");
         confirmPassFlag = true;
         createAccCards.get(3).add(createAccountConfirmPassword);
 
         /**
-         * JButton for the create account button that will be used to create an account, deferring to the action listener
-         * where other classes will authenticate the create account request
+         * Button to create account
          */
-        createAccountButton = new JButton("Create Account");
-        createAccountButton.addActionListener(this);
-        createAccountButton.setPreferredSize(new Dimension(120, 45));
-        createAccountButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        createAccountButton.setFont(new Font("Georgia", 1, 15));
-        createAccountButton.setBackground(Color.BLACK);
-        createAccountButton.setForeground(Color.WHITE);
-        createAccountButton.setFocusPainted(false);
-        createAccountButton.addMouseListener(this);
+        createAccountButton = createButton("Create Account");
         createAccCards.get(4).add(createAccountButton);
 
         /**
@@ -306,15 +416,6 @@ public class LoginComponent extends JPanel implements ActionListener, FocusListe
             createAccountPanel.add(createAccCards.get(i));
             createAccountPanel.add(Box.createVerticalStrut(cardSpacing[i]));
         }
-
-        /**
-         * Adding the create account panel to the UserInterface frame
-         */
-        add(createAccountPanel);
-        revalidate();
-        repaint();
-
-
     }
 
 
@@ -342,8 +443,7 @@ public class LoginComponent extends JPanel implements ActionListener, FocusListe
              */
             String username = usernameInput.getText();
             String password = new String(passwordInput.getPassword());
-            DataProcessor process = new DataProcessor();
-            // TODO: boolean isValid = process.authenticateLogin(username, password); // To implement in the future
+            // TODO: boolean isValid = processor.authenticateLogin(username, password); // To implement in the future
 
             /**
              * Empty text fields
@@ -401,19 +501,11 @@ public class LoginComponent extends JPanel implements ActionListener, FocusListe
                 /**
                  * Create a user account and JSON storage of the user account using the DataProcessor class
                  */
-                DataProcessor process = new DataProcessor();
-                // TODO: process.createAccount(username password); // To implement in the future
+                // TODO: processor.createAccount(username password); // To implement in the future
                 /**
                  * Bring user to login screen
                  */
-                createAccountPanel.setVisible(false);
-                /**
-                 * Make the loginPanel visible on the screen again
-                 */
-                loginPanel.setVisible(true);
-                add(loginPanel);
-                revalidate();
-                repaint();
+                openLoginPanel();
                 /**
                  * Reset password flag
                  */
@@ -554,36 +646,21 @@ public class LoginComponent extends JPanel implements ActionListener, FocusListe
             /**
              * Get the password from the database and display it to the user
              */
-            DataProcessor process = new DataProcessor();
-            // TODO: String password = process.getPasswordFromUserName(username); // To implement in the future
+            // TODO: String password = processor.getPasswordFromUserName(username); // To implement in the future
             JOptionPane.showMessageDialog(null, "Your password is: " + "password"); // TODO: Update to password variable after implemented
         }
         else if (e.getSource() == createAccount) {
             /**
              * Convert the loginPanel into a createAccountPanel
              */
-            System.out.println("create account");
-            loginPanel.setVisible(false);
-            this.createAccountPanel();
+            openCreateAccountPanel();
         }
         else if (e.getSource() == loginLabel) {
             /**
              * Convert the createAccountPanel into a loginPanel
              */
             System.out.println("login");
-            createAccountPanel.setVisible(false);
-            /**
-             * Make the loginPanel visible on the screen again
-             */
-            loginPanel.setVisible(true);
-            add(loginPanel);
-            isLoggedIn = false;
-            revalidate();
-            repaint();
-            /**
-             * Reset password flag
-             */
-            passwordFlag = true;
+            openLoginPanel();
         }
     }
 

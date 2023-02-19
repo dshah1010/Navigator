@@ -34,7 +34,16 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
     private JButton searchButton;
     private Weather weather;
     private JPanel searchBar;
-    private DataProcessor process;
+
+    /**
+     * DataProcessor instance to be used
+     */
+    private DataProcessor processor = DataProcessor.getInstance();
+
+    /**
+     * Private Singleton instance of the SidebarCOmponent
+     */
+    private static SidebarComponent INSTANCE;
 
     /**
      * Constructor to initialize the sidebar component
@@ -69,7 +78,9 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
          */
         sidebarPanel.add(searchBar);
         sidebarPanel.add(poiListContentPanel);
-        sidebarPanel.add(weatherInfoContentPanel);
+        if (weatherInfoContentPanel != null) {
+            sidebarPanel.add(weatherInfoContentPanel);
+        }
 
         /**
          * Display the three panels on top of one another with layout manager
@@ -81,6 +92,24 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
          */
         sidebarPanel.setVisible(true);
     }
+
+    /**
+     * Getter for the instance of SidebarComponent
+     * @return SidebarComponent instance
+     */
+    public static SidebarComponent getInstance() {
+        if (INSTANCE == null) {
+            try {
+                INSTANCE = new SidebarComponent();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return INSTANCE;
+    }
+
 
     /**
      * Getter for sidebarPanel
@@ -173,7 +202,7 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
          */
         return searchBarPanel;
     }
-
+    
     /**
      * Method to create POI List Panel
      * @param None
@@ -201,9 +230,23 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
     public void createWeatherInfoPanel() throws MalformedURLException, IOException {
         weatherInfoContentPanel = new JPanel();
         weatherInfoPanel = new JPanel();
-        weather = new Weather();
+        weather = Weather.getInstance();
         weather.parseWeather();
-        weatherInfoPanel.add(weather.addWeatherInfo());
+        JPanel weatherContent = weather.addWeatherInfo();
+
+        /**
+         * If there is no weather information, do not add the weather panel to the sidebar
+         */
+        if (weatherContent == null) {
+            weatherInfoContentPanel = null;
+            weatherInfoPanel = null;
+            return;
+        }
+
+        /**
+         * Add content to weather panel
+         */
+        weatherInfoPanel.add(weatherContent);
         weatherInfoPanel.setLayout(new BoxLayout(weatherInfoPanel, BoxLayout.Y_AXIS));
         weatherInfoPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 150));
         weatherInfoContentPanel.add(weatherInfo);
@@ -211,7 +254,6 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
         weatherInfoContentPanel.setBackground(Color.WHITE);
         weatherInfoContentPanel.setLayout(new BoxLayout(weatherInfoContentPanel, BoxLayout.Y_AXIS));
     }
-
 
     /**
      * Method to handle the action of a button being toggled on or off
@@ -271,8 +313,7 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
                 /**
                  * Search for the POI
                  */
-                process = new DataProcessor();
-                // TODO: PointOfInterest poi = process.searchPOI(text); // Need to search for POI on the currently displayed map
+                // TODO: PointOfInterest poi = processor.searchPOI(text); // Need to search for POI on the currently displayed map
                 /**
                  * If the POI is not null, display it on the map
                  */
@@ -318,10 +359,11 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
         button.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
         button.setFocusPainted(false);
         button.setFont(new Font("Georgia", Font.PLAIN, 12));
-        button.setPreferredSize(new Dimension(200, 30));
-        button.setMaximumSize(new Dimension(200, 30));
-        button.setMinimumSize(new Dimension(200, 30));
+        button.setPreferredSize(new Dimension(150, 30));
+        button.setMaximumSize(new Dimension(150, 30));
+        button.setMinimumSize(new Dimension(150, 30));
         button.setSelected(true);
+
         return button;
     }
 

@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.json.JSONObject;
 import com.google.gson.Gson;
@@ -18,7 +17,23 @@ import com.google.gson.JsonIOException;
  * @version: 1.0
  * @since: 1.0
  */
-public class DataProcessor {
+public final class DataProcessor {
+    /**
+     * Private variable to hold the DataProcessor singleton instance
+     */
+    private static DataProcessor INSTANCE;
+
+    /**
+     * Getter for the DataProcessor singleton instance
+     */
+    public static DataProcessor getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new DataProcessor();
+        }
+        return INSTANCE;
+    }
+
+
     /**
      * Function to store user info as a JSON object using Gson
      * @param user, the user object to be stored as a JSON string
@@ -113,7 +128,7 @@ public class DataProcessor {
         return userPOIs;
     }  
 
-    public static ArrayList<PointOfInterest> getUniversalPOIs() {
+    public ArrayList<PointOfInterest> getUniversalPOIs() {
         ArrayList<PointOfInterest> universalPOIs = new ArrayList<PointOfInterest>();
 
         // TODO: THIS IS TEMPORARY FOR TESTING
@@ -121,5 +136,58 @@ public class DataProcessor {
             universalPOIs.add(new PointOfInterest("Universal Test"));
         }
         return universalPOIs;
+    }
+
+    /**
+     * TODO: Method to get the POI's x and y coordinates when given the POI ID
+     * @param poiID - the ID of the POI
+     * @return coords, int[] of x and y coordinates
+     */
+    public int[] getPOIPosition(int poiID) {
+        int x = (int) (Math.random() * 1000);
+        int y = (int) (Math.random() * 1000);
+        int[] coords = {x, y};
+        return coords;
+    }
+
+    /**
+     * TODO: Method that checks if there is a floor above the current one.
+     * @param currentMapID
+     * @return boolean indicating if there is a floor above or not
+     */
+    public boolean checkfloorAbove(int currentMapID) {
+        return false;
+    }
+
+    /**
+     * TODO: Method that checks if there is a floor below the current one.
+     * @param currentMapID
+     * @return boolean indicating if there is a floor below or not
+     */
+    public boolean checkfloorBelow(int currentMapID) {
+        return false;
+    }
+
+    /**
+     * TODO: Method that gets the Map of the floor above the current one
+     * @param currentMapID
+     * @return Map object of the floor above
+     */
+    public Map getfloorAbove(int currentMapID) {
+        return null;
+    }
+
+    /**
+     * TODO: Method that gets the Map of the floor below the current one
+     * @param currentMapID
+     * @return Map object of the floor below
+     */
+    public Map getfloorBelow(int currentMapID) {
+        return null;
+    }
+
+
+    public PointOfInterest getPOI(int parseInt) {
+        return new PointOfInterest("Test");
     }
 }
