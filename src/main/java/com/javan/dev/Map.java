@@ -6,20 +6,13 @@ public interface Map {
      * Getter for file path
      * @return file path string
      */
-    String getFilePath();
+    public String getFilePath();
 
     /**
      * Getter for map id
      * @return map id int
      */
-    int getMapID();
+    public int getMapID();
 
-    boolean checkfloorAbove(int currentMapID);
-
-    boolean checkfloorBelow(int currentMapID);
-
-    Map getfloorAbove(int currentMapID);
-
-    Map getfloorBelow(int currentMapID);
-    
+    public void updateMap(int mapID);
 }

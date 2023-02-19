@@ -42,6 +42,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      */
     private boolean isCampusMap;
     private int currentMapID;
+    private MapFactory mapFactory = new MapFactory();
     private Map mapObject;
 
     /**
