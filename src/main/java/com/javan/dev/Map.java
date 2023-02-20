@@ -15,4 +15,12 @@ public interface Map {
     public int getMapID();
 
     public void updateMap(int mapID);
+
+    public boolean checkfloorAbove(int currentMapID);
+
+    public boolean checkfloorBelow(int currentMapID);
+
+    public Map getfloorAbove(int currentMapID);
+
+    public Map getfloorBelow(int currentMapID);
 }

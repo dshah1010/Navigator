@@ -62,4 +62,46 @@ public class CampusMap implements Map{
         DataProcessor processor = DataProcessor.getInstance();
         campus.CampusMap(processor.loadMap(mapID));
     }
+
+
+    public String getFilePath() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+
+    public int getMapID() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+
+    public void updateMap(int mapID) {
+        // TODO Auto-generated method stub
+        
+    }
+
+
+    public boolean checkfloorAbove(int currentMapID) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+
+    public boolean checkfloorBelow(int currentMapID) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+
+    public Map getfloorAbove(int currentMapID) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+
+    public Map getfloorBelow(int currentMapID) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

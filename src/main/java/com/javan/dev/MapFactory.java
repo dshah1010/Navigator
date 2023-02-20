@@ -7,13 +7,13 @@ public class MapFactory {
             return null;
         
         if (mapType.equals("floor")) {
-            return new FloorMap();
+            return new FloorMap(null);
         }
         else if (mapType.equals("floor")) {
-            return new BuildingMap();
+            return new BuildingMap(mapType, 0);
         }
         else if (mapType.equals("floor")) {
-            return new CampusMap();
+            return new CampusMap(mapType);
         }
         else 
             throw new IllegalArgumentException("Unknown map type " + mapType);

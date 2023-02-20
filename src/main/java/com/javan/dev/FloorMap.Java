@@ -11,7 +11,7 @@ public class FloorMap implements Map{
      * Declaring the Id, Point of Interest array and layers array of the Floor.
      */
     private int Id;
-    private ArrayList<PointOfInterest> POIs = new ArrayList<>;
+    private ArrayList<PointOfInterest> POIs = new ArrayList<PointOfInterest>();
     private ArrayList<int> layers = new ArrayList<>;
     private String filePath;
     /**
@@ -85,5 +85,41 @@ public class FloorMap implements Map{
         Map floor = new Map();
         DataProcessor processor = DataProcessor.getInstance();
         floor.FloorMap(processor.loadMap(mapID));
+    }
+
+
+    public int getMapID() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+
+    public void updateMap(int mapID) {
+        // TODO Auto-generated method stub
+        
+    }
+
+
+    public boolean checkfloorAbove(int currentMapID) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+
+    public boolean checkfloorBelow(int currentMapID) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+
+    public Map getfloorAbove(int currentMapID) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+
+    public Map getfloorBelow(int currentMapID) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }
