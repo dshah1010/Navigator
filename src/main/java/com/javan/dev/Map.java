@@ -15,4 +15,5 @@ public interface Map {
     public int getMapID();
 
     public void updateMap(int mapID);
+
 }

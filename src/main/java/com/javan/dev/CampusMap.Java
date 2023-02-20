@@ -12,7 +12,7 @@ public class CampusMap implements Map{
      */
     private String filePath;
     private int mapID;
-    private ArrayList<BuildingMap> BuildingArray = new ArrayList<>;
+    private ArrayList<BuildingMap> BuildingArray = new ArrayList<BuildingMap>();
     // TODO: add variable to contain map of campus
 
     /**
@@ -20,7 +20,7 @@ public class CampusMap implements Map{
      * @param campusName
      */
     public CampusMap(String filePath, int mapID) {
-        this.mapID = campusName;
+        this.filePath = filePath;
         this.mapID = mapID;
     }
 
@@ -67,10 +67,10 @@ public class CampusMap implements Map{
      * @param PointOfInterest
      * @return POI
      */
-    public String getBuilding(int BuildingId) {
+    public BuildingMap getBuilding(int buildingId) {
         for (int i = 0; i < this.BuildingArray.size(); i++) {
-            if (this.BuildingArray[i].buildingId == BuildingId) {
-                return this.BuildingArray[i];
+            if (this.BuildingArray.get(i).getMapID() == buildingId) {
+                return this.BuildingArray.get(i);
             }
         }
         return null;

@@ -12,20 +12,20 @@ public class FloorMap implements Map{
      */
     private String filePath;
     private int mapID;
-    private ArrayList<PointOfInterest> POIs = new ArrayList<>;
-    private ArrayList<int> layers = new ArrayList<>;
+    private ArrayList<PointOfInterest> POIs = new ArrayList<PointOfInterest>();
+    private ArrayList<Integer> layers = new ArrayList<Integer>();
     
     /**
      * Private variable to hold the instance of the data processor
      */
-    //private DataProcessor processor = DataProcessor.getInstance();
+    private DataProcessor processor = DataProcessor.getInstance();
 
     /**
      * Constructor for the FloorMap class to initialize the ID
      * @param floorId
      */
     public FloorMap(String filePath, int mapID) {
-        this.mapID = mapId;
+        this.mapID = mapID;
         this.filePath = filePath;
     }
 
@@ -39,11 +39,11 @@ public class FloorMap implements Map{
     }
 
     /**
-     * Getter for the floorId
+     * Getter for the mapID
      * @param None
-     * @return floorId
+     * @return mapID
      */
-    public int getId() {
+    public int getMapID() {
         return this.mapID;
     }
 
@@ -72,10 +72,10 @@ public class FloorMap implements Map{
      * @param PointOfInterest
      * @return POI
      */
-    public String searchPOI(String PointOfInterest) {
+    public PointOfInterest searchPOI(String PointOfInterest) {
         for (int i = 0; i < this.POIs.size(); i++) {
-            if (this.POIs[i].name.equalsIgnoreCase(PointOfInterest)) {
-                return this.POIs[i];
+            if (this.POIs.get(i).getName().equalsIgnoreCase(PointOfInterest)) {
+                return this.POIs.get(i);
             }
         }
         return null;
@@ -83,19 +83,19 @@ public class FloorMap implements Map{
 
 
     public boolean checkfloorAbove() {
-        return this.processor.checkfloorAbove(this.floorId);
+        return this.processor.checkfloorAbove(this.mapID);
     }
 
     public boolean checkfloorBelow() {
-        return this.processor.checkfloorBelow(this.floorId)
+        return this.processor.checkfloorBelow(this.mapID);
     }
 
     public Map getfloorAbove() {
-        return this.processor.getfloorAbove(this.floorID);
+        return this.processor.getfloorAbove(this.mapID);
     }
 
     public Map getfloorBelow() {
-        return this.processor.getfloorBelow(this.floorID);
+        return this.processor.getfloorBelow(this.mapID);
     }
 
 }
