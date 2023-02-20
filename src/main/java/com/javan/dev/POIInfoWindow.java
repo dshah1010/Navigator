@@ -5,6 +5,11 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.awt.*;
 
+/**
+ * @author: Riley Emma Gavigan <rgavigan@uwo.ca>
+ * @version: 1.0
+ * @since: 1.0
+ */
 public class POIInfoWindow extends JFrame {
     private JPanel panel;
     private JFrame frame;
@@ -90,7 +95,13 @@ public class POIInfoWindow extends JFrame {
         label.setFont(new Font("Georgia", Font.PLAIN, n));
         label.setForeground(Color.BLACK);
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
+    }
 
+    /**
+     * Getter for the labels ArrayList
+     */
+    public ArrayList<JLabel> getLabels() {
+        return labels;
     }
     
 }
