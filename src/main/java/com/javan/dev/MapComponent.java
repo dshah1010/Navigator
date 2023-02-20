@@ -89,7 +89,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          */
         imagePanel = new JPanel();
         imagePanel.setLayout(null);
-        mapImg = new ImageIcon("data\\images\\campusMap.png"); // TODO: Get Campus Map from backend and use that
+        mapImg = new ImageIcon("data\\images\\maps\\campusMap.png"); // TODO: Get Campus Map from backend and use that
         isCampusMap = true;
         currentMapID = 1; // TODO: Get Map ID from backend - whatever it is determined to be
         map = new JLabel(mapImg);
