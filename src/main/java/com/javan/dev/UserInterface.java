@@ -12,11 +12,11 @@ import java.net.MalformedURLException;
  * @version: 1.0
  * @since: 1.0
  */
-public class UserInterface extends JFrame implements ActionListener {
+public final class UserInterface extends JFrame implements ActionListener {
     /**
      * Initialize the JFrame for the UI during its entire runtime
      */
-    private JFrame frame = new JFrame("Enhanced Campus Navigation");
+    private JFrame frame = new JFrame("Enhanced Campus Navigation - Group 1");
 
     /**
      * Initialize private variables for the menu bar in the JFrame
@@ -89,7 +89,6 @@ public class UserInterface extends JFrame implements ActionListener {
                     e.printStackTrace();
                 }
             }
-            System.out.println("Opening the map after login");
             /**
              * Open MapComponent once user has logged in
              */

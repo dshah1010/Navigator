@@ -2,6 +2,8 @@ package com.javan.dev;
 
 // Import Swing Components
 import javax.swing.*;
+import javax.xml.namespace.QName;
+
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.awt.*;
@@ -11,7 +13,7 @@ import java.awt.*;
  * @version: 1.0
  * @since: 1.0
  */
-public final class MapComponent extends JPanel implements ActionListener, MouseListener {
+public final class MapComponent extends JPanel implements ActionListener, MouseListener, MouseMotionListener {
     /**
      * Initialize private variables for the map UI
      */
@@ -27,9 +29,17 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     private JButton floorAbove;
     private JButton floorBelow;
     private JButton campusMap;
+    private JButton mapMode;
     private JPanel buttonPanel;
 
+    /**
+     * ArrayList to hold the points of interest
+     */
     private ArrayList<PointOfInterest> pois;
+
+    /**
+     * ImageIcon for the flags
+     */
     private ImageIcon flag = new ImageIcon("data\\images\\flag.png");
 
     /**
@@ -38,18 +48,28 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     private static MapComponent INSTANCE;
 
     /**
-     * variables to hold the current map and whether or not it is the campus map
+     * Variables to hold the current map and whether or not it is the campus map. Also holding map mode
      */
-    private boolean isCampusMap;
+    private boolean isCampusMap = true; // *** CHANGE THIS IF U WANT TO VIEW THE FLOORMAPS INSTEAD FOR POICOMPONENT (FOR TESTING PURPOSES)
     private int currentMapID;
     private Map mapObject;
+    private boolean isNavigationMode;
 
     /**
      * DataProcessor instance
      */
     private DataProcessor dataProcessor = DataProcessor.getInstance();
 
+    /**
+     * Map instance for campus map
+     */
     private Map campus;
+
+    /**
+     * Coordinates of mouse
+     */
+    private int mouseStartX;
+    private int mouseStartY;
 
 
     /**
@@ -90,9 +110,10 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         imagePanel = new JPanel();
         imagePanel.setLayout(null);
         mapImg = new ImageIcon("data\\images\\campusMap.png"); // TODO: Get Campus Map from backend and use that
-        isCampusMap = true;
         currentMapID = 1; // TODO: Get Map ID from backend - whatever it is determined to be
         map = new JLabel(mapImg);
+        map.addMouseListener(this);
+        map.addMouseMotionListener(this);
         map.setLayout(null);
         map.setBounds(0, 0, mapImg.getIconWidth(), mapImg.getIconHeight());
         imagePanel.setPreferredSize(new Dimension(mapImg.getIconWidth(), mapImg.getIconHeight()));
@@ -115,15 +136,48 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         /**
          * Check for floor above/below
          */
-        // isFloorAbove(); TODO: Wait for implementation to be finished from FloorMap
-        // isFloorBelow(); TODO: Wait for implementation to be finished from FloorMap
+        //isFloorAbove(); // TODO: Wait for implementation to be finished from FloorMap
+        //isFloorBelow(); // TODO: Wait for implementation to be finished from FloorMap
+
+        /**
+         * Create panel to hold map mode button
+         */
+        JPanel mapModePanel = new JPanel();
+        mapModePanel.setLayout(new GridLayout(1, 1));
+        mapMode = createMapButton("Navigation Mode");
+        isNavigationMode = true;
+        mapModePanel.add(mapMode);
 
         /**
          * Fill the entire display with the campus map
          */
-        mapPanel.setLayout(new BorderLayout());
-        mapPanel.add(buttonPanel, BorderLayout.NORTH);
-        mapPanel.add(scrollPane, BorderLayout.CENTER);
+        mapPanel.setLayout(new GridBagLayout());
+        /**
+         * Add constraints to have buttonPanel at the top taking up as little space as possible, and scrollPane takes the remainder
+         * Both should fill all horizontal space
+         */
+        GridBagConstraints gridConstraints = new GridBagConstraints();
+
+        gridConstraints.gridx = 0;
+        gridConstraints.gridy = 0;
+        gridConstraints.weightx = 0;
+        gridConstraints.weighty = 0;
+        gridConstraints.fill = GridBagConstraints.BOTH;
+        mapPanel.add(mapModePanel, gridConstraints);
+
+        gridConstraints.gridx = 0;
+        gridConstraints.gridy = 1;
+        gridConstraints.weightx = 0;
+        gridConstraints.weighty = 0;
+        gridConstraints.fill = GridBagConstraints.BOTH;
+        mapPanel.add(buttonPanel, gridConstraints);
+
+        gridConstraints.gridx = 0;
+        gridConstraints.gridy = 2;
+        gridConstraints.weightx = 1;
+        gridConstraints.weighty = 1;
+        gridConstraints.fill = GridBagConstraints.BOTH;
+        mapPanel.add(scrollPane, gridConstraints);
     }
     
     /**
@@ -264,8 +318,6 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          * Get the POI's coordinates
          */
         int[] coordinates = dataProcessor.getPOIPosition(poiID);
-        System.out.println(coordinates[0]);
-        System.out.println(coordinates[1]);
 
         /**
          * Navigate to the POI's coordinates
@@ -365,6 +417,9 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          * POI Flag hovered over
          */
         else if (e.getSource() instanceof JLabel) {
+            if (e.getSource() == map) {
+                return;
+            }
             JLabel label = (JLabel) e.getSource();
             label.setCursor(new Cursor(Cursor.HAND_CURSOR));
         }
@@ -478,6 +533,20 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         else if (buttonText.equals("Floor Up")) {
             navigateToFloorAbove();
         }
+        /**
+         * If the button text is "Navigation Mode", change that button to "Editing Mode"
+         */
+        else if (buttonText.equals("Navigation Mode")) {
+            ((JButton) e.getSource()).setText("Editing Mode");
+            isNavigationMode = false;
+        }
+        /**
+         * If the button text is "Editing Mode", change that button to "Navigation Mode"
+         */
+        else if (buttonText.equals("Editing Mode")) {
+            ((JButton) e.getSource()).setText("Navigation Mode");
+            isNavigationMode = true;
+        }
     }
 
     /**
@@ -485,40 +554,87 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      */
     public void mouseClicked(MouseEvent e) {
         /**
-         * Get the label that was clicked
+         * Navigation Mode -> Can View POIs
          */
-        JLabel label = (JLabel) e.getSource();
+        if (isNavigationMode == true) {
+            if (e.getSource() == map) {
+                return;
+            }
+            /**
+             * Get the label that was clicked
+             */
+            else if (e.getSource() instanceof JLabel) {
+                JLabel label = (JLabel) e.getSource();
 
-        /**
-         * Get the POI Id of the label
-         */
-        String id = label.getText();
+                /**
+                 * Get the POI Id of the label
+                 */
+                String id = label.getText();
 
-        /**
-         * Get the POI object from the POI Id
-         */
-        PointOfInterest poi = dataProcessor.getPOI(Integer.parseInt(id));
+                /**
+                 * Get the POI object from the POI Id
+                 */
+                PointOfInterest poi = dataProcessor.getPOI(Integer.parseInt(id));
 
-        /**
-         * Create a new POIInfoWindow object and pass the POI object to it
-         */
-        POIInfoWindow poiInfoWindow = new POIInfoWindow(poi);
+                /**
+                 * Create a new POIInfoWindow object and pass the POI object to it
+                 */
+                POIInfoWindow poiInfoWindow = new POIInfoWindow(poi);
 
+                /**
+                 * Display the POIInfoWindow right on top of the map
+                 */
+                poiInfoWindow.getFrame().setLocationRelativeTo(mapPanel);
+                poiInfoWindow.setVisibleFrame();
+            }
+        }
         /**
-         * Display the POIInfoWindow right on top of the map
+         * Editing Mode -> Create POIs wherever clicked on the map image ()
          */
-        poiInfoWindow.getFrame().setLocationRelativeTo(mapPanel);
-        poiInfoWindow.setVisibleFrame();
+        else if (isNavigationMode == false) {
+            if (e.getSource() instanceof JLabel) {
+                /**
+                 * Get the coordinates of the mouse click
+                 */
+                JLabel label = (JLabel) e.getSource();
+                int x = e.getX();
+                int y = e.getY();
+
+                /**
+                 * Create a new Point of Interest with EditingTool by opening POICreationWindow with the coordinates
+                 * This window will work with EditingTool to create a new POI
+                 */
+                POICreationWindow poiCreationWindow = new POICreationWindow(x, y);
+                poiCreationWindow.getFrame().setLocationRelativeTo(mapPanel);
+                poiCreationWindow.setVisibleFrame();
+            }
+        }
     }
 
     public void mousePressed(MouseEvent e) {
-        // TODO Auto-generated method stub
+        if (e.getSource() == map) {
+            mouseStartX = e.getX();
+            mouseStartY = e.getY();
+        }
         
+    }
+
+    public void mouseDragged(MouseEvent e) {
+        if (e.getSource() == map) {
+            JViewport viewPort = scrollPane.getViewport();
+            Point vpp = viewPort.getViewPosition();
+            vpp.translate(mouseStartX-e.getX(), mouseStartY-e.getY());
+            map.scrollRectToVisible(new Rectangle(vpp, viewPort.getSize()));
+        }
     }
 
     public void mouseReleased(MouseEvent e) {
         // TODO Auto-generated method stub
         
+    }
+
+    public void mouseMoved(MouseEvent e) {
+        // TODO Auto-generated method stub
     }
     
 }
