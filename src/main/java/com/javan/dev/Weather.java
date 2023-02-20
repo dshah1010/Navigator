@@ -180,7 +180,7 @@ public final class Weather {
         /**
          * Get the temperature and icon link from the Weather class
          */
-        String temp = weather.getTempC() + "°C";
+        String temp = weather.getTempC();
         String iconLink = weather.getConditionIcon();
 
         /**
@@ -189,6 +189,7 @@ public final class Weather {
         if (temp == null || iconLink == null) {
             return null;
         }
+        temp = weather.getTempC() + "°C";
 
         /**
          * processor iconLink to allow it to be read by ImageIO
@@ -200,7 +201,7 @@ public final class Weather {
          */
         URL url = new URL(iconLink);
         BufferedImage image = ImageIO.read(url);
-        Image newImage = image.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        Image newImage = image.getScaledInstance(35, 35, Image.SCALE_SMOOTH);
 
         /**
          * Add the image and temperature to the panel
@@ -221,9 +222,8 @@ public final class Weather {
          * Remove spacing around the image
          */
         label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        imageFrame.add(label);
 
-
-         imageFrame.add(label);
 
         /**
          * Add it all to the weatherInfoPanel

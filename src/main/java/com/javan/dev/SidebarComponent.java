@@ -11,17 +11,14 @@ import java.awt.*;
  * @version: 1.0
  * @since: 1.0
  */
-public class SidebarComponent extends JPanel implements ActionListener, MouseListener, FocusListener {
+public final class SidebarComponent extends JPanel implements ActionListener, MouseListener, FocusListener {
     /**
      * Initialize private variables for the UI
      */
     private JPanel sidebarPanel;
-    private JToggleButton poiLayers;
     private JToggleButton poiList;
     private JToggleButton weatherInfo;
-    private JPanel poiLayersPanel;
     private JPanel poiListPanel;
-    private JPanel poiLayersContentPanel;
     private JPanel poiListContentPanel;
     private JPanel weatherInfoContentPanel;
     private JPanel weatherInfoPanel;
@@ -41,11 +38,16 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
     private static SidebarComponent INSTANCE;
 
     /**
+     * private instance of MapComponent to receive information from
+     */
+    private MapComponent mapComponent = MapComponent.getInstance();
+
+    /**
      * Constructor to initialize the sidebar component
      * @throws IOException
      * @throws MalformedURLException
      */
-    public SidebarComponent() throws MalformedURLException, IOException {
+    private SidebarComponent() throws MalformedURLException, IOException {
         /**
          * Create a new JPanel for the map
          */
@@ -69,18 +71,38 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
         createWeatherInfoPanel();
 
         /**
-         * Add the different panels to the sidebar
+         * Display the three panels on top of one another with GridBagLayout, with the search bar at the top, POI Content in the middle and Weather Content at the bottom. Let them take up all the horizontal and vertical space they need, with the search bar just taking up its size.
          */
-        sidebarPanel.add(searchBar);
-        sidebarPanel.add(poiListContentPanel);
-        if (weatherInfoContentPanel != null) {
-            sidebarPanel.add(weatherInfoContentPanel);
-        }
+        sidebarPanel.setLayout(new GridBagLayout());
+        GridBagConstraints gridConstraints = new GridBagConstraints();
 
         /**
-         * Display the three panels on top of one another with layout manager
+         * Adding search bar
          */
-        sidebarPanel.setLayout(new BoxLayout(sidebarPanel, BoxLayout.Y_AXIS));
+        gridConstraints.fill = GridBagConstraints.BOTH;
+        gridConstraints.gridx = 0;
+        gridConstraints.gridy = 0;
+        gridConstraints.weightx = 1;
+        gridConstraints.weighty = 0;
+        sidebarPanel.add(searchBar, gridConstraints);
+
+        /**
+         * Adding POI Content
+         */
+        gridConstraints.gridy = 1;
+        gridConstraints.weighty = 1;
+        sidebarPanel.add(poiListContentPanel, gridConstraints);
+
+        /**
+         * Adding Weather Content
+         */
+        gridConstraints.gridy = 2;
+        gridConstraints.weighty = 0;
+        if (weatherInfoContentPanel != null) {
+            sidebarPanel.add(weatherInfoContentPanel, gridConstraints);
+        }
+
+
 
         /**
          * Set visible
@@ -206,14 +228,59 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
     public void createPOIListPanel() {
         poiListContentPanel = new JPanel();
         poiListContentPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
-        POIComponent poiComponent = new POIComponent();
+        POIComponent poiComponent = POIComponent.getInstance();
         poiListPanel = poiComponent.getPOIPanel();
         poiListPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
-        poiListContentPanel.add(poiList);
-        poiListContentPanel.add(poiListPanel);
         poiListContentPanel.setBackground(Color.WHITE);
-        poiListContentPanel.setLayout(new BoxLayout(poiListContentPanel, BoxLayout.Y_AXIS));
+
+        /**
+         * Create GridBagLayout to add content
+         */
+        createPOIListGridBagLayout();
     }
+
+    /**
+     * Method to make it so the poiList button takes up the entire vertical space of the sidebar
+     */
+    public void increasePOIButtonSize() {
+        GridBagConstraints gridConstraints = new GridBagConstraints();
+        gridConstraints.weighty = 1;
+        gridConstraints.weightx = 1;
+        gridConstraints.fill = GridBagConstraints.BOTH;
+        poiListContentPanel.add(poiList, gridConstraints);
+    }
+
+    /**
+     * Method to create GridLayout for POI List Panel
+     */
+    public void createPOIListGridBagLayout() {
+        poiListContentPanel.setLayout(new GridBagLayout());
+        /**
+         * Create a GridBagConstraints object to set constraints for the GridBagLayout
+         */
+        GridBagConstraints gridConstraints = new GridBagConstraints();
+
+        /**
+         * Add poiList to GridLayout
+         */
+        gridConstraints.gridx = 0;
+        gridConstraints.gridy = 0;
+        gridConstraints.weightx = 1;
+        gridConstraints.weighty = 0;
+        gridConstraints.fill = GridBagConstraints.HORIZONTAL;
+        poiListContentPanel.add(poiList, gridConstraints);
+
+        /**
+         * Add poiListPanel to GridLayout
+         */
+        gridConstraints.gridx = 0;
+        gridConstraints.gridy = 1;
+        gridConstraints.weightx = 1;
+        gridConstraints.weighty = 1;
+        gridConstraints.fill = GridBagConstraints.BOTH;
+        poiListContentPanel.add(poiListPanel, gridConstraints);
+    }
+
 
     /**
      * Method to create Weather Info Panel
@@ -247,7 +314,7 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
         weatherInfoContentPanel.add(weatherInfo);
         weatherInfoContentPanel.add(weatherInfoPanel);
         weatherInfoContentPanel.setBackground(Color.WHITE);
-        weatherInfoContentPanel.setLayout(new BoxLayout(weatherInfoContentPanel, BoxLayout.Y_AXIS));
+        weatherInfoContentPanel.setLayout(new GridLayout(2, 1));
     }
 
     /**
@@ -268,6 +335,7 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
                 String buttonName = button.getText();
                 if (buttonName.equals("Points of Interest")) {
                     poiListPanel.setVisible(true);
+                    createPOIListGridBagLayout();
                 } else if (buttonName.equals("Weather Information")) {
                     weatherInfoPanel.setVisible(true);
                 }
@@ -281,10 +349,9 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
                  * Get the name of the button and hide the JFrame associated with it
                  */
                 String buttonName = button.getText();
-                if (buttonName.equals("POI Layers")) {
-                    poiLayersPanel.setVisible(false);
-                } else if (buttonName.equals("Points of Interest")) {
+                if (buttonName.equals("Points of Interest")) {
                     poiListPanel.setVisible(false);
+                    increasePOIButtonSize();
                 } else if (buttonName.equals("Weather Information")) {
                     weatherInfoPanel.setVisible(false);
                 }
@@ -314,7 +381,7 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
                  */
                 Integer poi = null; // TEMPORARY
                 if (poi != null) {
-                    // mapComponent.displayPOI(poi); // need to interact with UI to display on MapComponent
+                    // mapComponent.navigateToPOI(poi.getID()); // need to interact with UI to display on MapComponent
                 }
                 else {
                     /**
@@ -400,7 +467,6 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
             JToggleButton button = (JToggleButton) e.getSource();
             button.setBackground(Color.WHITE);
         }
-        
     }
     /**
      * Getter for POI list content panel

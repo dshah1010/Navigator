@@ -30,5 +30,11 @@ public class App
 
         // Create UserInterface object to create the UI -> this will remain for the session
         UserInterface ui = UserInterface.getInstance();
+        POIComponent poiComponent = POIComponent.getInstance();
+
+        /**
+        * Run an infinite loop to check for updates in POI component on map changes 
+        */
+        poiComponent.checkForUpdates();
     }
 }

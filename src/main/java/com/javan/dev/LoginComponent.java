@@ -62,6 +62,11 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
      */
     private DataProcessor processor = DataProcessor.getInstance();
 
+    /**
+     * Background image for the login component
+     */
+    private ImageIcon backgroundImage = new ImageIcon("data\\images\\uwo-bg-img.png");
+
 
     /**
      * Constructor to create Login Component of the UI. This will be in the main frame when the application is opened,
@@ -87,6 +92,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         mainPanel.add(loginPanel, BorderLayout.CENTER);
+        createBackground(mainPanel);
 
         /**
          * Set the login window to open by default
@@ -272,6 +278,16 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
     }
 
     /**
+     * Method to create an appealing background for components
+     */
+    public void createBackground(JPanel panel) {
+        /**
+         * Make more appealing background / border of the panel
+         */
+        panel.setBackground(Color.WHITE);
+    }
+
+    /**
      * Method to create the Login panel
      */
     public void loginPanel() {
@@ -280,6 +296,10 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
          */
         loginPanel = new JPanel();
         loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.Y_AXIS));
+        createBackground(loginPanel);
+
+
+
 
         /**
         * Initialize a list of JPanel objects for cards 1-6
@@ -287,6 +307,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
         ArrayList<JPanel> cards = new ArrayList<JPanel>();
         for (int i = 0; i < 6; i++) {
             cards.add(new JPanel());
+            createBackground(cards.get(i));
         }
 
         /**
@@ -356,6 +377,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
          */
         createAccountPanel = new JPanel();
         createAccountPanel.setLayout(new BoxLayout(createAccountPanel, BoxLayout.Y_AXIS));
+        createBackground(createAccountPanel);
 
         /**
         * Initialize a list of JPanel objects for cards 1-6
@@ -363,6 +385,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
         ArrayList<JPanel> createAccCards = new ArrayList<JPanel>();
         for (int i = 0; i < 6; i++) {
             createAccCards.add(new JPanel());
+            createBackground(createAccCards.get(i));
         }
 
         /**
@@ -501,7 +524,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
                 /**
                  * Create a user account and JSON storage of the user account using the DataProcessor class
                  */
-                // TODO: processor.createAccount(username password); // To implement in the future
+                // TODO: processor.createAccount(username, password); // To implement in the future
                 /**
                  * Bring user to login screen
                  */
@@ -659,7 +682,6 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
             /**
              * Convert the createAccountPanel into a loginPanel
              */
-            System.out.println("login");
             openLoginPanel();
         }
     }
