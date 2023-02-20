@@ -10,7 +10,8 @@ public class CampusMap implements Map{
     /**
      * Declaring the name and BuildingArray of the Campus.
      */
-    private String campusName;
+    private String filePath;
+    private int mapID;
     private ArrayList<BuildingMap> BuildingArray = new ArrayList<>;
     // TODO: add variable to contain map of campus
 
@@ -18,20 +19,38 @@ public class CampusMap implements Map{
      * Constructor for the CampusMap class to initialize the name/ ID
      * @param campusName
      */
-    public CampusMap(String campusName) {
-        this.campusName = campusName;
+    public CampusMap(String filePath, int mapID) {
+        this.mapID = campusName;
+        this.mapID = mapID;
     }
-
 
     /**
-     * Getter for the campusName
+     * Getter for filePath
      * @param None
-     * @return campusName
+     * @return String
      */
-    public String getCampusName() {
-        return this.campusName;
+    public String getFilePath() {
+        return this.filePath;
     }
 
+    /**
+     * Getter for mapID
+     * @param None
+     * @return int
+     */
+    public int getMapID() {
+        return this.mapID;
+    }
+
+    /**
+     * Updates Map (WIP)
+     * @param None
+     * @return int
+     */
+    public void updateMap(int mapID) {
+        this.mapID = mapID;
+        // Perform update of Campus Map
+    }
 
     /**
      * Adds Bulding to BuildingArray
@@ -55,11 +74,5 @@ public class CampusMap implements Map{
             }
         }
         return null;
-    }
-
-    public static void main (int mapID) {
-        Map campus = new Map();
-        DataProcessor processor = DataProcessor.getInstance();
-        campus.CampusMap(processor.loadMap(mapID));
     }
 }

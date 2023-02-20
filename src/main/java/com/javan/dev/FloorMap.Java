@@ -10,24 +10,33 @@ public class FloorMap implements Map{
     /**
      * Declaring the Id, Point of Interest array and layers array of the Floor.
      */
-    private int Id;
+    private String filePath;
+    private int mapID;
     private ArrayList<PointOfInterest> POIs = new ArrayList<>;
     private ArrayList<int> layers = new ArrayList<>;
-    private String filePath;
+    
     /**
      * Private variable to hold the instance of the data processor
      */
-    private DataProcessor processor = DataProcessor.getInstance();
+    //private DataProcessor processor = DataProcessor.getInstance();
 
     /**
      * Constructor for the FloorMap class to initialize the ID
      * @param floorId
      */
-    public FloorMap(Map mapInfo) {
-        this.floorId = mapInfo.floorId;
-        this.filePath = mapInfo.filePath;
+    public FloorMap(String filePath, int mapID) {
+        this.mapID = mapId;
+        this.filePath = filePath;
     }
 
+    /**
+     * Getter for filePath
+     * @param None
+     * @return String
+     */
+    public String getFilePath() {
+        return this.filePath;
+    }
 
     /**
      * Getter for the floorId
@@ -35,7 +44,18 @@ public class FloorMap implements Map{
      * @return floorId
      */
     public int getId() {
-        return this.floorId;
+        return this.mapID;
+    }
+
+
+    /**
+     * Updates Map (WIP)
+     * @param None
+     * @return int
+     */
+    public void updateMap(int mapID) {
+        this.mapID = mapID;
+        // Perform update of Campus Map
     }
 
     /**
@@ -61,9 +81,6 @@ public class FloorMap implements Map{
         return null;
     }
 
-    public String getFilePath() {
-        return this.filePath;
-    }
 
     public boolean checkfloorAbove() {
         return this.processor.checkfloorAbove(this.floorId);
@@ -81,9 +98,4 @@ public class FloorMap implements Map{
         return this.processor.getfloorBelow(this.floorID);
     }
 
-    public static void main (int mapID) {
-        Map floor = new Map();
-        DataProcessor processor = DataProcessor.getInstance();
-        floor.FloorMap(processor.loadMap(mapID));
-    }
 }

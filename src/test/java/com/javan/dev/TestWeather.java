@@ -25,6 +25,7 @@ public class TestWeather {
      * @throws IOException
      * @throws MalformedURLException
      */
+<<<<<<< HEAD
     @BeforeAll
     static void setUp() throws MalformedURLException, IOException {
         weather = Weather.getInstance();
@@ -39,6 +40,11 @@ public class TestWeather {
         Weather instance1 = Weather.getInstance();
         Weather instance2 = Weather.getInstance();
         assertEquals(instance1, instance2);
+=======
+    @BeforeEach
+    void setUp() throws MalformedURLException, IOException {
+        weather = Weather.getInstance();
+>>>>>>> de3370e (WIP)
     }
 
     /**

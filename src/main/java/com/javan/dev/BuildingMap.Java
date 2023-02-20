@@ -10,7 +10,7 @@ public class BuildingMap implements Map {
     /**
      * Declaring the name, Id and FloorArray of the Building.
      */
-    private String buildingName;
+    private String filePath;
     private int buildingId;
     private ArrayList<FloorMap> FloorArray = new ArrayList<>;
     // TODO: add variable to contain map of building
@@ -20,21 +20,38 @@ public class BuildingMap implements Map {
      * @param buildingName
      * @param buildingId
      */
-    public BuildingMap(String buildingName, int buildingId) {
-        this.buildingName = buildingName;
+    public BuildingMap(String filePath, int buildingId) {
+        this.filePath = buildingName;
         this.buildingId = buildingId;
     }
 
-
     /**
-     * Getter for the buildingName
+     * Getter for filePath
      * @param None
-     * @return buildingName
+     * @return String
      */
-    public String getBuildingName() {
-        return this.buildingName;
+    public String getFilePath() {
+        return this.filePath;
     }
 
+    /**
+     * Getter for mapID
+     * @param None
+     * @return int
+     */
+    public int getMapID() {
+        return this.mapID;
+    }
+
+    /**
+     * Updates Map (WIP)
+     * @param None
+     * @return int
+     */
+    public void updateMap(int mapID) {
+        this.mapID = mapID;
+        // Perform update of Campus Map
+    }
 
     /**
      * Adds Floor to FloorArray
@@ -58,9 +75,4 @@ public class BuildingMap implements Map {
         return null;
     }
     
-    public static void main (int mapID) {
-        Map buiilding = new Map();
-        DataProcessor processor = DataProcessor.getInstance();
-        building.BuildingMap(processor.loadMap(mapID));
-    }
 }
