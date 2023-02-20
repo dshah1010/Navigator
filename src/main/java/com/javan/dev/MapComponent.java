@@ -53,6 +53,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     private boolean isCampusMap = true; // *** CHANGE THIS IF U WANT TO VIEW THE FLOORMAPS INSTEAD FOR POICOMPONENT (FOR TESTING PURPOSES)
     private int currentMapID;
     private MapFactory mapFactory = new MapFactory();
+    private String mapType;
     private Map mapObject;
     private boolean isNavigationMode;
 
