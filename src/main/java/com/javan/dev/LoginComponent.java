@@ -195,7 +195,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
      * @param None
      * @return JButton of the button
      */
-    private JButton createButton(String text) {
+    public JButton createButton(String text) {
         /**
          * Create the button
          */
@@ -225,7 +225,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
      * @param String text
      * @return JTextField of the text field
      */
-    private JTextField createTextField(String text) {
+    public JTextField createTextField(String text) {
         /**
          * Create the new text field
          */
@@ -248,7 +248,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
      * @param String text
      * @return JPasswordField of the password field
      */
-    private JPasswordField createPasswordField(String text) {
+    public JPasswordField createPasswordField(String text) {
         /**
          * Create the password field
          */
@@ -274,7 +274,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
     /**
      * Method to create the Login panel
      */
-    private void loginPanel() {
+    public void loginPanel() {
         /**
          * JPanel to hold the login components with BoxLayout vertically
          */
@@ -350,7 +350,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
      * @param None
      * @return None
      */
-    private void createAccountPanel() {
+    public void createAccountPanel() {
         /**
          * JPanel to hold the create account components with BoxLayout vertically
          */

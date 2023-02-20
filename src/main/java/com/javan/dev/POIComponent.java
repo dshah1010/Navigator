@@ -400,7 +400,7 @@ public class POIComponent extends JPanel implements ActionListener, MouseListene
      * @param POIList
      * @return numRows to add
      */
-    private int addPOIsToPanel(JPanel gridDisplay, ArrayList<PointOfInterest> POIList) {
+    public int addPOIsToPanel(JPanel gridDisplay, ArrayList<PointOfInterest> POIList) {
 
         /**
          * Loop through all POIs in the list and add JPanels to the POI Panel on top of one another
@@ -453,7 +453,7 @@ public class POIComponent extends JPanel implements ActionListener, MouseListene
      * Method to create toggle buttons for the POI layers panel that are styled and have action listeners for toggling
      * @return JToggleButton
      */
-    private JToggleButton createPOILayerToggleButton(String text) {
+    public JToggleButton createPOILayerToggleButton(String text) {
         JToggleButton POILayerToggleButton = new JToggleButton(text);
         POILayerToggleButton.setBackground(Color.WHITE);
         POILayerToggleButton.setForeground(Color.BLACK);
@@ -630,6 +630,14 @@ public class POIComponent extends JPanel implements ActionListener, MouseListene
              */
             mapPanel.navigateToPOI(poiID);
         }
+    }
+
+    /**
+     * Getter for POI Panels
+     * @return POIPanels
+     */
+    public ArrayList<JPanel> getPOIPanels() {
+        return POIPanels;
     }
 
     /**

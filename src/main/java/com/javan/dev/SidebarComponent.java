@@ -1,15 +1,10 @@
 package com.javan.dev;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author: Riley Emma Gavigan <rgavigan@uwo.ca>
@@ -406,6 +401,37 @@ public class SidebarComponent extends JPanel implements ActionListener, MouseLis
             button.setBackground(Color.WHITE);
         }
         
+    }
+    /**
+     * Getter for POI list content panel
+     * @return poiListContentPanel
+     */
+    public JPanel getPOIListContentPanel() {
+        return poiListContentPanel;
+    }
+
+    /**
+     * Getter for Weather info content panel
+     * @return weatherInfoContentPane
+     */
+    public JPanel getWeatherInfoContentPanel() {
+        return weatherInfoContentPanel;
+    }
+
+    /**
+     * Getter for POI list button
+     * @return poiList
+     */
+    public JToggleButton getPOIListBtn() {
+        return poiList;
+    }
+
+    /**
+     * Getter for weather info toggle button
+     * @return weatherInfo
+     */
+    public JToggleButton getWeatherInfoBtn() {
+        return weatherInfo;
     }
 
     /**

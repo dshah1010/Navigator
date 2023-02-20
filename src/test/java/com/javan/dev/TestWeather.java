@@ -1,23 +1,44 @@
 package com.javan.dev;
 
+/**
+ * Include necessary libraries
+ */
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+
+/**
+ * @author: Riley Emma Gavigan <rgavigan@uwo.ca>
+ * @version: 1.0
+ * @since: 1.0
+ */
 public class TestWeather {
-    Weather weather;
+    static Weather weather;
 
     /**
-     * This method is called before each test method - sets up a new weather object
+     * This method is called before testing - sets up a new weather object
      * @throws IOException
      * @throws MalformedURLException
      */
-    @BeforeEach
-    void setUp() throws MalformedURLException, IOException {
-        weather = new Weather();
+    @BeforeAll
+    static void setUp() throws MalformedURLException, IOException {
+        weather = Weather.getInstance();
+        weather.parseWeather();
+    }
+
+    /**
+     * This method is called to check that the Weather singleton instance is not null and that it returns the same instance
+     */
+    @Test
+    void testGetInstanceReturnsSameInstance() {
+        Weather instance1 = Weather.getInstance();
+        Weather instance2 = Weather.getInstance();
+        assertEquals(instance1, instance2);
     }
 
     /**
