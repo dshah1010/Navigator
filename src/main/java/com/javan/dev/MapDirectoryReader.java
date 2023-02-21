@@ -7,7 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * @author: Riley Emma Gavigan <rgavigan@uwo.ca>
+ * @author: Bradley McGlynn <bmcglyn4@uwo.ca>
  * @version: 1.0
  * @since: 1.0
  */
