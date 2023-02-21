@@ -46,7 +46,7 @@ public final class DataProcessor {
         /**
          * Writes the user object to JSON file in the users folder under data
          */
-        Writer writer = new FileWriter("group1\\data\\users" + "\\" + user.getUsername() + ".json");
+        FileWriter writer = new FileWriter("data/users/userMetadata.json");
         gson.toJson(user, writer);
         writer.flush();
         writer.close();
@@ -60,7 +60,7 @@ public final class DataProcessor {
      */
     public User loadUser(String name) throws FileNotFoundException {
         Gson gson = new Gson();
-        Reader reader = new FileReader("group1\\data\\users" + "\\" + name + ".json");
+        FileReader reader = new FileReader("group1\\data\\users" + "\\" + name + ".json");
         User user = gson.fromJson(reader, User.class);
         return user;
     }
