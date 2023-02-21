@@ -12,6 +12,7 @@ public class FloorMap implements Map{
      */
     private String filePath;
     private int mapID;
+    private String mapType;
     private ArrayList<PointOfInterest> POIs = new ArrayList<PointOfInterest>();
     private ArrayList<Integer> layers = new ArrayList<Integer>();
     
@@ -24,9 +25,10 @@ public class FloorMap implements Map{
      * Constructor for the FloorMap class to initialize the ID
      * @param floorId
      */
-    public FloorMap(String filePath, int mapID) {
+    public FloorMap(int mapID) {
         this.mapID = mapID;
-        this.filePath = filePath;
+        this.filePath = processor.loadMapFilePath(mapID, "FLOOR");
+        this.mapType = "FLOOR";
     }
 
     /**
@@ -59,6 +61,15 @@ public class FloorMap implements Map{
     }
 
     /**
+     * Getter for mapType
+     * @param None
+     * @return String
+     */
+    public String getMapType() {
+        return this.mapType;
+    }
+
+    /**
      * Adds PointOfInterest to POIs
      * @param PointOfInterest
      * @return POI
@@ -86,16 +97,16 @@ public class FloorMap implements Map{
         return this.processor.checkfloorAbove(this.mapID);
     }
 
-    public boolean checkfloorBelow() {
-        return this.processor.checkfloorBelow(this.mapID);
+    public boolean checkFloorBelow() {
+        return this.processor.checkFloorBelow(this.mapID);
     }
 
-    public Map getfloorAbove() {
-        return this.processor.getfloorAbove(this.mapID);
+    public FloorMap getFloorAbove() {
+        return this.processor.getFloorAbove(this.mapID);
     }
 
-    public Map getfloorBelow() {
-        return this.processor.getfloorBelow(this.mapID);
+    public FloorMap getFloorBelow() {
+        return this.processor.getFloorBelow(this.mapID);
     }
 
 }

@@ -12,17 +12,24 @@ public class BuildingMap implements Map {
      */
     private String filePath;
     private int mapID;
+    private String mapType;
     private ArrayList<FloorMap> FloorArray = new ArrayList<FloorMap>();
     //private Image map;
+
+    /**
+     * Private variable to hold the instance of the data processor
+     */
+    private DataProcessor processor = DataProcessor.getInstance();
 
     /**
      * Constructor for the BuildingMap class to initialize the name/ ID
      * @param buildingName
      * @param buildingId
      */
-    public BuildingMap(String filePath, int mapID) {
-        this.filePath = filePath;
+    public BuildingMap(int mapID) {
+        this.filePath = processor.loadMapFilePath(mapID, "BUILDING");
         this.mapID = mapID;
+        this.mapType = "BUILDING";
     }
 
     /**
@@ -51,6 +58,15 @@ public class BuildingMap implements Map {
     public void updateMap(int mapID) {
         this.mapID = mapID;
         // Perform update of Campus Map
+    }
+
+    /**
+     * Getter for mapType
+     * @param None
+     * @return String
+     */
+    public String getMapType() {
+        return this.mapType;
     }
 
     /**

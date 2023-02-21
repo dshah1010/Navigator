@@ -35,7 +35,7 @@ public class MapDirectoryReader {
             // Set the building name, type and ID in the JSON object
             buildingJson.put("mapName", buildingName);
             buildingJson.put("mapType", "BUILDING");
-            buildingJson.put("buildingId", buildingId);
+            buildingJson.put("buildingID", buildingId);
     
             // Get a list of all PNG files in this subdirectory
             File[] imageFiles = subdirectory.listFiles();

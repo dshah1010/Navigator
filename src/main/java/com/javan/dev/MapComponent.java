@@ -52,7 +52,8 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      */
     private boolean isCampusMap = true; // *** CHANGE THIS IF U WANT TO VIEW THE FLOORMAPS INSTEAD FOR POICOMPONENT (FOR TESTING PURPOSES)
     private int currentMapID;
-    private MapFactory mapFactory = new MapFactory();
+    private MapFactory mapFactory = new MapFactory(); // TODO: need to determine when to use mapFactory still, likely will be used at start up instead of in MapComponent
+    private FloorMap floorMap; // TODO: could likely find a better workaround than having a separate map object for the floor maps, needs to be explored more
     private String mapType;
     private Map mapObject;
     private boolean isNavigationMode;
@@ -268,6 +269,11 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          */
         setMapDetails(newMap);
 
+         /**
+         * Sets map type
+         */
+        this.mapType = newMap.getMapType();
+
         /**
          * Remove the current map image from the image panel
          */
@@ -336,14 +342,16 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * @return None
      */
     private void isFloorAbove() {
-        if (mapObject.checkfloorAbove(currentMapID)) {
-            /**
-             * Enable the button "Floor Up"
-             */
-            floorAbove.setEnabled(true);
+        if (this.mapType.equals("FLOOR")) {
+            if (floorMap.checkfloorAbove()) {
+                /**
+                 * Enable the button "Floor Up"
+                 */
+                floorAbove.setEnabled(true);
 
-        } else {
-            floorAbove.setEnabled(false);
+            } else {
+                floorAbove.setEnabled(false);
+            }
         }
     }
 
@@ -355,7 +363,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * @return None
      */
     private void isFloorBelow() {
-        if (mapObject.checkfloorBelow(currentMapID)) {
+        if (floorMap.checkFloorBelow()) {
             /**
              * Enable the button "Floor Down"
              */
@@ -373,11 +381,11 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * @return None
      */
     private void navigateToFloorAbove() {
-        if (mapObject.checkfloorAbove(currentMapID)) {
+        if (floorMap.checkfloorAbove()) {
             /**
              * Get the map of the floor above
              */
-            mapObject = mapObject.getfloorAbove(currentMapID);
+            mapObject = floorMap.getFloorAbove();
 
             /**
              * Change the map
@@ -392,11 +400,11 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * @return None
      */
     private void navigateToFloorBelow() {
-        if (mapObject.checkfloorBelow(currentMapID)) {
+        if (floorMap.checkFloorBelow()) {
             /**
              * Get the map of the floor below
              */
-            mapObject = mapObject.getfloorBelow(currentMapID);
+            FloorMap mapObject = floorMap.getFloorBelow();
 
             /**
              * Change the map

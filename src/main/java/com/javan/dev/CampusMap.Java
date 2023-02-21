@@ -12,6 +12,7 @@ public class CampusMap implements Map{
      */
     private String filePath;
     private int mapID;
+    private String mapType;
     private ArrayList<BuildingMap> BuildingArray = new ArrayList<BuildingMap>();
     // TODO: add variable to contain map of campus
 
@@ -19,9 +20,10 @@ public class CampusMap implements Map{
      * Constructor for the CampusMap class to initialize the name/ ID
      * @param campusName
      */
-    public CampusMap(String filePath, int mapID) {
-        this.filePath = filePath;
+    public CampusMap(int mapID) {
+        this.filePath = "data/images/maps/campusMap.png";
         this.mapID = mapID;
+        this.mapType = "CAMPUS";
     }
 
     /**
@@ -50,6 +52,15 @@ public class CampusMap implements Map{
     public void updateMap(int mapID) {
         this.mapID = mapID;
         // Perform update of Campus Map
+    }
+
+    /**
+     * Getter for mapType
+     * @param None
+     * @return String
+     */
+    public String getMapType() {
+        return this.mapType;
     }
 
     /**

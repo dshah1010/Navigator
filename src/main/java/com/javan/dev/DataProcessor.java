@@ -22,6 +22,7 @@ public final class DataProcessor {
      * Private variable to hold the DataProcessor singleton instance
      */
     private static DataProcessor INSTANCE;
+    private String mapJsonFilePath = "data/images/maps/metadata/mapMetadata.json";
 
     /**
      * Getter for the DataProcessor singleton instance
@@ -65,11 +66,16 @@ public final class DataProcessor {
         return user;
     }
 
-    public Map loadMap(int mapID) throws FileNotFoundException {
-        Gson gson = new Gson();
-        Reader reader = new FileReader("group1\\data\\users" + "\\" + mapID + ".json");
-        Map map = gson.fromJson(reader, Map.class);
-        return map;
+    public String loadMapFilePath(int mapID, String mapType) {
+        if (mapType.equalsIgnoreCase("FLOOR")){
+            return JsonReader.getFloorMapPathFromID(mapID, this.mapJsonFilePath);
+        }
+        else if (mapType.equalsIgnoreCase("BUILDING")){
+            return JsonReader.getBuildingMapPathFromID(mapID, this.mapJsonFilePath);
+        }
+        else {
+            return null;
+        }
     }
 
 
@@ -172,7 +178,7 @@ public final class DataProcessor {
      * @param currentMapID
      * @return boolean indicating if there is a floor below or not
      */
-    public boolean checkfloorBelow(int currentMapID) {
+    public boolean checkFloorBelow(int currentMapID) {
         return false;
     }
 
@@ -181,7 +187,7 @@ public final class DataProcessor {
      * @param currentMapID
      * @return Map object of the floor above
      */
-    public Map getfloorAbove(int currentMapID) {
+    public FloorMap getFloorAbove(int currentMapID) {
         return null;
     }
 
@@ -190,7 +196,7 @@ public final class DataProcessor {
      * @param currentMapID
      * @return Map object of the floor below
      */
-    public Map getfloorBelow(int currentMapID) {
+    public FloorMap getFloorBelow(int currentMapID) {
         return null;
     }
 

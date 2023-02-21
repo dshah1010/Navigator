@@ -33,6 +33,14 @@ public class App
         String jsonFilePath = "data/images/maps/metadata/mapMetadata.json";
         MapDirectoryReader.addMapsToJSON(directoryPath, jsonFilePath);
 
+        // Test: Creating Map Objects
+        Map campusMap = MapFactory.createMap("CAMPUS", 1);
+        System.out.println(campusMap.getFilePath());
+        Map floorMap = MapFactory.createMap("FLOOR", 2);
+        System.out.println(floorMap.getFilePath());
+        Map buildingMap = MapFactory.createMap("BUILDING", 1);
+        System.out.println(buildingMap.getFilePath());
+
         // Create UserInterface object to create the UI -> this will remain for the session
         UserInterface ui = UserInterface.getInstance();
         POIComponent poiComponent = POIComponent.getInstance();

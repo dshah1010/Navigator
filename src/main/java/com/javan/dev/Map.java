@@ -16,4 +16,6 @@ public interface Map {
 
     public void updateMap(int mapID);
 
+    public String getMapType();
+
 }
