@@ -1,10 +1,16 @@
 package com.javan.dev;
 
-import org.json.simple.JSONObject;
-import org.json.simple.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONArray;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+
+/**
+ * @author: Riley Emma Gavigan <rgavigan@uwo.ca>
+ * @version: 1.0
+ * @since: 1.0
+ */
 
 public class MapDirectoryReader {
 
@@ -54,7 +60,7 @@ public class MapDirectoryReader {
                 String imagePath = imageFile.getAbsolutePath();
                 mapJson.put("filePath", imagePath);
 
-                mapsJson.add(mapJson);
+                mapsJson.put(mapJson);
                 mapID++;
             }
     
@@ -66,7 +72,7 @@ public class MapDirectoryReader {
             buildingJson.put("filePath", buildingPath);
     
             // Add the map JSON object to the buildings JSON array
-            buildingsJson.add(buildingJson);
+            buildingsJson.put(buildingJson);
 
             buildingId++;
 
@@ -76,7 +82,7 @@ public class MapDirectoryReader {
         FileWriter file = null;
         try {
             file = new FileWriter(jsonFilePath);
-            file.write(buildingsJson.toJSONString());
+            file.write(buildingsJson.toString());
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
