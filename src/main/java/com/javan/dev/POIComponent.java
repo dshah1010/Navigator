@@ -9,6 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 
@@ -17,7 +18,7 @@ import java.util.List;
  * @version: 1.0
  * @since: 1.0
  */
-public class POIComponent extends JPanel implements ActionListener, MouseListener, FocusListener {
+public final class POIComponent extends JPanel implements ActionListener, MouseListener, FocusListener {
     /**
      * Initialize private variables for the POIComponent
      */
@@ -42,9 +43,25 @@ public class POIComponent extends JPanel implements ActionListener, MouseListene
     private DataProcessor dataProcessor = DataProcessor.getInstance();
 
     /**
+     * private instance of MapComponent to receive information from
+     */
+    private MapComponent mapComponent = MapComponent.getInstance();
+
+    /**
+     * Instance of POIComponent to be used
+     */
+    private static POIComponent INSTANCE;
+
+    /**
+     * Map ID
+     */
+    private int currMapID;
+
+
+    /**
      * Constructor to create POIPanel that holds the four other panels vertically, allowing them to display their information
      */
-    public POIComponent() {
+    private POIComponent() {
         /**
          * Initialize list of POI panels and scroll panes
          */
@@ -87,9 +104,39 @@ public class POIComponent extends JPanel implements ActionListener, MouseListene
         addOtherPOIPanel();
 
         /**
+         * Start at campus map, set ID to it and change display if campus map
+         */
+        currMapID = 1;
+        changeDisplayIfCampusMap();
+
+        /**
          * Make POI Panel visible
          */
         POIPanel.setVisible(true);
+    }
+
+    public void checkForUpdates() {
+        while (true) {
+            try {
+                while (mapComponent.getCurrentMapID() == currMapID) {
+                    Thread.sleep(100);
+                }
+                currMapID = mapComponent.getCurrentMapID();
+                changeDisplayIfCampusMap();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Getter for the instance of the POIComponent
+     */
+    public static POIComponent getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new POIComponent();
+        }
+        return INSTANCE;
     }
 
     /**
@@ -344,7 +391,8 @@ public class POIComponent extends JPanel implements ActionListener, MouseListene
          * JPanel that separates the title from the list of other POIs
          */
         JPanel gridDisplay = new JPanel();
-        POIPanels.get(3).setLayout(new BoxLayout(POIPanels.get(3), BoxLayout.Y_AXIS));
+        POIPanels.get(3).setLayout(new GridBagLayout());
+        GridBagConstraints gridConstraints = new GridBagConstraints();
 
 
         /**
@@ -354,7 +402,16 @@ public class POIComponent extends JPanel implements ActionListener, MouseListene
         titleOther.setBackground(Color.WHITE);
         JButton otherPOIButton = createPOIButton("All POIs");
         titleOther.add(otherPOIButton);
-        POIPanels.get(3).add(titleOther);
+
+        /**
+         * Add the title button to the panel and have it weigh 0 in y axis
+         */
+        gridConstraints.gridx = 0;
+        gridConstraints.gridy = 0;
+        gridConstraints.weightx = 1.0;
+        gridConstraints.weighty = 0;
+        gridConstraints.fill = GridBagConstraints.BOTH;
+        POIPanels.get(3).add(titleOther, gridConstraints);
 
         /**
          * Update the list of Strings representing the other POIs 
@@ -368,7 +425,16 @@ public class POIComponent extends JPanel implements ActionListener, MouseListene
 
         GridLayout grid = new GridLayout(numRows, 2);
         gridDisplay.setLayout(grid);
-        POIPanels.get(3).add(gridDisplay);
+
+        /**
+         * Add the gridDisplay to the panel and have it weigh 1 in y axis
+         */
+        gridConstraints.gridx = 0;
+        gridConstraints.gridy = 1;
+        gridConstraints.weightx = 1.0;
+        gridConstraints.weighty = 1.0;
+        gridConstraints.fill = GridBagConstraints.BOTH;
+        POIPanels.get(3).add(gridDisplay, gridConstraints);
 
         /**
          * Set the Other POI Panel to be visible
@@ -470,6 +536,28 @@ public class POIComponent extends JPanel implements ActionListener, MouseListene
         return POILayerToggleButton;
     }
 
+    /**
+     * Method to hide the POI layers panel, favourite POIs, and User POIs if the campus map is selected
+     */
+    public void changeDisplayIfCampusMap() {
+        if (mapPanel.getIsCampusMap()) {
+            /**
+             * Make the first 3 scroll panes not show on UI
+             */
+            for (int i = 0; i < 3; i++) {
+                POIScrollPanes.get(i).setVisible(false);
+            }
+        }
+        else {
+            /**
+             * Make the first 3 scroll panes show on UI
+             */
+            for (int i = 0; i < 3; i++) {
+                POIScrollPanes.get(i).setVisible(true);
+            }
+        }
+    }
+
     public void mouseEntered(MouseEvent e) {
         /**
          * When the mouse enters a POI Layer Toggle Button, change the colour of the button to light gray and make the cursor a hover cursor
@@ -531,11 +619,9 @@ public class POIComponent extends JPanel implements ActionListener, MouseListene
         if (e.getSource() instanceof JToggleButton) {
             JToggleButton button = (JToggleButton) e.getSource();
             if (button.isSelected()) {
-                System.out.println("Selected POI Layer Being Sent To MapComponent: " + button.getText() + "");
                 // TODO: mapPanel.enablePOILayer(button.getText());
             }
             else {
-                System.out.println("Deselected POI Layer Being Sent To MapComponent: " + button.getText() + "");
                 // TODO: mapPanel.disablePOILayer(button.getText());
             }
         }
@@ -623,8 +709,6 @@ public class POIComponent extends JPanel implements ActionListener, MouseListene
             JLabel label = (JLabel) panel.getComponent(1);
             String poiName = label.getText();
             int poiID = Integer.parseInt(poiName);
-
-            System.out.println("Sending POI name to MapComponent: " + String.valueOf(poiID) + "");
             /**
              * Pass POI name to the MapPanel to be highlighted on the map
              */
