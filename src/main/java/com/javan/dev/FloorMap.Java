@@ -60,6 +60,7 @@ public class FloorMap implements Map{
         // Perform update of Campus Map
     }
 
+
     /**
      * Getter for mapType
      * @param None
