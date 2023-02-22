@@ -1,14 +1,29 @@
 package com.javan.dev;
 
+/**
+ * @author: Deep Shah <dshah228@uwo.ca>
+ * @version: 1.0
+ * @since: 1.0
+ */
 public class PointOfInterest {
-    private String name; // TODO: TEMPORARY FOR TESTING
+
+    private String name;
+    private int userID;
+    private boolean isUserMade;
+    private String poiType;
+    private int[] coordinates = {0, 0};
+    private int floorID;
+    private int buildingID;
+    private int isFavourited;
+    private String description;
+    private int roomNumber;
 
     /**
      * Constructor for the POI
      * @param name, the name of the POI
      */
     public PointOfInterest(String name) {
-        this.name = name; // TODO: TEMPORARY FOR TESTING
+        this.name = name; 
     }
 
     /**
@@ -16,42 +31,98 @@ public class PointOfInterest {
      * @return String of the name
      */
     public String getName() {
-        return "Test"; // TODO: TEMPORARY FOR TESTING
+        return name; 
     }
 
     /**
-     * Setter for the name of the POI
+     * Getter for the ID of the user
+     * @return int of the ID
      */
-    public void setName(String name) {
-        this.name = name; // TODO: TEMPORARY FOR TESTING
+    public int getUserID() {
+        return userID;
     }
 
     /**
-     * Getter for coordinates of the POI
-     * @return int[] of the x and y coordinates
+     * Getter for the user made POI
+     * @return boolean of user made
+     */
+    public boolean getIsUserMade() {
+        return isUserMade;
+    }
+
+    /**
+     * Getter for the type of the POI
+     * @return String of the type
+     */
+    public String getPOItype() {
+        return poiType;
+    }
+
+    /**
+     * Getter for the coordinates of the POI 
+     * @return int[] of the coordinates
      */
     public int[] getCoordinates() {
-        /**
-         * Get 2 random integers between 0 and 1000
-         */
-        int x = (int) (Math.random() * 2500);
-        int y = (int) (Math.random() * 2500);
+        return coordinates;
+    }
 
-        int[] coords = {x, y};
-        return coords;
+    /** 
+     * Getter for the floor ID of the POI
+     * @return int of the floor ID
+     */
+    public int getFloorID() {
+        return floorID;
     }
 
     /**
-     * Getter for the ID of the POI
-     * @return
+     * Getter for the building ID of the POI
+     * @return int of the building ID
      */
-    public int getID() {
-        return 12;
+    public int getBuildingID() {
+        return buildingID;
     }
 
+    /** 
+     * Getter for the favourited POI
+     * @return int of the favourited 
+     */
+    public int getIsFavourited() {
+        return isFavourited;
+    }
+
+    /**
+     * Getter for the description of the POI
+     * @return String of the description 
+     */
     public String getDescription() {
-        String test = "This is a test description";
-        return test;
+        return description;
+    }
+
+    /**
+     * Getter for the room number of the POI
+     * @return int of the room number 
+     */
+    public int getRoomNumber() {
+        return roomNumber;
+    }
+
+    /**
+     * Storing variable values into the JSON object
+     * @return JSON object 
+     */
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("userID", userID);
+        json.put("isUserMade", isUserMade);
+        json.put("POI_type", POI_type);
+        json.put("coordinates", new JSONArray(coordinates));
+        json.put("floorID", floorID);
+        json.put("buildingID", buildingID);
+        json.put("isFavourited", isFavourited);
+        json.put("description", description);
+        json.put("roomNumber", roomNumber);
+        return json;
     }
     
 }
