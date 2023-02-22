@@ -1,5 +1,7 @@
 package com.javan.dev;
 
+import org.json.JSONObject;
+
 /**
  * @author: Brad McGlynn <bmcglyn4@uwo.ca>
  * @version: 1.0
@@ -31,4 +33,5 @@ public interface Map {
      */
     public String getMapType();
 
+    public JSONObject toJSON();
 }
