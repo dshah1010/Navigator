@@ -1,6 +1,7 @@
 package com.javan.dev;
 import java.util.ArrayList;
-
+import org.json.JSONObject;
+import org.json.JSONArray;
 /**
  * @author: Brad McGlynn <bmcglyn4@uwo.ca>
  * @version: 1.0
@@ -79,6 +80,20 @@ public class FloorMap implements Map{
      */
     public String getMapType() {
         return this.mapType;
+    }
+
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+        json.put("filePath", this.filePath);
+        json.put("mapID", this.mapID);
+        json.put("mapType", this.mapType);
+        json.put("buildingID", this.buildingID);
+        JSONArray POIsJson = new JSONArray();
+        for (PointOfInterest POI : this.POIs) {
+            POIsJson.put(POI.toJSON());
+        }
+        json.put("POIs", POIsJson);
+        return json;
     }
 
     /**

@@ -19,7 +19,7 @@ public class MapDirectoryReader {
      * @param String jsonFilePath, the target path for the json file of metadata to be created at
      * @return None
      */
-    public static void addMapsToJSON(String directoryPath, String jsonFilePath) {
+    public static void addMapInfoToJSON(String directoryPath, String jsonFilePath) {
         // Create a JSON array to hold the maps
         JSONArray buildingsJson = new JSONArray();
     
@@ -98,6 +98,38 @@ public class MapDirectoryReader {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+    /**
+     * Function to create map object metadata based
+     * @param String directoryPath, directory path of the directory of directories containing map pngs
+     * @param String jsonFilePath, the target path for the json file of metadata to be created at
+     * @return None
+     */
+    public static void addMapObjectsToJSON(String jsonFilePath, Map map) {
+        try {
+            // Get the building ID from the BuildingMap
+            int mapID = map.getMapID();
+
+            // Create a new JSONObject and add the building ID and BuildingMap to it
+            JSONObject mapData = new JSONObject();
+
+            if (map.getMapType().equals("BUILDING")) {
+                mapData.put("buildingID", mapID);
+                mapData.put("buildingMap", map.toJSON());
+            }
+            else if (map.getMapType().equals("FLOOR")) {
+                mapData.put("floorID", mapID);
+                mapData.put("floorMap", map.toJSON());
+            }
+            
+            FileWriter writer = new FileWriter(jsonFilePath);
+            writer.write(mapData.toString());
+            writer.close();
+
+            System.out.println("Building data added to JSON file.");
+        } catch (IOException e) {
+            System.err.println("Error adding building data to JSON file: " + e.getMessage());
         }
     }
 }
