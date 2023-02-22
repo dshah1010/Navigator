@@ -728,7 +728,7 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
                 /**
                  * Get the building map for the building ID
                  */
-                // TODO: either this method or some other method: Map buildingMap = dataProcessor.getMap(buildingID);
+                // TODO: Get Map from some form of map storage and store as buildingMap
                 /**
                  * Pass POI name to the MapPanel to be highlighted on the map
                  */
