@@ -30,12 +30,13 @@ public final class Weather {
     private String API_key = "04decf0c05e44c028f211659231302";
     /**
      * URL for Weather API GET request for our purposes (simple current weather request)
+     * Gets it for current IP of the user
      */
-    private String GET_URL = "http://api.weatherapi.com/v1/current.json?key=" + API_key + "&q=N6A3K7";
+    private String GET_URL = "http://api.weatherapi.com/v1/current.json?key=" + API_key + "&q=auto:ip";
     /**
      * String to hold JSON object retrieved from constructor
      */
-    private StringBuffer json = new StringBuffer();
+    private StringBuffer json = null;
     /**
      * Variables to hold weather data
      */
@@ -66,6 +67,7 @@ public final class Weather {
         /**
          * Turn GET request URL into a URL object
          */
+        System.out.println(GET_URL);
         URL url = new URL(GET_URL);
 
         /**
@@ -75,12 +77,12 @@ public final class Weather {
         connection.setRequestMethod("GET");
 
         /**
-         * Check if the connection was successful. If it wasnt, a RuntimeException will be thrown.
-         * This will ensure that when a user is offline, undefined behaviour does not occur.
+         * Check if the connection was successful. If it wasnt, disconnect and return
          */
         int responseCode = connection.getResponseCode();
         if (responseCode != 200) {
-            throw new RuntimeException("Weather API Could Not Be Accessed");
+            connection.disconnect();
+            return;
         }
 
         /**
@@ -88,6 +90,14 @@ public final class Weather {
          */
         BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String input;
+        /**
+         * Initialize json stringbuffer
+         */
+        json = new StringBuffer();
+
+        /**
+         * Add to the stringbuffer
+         */
         while ((input = reader.readLine()) != null) {
             json.append(input);
         }
@@ -126,6 +136,13 @@ public final class Weather {
      * Function to use DataProcessor to parse the weather JSON object
      */
     public void parseWeather() {
+        /**
+         * Do nothing / no parsing if null JSON object
+         */
+        if (this.json == null) {
+            return;
+        }
+        
         /**
          * Get the parsed data and store it in the current Weather objet
          */
@@ -175,7 +192,7 @@ public final class Weather {
      */
     public JPanel addWeatherInfo() throws MalformedURLException, IOException {
         weatherInfoPanel = new JPanel();
-        Weather weather = new Weather();
+        Weather weather = Weather.getInstance();
         weather.parseWeather();
         /**
          * Get the temperature and icon link from the Weather class

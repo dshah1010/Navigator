@@ -293,9 +293,9 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
         weatherInfoContentPanel = new JPanel();
         weatherInfoPanel = new JPanel();
         // TODO: fix weather object / API
-        weather = null ;//Weather.getInstance();
-        //weather.parseWeather();
-        JPanel weatherContent = null; //weather.addWeatherInfo();
+        weather = Weather.getInstance();
+        weather.parseWeather();
+        JPanel weatherContent = weather.addWeatherInfo();
 
         /**
          * If there is no weather information, do not add the weather panel to the sidebar

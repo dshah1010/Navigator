@@ -92,14 +92,24 @@ public final class DataProcessor {
      */
     public ArrayList<String> parseWeather(StringBuffer json) {
         /**
+         * Initialize ArrayList to hold the two strings
+         */
+        ArrayList<String> weather = new ArrayList<String>();
+
+        /**
+         * If null just add null and return null arraylist to pass back to Weather
+         */
+        if (json.toString() == null) {
+            weather.add(null);
+            weather.add(null);
+            weather.add(null);
+            return weather;
+        }
+        /**
          * Create JSON object with org.json library
          */
         String data = json.toString();
         JSONObject obj = new JSONObject(data);
-        /**
-         * Initialize ArrayList to hold the two strings
-         */
-        ArrayList<String> weather = new ArrayList<String>();
 
         /**
          * Get temperature and condition
