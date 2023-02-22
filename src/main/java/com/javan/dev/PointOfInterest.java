@@ -2,7 +2,13 @@ package com.javan.dev;
 import org.json.JSONObject;
 import org.json.JSONArray;
 
+/**
+ * @author: Deep Shah <dshah228@uwo.ca>
+ * @version: 1.0
+ * @since: 1.0
+ */
 public class PointOfInterest {
+    private int ID;
     private String name; 
     private int userID;
     private Boolean isUserMade;
@@ -20,7 +26,7 @@ public class PointOfInterest {
      * @param name, the name of the POI
      */
     public PointOfInterest(String name) {
-        this.name = name; // TODO: TEMPORARY FOR TESTING
+        this.name = name; 
     }
 
     /**
@@ -28,44 +34,93 @@ public class PointOfInterest {
      * @return String of the name
      */
     public String getName() {
-        return "Test"; // TODO: TEMPORARY FOR TESTING
+        return name; 
     }
 
     /**
-     * Setter for the name of the POI
+     * Getter for the ID of the user
+     * @return int of the ID
      */
-    public void setName(String name) {
-        this.name = name; // TODO: TEMPORARY FOR TESTING
+    public int getUserID() {
+        return userID;
     }
 
     /**
-     * Getter for coordinates of the POI
-     * @return int[] of the x and y coordinates
-     */
-    public int[] getCoordinates() {
-        /**
-         * Get 2 random integers between 0 and 1000
-         */
-        int x = (int) (Math.random() * 2500);
-        int y = (int) (Math.random() * 2500);
-
-        int[] coords = {x, y};
-        return coords;
-    }
-
-    /**
-     * Getter for the ID of the POI
-     * @return
+     * Getter for the POI Id
+     * @return int of the ID
      */
     public int getID() {
-        return 12;
+        return ID;
     }
 
-    public String getDescription() {
-        String test = "This is a test description";
-        return test;
+    /**
+     * Getter for the user made POI
+     * @return boolean of user made
+     */
+    public boolean getIsUserMade() {
+        return isUserMade;
     }
-    
+
+    /**
+     * Getter for the type of the POI
+     * @return String of the type
+     */
+    public String getPOItype() {
+        return POI_type;
+    }
+
+    /**
+     * Getter for the coordinates of the POI 
+     * @return int[] of the coordinates
+     */
+    public int[] getCoordinates() {
+        return coordinates;
+    }
+
+    /** 
+     * Getter for the floor ID of the POI
+     * @return int of the floor ID
+     */
+    public int getFloorID() {
+        return floorID;
+    }
+
+    /**
+     * Getter for the building ID of the POI
+     * @return int of the building ID
+     */
+    public int getBuildingID() {
+        return buildingID;
+    }
+
+    /** 
+     * Getter for the favourited POI
+     * @return int of the favourited 
+     */
+    public Boolean getIsFavourited() {
+        return isFavourited;
+    }
+
+    /**
+     * Getter for the description of the POI
+     * @return String of the description 
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Getter for the room number of the POI
+     * @return int of the room number 
+     */
+    public int getRoomNumber() {
+        return roomNumber;
+    }
+
+    /**
+     * Storing variable values into the JSON object
+     * @return JSON object 
+     */
     public JSONObject toJSON() {
         JSONObject json = new JSONObject();
         json.put("name", name);
