@@ -8,6 +8,7 @@ import org.json.JSONArray;
  * @since: 1.0
  */
 public class PointOfInterest {
+    
     private int ID;
     private String name; 
     private int userID;
@@ -30,22 +31,6 @@ public class PointOfInterest {
     }
 
     /**
-     * Getter for the name of the POI
-     * @return String of the name
-     */
-    public String getName() {
-        return name; 
-    }
-
-    /**
-     * Getter for the ID of the user
-     * @return int of the ID
-     */
-    public int getUserID() {
-        return userID;
-    }
-
-    /**
      * Getter for the POI Id
      * @return int of the ID
      */
@@ -53,12 +38,29 @@ public class PointOfInterest {
         return ID;
     }
 
+
+    /**
+     * Getter for the name of the POI
+     * @return String of the name
+     */
+    public String getName() {
+        return this.name; 
+    }
+
+    /**
+     * Getter for the ID of the user
+     * @return int of the ID
+     */
+    public int getUserID() {
+        return this.userID;
+    }
+
     /**
      * Getter for the user made POI
      * @return boolean of user made
      */
     public boolean getIsUserMade() {
-        return isUserMade;
+        return this.isUserMade;
     }
 
     /**
@@ -74,7 +76,7 @@ public class PointOfInterest {
      * @return int[] of the coordinates
      */
     public int[] getCoordinates() {
-        return coordinates;
+        return this.coordinates;
     }
 
     /** 
@@ -82,7 +84,7 @@ public class PointOfInterest {
      * @return int of the floor ID
      */
     public int getFloorID() {
-        return floorID;
+        return this.floorID;
     }
 
     /**
@@ -90,7 +92,7 @@ public class PointOfInterest {
      * @return int of the building ID
      */
     public int getBuildingID() {
-        return buildingID;
+        return this.buildingID;
     }
 
     /** 
@@ -98,7 +100,7 @@ public class PointOfInterest {
      * @return int of the favourited 
      */
     public Boolean getIsFavourited() {
-        return isFavourited;
+        return this.isFavourited;
     }
 
     /**
@@ -106,7 +108,7 @@ public class PointOfInterest {
      * @return String of the description 
      */
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     /**
@@ -114,13 +116,9 @@ public class PointOfInterest {
      * @return int of the room number 
      */
     public int getRoomNumber() {
-        return roomNumber;
+        return this.roomNumber;
     }
 
-    /**
-     * Storing variable values into the JSON object
-     * @return JSON object 
-     */
     public JSONObject toJSON() {
         JSONObject json = new JSONObject();
         json.put("name", name);
