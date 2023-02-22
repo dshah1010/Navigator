@@ -8,6 +8,7 @@ package com.javan.dev;
 public class PointOfInterest {
 
     private String name;
+    private int ID;
     private int userID;
     private boolean isUserMade;
     private String poiType;
@@ -27,11 +28,19 @@ public class PointOfInterest {
     }
 
     /**
+     * Getter method for the ID
+     * @return int of the ID
+     */
+    public int getID() {
+        return this.ID;
+    }
+
+    /**
      * Getter for the name of the POI
      * @return String of the name
      */
     public String getName() {
-        return name; 
+        return this.name; 
     }
 
     /**
@@ -39,7 +48,7 @@ public class PointOfInterest {
      * @return int of the ID
      */
     public int getUserID() {
-        return userID;
+        return this.userID;
     }
 
     /**
@@ -47,7 +56,7 @@ public class PointOfInterest {
      * @return boolean of user made
      */
     public boolean getIsUserMade() {
-        return isUserMade;
+        return this.isUserMade;
     }
 
     /**
@@ -55,7 +64,7 @@ public class PointOfInterest {
      * @return String of the type
      */
     public String getPOItype() {
-        return poiType;
+        return this.poiType;
     }
 
     /**
@@ -63,7 +72,7 @@ public class PointOfInterest {
      * @return int[] of the coordinates
      */
     public int[] getCoordinates() {
-        return coordinates;
+        return this.coordinates;
     }
 
     /** 
@@ -71,7 +80,7 @@ public class PointOfInterest {
      * @return int of the floor ID
      */
     public int getFloorID() {
-        return floorID;
+        return this.floorID;
     }
 
     /**
@@ -79,7 +88,7 @@ public class PointOfInterest {
      * @return int of the building ID
      */
     public int getBuildingID() {
-        return buildingID;
+        return this.buildingID;
     }
 
     /** 
@@ -87,7 +96,7 @@ public class PointOfInterest {
      * @return int of the favourited 
      */
     public int getIsFavourited() {
-        return isFavourited;
+        return this.isFavourited;
     }
 
     /**
@@ -95,7 +104,7 @@ public class PointOfInterest {
      * @return String of the description 
      */
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     /**
@@ -103,26 +112,7 @@ public class PointOfInterest {
      * @return int of the room number 
      */
     public int getRoomNumber() {
-        return roomNumber;
-    }
-
-    /**
-     * Storing variable values into the JSON object
-     * @return JSON object 
-     */
-    public JSONObject toJSON() {
-        JSONObject json = new JSONObject();
-        json.put("name", name);
-        json.put("userID", userID);
-        json.put("isUserMade", isUserMade);
-        json.put("POI_type", POI_type);
-        json.put("coordinates", new JSONArray(coordinates));
-        json.put("floorID", floorID);
-        json.put("buildingID", buildingID);
-        json.put("isFavourited", isFavourited);
-        json.put("description", description);
-        json.put("roomNumber", roomNumber);
-        return json;
+        return this.roomNumber;
     }
     
 }
