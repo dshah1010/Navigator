@@ -102,8 +102,8 @@ public class MapDirectoryReader {
     }
     /**
      * Function to create map object metadata
-     * @param String directoryPath, directory path of the directory of directories containing map pngs
      * @param String jsonFilePath, the target path for the json file of metadata to be created at
+     * @param Map map, map object to create metadata for
      * @return None
      */
     public static void addMapObjectsToJSON(String jsonFilePath, Map map) {
