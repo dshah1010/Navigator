@@ -101,7 +101,7 @@ public class MapDirectoryReader {
         }
     }
     /**
-     * Function to create map object metadata based
+     * Function to create map object metadata
      * @param String directoryPath, directory path of the directory of directories containing map pngs
      * @param String jsonFilePath, the target path for the json file of metadata to be created at
      * @return None
