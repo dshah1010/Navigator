@@ -122,10 +122,12 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         map.setBounds(0, 0, mapImg.getIconWidth(), mapImg.getIconHeight());
         imagePanel.setPreferredSize(new Dimension(mapImg.getIconWidth(), mapImg.getIconHeight()));
         imagePanel.add(map);
+
         /**
-         * Display POIs
+         * Display POIs and update buttons
          */
         displayPOIs();
+        updateFloorButtons();
 
         /**
          * Add the scroll pane to the map panel
@@ -241,6 +243,22 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
             isCampusMap = true;
         }
     }
+    
+    /**
+     * Method to update floor up/down buttons depending on if on campus map or a floor map
+     */
+    public void updateFloorButtons() {
+        if (isCampusMap) {
+            buttonPanel.remove(floorBelow);
+            buttonPanel.remove(floorAbove);
+            buttonPanel.setLayout(new GridLayout(1, 1));
+        }
+        else {
+            buttonPanel.add(floorBelow);
+            buttonPanel.add(floorAbove);
+            buttonPanel.setLayout(new GridLayout(1, 3));
+        }
+    }
 
     /**
      * Function to create a new button and style it
@@ -309,9 +327,10 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         // isFloorBelow(); TODO: Wait for implementation to be finished from FloorMap
 
         /**
-         * Display the POIs for the map
+         * Display the POIs for the map and update buttons
          */
         displayPOIs();
+        updateFloorButtons();
 
         /**
          * Set visible
