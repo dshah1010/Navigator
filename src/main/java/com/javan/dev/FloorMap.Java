@@ -6,42 +6,79 @@ import java.util.ArrayList;
  * @version: 1.0
  * @since: 1.0
  */
-public class FloorMap {
+public class FloorMap implements Map{
     /**
-     * Declaring the name, Id and Point of Interest array of the Floor.
+     * Declaring the mapID, buildindID, filePath, map type, Point of Interest array and layers array of the Floor.
      */
-    private String floorName;
-    private int floorId;
-    private ArrayList<PointOfInterest> POIs = new ArrayList<>;
-    // TODO: add variale to contain map of floor
+    private String filePath;
+    private int mapID;
+    private int buildingID;
+    private String mapType;
+    private ArrayList<PointOfInterest> POIs = new ArrayList<PointOfInterest>();
+    private ArrayList<Integer> layers = new ArrayList<Integer>();
+    
+    /**
+     * Private variable to hold the instance of the data processor
+     */
+    private DataProcessor processor = DataProcessor.getInstance();
 
     /**
-     * Constructor for the FloorMap class to initialize the name/ ID
-     * @param floorName
+     * Constructor for the FloorMap class to initialize the ID, type and filePath
      * @param floorId
      */
-    public FloorMap(String floorName, int floorId) {
-        this.floorName = floorName;
-        this.floorId = floorId;
+    public FloorMap(int buildingID, int mapID) {
+        this.filePath = processor.loadMapFilePath(buildingID, mapID, "FLOOR");
+        this.mapID = mapID;
+        this.buildingID = buildingID;
+        this.mapType = "FLOOR";
+    }
+
+    /**
+     * Getter for filePath
+     * @param None
+     * @return String
+     */
+    public String getFilePath() {
+        return this.filePath;
+    }
+
+    /**
+     * Getter for the mapID
+     * @param None
+     * @return mapID
+     */
+    public int getMapID() {
+        return this.mapID;
     }
 
 
     /**
-     * Getter for the floorName
+     * Updates Map (WIP)
      * @param None
-     * @return floorName
+     * @return int
      */
-    public String getFloorName() {
-        return this.floorName;
+    public void updateMap(int mapID) {
+        this.mapID = mapID;
+        // Perform update of Campus Map
     }
 
     /**
-     * Getter for the floorId
+     * Getter for the buildingID
      * @param None
-     * @return floorId
+     * @return mapID
      */
-    public int getFloorId() {
-        return this.floorId;
+    public int getBuildingID() {
+        return this.buildingID;
+    }
+
+
+    /**
+     * Getter for mapType
+     * @param None
+     * @return String
+     */
+    public String getMapType() {
+        return this.mapType;
     }
 
     /**
@@ -49,22 +86,39 @@ public class FloorMap {
      * @param PointOfInterest
      * @return POI
      */
-    public String addPOI(PointOfInterest newPointOfInterest) {
+    public void addPOI(PointOfInterest newPointOfInterest) {
         this.POIs.add(newPointOfInterest);
-        return null;
     }
 
     /**
-     * Getter for the PointOfInterest
+     * Searches for the PointOfInterest that matches search string
      * @param PointOfInterest
      * @return POI
      */
-    public String getPOI(String PointOfInterest) {
+    public PointOfInterest searchPOI(String PointOfInterest) {
         for (int i = 0; i < this.POIs.size(); i++) {
-            if (this.POIs[i].name.equalsIgnoreCase(PointOfInterest)) {
-                return this.POIs[i];
+            if (this.POIs.get(i).getName().equalsIgnoreCase(PointOfInterest)) {
+                return this.POIs.get(i);
             }
         }
         return null;
     }
+
+
+    public boolean checkfloorAbove() {
+        return this.processor.checkfloorAbove(this.mapID);
+    }
+
+    public boolean checkFloorBelow() {
+        return this.processor.checkFloorBelow(this.mapID);
+    }
+
+    public FloorMap getFloorAbove() {
+        return this.processor.getFloorAbove(this.mapID);
+    }
+
+    public FloorMap getFloorBelow() {
+        return this.processor.getFloorBelow(this.mapID);
+    }
+
 }

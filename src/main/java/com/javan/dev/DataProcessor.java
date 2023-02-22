@@ -4,8 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
 import java.util.ArrayList;
 
 import org.json.JSONObject;
@@ -22,6 +20,7 @@ public final class DataProcessor {
      * Private variable to hold the DataProcessor singleton instance
      */
     private static DataProcessor INSTANCE;
+    private String mapJsonFilePath = "data/images/maps/metadata/mapMetadata.json";
 
     /**
      * Getter for the DataProcessor singleton instance
@@ -46,7 +45,7 @@ public final class DataProcessor {
         /**
          * Writes the user object to JSON file in the users folder under data
          */
-        Writer writer = new FileWriter("group1\\data\\users" + "\\" + user.getUsername() + ".json");
+        FileWriter writer = new FileWriter("data/users/userMetadata.json");
         gson.toJson(user, writer);
         writer.flush();
         writer.close();
@@ -60,10 +59,31 @@ public final class DataProcessor {
      */
     public User loadUser(String name) throws FileNotFoundException {
         Gson gson = new Gson();
-        Reader reader = new FileReader("group1\\data\\users" + "\\" + name + ".json");
+        FileReader reader = new FileReader("group1\\data\\users" + "\\" + name + ".json");
         User user = gson.fromJson(reader, User.class);
         return user;
     }
+
+    /**
+     * Function to load map filePaths from our metadata JSON object using Gson
+     * @param int buildingID, buildingID of floorMap or BuilindMap object
+     * @param int mapID, mapID of associated object
+     * @param String mapType, differentiates between BuildingMap and FloorMap
+     * @return String filePath
+     * @throws FileNotFoundException
+     */
+    public String loadMapFilePath(int buildingID, int mapID, String mapType) {
+        if (mapType.equalsIgnoreCase("FLOOR")){
+            return JsonReader.getFloorMapPathFromID(buildingID, mapID, this.mapJsonFilePath);
+        }
+        else if (mapType.equalsIgnoreCase("BUILDING")){
+            return JsonReader.getBuildingMapPathFromID(buildingID, this.mapJsonFilePath);
+        }
+        else {
+            return null;
+        }
+    }
+
 
     /**
      * Function to parse JSON string to get the current weather at Western University
@@ -164,7 +184,7 @@ public final class DataProcessor {
      * @param currentMapID
      * @return boolean indicating if there is a floor below or not
      */
-    public boolean checkfloorBelow(int currentMapID) {
+    public boolean checkFloorBelow(int currentMapID) {
         return false;
     }
 
@@ -173,7 +193,7 @@ public final class DataProcessor {
      * @param currentMapID
      * @return Map object of the floor above
      */
-    public Map getfloorAbove(int currentMapID) {
+    public FloorMap getFloorAbove(int currentMapID) {
         return null;
     }
 
@@ -182,7 +202,7 @@ public final class DataProcessor {
      * @param currentMapID
      * @return Map object of the floor below
      */
-    public Map getfloorBelow(int currentMapID) {
+    public FloorMap getFloorBelow(int currentMapID) {
         return null;
     }
 

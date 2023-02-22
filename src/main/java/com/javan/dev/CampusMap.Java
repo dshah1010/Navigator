@@ -6,32 +6,62 @@ import java.util.ArrayList;
  * @version: 1.0
  * @since: 1.0
  */
-public class CampusMap {
+public class CampusMap implements Map{
     /**
-     * Declaring the name and BuildingArray of the Campus.
+     * Declaring the file path, ID, type and BuildingArray of the Campus.
      */
-    private String campusName;
-    private ArrayList<BuildingMap> BuildingArray = new ArrayList<>;
+    private String filePath;
+    private int mapID;
+    private String mapType;
+    private ArrayList<BuildingMap> BuildingArray = new ArrayList<BuildingMap>();
     // TODO: add variable to contain map of campus
 
     /**
-     * Constructor for the CampusMap class to initialize the name/ ID
+     * Constructor for the CampusMap class to initialize the ID, type and filePath
      * @param campusName
      */
-    public CampusMap(String campusName) {
-        this.campusName = campusName;
+    public CampusMap(int mapID) {
+        this.filePath = "data/images/maps/campusMap.png";
+        this.mapID = mapID;
+        this.mapType = "CAMPUS";
     }
-
 
     /**
-     * Getter for the campusName
+     * Getter for filePath
      * @param None
-     * @return campusName
+     * @return String
      */
-    public String getCampusName() {
-        return this.campusName;
+    public String getFilePath() {
+        return this.filePath;
     }
 
+    /**
+     * Getter for mapID
+     * @param None
+     * @return int
+     */
+    public int getMapID() {
+        return this.mapID;
+    }
+
+    /**
+     * Updates Map (WIP)
+     * @param None
+     * @return int
+     */
+    public void updateMap(int mapID) {
+        this.mapID = mapID;
+        // Perform update of Campus Map
+    }
+
+    /**
+     * Getter for mapType
+     * @param None
+     * @return String
+     */
+    public String getMapType() {
+        return this.mapType;
+    }
 
     /**
      * Adds Bulding to BuildingArray
@@ -48,10 +78,10 @@ public class CampusMap {
      * @param PointOfInterest
      * @return POI
      */
-    public String getBuilding(int BuildingId) {
+    public BuildingMap getBuilding(int buildingId) {
         for (int i = 0; i < this.BuildingArray.size(); i++) {
-            if (this.BuildingArray[i].buildingId == BuildingId) {
-                return this.BuildingArray[i];
+            if (this.BuildingArray.get(i).getMapID() == buildingId) {
+                return this.BuildingArray.get(i);
             }
         }
         return null;

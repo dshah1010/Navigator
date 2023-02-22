@@ -10,6 +10,7 @@ public class User {
      * Declaring the username and password of the user.
      */
     private String username;
+    private int userID;
     private String password;
     private boolean isAdmin;
 

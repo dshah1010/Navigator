@@ -6,41 +6,72 @@ import java.util.ArrayList;
  * @version: 1.0
  * @since: 1.0
  */
-public class BuildingMap {
+public class BuildingMap implements Map {
     /**
-     * Declaring the name, Id and FloorArray of the Building.
+     * Declaring the name, ID, filePath and FloorArray of the Building.
      */
-    private String buildingName;
-    private int buildingId;
-    private ArrayList<FloorMap> FloorArray = new ArrayList<>;
-    // TODO: add variable to contain map of building
+    private String filePath;
+    private int mapID;
+    private String mapType;
+    private ArrayList<FloorMap> FloorArray = new ArrayList<FloorMap>();
 
     /**
-     * Constructor for the BuildingMap class to initialize the name/ ID
-     * @param buildingName
-     * @param buildingId
+     * Private variable to hold the instance of the data processor
      */
-    public BuildingMap(String buildingName, int buildingId) {
-        this.buildingName = buildingName;
-        this.buildingId = buildingId;
+    private DataProcessor processor = DataProcessor.getInstance();
+
+    /**
+     * Constructor for the BuildingMap class to initialize the ID, type and filePath
+     * @param mapID
+     */
+    public BuildingMap(int mapID) {
+        this.filePath = processor.loadMapFilePath(mapID, 0, "BUILDING");
+        this.mapID = mapID;
+        this.mapType = "BUILDING";
     }
 
-
     /**
-     * Getter for the buildingName
+     * Getter for filePath
      * @param None
-     * @return buildingName
+     * @return String
      */
-    public String getBuildingName() {
-        return this.buildingName;
+    public String getFilePath() {
+        return this.filePath;
     }
 
+    /**
+     * Getter for mapID
+     * @param None
+     * @return int
+     */
+    public int getMapID() {
+        return this.mapID;
+    }
+
+    /**
+     * Updates Map (WIP)
+     * @param None
+     * @return int
+     */
+    public void updateMap(int mapID) {
+        this.mapID = mapID;
+        // Perform update of Campus Map
+    }
+
+    /**
+     * Getter for mapType
+     * @param None
+     * @return String
+     */
+    public String getMapType() {
+        return this.mapType;
+    }
 
     /**
      * Adds Floor to FloorArray
-     * @param PointOfInterest
+     * @param FloorMap
      */
-    public String addBuilding(FloorMap newFloor) {
+    public void addBuilding(FloorMap newFloor) {
         this.FloorArray.add(newFloor);
     }
 
@@ -49,12 +80,13 @@ public class BuildingMap {
      * @param FloorId
      * @return FloorMap
      */
-    public String getFloor(int floorId) {
+    public FloorMap getFloor(int floorID) {
         for (int i = 0; i < this.FloorArray.size(); i++) {
-            if (this.FloorArray[i].floorId == floorId) {
-                return this.FloorArray[i];
+            if (this.FloorArray.get(i).getMapID() == floorID) {
+                return this.FloorArray.get(i);
             }
         }
         return null;
     }
+    
 }

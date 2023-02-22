@@ -1,25 +1,34 @@
 package com.javan.dev;
 
+/**
+ * @author: Brad McGlynn <bmcglyn4@uwo.ca>
+ * @version: 1.0
+ * @since: 1.0
+ */
 public interface Map {
 
     /**
      * Getter for file path
      * @return file path string
      */
-    String getFilePath();
+    public String getFilePath();
 
     /**
      * Getter for map id
      * @return map id int
      */
-    int getMapID();
+    public int getMapID();
 
-    boolean checkfloorAbove(int currentMapID);
+    /**
+     * (WIP) Updates map
+     * @return None
+     */
+    public void updateMap(int mapID);
 
-    boolean checkfloorBelow(int currentMapID);
+    /**
+     * Getter for map type
+     * @return String map type
+     */
+    public String getMapType();
 
-    Map getfloorAbove(int currentMapID);
-
-    Map getfloorBelow(int currentMapID);
-    
 }

@@ -22,7 +22,7 @@ class TestPOIComponent {
 
     @BeforeEach
     void setUp() {
-        poiComponent = new POIComponent();
+        poiComponent = POIComponent.getInstance();
     }
 
     /**

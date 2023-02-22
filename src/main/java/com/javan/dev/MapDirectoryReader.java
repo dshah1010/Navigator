@@ -13,7 +13,12 @@ import java.io.IOException;
  */
 
 public class MapDirectoryReader {
-
+    /**
+     * Function to create map metadata based on images in directory
+     * @param String directoryPath, directory path of the directory of directories containing map pngs
+     * @param String jsonFilePath, the target path for the json file of metadata to be created at
+     * @return None
+     */
     public static void addMapsToJSON(String directoryPath, String jsonFilePath) {
         // Create a JSON array to hold the maps
         JSONArray buildingsJson = new JSONArray();
@@ -35,7 +40,7 @@ public class MapDirectoryReader {
             // Set the building name, type and ID in the JSON object
             buildingJson.put("mapName", buildingName);
             buildingJson.put("mapType", "BUILDING");
-            buildingJson.put("buildingId", buildingId);
+            buildingJson.put("buildingID", buildingId);
     
             // Get a list of all PNG files in this subdirectory
             File[] imageFiles = subdirectory.listFiles();
