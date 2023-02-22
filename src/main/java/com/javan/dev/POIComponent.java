@@ -57,6 +57,8 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
      */
     private int currMapID;
 
+    private JButton otherPOIButton;
+
 
     /**
      * Constructor to create POIPanel that holds the four other panels vertically, allowing them to display their information
@@ -400,7 +402,7 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
          */
         JPanel titleOther = new JPanel();
         titleOther.setBackground(Color.WHITE);
-        JButton otherPOIButton = createPOIButton("All POIs");
+        otherPOIButton = createPOIButton("All POIs");
         titleOther.add(otherPOIButton);
 
         /**
@@ -546,6 +548,11 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
              */
             for (int i = 0; i < 3; i++) {
                 POIScrollPanes.get(i).setVisible(false);
+
+                /**
+                 * Change the title of All POIs to Building Directory
+                 */
+                otherPOIButton.setText("Building Directory");
             }
         }
         else {
@@ -555,6 +562,11 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
             for (int i = 0; i < 3; i++) {
                 POIScrollPanes.get(i).setVisible(true);
             }
+
+            /**
+             * Change the title of All POIs to Other POIs
+             */
+            otherPOIButton.setText("All POIs");
         }
     }
 
@@ -702,17 +714,36 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
      */
     public void mouseClicked(MouseEvent e) {
         /**
-         * If the mouse is clicked on a POI name, send the name of the POI to the MapPanel to be highlighted
+         * If the mouse is clicked on a POI name, send the name of the POI to the MapPanel to be highlighted if not on campus map
+         * If on campus map, change the map to that POI's map
          */
         if (e.getSource() instanceof JPanel) {
-            JPanel panel = (JPanel) e.getSource();
-            JLabel label = (JLabel) panel.getComponent(1);
-            String poiName = label.getText();
-            int poiID = Integer.parseInt(poiName);
             /**
-             * Pass POI name to the MapPanel to be highlighted on the map
+             * Campus map case
              */
-            mapPanel.navigateToPOI(poiID);
+            if (mapPanel.getIsCampusMap()) {
+                JPanel panel = (JPanel) e.getSource();
+                JLabel label = (JLabel) panel.getComponent(1);
+                String buildingID = label.getText();
+                /**
+                 * Get the building map for the building ID
+                 */
+                // TODO: Get Map from some form of map storage and store as buildingMap
+                /**
+                 * Pass POI name to the MapPanel to be highlighted on the map
+                 */
+                // TODO: have the method above implemented: mapPanel.changeMap(buildingMap);
+            }
+            else {
+                JPanel panel = (JPanel) e.getSource();
+                JLabel label = (JLabel) panel.getComponent(1);
+                String poiName = label.getText();
+                int poiID = Integer.parseInt(poiName);
+                /**
+                 * Pass POI name to the MapPanel to be highlighted on the map
+                 */
+                mapPanel.navigateToPOI(poiID);
+            }
         }
     }
 
