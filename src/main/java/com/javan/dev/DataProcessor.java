@@ -210,4 +210,13 @@ public final class DataProcessor {
     public PointOfInterest getPOI(int parseInt) {
         return new PointOfInterest("Test");
     }
+
+    /**
+     * TODO: A method to get the map from an ID
+     * @param buildingID
+     * @return
+     */
+    public Map getMap(String mapID) {
+        return null;
+    }
 }
