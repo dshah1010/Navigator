@@ -8,13 +8,12 @@ import java.util.ArrayList;
  */
 public class BuildingMap implements Map {
     /**
-     * Declaring the name, Id and FloorArray of the Building.
+     * Declaring the name, ID, filePath and FloorArray of the Building.
      */
     private String filePath;
     private int mapID;
     private String mapType;
     private ArrayList<FloorMap> FloorArray = new ArrayList<FloorMap>();
-    //private Image map;
 
     /**
      * Private variable to hold the instance of the data processor
@@ -22,12 +21,11 @@ public class BuildingMap implements Map {
     private DataProcessor processor = DataProcessor.getInstance();
 
     /**
-     * Constructor for the BuildingMap class to initialize the name/ ID
-     * @param buildingName
-     * @param buildingId
+     * Constructor for the BuildingMap class to initialize the ID, type and filePath
+     * @param mapID
      */
     public BuildingMap(int mapID) {
-        this.filePath = processor.loadMapFilePath(mapID, "BUILDING");
+        this.filePath = processor.loadMapFilePath(mapID, 0, "BUILDING");
         this.mapID = mapID;
         this.mapType = "BUILDING";
     }

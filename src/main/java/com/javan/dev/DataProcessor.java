@@ -4,8 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
 import java.util.ArrayList;
 
 import org.json.JSONObject;
@@ -66,12 +64,20 @@ public final class DataProcessor {
         return user;
     }
 
-    public String loadMapFilePath(int mapID, String mapType) {
+    /**
+     * Function to load map filePaths from our metadata JSON object using Gson
+     * @param int buildingID, buildingID of floorMap or BuilindMap object
+     * @param int mapID, mapID of associated object
+     * @param String mapType, differentiates between BuildingMap and FloorMap
+     * @return String filePath
+     * @throws FileNotFoundException
+     */
+    public String loadMapFilePath(int buildingID, int mapID, String mapType) {
         if (mapType.equalsIgnoreCase("FLOOR")){
-            return JsonReader.getFloorMapPathFromID(mapID, this.mapJsonFilePath);
+            return JsonReader.getFloorMapPathFromID(buildingID, mapID, this.mapJsonFilePath);
         }
         else if (mapType.equalsIgnoreCase("BUILDING")){
-            return JsonReader.getBuildingMapPathFromID(mapID, this.mapJsonFilePath);
+            return JsonReader.getBuildingMapPathFromID(buildingID, this.mapJsonFilePath);
         }
         else {
             return null;

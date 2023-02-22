@@ -348,10 +348,9 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                  * Enable the button "Floor Up"
                  */
                 floorAbove.setEnabled(true);
-
-            } else {
-                floorAbove.setEnabled(false);
-            }
+            } 
+        } else {
+            floorAbove.setEnabled(false);
         }
     }
 
@@ -363,17 +362,18 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * @return None
      */
     private void isFloorBelow() {
-        if (floorMap.checkFloorBelow()) {
-            /**
-             * Enable the button "Floor Down"
-             */
-            floorBelow.setEnabled(true);
+        if (this.mapType.equals("FLOOR")) {
+            if (floorMap.checkFloorBelow()) {
+                /**
+                 * Enable the button "Floor Down"
+                 */
+                floorBelow.setEnabled(true);
 
+            } 
         } else {
             floorBelow.setEnabled(false);
-        }
+        } 
     }
-
 
     /**
      * Method that changes the map to the floor above if there is a floor above the current one. Uses DataProcessor to get the Map of the floor above.

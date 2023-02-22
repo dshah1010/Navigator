@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 public class CampusMap implements Map{
     /**
-     * Declaring the name and BuildingArray of the Campus.
+     * Declaring the file path, ID, type and BuildingArray of the Campus.
      */
     private String filePath;
     private int mapID;
@@ -17,7 +17,7 @@ public class CampusMap implements Map{
     // TODO: add variable to contain map of campus
 
     /**
-     * Constructor for the CampusMap class to initialize the name/ ID
+     * Constructor for the CampusMap class to initialize the ID, type and filePath
      * @param campusName
      */
     public CampusMap(int mapID) {

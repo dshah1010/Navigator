@@ -8,10 +8,11 @@ import java.util.ArrayList;
  */
 public class FloorMap implements Map{
     /**
-     * Declaring the Id, Point of Interest array and layers array of the Floor.
+     * Declaring the mapID, buildindID, filePath, map type, Point of Interest array and layers array of the Floor.
      */
     private String filePath;
     private int mapID;
+    private int buildingID;
     private String mapType;
     private ArrayList<PointOfInterest> POIs = new ArrayList<PointOfInterest>();
     private ArrayList<Integer> layers = new ArrayList<Integer>();
@@ -22,12 +23,13 @@ public class FloorMap implements Map{
     private DataProcessor processor = DataProcessor.getInstance();
 
     /**
-     * Constructor for the FloorMap class to initialize the ID
+     * Constructor for the FloorMap class to initialize the ID, type and filePath
      * @param floorId
      */
-    public FloorMap(int mapID) {
+    public FloorMap(int buildingID, int mapID) {
+        this.filePath = processor.loadMapFilePath(buildingID, mapID, "FLOOR");
         this.mapID = mapID;
-        this.filePath = processor.loadMapFilePath(mapID, "FLOOR");
+        this.buildingID = buildingID;
         this.mapType = "FLOOR";
     }
 
@@ -58,6 +60,15 @@ public class FloorMap implements Map{
     public void updateMap(int mapID) {
         this.mapID = mapID;
         // Perform update of Campus Map
+    }
+
+    /**
+     * Getter for the buildingID
+     * @param None
+     * @return mapID
+     */
+    public int getBuildingID() {
+        return this.buildingID;
     }
 
 

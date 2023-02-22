@@ -1,5 +1,10 @@
 package com.javan.dev;
 
+/**
+ * @author: Brad McGlynn <bmcglyn4@uwo.ca>
+ * @version: 1.0
+ * @since: 1.0
+ */
 public interface Map {
 
     /**
@@ -14,8 +19,16 @@ public interface Map {
      */
     public int getMapID();
 
+    /**
+     * (WIP) Updates map
+     * @return None
+     */
     public void updateMap(int mapID);
 
+    /**
+     * Getter for map type
+     * @return String map type
+     */
     public String getMapType();
 
 }

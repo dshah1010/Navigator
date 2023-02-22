@@ -9,8 +9,14 @@ import com.google.gson.*;
  * @since: 1.0
  */
 public class JsonReader {
-
-    public static String getFloorMapPathFromID(int mapID, String jsonFilePath) {
+    /**
+     * Function to find filePath of FloorMap using Gson
+     * @param int buildingID
+     * @param int mapID
+     * @return file path of floor map
+     * @throws FileNotFoundException
+     */
+    public static String getFloorMapPathFromID(int buildingID, int mapID, String jsonFilePath) {
         FileReader reader = null;
         try {
             reader = new FileReader(jsonFilePath);
@@ -20,15 +26,18 @@ public class JsonReader {
             int counter = 0;
             int floorCounter = 0;
 
-            while (counter < buildingMaps.size() - 1) {
-                floorMaps = buildingMaps.get(counter).getAsJsonObject().get("floorMaps").getAsJsonArray();
-                while (floorCounter < floorMaps.size() - 1) {
-                    mapPath = floorMaps.get(floorCounter).getAsJsonObject().get("filePath").getAsString();
-                    int id = floorMaps.get(floorCounter).getAsJsonObject().get("mapID").getAsInt();
-                    if (id == mapID) {
-                        return mapPath;
+            while (counter < buildingMaps.size()) {
+                if (counter + 1 == buildingID){ // counter + 1 because buildingIDs start at 1 rather than 0, but 
+                    // the JsonArray is 0 indexed
+                    floorMaps = buildingMaps.get(counter).getAsJsonObject().get("floorMaps").getAsJsonArray();
+                    while (floorCounter < floorMaps.size()) {
+                        mapPath = floorMaps.get(floorCounter).getAsJsonObject().get("filePath").getAsString();
+                        int id = floorMaps.get(floorCounter).getAsJsonObject().get("mapID").getAsInt();
+                        if (id == mapID) {
+                            return mapPath;
+                        }
+                        floorCounter++;
                     }
-                    floorCounter++;
                 }
                 counter++;
                 floorCounter = 0;
@@ -38,8 +47,13 @@ public class JsonReader {
         }
         return null;
     }
-
-    public static String getBuildingMapPathFromID(int mapID, String jsonFilePath) {
+    /**
+     * Function to find filePath of BuildingMap using Gson
+     * @param int buildingID
+     * @return file path of building map
+     * @throws FileNotFoundException
+     */
+    public static String getBuildingMapPathFromID(int buildingID, String jsonFilePath) {
         FileReader reader = null;
         try {
             reader = new FileReader(jsonFilePath);
@@ -47,10 +61,10 @@ public class JsonReader {
             String mapPath;
             int counter = 0;
 
-            while (counter < buildingMaps.size() - 1) {
+            while (counter < buildingMaps.size()) {
                 mapPath = buildingMaps.get(counter).getAsJsonObject().get("filePath").getAsString();
                 int id = buildingMaps.get(counter).getAsJsonObject().get("buildingID").getAsInt();
-                if (id == mapID) {
+                if (id == buildingID) {
                     return mapPath;
                 }
                 counter++;

@@ -1,3 +1,4 @@
 [{"userType":"ADMIN",
 "userID":1,
+"username": "admin",
 "userPasswordEncrypted":"xyz"}]
