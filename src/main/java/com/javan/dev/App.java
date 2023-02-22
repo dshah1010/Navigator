@@ -31,15 +31,16 @@ public class App
         // Load Map Metadata
         String directoryPath = "data/images/maps/floorPlans";
         String jsonFilePath = "data/images/maps/metadata/mapMetadata.json";
-        MapDirectoryReader.addMapsToJSON(directoryPath, jsonFilePath);
+        MapDirectoryReader.addMapInfoToJSON(directoryPath, jsonFilePath);
 
         // Test: Creating Map Objects
         Map campusMap = MapFactory.createMap("CAMPUS", 1, 1);
-        System.out.println(campusMap.getFilePath());
         Map floorMap = MapFactory.createMap("FLOOR", 1, 2);
-        System.out.println(floorMap.getFilePath());
         Map buildingMap = MapFactory.createMap("BUILDING", 1, 1);
-        System.out.println(buildingMap.getFilePath());
+        
+        // Test: Storing Map Objects
+        MapDirectoryReader.addMapObjectsToJSON("data/maps/BuildingMapMetadata.json", buildingMap);
+        MapDirectoryReader.addMapObjectsToJSON("data/maps/FloorMapMetadata.json", floorMap);
 
         // Create UserInterface object to create the UI -> this will remain for the session
         UserInterface ui = UserInterface.getInstance();
