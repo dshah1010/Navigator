@@ -1,6 +1,5 @@
 package com.javan.dev;
 import java.util.ArrayList;
-import org.json.JSONObject;
 
 /**
  * @author: Brad McGlynn <bmcglyn4@uwo.ca>
@@ -62,12 +61,6 @@ public class CampusMap implements Map{
      */
     public String getMapType() {
         return this.mapType;
-    }
-
-    // TODO: either keep this as a required thing to bring over from Map.java
-    // or implement it like in BuildingMap and FloorMap
-    public JSONObject toJSON() {
-        return null;
     }
 
     /**

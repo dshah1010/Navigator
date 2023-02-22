@@ -1,7 +1,5 @@
 package com.javan.dev;
 import java.util.ArrayList;
-import org.json.JSONObject;
-import org.json.JSONArray;
 
 /**
  * @author: Brad McGlynn <bmcglyn4@uwo.ca>
@@ -15,7 +13,7 @@ public class BuildingMap implements Map {
     private String filePath;
     private int mapID;
     private String mapType;
-    private ArrayList<FloorMap> floorArray = new ArrayList<FloorMap>();
+    private ArrayList<FloorMap> FloorArray = new ArrayList<FloorMap>();
 
     /**
      * Private variable to hold the instance of the data processor
@@ -69,25 +67,12 @@ public class BuildingMap implements Map {
         return this.mapType;
     }
 
-    public JSONObject toJSON() {
-        JSONObject json = new JSONObject();
-        json.put("filePath", this.filePath);
-        json.put("mapID", this.mapID);
-        json.put("mapType", this.mapType);
-        JSONArray floorArrayJson = new JSONArray();
-        for (FloorMap floorMap : this.floorArray) {
-            floorArrayJson.put(floorMap.toJSON());
-        }
-        json.put("floorArray", floorArrayJson);
-        return json;
-    }
-
     /**
      * Adds Floor to FloorArray
      * @param FloorMap
      */
     public void addBuilding(FloorMap newFloor) {
-        this.floorArray.add(newFloor);
+        this.FloorArray.add(newFloor);
     }
 
     /**
@@ -96,9 +81,9 @@ public class BuildingMap implements Map {
      * @return FloorMap
      */
     public FloorMap getFloor(int floorID) {
-        for (int i = 0; i < this.floorArray.size(); i++) {
-            if (this.floorArray.get(i).getMapID() == floorID) {
-                return this.floorArray.get(i);
+        for (int i = 0; i < this.FloorArray.size(); i++) {
+            if (this.FloorArray.get(i).getMapID() == floorID) {
+                return this.FloorArray.get(i);
             }
         }
         return null;
