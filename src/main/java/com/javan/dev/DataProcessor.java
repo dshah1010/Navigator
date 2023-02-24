@@ -132,9 +132,10 @@ public final class DataProcessor {
 
     /**
      * Method to return the favourite POIs of a user // TODO: TEMPORARY FOR TESTING
+     * @param int userID - the ID of the user
      * @return List of favourite POIs
      */
-    public static ArrayList<PointOfInterest> getFavouritePOIs() {
+    public ArrayList<PointOfInterest> getFavouritePOIs(int userID) {
         ArrayList<PointOfInterest> favouritePOIs = new ArrayList<PointOfInterest>();
 
         // TODO: THIS IS TEMPORARY FOR TESTING
@@ -146,9 +147,10 @@ public final class DataProcessor {
 
     /**
      * Method to return the POIs created by a user // TODO: TEMPORARY FOR RESTING
+     * @param int userID - the ID of the user
      * @return List of user-created POIs
      */
-    public static ArrayList<PointOfInterest> getUserPOIs() {
+    public ArrayList<PointOfInterest> getUserPOIs(int userID) {
         ArrayList<PointOfInterest> userPOIs = new ArrayList<PointOfInterest>();
 
         // TODO: THIS IS TEMPORARY FOR TESTING

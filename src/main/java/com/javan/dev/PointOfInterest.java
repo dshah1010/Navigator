@@ -27,7 +27,22 @@ public class PointOfInterest {
      * @param name, the name of the POI
      */
     public PointOfInterest(String name) {
-        this.name = name; 
+        this.name = name;
+
+        /**
+         * TODO: TEMPORARY FOR TESTING PURPOSES
+         */
+        this.ID = 1;
+        this.userID = 1;
+        this.isUserMade = true;
+        this.POI_type = "test";
+        this.coordinates[0] = 1;
+        this.coordinates[1] = 1;
+        this.floorID = 1;
+        this.buildingID = 1;
+        this.isFavourited = false;
+        this.description = "test";
+        this.roomNumber = 1;
     }
 
     /**
@@ -132,5 +147,14 @@ public class PointOfInterest {
         json.put("description", description);
         json.put("roomNumber", roomNumber);
         return json;
+    }
+
+    /**
+     * TODO: This should be temporary. Not sure how we want to set favourited for a particular user but also know how to get favourite
+     * for a specific user because getIsFavourited() is for an entire POI. not sure how it will work for a POI that is not user-created and
+     * favourited by multiple users
+     */
+    public void setIsFavourited(boolean isFavourited) {
+        this.isFavourited = isFavourited;
     }
 }
