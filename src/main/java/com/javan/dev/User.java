@@ -5,9 +5,9 @@ package com.javan.dev;
  * @version: 1.0
  * @since: 1.0
  */
-public class User {
+public final class User {
     /**
-     * Declaring the username and password of the user.
+     * Declaring variables of the user class
      */
     private String username;
     private int userID;
@@ -15,14 +15,29 @@ public class User {
     private boolean isAdmin;
 
     /**
+     * Singleton instance of User
+     */
+    private static User INSTANCE;
+
+    /**
      * Constructor for the User class to initialize user/pass when account created
      * @param username
      * @param password
      */
-    public User(String username, String password) {
+    private User(String username, String password) {
         this.username = username;
         this.password = password;
         this.isAdmin = false;
+    }
+
+    /**
+     * Getter for the instance of user
+     */
+    public static User getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new User("admin", "admin");
+        }
+        return INSTANCE;
     }
 
     /**
@@ -41,5 +56,23 @@ public class User {
      */
     public String getUsername() {
         return this.username;
+    }
+
+    /**
+     * Getter for the userID
+     * @param None
+     * @return int userID
+     */
+    public int getUserID() {
+        return this.userID;
+    }
+
+    /**
+     * Getter for isAdmin
+     * @param None
+     * @return boolean isAdmin
+     */
+    public boolean getIsAdmin() {
+        return this.isAdmin;
     }
 }

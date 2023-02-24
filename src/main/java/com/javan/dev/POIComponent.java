@@ -43,6 +43,11 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
     private DataProcessor dataProcessor = DataProcessor.getInstance();
 
     /**
+     * User instance
+     */
+    private User user = User.getInstance();
+
+    /**
      * private instance of MapComponent to receive information from
      */
     private MapComponent mapComponent = MapComponent.getInstance();
@@ -309,7 +314,7 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
         /**
          * Get list of favourite PointOfInterest objects from DataProcessor
          */
-         favouritePOIList = DataProcessor.getFavouritePOIs();
+         favouritePOIList = dataProcessor.getFavouritePOIs(user.getUserID());
 
          /**
           * Empty out favouritePOIStrings before adding updated list of favourite POIs
@@ -370,7 +375,7 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
         /**
          * Get list of strings of user-created POIs from DataProcessor
          */
-         userPOIList = DataProcessor.getUserPOIs();
+         userPOIList = dataProcessor.getUserPOIs(user.getUserID());
 
          /**
           * Empty out userPOIStrings before adding updated list of user-created POIs

@@ -36,6 +36,8 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * ArrayList to hold the points of interest
      */
     private ArrayList<PointOfInterest> pois;
+    private ArrayList<PointOfInterest> userPOIs;
+    private ArrayList<PointOfInterest> favouritePOIs;
 
     /**
      * ImageIcon for the flags
@@ -45,7 +47,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     /**
      * Singleton instance variable
      */
-    private static MapComponent INSTANCE;
+    private static MapComponent INSTANCE; // TODO: We may not need this?
 
     /**
      * Variables to hold the current map and whether or not it is the campus map. Also holding map mode
@@ -62,6 +64,11 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * DataProcessor instance
      */
     private DataProcessor dataProcessor = DataProcessor.getInstance();
+
+    /**
+     * User instance
+    */
+    private User user = User.getInstance();
 
     /**
      * Map instance for campus map
@@ -481,10 +488,28 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      */
     public void displayPOIs() {
         /**
-         * Get the POIs for the current map
+         * Get the Universal POIs for the map (not user based)
          */
         pois = dataProcessor.getUniversalPOIs();
 
+        /**
+         * Get the User and Favourite POIs for the map (based on userID)
+         */
+        userPOIs = dataProcessor.getUserPOIs(user.getUserID());
+        favouritePOIs = dataProcessor.getFavouritePOIs(user.getUserID());
+
+        /**
+         * Add each POI list to the map
+         */
+        addPOIList(pois);
+        addPOIList(userPOIs);
+        addPOIList(favouritePOIs);
+    }
+
+    /**
+     * Method to loop through POI arraylist and add to map
+     */
+    public void addPOIList(ArrayList<PointOfInterest> pois) {
         /**
          * Loop through the POIs and add a flag icon to the map at the POI's coordinates
          */
@@ -532,7 +557,6 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
             mapPanel.repaint();
             flag.setVisible(true);
             imagePanel.setVisible(true);
-
         }
     }
 
@@ -567,13 +591,24 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          * If the button text is "Navigation Mode", change that button to "Editing Mode"
          */
         else if (buttonText.equals("Navigation Mode")) {
-            ((JButton) e.getSource()).setText("Editing Mode");
+            /**
+             * If admin, change to 'Developer Editing Mode'
+             */
+            if (user.getIsAdmin()) {
+                ((JButton) e.getSource()).setText("Developer Editing Mode");
+            }
+            /**
+             * If user, change to 'User Editing Mode'
+             */
+            else {
+                ((JButton) e.getSource()).setText("User Editing Mode");
+            }
             isNavigationMode = false;
         }
         /**
          * If the button text is "Editing Mode", change that button to "Navigation Mode"
          */
-        else if (buttonText.equals("Editing Mode")) {
+        else if (buttonText.equals("User Editing Mode") || buttonText.equals("Developer Editing Mode")) {
             ((JButton) e.getSource()).setText("Navigation Mode");
             isNavigationMode = true;
         }
