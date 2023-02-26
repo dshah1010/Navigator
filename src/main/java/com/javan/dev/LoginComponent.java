@@ -536,7 +536,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
                 }
 
                 else {
-                    JOptionPane.showMessageDialog(null, "Error: Account with that username and password already exists.");
+                    JOptionPane.showMessageDialog(null, "Error: Account with that username already exists.");
                 }
                 
             }

@@ -348,15 +348,9 @@ public final class DataProcessor {
                 JSONObject user = (JSONObject) iterator.next();
 
                 /** 
-                / Decrypt the password from the JSON file
+                * Check if the usernames match
                 */
-                String encryptedPassword = user.getString("encryptedPassword");
-                String decryptedPassword = decrypt(encryptedPassword);
-
-                /** 
-                * Check if the username and decrypted password match
-                */
-                if (username.equals(user.getString("username")) && password.equals(decryptedPassword)) {
+                if (username.equals(user.getString("username"))) {
                     System.out.println("Error: account already exists");
                     return false;
                 }
