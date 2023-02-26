@@ -190,9 +190,53 @@ public final class DataProcessor {
      * @param currentMapID
      * @return boolean indicating if there is a floor above or not
      */
-    public boolean checkfloorAbove(int currentMapID) {
+    public boolean checkFloorAbove(int currentMapID, int currentBuildingID) {
+        try {
+          // Read the JSON file
+          JSONArray metadataArray = new JSONArray(new String(JsonReader.read(mapJsonFilePath)));
+    
+          // Loop through the metadata array
+          for (int i = 0; i < metadataArray.length(); i++) {
+            JSONObject metadata = metadataArray.getJSONObject(i);
+            if (metadata.getInt("buildingID") == currentBuildingID) {
+              JSONArray floorMaps = metadata.getJSONArray("floorMaps");
+              for (int j = 0; j < floorMaps.length(); j++) {
+                JSONObject floorMap = floorMaps.getJSONObject(j);
+                if (floorMap.getInt("mapID") == currentMapID + 1) {
+                  return true;
+                }
+              }
+            }
+          }
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
         return false;
-    }
+      }
+    
+      public boolean checkFloorBelow(int currentMapID, int currentBuildingID) {
+        try {
+          // Read the JSON file
+          JSONArray metadataArray = new JSONArray(new String(JsonReader.read(mapJsonFilePath)));
+    
+          // Loop through the metadata array
+          for (int i = 0; i < metadataArray.length(); i++) {
+            JSONObject metadata = metadataArray.getJSONObject(i);
+            if (metadata.getInt("buildingID") == currentBuildingID) {
+              JSONArray floorMaps = metadata.getJSONArray("floorMaps");
+              for (int j = 0; j < floorMaps.length(); j++) {
+                JSONObject floorMap = floorMaps.getJSONObject(j);
+                if (floorMap.getInt("mapID") == currentMapID - 1) {
+                  return true;
+                }
+              }
+            }
+          }
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        return false;
+      }
 
     /**
      * TODO: Method that checks if there is a floor below the current one.

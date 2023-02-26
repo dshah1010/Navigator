@@ -121,11 +121,11 @@ public class FloorMap implements Map{
 
 
     public boolean checkfloorAbove() {
-        return this.processor.checkfloorAbove(this.mapID);
+        return this.processor.checkFloorAbove(this.mapID, this.buildingID);
     }
 
     public boolean checkFloorBelow() {
-        return this.processor.checkFloorBelow(this.mapID);
+        return this.processor.checkFloorBelow(this.mapID, this.buildingID);
     }
 
     public FloorMap getFloorAbove() {

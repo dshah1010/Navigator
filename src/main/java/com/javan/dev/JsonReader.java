@@ -2,6 +2,9 @@ package com.javan.dev;
 
 import java.io.FileReader;
 import com.google.gson.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * @author: Brad McGlynn <bmcglyn4@uwo.ca>
@@ -9,6 +12,17 @@ import com.google.gson.*;
  * @since: 1.0
  */
 public class JsonReader {
+
+    /**
+     * Method to read the contents found at fileName and returns them as a string
+     * @param String fileName, file to be read
+     * @return String content, file content as a string
+     */
+    public static String read(String fileName) throws IOException {
+        String content = new String(Files.readAllBytes(Paths.get(fileName)));
+        return content;
+    }
+
     /**
      * Function to find filePath of FloorMap using Gson
      * @param int buildingID
