@@ -529,10 +529,10 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
                  */
                 if (validLogin) {
                     openLoginPanel();
-                /**
-                 * Reset password flag
-                 */
-                passwordFlag = true;
+                    /**
+                     * Reset password flag
+                     */
+                    passwordFlag = true;
                 }
 
                 else {
