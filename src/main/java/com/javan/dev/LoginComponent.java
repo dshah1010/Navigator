@@ -466,7 +466,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
              */
             String username = usernameInput.getText();
             String password = new String(passwordInput.getPassword());
-            // TODO: boolean isValid = processor.authenticateLogin(username, password); // To implement in the future
+            boolean isValid = processor.authenticateLogin(username, password);
 
             /**
              * Empty text fields
@@ -477,7 +477,6 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
             /**
              * If the login is valid (isValid != 0), then remove the login panel from the frame and add the main panel
              */
-            boolean isValid = true; // TEMPORARY
             if (isValid == true) {
                 /**
                  * Remove the login panel from the frame and set loggedIn to true for the rest of the program
