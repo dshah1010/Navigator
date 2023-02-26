@@ -523,15 +523,22 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
                 /**
                  * Create a user account and JSON storage of the user account using the DataProcessor class
                  */
-                // TODO: processor.createAccount(username, password); // To implement in the future
+                boolean validLogin = processor.createAccount(username, password);
                 /**
                  * Bring user to login screen
                  */
-                openLoginPanel();
+                if (validLogin) {
+                    openLoginPanel();
                 /**
                  * Reset password flag
                  */
                 passwordFlag = true;
+                }
+
+                else {
+                    JOptionPane.showMessageDialog(null, "Error: Account with that username already exists.");
+                }
+                
             }
         }
     }
