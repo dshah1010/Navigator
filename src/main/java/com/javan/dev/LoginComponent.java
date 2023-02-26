@@ -466,7 +466,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
              */
             String username = usernameInput.getText();
             String password = new String(passwordInput.getPassword());
-            // TODO: boolean isValid = processor.authenticateLogin(username, password); // To implement in the future
+            boolean isValid = processor.authenticateLogin(username, password);
 
             /**
              * Empty text fields
@@ -477,7 +477,6 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
             /**
              * If the login is valid (isValid != 0), then remove the login panel from the frame and add the main panel
              */
-            boolean isValid = true; // TEMPORARY
             if (isValid == true) {
                 /**
                  * Remove the login panel from the frame and set loggedIn to true for the rest of the program
@@ -524,15 +523,22 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
                 /**
                  * Create a user account and JSON storage of the user account using the DataProcessor class
                  */
-                // TODO: processor.createAccount(username, password); // To implement in the future
+                boolean validLogin = processor.createAccount(username, password);
                 /**
                  * Bring user to login screen
                  */
-                openLoginPanel();
-                /**
-                 * Reset password flag
-                 */
-                passwordFlag = true;
+                if (validLogin) {
+                    openLoginPanel();
+                    /**
+                     * Reset password flag
+                     */
+                    passwordFlag = true;
+                }
+
+                else {
+                    JOptionPane.showMessageDialog(null, "Error: Account with that username already exists.");
+                }
+                
             }
         }
     }
