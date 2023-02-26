@@ -273,28 +273,38 @@ public final class DataProcessor {
         return decrypted;
     }
 
-    // Method to authenticate login
+    /**
+     * Method authenticates the login attempt made by the user, checking if the account exists
+     * @param String username
+     * @param String password, unencrypted password attempt
+     * @return boolean
+     */
     public boolean authenticateLogin(String username, String password) {
         // JSON file location
         String filePath = "data/users/usersMetadata.json";
 
         try {
-            // Read the JSON file
+            /** 
+            * Read the JSON file
+            */
             FileReader fileReader = new FileReader(filePath);
             JSONTokener jsonTokener = new JSONTokener(fileReader);
             JSONArray jsonArray = new JSONArray(jsonTokener);
-
-            // Check each user in the JSON array
+            /** 
+            * Check each user in the JSON array
+            */
             for (Iterator<Object> iterator = jsonArray.iterator(); iterator.hasNext();) {
                 JSONObject user = (JSONObject) iterator.next();
 
-                // Decrypt the password from the JSON file
+                /** 
+                * Decrypt the password from the JSON file
+                */
                 String encryptedPassword = user.getString("encryptedPassword");
                 String decryptedPassword = decrypt(encryptedPassword);
-                System.out.println(decryptedPassword + "\n");
-                System.out.println(password + "\n");
 
-                // Check if the username and decrypted password match
+                /** 
+                * Check if the username and decrypted password match
+                */
                 if (username.equals(user.getString("username")) && password.equals(decryptedPassword)) {
                     String userType = user.getString("userType");
                     System.out.println("User " + username + " logged in as " + userType + ".");
@@ -304,24 +314,56 @@ public final class DataProcessor {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        // If no match was found, return false
+        /**
+        * If no match was found, return false
+        */
         System.out.println("Invalid username or password.");
         return false;
     }
 
-    // Method to create a new account
-    public void createAccount(String username, String password) {
-        // JSON file location
+    /**
+     * Method to create a new user account provided that a user with the same username and password doesn't exist already
+     * @param String username
+     * @param String password, unencrypted password attempt
+     * @return boolean
+     */
+    public boolean createAccount(String username, String password) {
+        /** 
+        * JSON file location
+        */
         String filePath = "data\\users\\usersMetadata.json";
 
         try {
-            // Read the JSON file
+            /** 
+            * Read the JSON file
+            */
             FileReader fileReader = new FileReader(filePath);
             JSONTokener jsonTokener = new JSONTokener(fileReader);
             JSONArray jsonArray = new JSONArray(jsonTokener);
+            
+            /** 
+            * Check if user account exists already
+            */
+            for (Iterator<Object> iterator = jsonArray.iterator(); iterator.hasNext();) {
+                JSONObject user = (JSONObject) iterator.next();
 
-            // Find the next available userID
+                /** 
+                / Decrypt the password from the JSON file
+                */
+                String encryptedPassword = user.getString("encryptedPassword");
+                String decryptedPassword = decrypt(encryptedPassword);
+
+                /** 
+                * Check if the username and decrypted password match
+                */
+                if (username.equals(user.getString("username")) && password.equals(decryptedPassword)) {
+                    System.out.println("Error: account already exists");
+                    return false;
+                }
+            }
+            /** 
+            * Find the next available userID
+            */
             int nextUserID = 1;
             for (Iterator<Object> iterator = jsonArray.iterator(); iterator.hasNext();) {
                 JSONObject user = (JSONObject) iterator.next();
@@ -330,30 +372,36 @@ public final class DataProcessor {
                     nextUserID = userID + 1;
                 }
             }
-
-            // Encrypt the password
+            /** 
+            * Encrypt the password
+            */
             String encryptedPassword = encrypt(password);
-
-            // Create a new user object
+            /** 
+            * Create a new user object
+            */
             JSONObject newUser = new JSONObject();
             newUser.put("userType", "USER");
             newUser.put("userID", nextUserID);
             newUser.put("username", username);
             newUser.put("encryptedPassword", encryptedPassword);
-
-            // Add the new user object to the JSON array
+            /** 
+            * Add the new user object to the JSON array
+            */
             jsonArray.put(newUser);
-
-            // Write the updated JSON array to the file
+            /** 
+            * Write the updated JSON array to the file
+            */
             FileWriter fileWriter = new FileWriter(filePath);
             jsonArray.write(fileWriter);
             fileWriter.flush();
             fileWriter.close();
 
             System.out.println("New account created for " + username + " with userID " + nextUserID + ".");
+            return true;
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
+            return false;
+        } 
     }
 }
