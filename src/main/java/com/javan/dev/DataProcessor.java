@@ -228,12 +228,12 @@ public final class DataProcessor {
 
 
     /**
-     * Method that encrypts user password using the Caesar Cipher algorithm with a key of -6
+     * Method that encrypts user password using the Caesar Cipher algorithm with a key of 6
      * @param String userPassword
      * @return String encrypted, the encrypted userPassword
      */
     public static String encrypt(String userPassword) {
-        int key = -6;
+        int key = 6;
         String encrypted = "";
         for(int i = 0; i < userPassword.length(); i++) {
         char c = userPassword.charAt(i);
@@ -251,12 +251,12 @@ public final class DataProcessor {
     }
     
     /**
-     * Method that decypts stored user password using the Caesar Cipher algorithm with a key of -6
+     * Method that decypts stored user password using the Caesar Cipher algorithm with a key of 6
      * @param String encrypted, the stored encrypted password
      * @return String decrypted, the decrypted userPassword
      */
     public static String decrypt(String encrypted) {
-        int key = -6;
+        int key = 6;
         String decrypted = "";
         for(int i = 0; i < encrypted.length(); i++) {
         char c = encrypted.charAt(i);
@@ -308,5 +308,52 @@ public final class DataProcessor {
         // If no match was found, return false
         System.out.println("Invalid username or password.");
         return false;
+    }
+
+    // Method to create a new account
+    public void createAccount(String username, String password) {
+        // JSON file location
+        String filePath = "data\\users\\usersMetadata.json";
+
+        try {
+            // Read the JSON file
+            FileReader fileReader = new FileReader(filePath);
+            JSONTokener jsonTokener = new JSONTokener(fileReader);
+            JSONArray jsonArray = new JSONArray(jsonTokener);
+
+            // Find the next available userID
+            int nextUserID = 1;
+            for (Iterator<Object> iterator = jsonArray.iterator(); iterator.hasNext();) {
+                JSONObject user = (JSONObject) iterator.next();
+                int userID = user.getInt("userID");
+                if (userID >= nextUserID) {
+                    nextUserID = userID + 1;
+                }
+            }
+
+            // Encrypt the password
+            String encryptedPassword = encrypt(password);
+
+            // Create a new user object
+            JSONObject newUser = new JSONObject();
+            newUser.put("userType", "USER");
+            newUser.put("userID", nextUserID);
+            newUser.put("username", username);
+            newUser.put("encryptedPassword", encryptedPassword);
+
+            // Add the new user object to the JSON array
+            jsonArray.put(newUser);
+
+            // Write the updated JSON array to the file
+            FileWriter fileWriter = new FileWriter(filePath);
+            jsonArray.write(fileWriter);
+            fileWriter.flush();
+            fileWriter.close();
+
+            System.out.println("New account created for " + username + " with userID " + nextUserID + ".");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
