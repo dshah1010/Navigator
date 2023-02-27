@@ -121,7 +121,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          */
         imagePanel = new JPanel();
         imagePanel.setLayout(null);
-        mapImg = new ImageIcon("C:\\Users\\bradl\\OneDrive\\Desktop\\CS2212\\group1\\data\\images\\maps\\floorPlans\\3M, Thames and Somerville Floor Plans\\3M, Thames and Somerville Floor Plans-1.png"); // TODO: Get Campus Map from backend and use that
+        mapImg = new ImageIcon("data\\images\\maps\\floorPlans\\3M, Thames and Somerville Floor Plans\\3M, Thames and Somerville Floor Plans-1.png"); // TODO: Get Campus Map from backend and use that
         isCampusMap = false;
         currentMapID = 2; // TODO: Get Map ID from backend - whatever it is determined to be
         map = new JLabel(mapImg);
@@ -302,17 +302,10 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         this.mapType = newMap.getMapType();
 
         /**
-         * Remove the current map image from the image panel
-         */
-        imagePanel.remove(map);
-
-        /**
-         * Add the new map image to the image panel
+         * Updates the map image and map object
          */
         mapImg = new ImageIcon(newMap.getFilePath());
-        map = new JLabel(mapImg);
-        map.setLayout(null);
-        imagePanel.add(map);
+        map.setIcon(mapImg);
 
         /**
          * Update the scroll pane
@@ -323,23 +316,6 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          * Make it so that the scroll pane displays the upper third of the map image when the UI is opened (use ImageIcon dimensions)
          */
         scrollPane.getViewport().setViewPosition(new Point(mapImg.getIconWidth() / 3, mapImg.getIconHeight() / 3));
-
-        /**
-         * Add constraints to have buttonPanel at the top taking up as little space as possible, and scrollPane takes the remainder
-         * Both should fill all horizontal space
-         */
-        GridBagConstraints gridConstraints = new GridBagConstraints();
-
-        gridConstraints.gridx = 0;
-        gridConstraints.gridy = 0;
-        gridConstraints.weightx = 0;
-        gridConstraints.weighty = 0;
-        gridConstraints.fill = GridBagConstraints.BOTH;
-
-        /**
-         * Update the map panel
-         */
-        mapPanel.add(scrollPane, gridConstraints);
 
         /**
          * Check for floor above/below
@@ -444,7 +420,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
             /**
              * Get the map of the floor below
              */
-            FloorMap mapObject = floorMap.getFloorBelow();
+            mapObject = floorMap.getFloorBelow();
 
             /**
              * Change the map
