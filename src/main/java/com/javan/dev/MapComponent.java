@@ -402,6 +402,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
              * Get the map of the floor above
              */
             mapObject = floorMap.getFloorAbove();
+            floorMap = floorMap.getFloorAbove();
 
             /**
              * Change the map
@@ -421,6 +422,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
              * Get the map of the floor below
              */
             mapObject = floorMap.getFloorBelow();
+            floorMap = floorMap.getFloorBelow();
 
             /**
              * Change the map
