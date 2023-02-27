@@ -42,7 +42,6 @@ public class FloorMap implements Map{
      * @return String
      */
     public String getFilePath() {
-        System.out.println(this.filePath);
         return this.filePath;
     }
 
