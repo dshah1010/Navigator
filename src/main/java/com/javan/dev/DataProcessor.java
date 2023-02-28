@@ -186,33 +186,35 @@ public final class DataProcessor {
     }
 
     /**
-     * TODO: Method that checks if there is a floor above the current one.
      * @param currentMapID
      * @return boolean indicating if there is a floor above or not
      */
     public boolean checkFloorAbove(int currentMapID, int currentBuildingID) {
         try {
-          // Read the JSON file
-          JSONArray metadataArray = new JSONArray(new String(JsonReader.read(mapJsonFilePath)));
-    
-          // Loop through the metadata array
-          for (int i = 0; i < metadataArray.length(); i++) {
-            JSONObject metadata = metadataArray.getJSONObject(i);
-            if (metadata.getInt("buildingID") == currentBuildingID) {
-              JSONArray floorMaps = metadata.getJSONArray("floorMaps");
-              for (int j = 0; j < floorMaps.length(); j++) {
-                JSONObject floorMap = floorMaps.getJSONObject(j);
-                if (floorMap.getInt("mapID") == currentMapID + 1) {
-                  return true;
+            /**
+             * Read the JSON file
+             */
+            JSONArray metadataArray = new JSONArray(new String(JsonReader.read(mapJsonFilePath)));
+            /**
+             * Loop through the metadata array
+             */
+            for (int i = 0; i < metadataArray.length(); i++) {
+                JSONObject metadata = metadataArray.getJSONObject(i);
+                if (metadata.getInt("buildingID") == currentBuildingID) {
+                    JSONArray floorMaps = metadata.getJSONArray("floorMaps");
+                    for (int j = 0; j < floorMaps.length(); j++) {
+                        JSONObject floorMap = floorMaps.getJSONObject(j);
+                        if (floorMap.getInt("mapID") == currentMapID + 1) {
+                            return true;
+                        }
+                    }
                 }
-              }
             }
-          }
         } catch (Exception e) {
-          e.printStackTrace();
+            e.printStackTrace();
         }
         return false;
-      }
+    }
 
     /**
      * Method that checks if there is a floor below the current one.
@@ -232,16 +234,16 @@ public final class DataProcessor {
          * Loop through the metadata array
          */
         for (int i = 0; i < metadataArray.length(); i++) {
-        JSONObject metadata = metadataArray.getJSONObject(i);
-        if (metadata.getInt("buildingID") == currentBuildingID) {
-            JSONArray floorMaps = metadata.getJSONArray("floorMaps");
-            for (int j = 0; j < floorMaps.length(); j++) {
-            JSONObject floorMap = floorMaps.getJSONObject(j);
-            if (floorMap.getInt("mapID") == currentMapID - 1) {
-                return true;
+            JSONObject metadata = metadataArray.getJSONObject(i);
+            if (metadata.getInt("buildingID") == currentBuildingID) {
+                JSONArray floorMaps = metadata.getJSONArray("floorMaps");
+                for (int j = 0; j < floorMaps.length(); j++) {
+                    JSONObject floorMap = floorMaps.getJSONObject(j);
+                    if (floorMap.getInt("mapID") == currentMapID - 1) {
+                        return true;
+                    }
+                }
             }
-            }
-        }
         }
     } catch (Exception e) {
         e.printStackTrace();
