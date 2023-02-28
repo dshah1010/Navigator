@@ -8,6 +8,8 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.awt.*;
 
+import java.io.IOException;
+
 /**
  * @author: Riley Emma Gavigan <rgavigan@uwo.ca>
  * @version: 1.0
@@ -52,11 +54,11 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     /**
      * Variables to hold the current map and whether or not it is the campus map. Also holding map mode
      */
-    private boolean isCampusMap = true; // *** CHANGE THIS IF U WANT TO VIEW THE FLOORMAPS INSTEAD FOR POICOMPONENT (FOR TESTING PURPOSES)
+    private boolean isCampusMap = false; // *** CHANGE THIS IF U WANT TO VIEW THE FLOORMAPS INSTEAD FOR POICOMPONENT (FOR TESTING PURPOSES)
     private int currentMapID;
     private MapFactory mapFactory = new MapFactory(); // TODO: need to determine when to use mapFactory still, likely will be used at start up instead of in MapComponent
-    private FloorMap floorMap; // TODO: could likely find a better workaround than having a separate map object for the floor maps, needs to be explored more
-    private String mapType;
+    private FloorMap floorMap = new FloorMap(1, 2);// TODO: could likely find a better workaround than having a separate map object for the floor maps, needs to be explored more
+    private String mapType = "FLOOR"; // Just for testing
     private Map mapObject;
     private boolean isNavigationMode;
 
@@ -73,7 +75,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     /**
      * Map instance for campus map
      */
-    private Map campus;
+    private Map campus = MapFactory.createMap("CAMPUS", 0, 1);
 
     /**
      * Coordinates of mouse
@@ -119,9 +121,9 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          */
         imagePanel = new JPanel();
         imagePanel.setLayout(null);
-        mapImg = new ImageIcon("data\\images\\maps\\campusMap.png"); // TODO: Get Campus Map from backend and use that
-        isCampusMap = true;
-        currentMapID = 1; // TODO: Get Map ID from backend - whatever it is determined to be
+        mapImg = new ImageIcon("data\\images\\maps\\floorPlans\\3M, Thames and Somerville Floor Plans\\3M, Thames and Somerville Floor Plans-1.png"); // TODO: Get Campus Map from backend and use that
+        isCampusMap = false;
+        currentMapID = 2; // TODO: Get Map ID from backend - whatever it is determined to be
         map = new JLabel(mapImg);
         map.addMouseListener(this);
         map.addMouseMotionListener(this);
@@ -149,8 +151,8 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         /**
          * Check for floor above/below
          */
-        //isFloorAbove(); // TODO: Wait for implementation to be finished from FloorMap
-        //isFloorBelow(); // TODO: Wait for implementation to be finished from FloorMap
+        isFloorAbove(); 
+        isFloorBelow(); 
 
         /**
          * Create panel to hold map mode button
@@ -300,17 +302,10 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         this.mapType = newMap.getMapType();
 
         /**
-         * Remove the current map image from the image panel
-         */
-        imagePanel.remove(map);
-
-        /**
-         * Add the new map image to the image panel
+         * Updates the map image and map object
          */
         mapImg = new ImageIcon(newMap.getFilePath());
-        map = new JLabel(mapImg);
-        map.setLayout(null);
-        imagePanel.add(map);
+        map.setIcon(mapImg);
 
         /**
          * Update the scroll pane
@@ -323,15 +318,10 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         scrollPane.getViewport().setViewPosition(new Point(mapImg.getIconWidth() / 3, mapImg.getIconHeight() / 3));
 
         /**
-         * Update the map panel
-         */
-        mapPanel.add(scrollPane, BorderLayout.CENTER);
-
-        /**
          * Check for floor above/below
          */
-        // isFloorAbove(); TODO: Wait for implementation to be finished from FloorMap
-        // isFloorBelow(); TODO: Wait for implementation to be finished from FloorMap
+        isFloorAbove(); 
+        isFloorBelow(); 
 
         /**
          * Display the POIs for the map and update buttons
@@ -406,12 +396,13 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * @param None
      * @return None
      */
-    private void navigateToFloorAbove() {
+    private void navigateToFloorAbove() throws IOException {
         if (floorMap.checkfloorAbove()) {
             /**
              * Get the map of the floor above
              */
             mapObject = floorMap.getFloorAbove();
+            floorMap = floorMap.getFloorAbove();
 
             /**
              * Change the map
@@ -425,12 +416,13 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * @param None
      * @return None
      */
-    private void navigateToFloorBelow() {
+    private void navigateToFloorBelow() throws IOException {
         if (floorMap.checkFloorBelow()) {
             /**
              * Get the map of the floor below
              */
-            FloorMap mapObject = floorMap.getFloorBelow();
+            mapObject = floorMap.getFloorBelow();
+            floorMap = floorMap.getFloorBelow();
 
             /**
              * Change the map
@@ -579,13 +571,21 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          * If the button text is "Floor Down", change the map to the floor below the current map
          */
         else if (buttonText.equals("Floor Down")) {
-            navigateToFloorBelow();
+            try {
+                navigateToFloorBelow();
+            } catch (Exception error) {
+                error.printStackTrace();
+              }
         }
         /**
          * If the button text is "Floor Up", change the map to the floor above the current map
          */
         else if (buttonText.equals("Floor Up")) {
-            navigateToFloorAbove();
+            try {
+                navigateToFloorAbove();
+            } catch (Exception error) {
+                error.printStackTrace();
+              }
         }
         /**
          * If the button text is "Navigation Mode", change that button to "Editing Mode"

@@ -186,29 +186,85 @@ public final class DataProcessor {
     }
 
     /**
-     * TODO: Method that checks if there is a floor above the current one.
      * @param currentMapID
      * @return boolean indicating if there is a floor above or not
      */
-    public boolean checkfloorAbove(int currentMapID) {
+    public boolean checkFloorAbove(int currentMapID, int currentBuildingID) {
+        try {
+            /**
+             * Read the JSON file
+             */
+            JSONArray metadataArray = new JSONArray(new String(JsonReader.read(mapJsonFilePath)));
+            /**
+             * Loop through the metadata array
+             */
+            for (int i = 0; i < metadataArray.length(); i++) {
+                JSONObject metadata = metadataArray.getJSONObject(i);
+                if (metadata.getInt("buildingID") == currentBuildingID) {
+                    JSONArray floorMaps = metadata.getJSONArray("floorMaps");
+                    for (int j = 0; j < floorMaps.length(); j++) {
+                        JSONObject floorMap = floorMaps.getJSONObject(j);
+                        if (floorMap.getInt("mapID") == currentMapID + 1) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
     /**
-     * TODO: Method that checks if there is a floor below the current one.
-     * @param currentMapID
-     * @return boolean indicating if there is a floor below or not
+     * Method that checks if there is a floor below the current one.
+     * @param int currentMapID
+     * @param int currentBuildingID
+     * @return boolean indicating if there is a floor below 
      */
-    public boolean checkFloorBelow(int currentMapID) {
-        return false;
+    
+    public boolean checkFloorBelow(int currentMapID, int currentBuildingID) {
+    try {
+        /**
+         * Read the JSON file
+         */
+        JSONArray metadataArray = new JSONArray(new String(JsonReader.read(mapJsonFilePath)));
+
+        /**
+         * Loop through the metadata array
+         */
+        for (int i = 0; i < metadataArray.length(); i++) {
+            JSONObject metadata = metadataArray.getJSONObject(i);
+            if (metadata.getInt("buildingID") == currentBuildingID) {
+                JSONArray floorMaps = metadata.getJSONArray("floorMaps");
+                for (int j = 0; j < floorMaps.length(); j++) {
+                    JSONObject floorMap = floorMaps.getJSONObject(j);
+                    if (floorMap.getInt("mapID") == currentMapID - 1) {
+                        return true;
+                    }
+                }
+            }
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return false;
     }
 
     /**
-     * TODO: Method that gets the Map of the floor above the current one
-     * @param currentMapID
+     * @param int currentMapID
+     * @param int currentBuildingID
      * @return Map object of the floor above
+     * @throws IOException If there is an error reading the map metadata file.
      */
-    public FloorMap getFloorAbove(int currentMapID) {
+    public FloorMap getFloorAbove(int currentMapID, int currentBuildingID) throws IOException {
+        ArrayList<FloorMap> floorMaps = JsonReader.getFloorMaps(mapJsonFilePath);
+        for (int i = 0; i < floorMaps.size(); i++) {
+            FloorMap floor = floorMaps.get(i);
+            if (floor.getBuildingID() == currentBuildingID && floor.getMapID() == currentMapID + 1) {
+                return new FloorMap(currentBuildingID, currentMapID + 1);
+            }
+        }
         return null;
     }
 
@@ -216,8 +272,16 @@ public final class DataProcessor {
      * TODO: Method that gets the Map of the floor below the current one
      * @param currentMapID
      * @return Map object of the floor below
+     * @throws IOException If there is an error reading the map metadata file.
      */
-    public FloorMap getFloorBelow(int currentMapID) {
+    public FloorMap getFloorBelow(int currentMapID, int currentBuildingID) throws IOException {
+        ArrayList<FloorMap> floorMaps = JsonReader.getFloorMaps(mapJsonFilePath);
+        for (int i = 0; i < floorMaps.size(); i++) {
+            FloorMap floor = floorMaps.get(i);
+            if (floor.getBuildingID() == currentBuildingID && floor.getMapID() == currentMapID - 1) {
+                return new FloorMap(currentBuildingID, currentMapID - 1);
+            }
+        }
         return null;
     }
 
@@ -280,31 +344,33 @@ public final class DataProcessor {
      * @return boolean
      */
     public boolean authenticateLogin(String username, String password) {
-        // JSON file location
+        /**
+         * JSON file location
+         */
         String filePath = "data/users/usersMetadata.json";
 
         try {
             /** 
-            * Read the JSON file
-            */
+             * Read the JSON file
+             */
             FileReader fileReader = new FileReader(filePath);
             JSONTokener jsonTokener = new JSONTokener(fileReader);
             JSONArray jsonArray = new JSONArray(jsonTokener);
             /** 
-            * Check each user in the JSON array
-            */
+             * Check each user in the JSON array
+             */
             for (Iterator<Object> iterator = jsonArray.iterator(); iterator.hasNext();) {
                 JSONObject user = (JSONObject) iterator.next();
 
                 /** 
-                * Decrypt the password from the JSON file
-                */
+                 * Decrypt the password from the JSON file
+                 */
                 String encryptedPassword = user.getString("encryptedPassword");
                 String decryptedPassword = decrypt(encryptedPassword);
 
                 /** 
-                * Check if the username and decrypted password match
-                */
+                 * Check if the username and decrypted password match
+                 */
                 if (username.equals(user.getString("username")) && password.equals(decryptedPassword)) {
                     String userType = user.getString("userType");
                     System.out.println("User " + username + " logged in as " + userType + ".");
@@ -315,8 +381,8 @@ public final class DataProcessor {
             e.printStackTrace();
         }
         /**
-        * If no match was found, return false
-        */
+         * If no match was found, return false
+         */
         System.out.println("Invalid username or password.");
         return false;
     }
@@ -329,35 +395,35 @@ public final class DataProcessor {
      */
     public boolean createAccount(String username, String password) {
         /** 
-        * JSON file location
-        */
+         * JSON file location
+         */
         String filePath = "data\\users\\usersMetadata.json";
 
         try {
             /** 
-            * Read the JSON file
-            */
+             * Read the JSON file
+             */
             FileReader fileReader = new FileReader(filePath);
             JSONTokener jsonTokener = new JSONTokener(fileReader);
             JSONArray jsonArray = new JSONArray(jsonTokener);
             
             /** 
-            * Check if user account exists already
-            */
+             * Check if user account exists already
+             */
             for (Iterator<Object> iterator = jsonArray.iterator(); iterator.hasNext();) {
                 JSONObject user = (JSONObject) iterator.next();
 
                 /** 
-                * Check if the usernames match
-                */
+                 * Check if the usernames match
+                 */
                 if (username.equals(user.getString("username"))) {
                     System.out.println("Error: account already exists");
                     return false;
                 }
             }
             /** 
-            * Find the next available userID
-            */
+             * Find the next available userID
+             */
             int nextUserID = 1;
             for (Iterator<Object> iterator = jsonArray.iterator(); iterator.hasNext();) {
                 JSONObject user = (JSONObject) iterator.next();
@@ -367,24 +433,24 @@ public final class DataProcessor {
                 }
             }
             /** 
-            * Encrypt the password
-            */
+             * Encrypt the password
+             */
             String encryptedPassword = encrypt(password);
             /** 
-            * Create a new user object
-            */
+             * Create a new user object
+             */
             JSONObject newUser = new JSONObject();
             newUser.put("userType", "USER");
             newUser.put("userID", nextUserID);
             newUser.put("username", username);
             newUser.put("encryptedPassword", encryptedPassword);
             /** 
-            * Add the new user object to the JSON array
+             * Add the new user object to the JSON array
             */
             jsonArray.put(newUser);
             /** 
-            * Write the updated JSON array to the file
-            */
+             * Write the updated JSON array to the file
+             */
             FileWriter fileWriter = new FileWriter(filePath);
             jsonArray.write(fileWriter);
             fileWriter.flush();

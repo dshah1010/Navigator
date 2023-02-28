@@ -2,6 +2,8 @@ package com.javan.dev;
 import java.util.ArrayList;
 import org.json.JSONObject;
 import org.json.JSONArray;
+import java.io.IOException;
+
 /**
  * @author: Brad McGlynn <bmcglyn4@uwo.ca>
  * @version: 1.0
@@ -121,19 +123,19 @@ public class FloorMap implements Map{
 
 
     public boolean checkfloorAbove() {
-        return this.processor.checkfloorAbove(this.mapID);
+        return this.processor.checkFloorAbove(this.mapID, this.buildingID);
     }
 
     public boolean checkFloorBelow() {
-        return this.processor.checkFloorBelow(this.mapID);
+        return this.processor.checkFloorBelow(this.mapID, this.buildingID);
     }
 
-    public FloorMap getFloorAbove() {
-        return this.processor.getFloorAbove(this.mapID);
+    public FloorMap getFloorAbove() throws IOException {
+        return this.processor.getFloorAbove(this.mapID, this.buildingID);
     }
 
-    public FloorMap getFloorBelow() {
-        return this.processor.getFloorBelow(this.mapID);
+    public FloorMap getFloorBelow() throws IOException {
+        return this.processor.getFloorBelow(this.mapID, this.buildingID);
     }
 
 }
