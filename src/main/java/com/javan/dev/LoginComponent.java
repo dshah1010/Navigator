@@ -211,6 +211,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
         newButton.setBackground(Color.BLACK);
         newButton.setForeground(Color.WHITE);
         newButton.setFocusPainted(false);
+        newButton.setOpaque(true);
 
         /**
          * Add listeners to the button
