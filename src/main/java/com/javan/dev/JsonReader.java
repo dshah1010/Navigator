@@ -84,6 +84,45 @@ public class JsonReader {
         return floorMaps;
     }
 
+    /**
+     * Method to get all of the building maps from the JSON file and create BuildingMaps, adding them to CampusMap
+     */
+    public static ArrayList<BuildingMap> getBuildingMaps(String mapJsonFilePath) throws IOException {
+        /*
+         * Initialize an ArrayList to store the building maps.
+         */
+        ArrayList<BuildingMap> buildingMaps = new ArrayList<BuildingMap>();
+        /*
+         * Use the JSONReader to read the map metadata file.
+         */
+        JSONArray buildings = new JSONArray(new String(JsonReader.read(mapJsonFilePath)));
+        /*
+         * Loop through each building in the JSON data.
+         */
+        for (int i = 0; i < buildings.length(); i++) {
+            JSONObject buildingObj = (JSONObject) buildings.get(i);
+            /*
+             * Get the building ID
+             */
+            int buildingID = ((Integer) buildingObj.get("buildingID")).intValue();
+
+            /**
+             * Get the building name
+             */
+            String buildingName = (String) buildingObj.get("mapName");
+            /*
+             * Create a new BuildingMap object and add it to the ArrayList.
+             */
+            BuildingMap buildingMap = new BuildingMap(buildingID);
+            buildingMap.setName(buildingName);
+            buildingMaps.add(buildingMap);
+        }
+        /*
+         * Return the ArrayList of building maps.
+         */
+        return buildingMaps;
+    }
+
 
     /**
      * Function to find filePath of FloorMap using Gson

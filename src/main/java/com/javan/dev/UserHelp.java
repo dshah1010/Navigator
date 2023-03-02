@@ -49,7 +49,7 @@ public final class UserHelp extends JFrame {
         /**
          * Add icon to the UI frame (UWO Logo)
          */
-        frame.setIconImage(new ImageIcon("data\\images\\icon.png").getImage());
+        frame.setIconImage(new ImageIcon("data/images/icon.png").getImage());
 
         /**
          * JTabbedPane to hold JPanels for each menu section

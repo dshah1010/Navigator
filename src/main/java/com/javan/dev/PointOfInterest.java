@@ -53,6 +53,30 @@ public class PointOfInterest {
         return ID;
     }
 
+    /**
+     * Getter for building / floor ID
+     * @return
+     */
+    public String getBuildingFloorID() {
+        return buildingID + " " + floorID;
+    }
+
+    /**
+     * Set building ID
+     * @return
+     */
+    public int setBuildingID(int buildingID) {
+        return this.buildingID = buildingID;
+    }
+
+    /**
+     * Set floor ID
+     * @return
+     */
+    public int setFloorID(int floorID) {
+        return this.floorID = floorID;
+    }
+
 
     /**
      * Getter for the name of the POI
@@ -156,5 +180,12 @@ public class PointOfInterest {
      */
     public void setIsFavourited(boolean isFavourited) {
         this.isFavourited = isFavourited;
+    }
+
+    /**
+     * Setter for ID
+     */
+    public void setID(int ID) {
+        this.ID = ID;
     }
 }

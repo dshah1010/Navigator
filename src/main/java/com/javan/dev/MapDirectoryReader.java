@@ -20,70 +20,114 @@ public class MapDirectoryReader {
      * @return None
      */
     public static void addMapInfoToJSON(String directoryPath, String jsonFilePath) {
-        // Create a JSON array to hold the maps
+        /**
+         * Create a JSON array to hold the maps
+         */
         JSONArray buildingsJson = new JSONArray();
     
-        // Get a list of subdirectories in the specified directory
+        /**
+         * Get a list of sub-directories in the specified directory
+         */
         File directory = new File(directoryPath);
         File[] subdirectories = directory.listFiles();
 
-        int mapID = 2;
+        int mapID = 1;
         int buildingId = 1;
-        // Loop through each subdirectory
+        /**
+         * Loop through each subdirectory inside floorPlans (each Building's directory of maps)
+         */
         for (File subdirectory : subdirectories) {
-            // Create a new JSON object for this building
+            /**
+             * Set floor ID to 1 for each building
+             */
+            mapID = 1;
+
+            /**
+             * Create a new JSON object for this building
+             */
             JSONObject buildingJson = new JSONObject();
 
-            // Get the building name subdirectory
+            /**
+             * Get the building name subdirectory
+             */
             String buildingName = subdirectory.getName();
     
-            // Set the building name, type and ID in the JSON object
+            /**
+             * Set the building name, type and ID in the JSON object
+             */
             buildingJson.put("mapName", buildingName);
             buildingJson.put("mapType", "BUILDING");
             buildingJson.put("buildingID", buildingId);
     
-            // Get a list of all PNG files in this subdirectory
+            /**
+             * Get a list of all PNG files in this subdirectory (these are the FloorMap imaages)
+             */
             File[] imageFiles = subdirectory.listFiles();
     
-            // Create a JSON array to hold the floor maps
+            /**
+             * Create a JSON array to hold the floor maps for the building
+             */
             JSONArray mapsJson = new JSONArray();
 
-            // Loop through each image file and add it to the JSON array
+            /**
+             * Loop through each image file and add it to the JSON array
+             */
             for (File imageFile : imageFiles) {
-                // Create a new JSON object for this floor
+                /**
+                 * Create a new JSON object for this floor
+                 */
                 JSONObject mapJson = new JSONObject();
 
-                // Get the map name from the subdirectory 
+                /**
+                 * Get the map name from the subdirectory 
+                 */
                 String mapName = imageFile.getName();
         
-                // Set the map name, map type and ID in the JSON object
+                /**
+                 * Set the map name, map type and ID in the JSON object
+                 */
                 mapJson.put("mapName", mapName);
                 mapJson.put("mapType", "FLOOR");
                 mapJson.put("mapID", mapID);
                 
-                // Loop through each image file and add it to the JSON array
+                /**
+                 * Loop through each image file and add it to the JSON array
+                 */
                 String imagePath = imageFile.getAbsolutePath();
                 mapJson.put("filePath", imagePath);
-
                 mapsJson.put(mapJson);
+                
+                /**
+                 * Increment mapID by 1 for next floor within the building
+                 */
                 mapID++;
             }
     
-            // Set the floor maps in the JSON object
+            /**
+             * Set the floor maps in the JSON object
+             */
             buildingJson.put("floorMaps", mapsJson);
 
-            // Set the building path in the JSON object
+            /**
+             * Set the building path in the JSON object
+             */
             String buildingPath = subdirectory.getAbsolutePath();
             buildingJson.put("filePath", buildingPath);
     
-            // Add the map JSON object to the buildings JSON array
+            /**
+             * Add the map JSON object to the buildings JSON array
+             */
             buildingsJson.put(buildingJson);
 
+            /**
+             * Increment the building ID for next building
+             */
             buildingId++;
-
-            
         }
-        // Write the maps to the JSON file
+
+        /**
+         * Write the maps to the JSON file
+         */
         FileWriter file = null;
         try {
             file = new FileWriter(jsonFilePath);
@@ -108,10 +152,14 @@ public class MapDirectoryReader {
      */
     public static void addMapObjectsToJSON(String jsonFilePath, Map map) {
         try {
-            // Get the building ID from the BuildingMap
+            /**
+             * Get the building ID from the BuildingMap
+             */
             int mapID = map.getMapID();
 
-            // Create a new JSONObject and add the building ID and BuildingMap to it
+            /**
+             * Create a new JSONObject and add the building ID and BuildingMap to it
+             */
             JSONObject mapData = new JSONObject();
 
             if (map.getMapType().equals("BUILDING")) {

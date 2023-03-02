@@ -28,18 +28,16 @@ public class App
         // Test print statement
         System.out.println( "Hello World!" );
 
-        // Load Map Metadata
+        /**
+         * Load Map Metadata
+        */
         String directoryPath = "data/images/maps/floorPlans";
         String jsonFilePath = "data/images/maps/metadata/mapMetadata.json";
         MapDirectoryReader.addMapInfoToJSON(directoryPath, jsonFilePath);
 
-        // Create UserInterface object to create the UI -> this will remain for the session
-        UserInterface ui = UserInterface.getInstance();
-        POIComponent poiComponent = POIComponent.getInstance();
-
         /**
-        * Run an infinite loop to check for updates in POI component on map changes 
+         * Create UserInterface object to create the UI -> this will remain for the session
         */
-        poiComponent.checkForUpdates();
+        UserInterface ui = UserInterface.getInstance();
     }
 }

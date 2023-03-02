@@ -75,4 +75,30 @@ public final class User {
     public boolean getIsAdmin() {
         return this.isAdmin;
     }
+
+    /**
+     * Setter for username
+     * @param String username
+     * @return None
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    /**
+     * Setter for password
+     * @param String password
+     * @return None
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    /**
+     * Setter for isAdmim
+     * @param boolean adminStatus
+     */
+    public void setIsAdmin(boolean adminStatus) {
+        this.isAdmin = adminStatus;
+    }
 }

@@ -1,5 +1,7 @@
 package com.javan.dev;
 
+import java.io.IOException;
+
 /**
  * @author: Brad McGlynn <bmcglyn4@uwo.ca>
  * @version: 1.0
@@ -24,9 +26,10 @@ public class MapFactory {
             return new BuildingMap(mapID);
         }
         else if (mapType.equals("CAMPUS")) {
-            return new CampusMap(mapID);
+            return CampusMap.getInstance(mapID);
         }
-        else 
+        else {
             throw new IllegalArgumentException("Unknown map type " + mapType);
         }
+    }
 }

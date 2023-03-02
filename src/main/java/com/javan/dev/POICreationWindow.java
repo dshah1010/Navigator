@@ -47,7 +47,7 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
         /**
          * Add icon to the UI frame (Flag Icon)
          */
-        frame.setIconImage(new ImageIcon("data\\images\\flag.png").getImage());
+        frame.setIconImage(new ImageIcon("data/images/flag.png").getImage());
 
         /**
          * Create ArrayList of different metadata String titles
