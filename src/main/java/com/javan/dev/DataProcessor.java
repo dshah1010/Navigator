@@ -171,6 +171,7 @@ public final class DataProcessor {
          * Campus Map Condition: Get all Campus Map POIs for Building Directory
          */
         if (isCampusMap == true) {
+            universalPOIs.clear();
             /**
              * Go through campusMap object building Array and create POIs for each building
              */
@@ -186,6 +187,7 @@ public final class DataProcessor {
             }
         }
         else {
+            universalPOIs.clear();
             /**
              * Floor Map Condition: Get all POIs within the current floor map
              */

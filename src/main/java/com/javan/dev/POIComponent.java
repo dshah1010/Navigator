@@ -242,6 +242,11 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
      */
     private void addFavouritePOIPanel() {
         /**
+         * Clear the POI Panel first
+         */
+        POIPanels.get(1).removeAll();
+
+        /**
          * JPanel that separates the title from the list of favourite POIs
          */
         JPanel gridDisplay = new JPanel();
@@ -308,6 +313,11 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
      */
     private void addUserPOIPanel() {
         /**
+         * Clear the POI Panel first
+         */
+        POIPanels.get(2).removeAll();
+
+        /**
          * JPanel that separates the title from the list of user-created POIs
          */
         JPanel gridDisplay = new JPanel();
@@ -367,6 +377,10 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
      */
     private void addOtherPOIPanel() {
         /**
+         * Clear the POI Panel first
+         */
+        POIPanels.get(3).removeAll();
+        /**
          * JPanel that separates the title from the list of other POIs
          */
         JPanel gridDisplay = new JPanel();
@@ -402,7 +416,7 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
          */
         int numRows = addPOIsToPanel(gridDisplay, otherPOIList);
 
-        GridLayout grid = new GridLayout(numRows, 2);
+        GridLayout grid = new GridLayout(numRows, 1);
         gridDisplay.setLayout(grid);
 
         /**
@@ -429,6 +443,7 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
             otherPOIList = dataProcessor.getUniversalPOIs(true);
         }
         else {
+            System.out.println("GETTING UNIVERSAL POIS");
             otherPOIList = dataProcessor.getUniversalPOIs(false);
         }
 
@@ -533,13 +548,16 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
          * Get current map ID from map component
          */
         this.currMapID = mapIDFromMapComponent;
-        if (this.currMapID == 0) {
+        if (mapComponent.getIsCampusMap()) {
             /**
              * Make the first 3 scroll panes not show on UI
              */
             for (int i = 0; i < 3; i++) {
                 POIScrollPanes.get(i).setVisible(false);
             }
+            addFavouritePOIPanel();
+            addOtherPOIPanel();
+            addUserPOIPanel();
             /**
              * Change the title of All POIs to Building Directory
              */
@@ -552,6 +570,9 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
             for (int i = 0; i < 3; i++) {
                 POIScrollPanes.get(i).setVisible(true);
             }
+            addFavouritePOIPanel();
+            addOtherPOIPanel();
+            addUserPOIPanel();
 
             /**
              * Change the title of All POIs to Other POIs

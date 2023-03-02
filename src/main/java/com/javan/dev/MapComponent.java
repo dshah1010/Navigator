@@ -380,15 +380,16 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * @return None
      */
     private void isFloorAbove() {
-        if (this.mapType.equals("FLOOR")) {
+        if (this.mapType.contains("FLOOR")) {
             if (floorMap.checkfloorAbove()) {
                 /**
                  * Enable the button "Floor Up"
                  */
                 floorAbove.setEnabled(true);
             } 
-        } else {
-            floorAbove.setEnabled(false);
+            else {
+                floorAbove.setEnabled(false);
+            }
         }
     }
 
@@ -400,7 +401,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * @return None
      */
     private void isFloorBelow() {
-        if (this.mapType.equals("FLOOR")) {
+        if (this.mapType.contains("FLOOR")) {
             if (floorMap.checkFloorBelow()) {
                 /**
                  * Enable the button "Floor Down"
@@ -408,8 +409,9 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                 floorBelow.setEnabled(true);
 
             } 
-        } else {
-            floorBelow.setEnabled(false);
+            else {
+                floorBelow.setEnabled(false);
+            }
         } 
     }
 
