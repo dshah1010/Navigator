@@ -54,7 +54,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     private boolean isCampusMap;
     private int currentMapID;
     private FloorMap floorMap;
-    private Map campus = MapFactory.createMap("CAMPUS", 0, 1);
+    private Map campus = MapFactory.createMap("CAMPUS", 0, 0);
     private String mapType = "CAMPUS";
     private Map mapObject;
     private boolean isNavigationMode;
@@ -63,6 +63,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * DataProcessor instance
      */
     private DataProcessor dataProcessor = DataProcessor.getInstance();
+    private POIComponent poiComponent;
 
     /**
      * User instance
@@ -120,7 +121,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         mapObject = campus;
         mapImg = new ImageIcon(campus.getFilePath());
         isCampusMap = true;
-        currentMapID = 1;
+        currentMapID = 0;
 
 
         map = new JLabel(mapImg);
@@ -242,37 +243,46 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * @param mapObject
      */
     public void setMapDetails(Map newMap) {
-        /**
-         * Set Map object and Map ID
-         */
-        this.mapObject = newMap;
-        currentMapID = newMap.getMapID();
 
         /**
          * Set Campus Map Boolean and Map Type
          */
-        if (currentMapID != 1) {
-            isCampusMap = false;
-            mapType = "FLOOR";
+        System.out.println("Map Type: " + newMap.getMapType());
+        if (newMap.getMapType() == "FLOOR") {
+            this.isCampusMap = false;
+            this.mapType = "FLOOR";
+            this.floorMap = (FloorMap) newMap;
         }
-        else {
-            isCampusMap = true;
-            mapType = "CAMPUS";
+        else if (newMap.getMapType() == "CAMPUS") {
+            this.isCampusMap = true;
+            this.mapType = "CAMPUS";
         }
+
+        /**
+         * Set Map object and Map ID
+         */
+        this.mapObject = newMap;
+        this.currentMapID = newMap.getMapID();
     }
     
     /**
      * Method to update floor up/down buttons depending on if on campus map or a floor map
      */
     public void updateFloorButtons() {
-        if (isCampusMap) {
+        if (this.mapType.contains("CAMPUS")) {
+            System.out.println("REMOVING FLOOR BUTTONS");
+            floorBelow.setVisible(false);
+            floorAbove.setVisible(false);
             buttonPanel.remove(floorBelow);
             buttonPanel.remove(floorAbove);
-            buttonPanel.setLayout(new GridLayout(1, 1));
+            buttonPanel.setLayout(new GridLayout(1, 3));
         }
         else {
+            System.out.println("ADDING FLOOR BUTTONS");
             buttonPanel.add(floorBelow);
             buttonPanel.add(floorAbove);
+            floorBelow.setVisible(true);
+            floorAbove.setVisible(true);
             buttonPanel.setLayout(new GridLayout(1, 3));
         }
     }
@@ -299,21 +309,25 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * @return None
      */
     public void changeMap(Map newMap) {
+        poiComponent = POIComponent.getInstance();
         /**
          * Set map details
          */
         setMapDetails(newMap);
-
-         /**
-         * Sets map type
-         */
-        this.mapType = newMap.getMapType();
+        poiComponent.changeDisplayIfCampusMap(this.currentMapID);
 
         /**
          * Updates the map image and map object
          */
         mapImg = new ImageIcon(newMap.getFilePath());
         map.setIcon(mapImg);
+
+        /**
+         * Update boundaries of display to current image
+         */
+        map.setLayout(null);
+        map.setBounds(0, 0, mapImg.getIconWidth(), mapImg.getIconHeight());
+        imagePanel.setPreferredSize(new Dimension(mapImg.getIconWidth(), mapImg.getIconHeight()));
 
         /**
          * Update the scroll pane
@@ -323,7 +337,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         /**
          * Make it so that the scroll pane displays the upper third of the map image when the UI is opened (use ImageIcon dimensions)
          */
-        scrollPane.getViewport().setViewPosition(new Point(mapImg.getIconWidth() / 3, mapImg.getIconHeight() / 3));
+        scrollPane.getViewport().setViewPosition(new Point((int) (mapImg.getIconWidth() / 3), (int) (mapImg.getIconHeight() / 3)));
 
         /**
          * Check for floor above/below (enable/disable buttons)

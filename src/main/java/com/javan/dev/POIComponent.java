@@ -102,27 +102,13 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
         /**
          * Start at campus map, set ID to it and change display if campus map
          */
-        currMapID = 1;
-        changeDisplayIfCampusMap();
+        currMapID = 0;
+        changeDisplayIfCampusMap(0);
 
         /**
          * Make POI Panel visible
          */
         POIPanel.setVisible(true);
-    }
-
-    public void checkForUpdates() {
-        while (true) {
-            try {
-                while (mapComponent.getCurrentMapID() == currMapID) {
-                    Thread.sleep(100);
-                }
-                currMapID = mapComponent.getCurrentMapID();
-                changeDisplayIfCampusMap();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     /**
@@ -507,12 +493,6 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
          * Layout POI panel, adding two POIs per row
          */
         int numRows = POIList.size();
-        if (numRows % 2 == 1) {
-            numRows = numRows / 2 + 1;
-        }
-        else {
-            numRows = numRows / 2;
-        }
         return numRows;
     }
 
@@ -548,8 +528,12 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
     /**
      * Method to hide the POI layers panel, favourite POIs, and User POIs if the campus map is selected
      */
-    public void changeDisplayIfCampusMap() {
-        if (mapComponent.getIsCampusMap()) {
+    public void changeDisplayIfCampusMap(int mapIDFromMapComponent) {
+        /**
+         * Get current map ID from map component
+         */
+        this.currMapID = mapIDFromMapComponent;
+        if (this.currMapID == 0) {
             /**
              * Make the first 3 scroll panes not show on UI
              */
@@ -745,7 +729,6 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
                  * Get the Map object associated with the Map ID and Building ID
                  */
                 Map map = dataProcessor.getFloorMapFromMapID(buildingID, mapID);
-                System.out.println(map.getFilePath());
 
                 /*
                  * Change Map to MapID, update map ID

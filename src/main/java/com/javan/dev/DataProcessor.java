@@ -164,7 +164,7 @@ public final class DataProcessor {
     }  
 
     public ArrayList<PointOfInterest> getUniversalPOIs(boolean isCampusMap) {
-        CampusMap campusMap = CampusMap.getInstance(1);
+        CampusMap campusMap = CampusMap.getInstance(0);
         ArrayList<PointOfInterest> universalPOIs = new ArrayList<PointOfInterest>();
 
         /**

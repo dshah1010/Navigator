@@ -36,13 +36,6 @@ public final class CampusMap implements Map{
          * Add BuildingMaps to buildingArray
          */
         buildingArray = JsonReader.getBuildingMaps("data/images/maps/metadata/mapMetadata.json");
-
-        /**
-         * Print all buildingMap IDs in loop
-         */
-        for (BuildingMap buildingMap : buildingArray) {
-            System.out.println(buildingMap.getFilePath()); // TEMP FOR TESTING
-        }
     }
 
     /**

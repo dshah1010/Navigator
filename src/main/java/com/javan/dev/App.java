@@ -29,23 +29,17 @@ public class App
         System.out.println( "Hello World!" );
 
         /**
-         * Create UserInterface object to create the UI -> this will remain for the session
-        */
-        UserInterface ui = UserInterface.getInstance();
-        POIComponent poiComponent = POIComponent.getInstance();
-
-        /**
          * Load Map Metadata
         */
         String directoryPath = "data/images/maps/floorPlans";
         String jsonFilePath = "data/images/maps/metadata/mapMetadata.json";
         MapDirectoryReader.addMapInfoToJSON(directoryPath, jsonFilePath);
-
+        
         JsonReader.getBuildingMaps("data/images/maps/metadata/mapMetadata.json");
 
         /**
-        * Run an infinite thread sleeping loop to check for updates in POI component on map changes 
+         * Create UserInterface object to create the UI -> this will remain for the session
         */
-        poiComponent.checkForUpdates();
+        UserInterface ui = UserInterface.getInstance();
     }
 }
