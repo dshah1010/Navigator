@@ -58,15 +58,10 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
     private static LoginComponent INSTANCE;
 
     /**
-     * Private variable to hold the instance of the data processor
+     * Private variables to hold the instance of the data processor and user
      */
     private DataProcessor processor = DataProcessor.getInstance();
-
-    /**
-     * Background image for the login component
-     */
-    private ImageIcon backgroundImage = new ImageIcon("data\\images\\uwo-bg-img.png");
-
+    private User user = User.getInstance();
 
     /**
      * Constructor to create Login Component of the UI. This will be in the main frame when the application is opened,
@@ -298,9 +293,6 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
         loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.Y_AXIS));
         createBackground(loginPanel);
 
-
-
-
         /**
         * Initialize a list of JPanel objects for cards 1-6
         */
@@ -478,6 +470,17 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
              * If the login is valid (isValid != 0), then remove the login panel from the frame and add the main panel
              */
             if (isValid == true) {
+                user.setUsername(username);
+                user.setPassword(password);
+                /**
+                 * Set admin status for admin
+                 */
+                if (user.getUsername().contains("admin")) {
+                    user.setIsAdmin(true);
+                }
+                else {
+                    user.setIsAdmin(false);
+                }
                 /**
                  * Remove the login panel from the frame and set loggedIn to true for the rest of the program
                  */
@@ -513,6 +516,14 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
             String confirmPassword = new String(createAccountConfirmPassword.getPassword());
 
             /**
+             * Don't allow admin creation
+             */
+            if (username.contains("admin")) {
+                JOptionPane.showMessageDialog(null, "Cannot create admin account");
+                return;
+            }
+
+            /**
              * If the password and confirm password fields do not match, display a message informing the user
              */
             if (!password.equals(confirmPassword)) {
@@ -520,6 +531,17 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
                 return;
             }
             else {
+                user.setUsername(username);
+                user.setPassword(password);
+                /**
+                 * Set admin status for admin
+                 */
+                if (user.getUsername() == "admin") {
+                    user.setIsAdmin(true);
+                }
+                else {
+                    user.setIsAdmin(false);
+                }
                 /**
                  * Create a user account and JSON storage of the user account using the DataProcessor class
                  */
@@ -529,16 +551,16 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
                  */
                 if (validLogin) {
                     openLoginPanel();
-                    /**
-                     * Reset password flag
-                     */
-                    passwordFlag = true;
                 }
 
                 else {
                     JOptionPane.showMessageDialog(null, "Error: Account with that username already exists.");
                 }
-                
+                /**
+                 * Reset password flags
+                 */
+                passwordFlag = true;
+                confirmPassFlag = true;
             }
         }
     }
@@ -668,15 +690,15 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
              * Get the username from the username input field, and if it is empty inform user to enter a username
              */
             String username = usernameInput.getText();
-            if (username.contains("Username:")) {
-                JOptionPane.showMessageDialog(null, "Please enter your username, and we will give you your password");
-                return;
-            }
             /**
              * Get the password from the database and display it to the user
              */
-            // TODO: String password = processor.getPasswordFromUserName(username); // To implement in the future
-            JOptionPane.showMessageDialog(null, "Your password is: " + "password"); // TODO: Update to password variable after implemented
+            String password = processor.getPasswordFromUsername(username);
+            if (username.contains("Username:") || password == null) {
+                JOptionPane.showMessageDialog(null, "Please enter your username, and we will give you your password");
+                return;
+            }
+            JOptionPane.showMessageDialog(null, "Your password is: " + password);
         }
         else if (e.getSource() == createAccount) {
             /**

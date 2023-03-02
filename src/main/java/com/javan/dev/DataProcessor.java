@@ -62,7 +62,7 @@ public final class DataProcessor {
      */
     public User loadUser(String name) throws FileNotFoundException {
         Gson gson = new Gson();
-        FileReader reader = new FileReader("group1\\data\\users" + "\\" + name + ".json");
+        FileReader reader = new FileReader("group1/data/users" + "/" + name + ".json");
         User user = gson.fromJson(reader, User.class);
         return user;
     }
@@ -163,13 +163,37 @@ public final class DataProcessor {
         return userPOIs;
     }  
 
-    public ArrayList<PointOfInterest> getUniversalPOIs() {
+    public ArrayList<PointOfInterest> getUniversalPOIs(boolean isCampusMap) {
+        CampusMap campusMap = CampusMap.getInstance(1);
         ArrayList<PointOfInterest> universalPOIs = new ArrayList<PointOfInterest>();
 
-        // TODO: THIS IS TEMPORARY FOR TESTING
-        for (int i = 0; i < 40; i++) {
-            universalPOIs.add(new PointOfInterest("Universal Test"));
+        /**
+         * Campus Map Condition: Get all Campus Map POIs for Building Directory
+         */
+        if (isCampusMap == true) {
+            /**
+             * Go through campusMap object building Array and create POIs for each building
+             */
+            for (int i = 0; i < campusMap.getBuildingArray().size(); i++) {
+                BuildingMap building = campusMap.getBuildingArray().get(i);
+                PointOfInterest poi = new PointOfInterest(building.getMapName());
+                /**
+                 * Set building ID and floor ID to 1
+                 */
+                poi.setBuildingID(building.getMapID());
+                poi.setFloorID(1);
+                universalPOIs.add(poi);
+            }
         }
+        else {
+            /**
+             * Floor Map Condition: Get all POIs within the current floor map
+             */
+            for (int i = 0; i < 10; i++) {
+                universalPOIs.add(new PointOfInterest("Universal Test"));
+            }
+        }
+
         return universalPOIs;
     }
 
@@ -356,6 +380,7 @@ public final class DataProcessor {
             FileReader fileReader = new FileReader(filePath);
             JSONTokener jsonTokener = new JSONTokener(fileReader);
             JSONArray jsonArray = new JSONArray(jsonTokener);
+
             /** 
              * Check each user in the JSON array
              */
@@ -388,6 +413,46 @@ public final class DataProcessor {
     }
 
     /**
+     * Method to get a user's password from their username and return a string of the password
+     * @param String username
+     * @return String password
+     */
+    public String getPasswordFromUsername(String username) {
+        /**
+         * JSON file location
+         */
+        String filePath = "data/users/usersMetadata.json";
+
+        try {
+            /** 
+             * Read the JSON file
+             */
+            FileReader fileReader = new FileReader(filePath);
+            JSONTokener jsonTokener = new JSONTokener(fileReader);
+            JSONArray jsonArray = new JSONArray(jsonTokener);
+            
+            /** 
+             * Check each user in the JSON array
+             */
+            for (Iterator<Object> iterator = jsonArray.iterator(); iterator.hasNext();) {
+                JSONObject user = (JSONObject) iterator.next();
+
+                /** 
+                 * Check if the usernames match
+                 */
+                if (username.equals(user.getString("username"))) {
+                    String encryptedPassword = user.getString("encryptedPassword");
+                    String decryptedPassword = decrypt(encryptedPassword);
+                    return decryptedPassword;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
      * Method to create a new user account provided that a user with the same username and password doesn't exist already
      * @param String username
      * @param String password, unencrypted password attempt
@@ -397,7 +462,7 @@ public final class DataProcessor {
         /** 
          * JSON file location
          */
-        String filePath = "data\\users\\usersMetadata.json";
+        String filePath = "data/users/usersMetadata.json";
 
         try {
             /** 
@@ -463,5 +528,15 @@ public final class DataProcessor {
             e.printStackTrace();
             return false;
         } 
+    }
+
+    /**
+     * Method to get a FloorMap object from MapID and Building ID
+     * @param mapID integer and buildingID integer
+     * @return Map object retrieved from ID
+     */
+    public FloorMap getFloorMapFromMapID(int buildingID, int mapID) {
+        FloorMap mapObject = new FloorMap(buildingID, mapID);
+        return mapObject;
     }
 }

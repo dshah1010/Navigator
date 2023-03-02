@@ -1,13 +1,10 @@
 package com.javan.dev;
 
-// Import Swing Components
+// Import Necessary Libraries
 import javax.swing.*;
-import javax.xml.namespace.QName;
-
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.awt.*;
-
 import java.io.IOException;
 
 /**
@@ -44,21 +41,21 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     /**
      * ImageIcon for the flags
      */
-    private ImageIcon flag = new ImageIcon("data\\images\\flag.png");
+    private ImageIcon flag = new ImageIcon("data/images/flag.png");
 
     /**
      * Singleton instance variable
      */
-    private static MapComponent INSTANCE; // TODO: We may not need this?
+    private static MapComponent INSTANCE;
 
     /**
      * Variables to hold the current map and whether or not it is the campus map. Also holding map mode
      */
-    private boolean isCampusMap = false; // *** CHANGE THIS IF U WANT TO VIEW THE FLOORMAPS INSTEAD FOR POICOMPONENT (FOR TESTING PURPOSES)
+    private boolean isCampusMap;
     private int currentMapID;
-    private MapFactory mapFactory = new MapFactory(); // TODO: need to determine when to use mapFactory still, likely will be used at start up instead of in MapComponent
-    private FloorMap floorMap = new FloorMap(1, 2);// TODO: could likely find a better workaround than having a separate map object for the floor maps, needs to be explored more
-    private String mapType = "FLOOR"; // Just for testing
+    private FloorMap floorMap;
+    private Map campus = MapFactory.createMap("CAMPUS", 0, 1);
+    private String mapType = "CAMPUS";
     private Map mapObject;
     private boolean isNavigationMode;
 
@@ -71,11 +68,6 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * User instance
     */
     private User user = User.getInstance();
-
-    /**
-     * Map instance for campus map
-     */
-    private Map campus = MapFactory.createMap("CAMPUS", 0, 1);
 
     /**
      * Coordinates of mouse
@@ -121,9 +113,16 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          */
         imagePanel = new JPanel();
         imagePanel.setLayout(null);
-        mapImg = new ImageIcon("data\\images\\maps\\floorPlans\\3M, Thames and Somerville Floor Plans\\3M, Thames and Somerville Floor Plans-1.png"); // TODO: Get Campus Map from backend and use that
-        isCampusMap = false;
-        currentMapID = 2; // TODO: Get Map ID from backend - whatever it is determined to be
+
+        /**
+         * Campus map image and ID
+         */
+        mapObject = campus;
+        mapImg = new ImageIcon(campus.getFilePath());
+        isCampusMap = true;
+        currentMapID = 1;
+
+
         map = new JLabel(mapImg);
         map.addMouseListener(this);
         map.addMouseMotionListener(this);
@@ -243,13 +242,22 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * @param mapObject
      */
     public void setMapDetails(Map newMap) {
+        /**
+         * Set Map object and Map ID
+         */
         this.mapObject = newMap;
         currentMapID = newMap.getMapID();
+
+        /**
+         * Set Campus Map Boolean and Map Type
+         */
         if (currentMapID != 1) {
             isCampusMap = false;
+            mapType = "FLOOR";
         }
         else {
             isCampusMap = true;
+            mapType = "CAMPUS";
         }
     }
     
@@ -318,7 +326,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         scrollPane.getViewport().setViewPosition(new Point(mapImg.getIconWidth() / 3, mapImg.getIconHeight() / 3));
 
         /**
-         * Check for floor above/below
+         * Check for floor above/below (enable/disable buttons)
          */
         isFloorAbove(); 
         isFloorBelow(); 
@@ -432,6 +440,20 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     }
 
     /**
+     * Method that enables a POI layer on the map. This makes the POIs of that layer visible on the map.
+     * @param text of the layer name
+     */
+    public void enablePOILayer(String text) {
+    }
+
+    /**
+     * Method that disables a POI layer on the map. This makes the POIs of that layer invisible on the map.
+     * @param text of the layer name
+     */
+    public void disablePOILayer(String text) {
+    }
+
+    /**
      * Method to change mouse cursor when button hovered over and when a POI flag is hovered over
      */
     public void mouseEntered(MouseEvent e) {
@@ -482,7 +504,12 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         /**
          * Get the Universal POIs for the map (not user based)
          */
-        pois = dataProcessor.getUniversalPOIs();
+        if (isCampusMap == true) {
+            pois = dataProcessor.getUniversalPOIs(true);
+        }
+        else {
+            pois = dataProcessor.getUniversalPOIs(false);
+        }
 
         /**
          * Get the User and Favourite POIs for the map (based on userID)

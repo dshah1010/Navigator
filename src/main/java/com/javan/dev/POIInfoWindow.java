@@ -16,8 +16,8 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
     private ArrayList<JLabel> labels;
     private PointOfInterest poi;
     private JButton favourite;
-    private ImageIcon favouriteIcon = new ImageIcon("data\\images\\favourited_poi.png");
-    private ImageIcon unfavouriteIcon = new ImageIcon("data\\images\\unfavourited_poi.png");
+    private ImageIcon favouriteIcon = new ImageIcon("data/images/favourited_poi.png");
+    private ImageIcon unfavouriteIcon = new ImageIcon("data/images/unfavourited_poi.png");
 
     /**
      * Constructor that creates the POI information window given the PointOfInterest object
@@ -48,7 +48,7 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
         /**
          * Add icon to the UI frame (Flag Icon)
          */
-        frame.setIconImage(new ImageIcon("data\\images\\flag.png").getImage());
+        frame.setIconImage(new ImageIcon("data/images/flag.png").getImage());
 
         /**
          * Create JPanel to hold the POI information

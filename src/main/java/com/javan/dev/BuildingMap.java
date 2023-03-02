@@ -16,6 +16,7 @@ public class BuildingMap implements Map {
     private int mapID;
     private String mapType;
     private ArrayList<FloorMap> floorArray = new ArrayList<FloorMap>();
+    private String mapName;
 
     /**
      * Private variable to hold the instance of the data processor
@@ -30,6 +31,7 @@ public class BuildingMap implements Map {
         this.filePath = processor.loadMapFilePath(mapID, 0, "BUILDING");
         this.mapID = mapID;
         this.mapType = "BUILDING";
+        this.mapName = null;
     }
 
     /**
@@ -69,6 +71,13 @@ public class BuildingMap implements Map {
         return this.mapType;
     }
 
+    /**
+     * Getter for map name
+     */
+    public String getMapName() {
+        return this.mapName;
+    }
+
     public JSONObject toJSON() {
         JSONObject json = new JSONObject();
         json.put("filePath", this.filePath);
@@ -102,6 +111,10 @@ public class BuildingMap implements Map {
             }
         }
         return null;
+    }
+
+    public void setName(String buildingName) {
+        this.mapName = buildingName;
     }
     
 }

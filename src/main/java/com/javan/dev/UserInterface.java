@@ -59,7 +59,7 @@ public final class UserInterface extends JFrame implements ActionListener {
         /**
          * Add icon to the UI frame (UWO Logo)
          */
-        frame.setIconImage(new ImageIcon("data\\images\\icon.png").getImage());
+        frame.setIconImage(new ImageIcon("data/images/icon.png").getImage());
 
         /**
          * Create the menu bar and add it to the frame

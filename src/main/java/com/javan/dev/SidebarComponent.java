@@ -195,7 +195,7 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
          * Create a JButton for the search bar
          */
         searchButton = new JButton();
-        ImageIcon searchIcon = new ImageIcon("data\\images\\search.png");
+        ImageIcon searchIcon = new ImageIcon("data/images/search.png");
         /**
          * Limit size of search icon and then button
          */
@@ -292,7 +292,6 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
     public void createWeatherInfoPanel() throws MalformedURLException, IOException {
         weatherInfoContentPanel = new JPanel();
         weatherInfoPanel = new JPanel();
-        // TODO: fix weather object / API
         weather = Weather.getInstance();
         weather.parseWeather();
         JPanel weatherContent = weather.addWeatherInfo();

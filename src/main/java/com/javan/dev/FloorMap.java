@@ -27,7 +27,7 @@ public class FloorMap implements Map{
 
     /**
      * Constructor for the FloorMap class to initialize the ID, type and filePath
-     * @param floorId
+     * @param buildingID and mapID
      */
     public FloorMap(int buildingID, int mapID) {
         this.filePath = processor.loadMapFilePath(buildingID, mapID, "FLOOR");

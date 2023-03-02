@@ -1,4 +1,5 @@
 package com.javan.dev;
+import java.io.IOException;
 import java.util.ArrayList;
 import org.json.JSONObject;
 
@@ -7,24 +8,56 @@ import org.json.JSONObject;
  * @version: 1.0
  * @since: 1.0
  */
-public class CampusMap implements Map{
+public final class CampusMap implements Map{
     /**
      * Declaring the file path, ID, type and BuildingArray of the Campus.
      */
     private String filePath;
     private int mapID;
     private String mapType;
-    private ArrayList<BuildingMap> BuildingArray = new ArrayList<BuildingMap>();
-    // TODO: add variable to contain map of campus
+    private ArrayList<BuildingMap> buildingArray = new ArrayList<BuildingMap>();
+
+    /**
+     * Private variable to hold instance of CampusMap
+     */
+    private static CampusMap INSTANCE;
 
     /**
      * Constructor for the CampusMap class to initialize the ID, type and filePath
      * @param campusName
+     * @throws IOException
      */
-    public CampusMap(int mapID) {
+    private CampusMap(int mapID) throws IOException {
         this.filePath = "data/images/maps/campusMap.png";
         this.mapID = mapID;
         this.mapType = "CAMPUS";
+
+        /**
+         * Add BuildingMaps to buildingArray
+         */
+        buildingArray = JsonReader.getBuildingMaps("data/images/maps/metadata/mapMetadata.json");
+
+        /**
+         * Print all buildingMap IDs in loop
+         */
+        for (BuildingMap buildingMap : buildingArray) {
+            System.out.println(buildingMap.getFilePath()); // TEMP FOR TESTING
+        }
+    }
+
+    /**
+     * Getter for CampusMap Instance
+     * @throws IOException
+     */
+    public static CampusMap getInstance(int mapID) {
+        if (INSTANCE == null) {
+            try {
+                INSTANCE = new CampusMap(mapID);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return INSTANCE;
     }
 
     /**
@@ -76,7 +109,7 @@ public class CampusMap implements Map{
      * @return POI
      */
     public String addBuilding(BuildingMap newBuilding) {
-        this.BuildingArray.add(newBuilding);
+        this.buildingArray.add(newBuilding);
         return null;
     }
 
@@ -86,11 +119,18 @@ public class CampusMap implements Map{
      * @return POI
      */
     public BuildingMap getBuilding(int buildingId) {
-        for (int i = 0; i < this.BuildingArray.size(); i++) {
-            if (this.BuildingArray.get(i).getMapID() == buildingId) {
-                return this.BuildingArray.get(i);
+        for (int i = 0; i < this.buildingArray.size(); i++) {
+            if (this.buildingArray.get(i).getMapID() == buildingId) {
+                return this.buildingArray.get(i);
             }
         }
         return null;
+    }
+
+    /**
+     * Getter for the BuildingArray
+     */
+    public ArrayList<BuildingMap> getBuildingArray() {
+        return this.buildingArray;
     }
 }
