@@ -14,8 +14,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 
 /**
- * @author: Riley Emma Gavigan <rgavigan@uwo.ca>
- * @version: 1.0
+ * @author: Riley Emma Gavigan <rgavigan@uwo.ca>, Dylan Sta Ana <dstaana@uwo.ca>, Brad McGlynn <bmcglyn4@uwo.ca>
+ * @version: 1.1
  * @since: 1.0
  */
 public final class DataProcessor {
@@ -134,18 +134,11 @@ public final class DataProcessor {
     }
 
     /**
-     * Method to return the favourite POIs of a user // TODO: TEMPORARY FOR TESTING
      * @param int userID - the ID of the user
      * @return List of favourite POIs
      */
     public ArrayList<PointOfInterest> getFavouritePOIs(int userID) {
-        ArrayList<PointOfInterest> favouritePOIs = new ArrayList<PointOfInterest>();
-
-        // TODO: THIS IS TEMPORARY FOR TESTING
-        for (int i = 0; i < 10; i++) {
-            favouritePOIs.add(new PointOfInterest("Favourite Test"));
-        }
-        return favouritePOIs;
+        return JsonReader.favouritesList(userID);
     }
 
     /**
@@ -153,14 +146,8 @@ public final class DataProcessor {
      * @param int userID - the ID of the user
      * @return List of user-created POIs
      */
-    public ArrayList<PointOfInterest> getUserPOIs(int userID) {
-        ArrayList<PointOfInterest> userPOIs = new ArrayList<PointOfInterest>();
-
-        // TODO: THIS IS TEMPORARY FOR TESTING
-        for (int i = 0; i < 10; i++) {
-            userPOIs.add(new PointOfInterest("User Test"));
-        }
-        return userPOIs;
+    public ArrayList<PointOfInterest> getUserPOIs() {
+        return JsonReader.userPOIList();
     }  
 
     public ArrayList<PointOfInterest> getUniversalPOIs(boolean isCampusMap) {
@@ -177,12 +164,7 @@ public final class DataProcessor {
              */
             for (int i = 0; i < campusMap.getBuildingArray().size(); i++) {
                 BuildingMap building = campusMap.getBuildingArray().get(i);
-                PointOfInterest poi = new PointOfInterest(building.getMapName());
-                /**
-                 * Set building ID and floor ID to 1
-                 */
-                poi.setBuildingID(building.getMapID());
-                poi.setFloorID(1);
+                PointOfInterest poi = new PointOfInterest(building.getMapName(), building.getMapID(), false, "BUILDING", 0, 0, 1, 1, false, "", 0);
                 universalPOIs.add(poi);
             }
         }
@@ -192,7 +174,7 @@ public final class DataProcessor {
              * Floor Map Condition: Get all POIs within the current floor map
              */
             for (int i = 0; i < 10; i++) {
-                universalPOIs.add(new PointOfInterest("Universal Test"));
+                universalPOIs.add(new PointOfInterest("Universal Test", 1, false, "BUILDING", 0, 0, 1, 1, false, "", 0));
             }
         }
 
@@ -200,7 +182,6 @@ public final class DataProcessor {
     }
 
     /**
-     * TODO: Method to get the POI's x and y coordinates when given the POI ID
      * @param poiID - the ID of the POI
      * @return coords, int[] of x and y coordinates
      */
@@ -295,7 +276,6 @@ public final class DataProcessor {
     }
 
     /**
-     * TODO: Method that gets the Map of the floor below the current one
      * @param currentMapID
      * @return Map object of the floor below
      * @throws IOException If there is an error reading the map metadata file.
@@ -313,7 +293,7 @@ public final class DataProcessor {
 
 
     public PointOfInterest getPOI(int parseInt) {
-        return new PointOfInterest("Test");
+        return new PointOfInterest("TEST", 0, false, "BUILDING", 0, 0, 1, 1, false, "", 0);
     }
 
 

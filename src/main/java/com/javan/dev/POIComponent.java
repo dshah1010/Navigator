@@ -357,7 +357,7 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
         /**
          * Get list of strings of user-created POIs from DataProcessor
          */
-         userPOIList = dataProcessor.getUserPOIs(user.getUserID());
+         userPOIList = dataProcessor.getUserPOIs();
 
          /**
           * Empty out userPOIStrings before adding updated list of user-created POIs
