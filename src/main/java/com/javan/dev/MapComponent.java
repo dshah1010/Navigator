@@ -530,7 +530,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         /**
          * Get the User and Favourite POIs for the map (based on userID)
          */
-        userPOIs = dataProcessor.getUserPOIs(user.getUserID());
+        userPOIs = dataProcessor.getUserPOIs();
         favouritePOIs = dataProcessor.getFavouritePOIs(user.getUserID());
 
         /**

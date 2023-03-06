@@ -26,23 +26,19 @@ public class PointOfInterest {
      * Constructor for the POI
      * @param name, the name of the POI
      */
-    public PointOfInterest(String name) {
+    public PointOfInterest(String name, int userID, boolean isUsermade, String POI_Type, int coordinatesX, int coordinatesY, int floorID, int buildingID, Boolean isFavourited, String description, int roomNumber)  {
         this.name = name;
 
-        /**
-         * TODO: TEMPORARY FOR TESTING PURPOSES
-         */
-        this.ID = 1;
-        this.userID = 1;
-        this.isUserMade = true;
-        this.POI_type = "test";
-        this.coordinates[0] = 1;
-        this.coordinates[1] = 1;
-        this.floorID = 1;
-        this.buildingID = 1;
-        this.isFavourited = false;
-        this.description = "test";
-        this.roomNumber = 1;
+        this.userID = userID;
+        this.isUserMade = isUsermade;
+        this.POI_type = POI_Type;
+        this.coordinates[0] = coordinatesX;
+        this.coordinates[1] = coordinatesY;
+        this.floorID = floorID;
+        this.buildingID = buildingID;
+        this.isFavourited = isFavourited;
+        this.description = description;
+        this.roomNumber = roomNumber;
     }
 
     /**

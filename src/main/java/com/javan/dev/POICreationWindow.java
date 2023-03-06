@@ -166,7 +166,7 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
          * When the create button is clicked, create a new POI
          */
         if (e.getSource() == create) {
-            PointOfInterest poi = new PointOfInterest(title.getText());
+            PointOfInterest poi = new PointOfInterest(title.getText(), 0, false, "BUILDING", 0, 0, 1, 1, false, "", 0);
             // TODO: Create the POI with all the metadata filled in (add via methods below)
             frame.dispose();
         }

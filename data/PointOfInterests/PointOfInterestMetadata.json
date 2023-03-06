@@ -1,4 +1,4 @@
-{"POI_id":1,
+[{"POI_id":1,
 "userID":1,
 "isUserMade": false,
 "POI_type":"PRE-BUILT",
@@ -7,4 +7,4 @@
 "mapID": 1,
 "layerType": "",
 "isFavourited": false,
-"description":""}
+"description":""}]

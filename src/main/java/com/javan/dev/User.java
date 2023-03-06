@@ -1,8 +1,8 @@
 package com.javan.dev;
 
 /**
- * @author: Riley Emma Gavigan <rgavigan@uwo.ca>
- * @version: 1.0
+ * @author: Riley Emma Gavigan <rgavigan@uwo.ca>, Dylan Sta Ana <dstaana@uwo.ca>
+ * @version: 1.1
  * @since: 1.0
  */
 public final class User {
@@ -24,10 +24,11 @@ public final class User {
      * @param username
      * @param password
      */
-    private User(String username, String password) {
+    private User(String username, String password, int userID) {
         this.username = username;
         this.password = password;
         this.isAdmin = false;
+        this.userID = userID;
     }
 
     /**
@@ -35,7 +36,7 @@ public final class User {
      */
     public static User getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new User("admin", "admin");
+            INSTANCE = new User("admin", "admin", 1);
         }
         return INSTANCE;
     }
@@ -100,5 +101,13 @@ public final class User {
      */
     public void setIsAdmin(boolean adminStatus) {
         this.isAdmin = adminStatus;
+    }
+
+    /**
+     * Setter for userPassword
+     * @param int userID
+     */
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 }

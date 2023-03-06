@@ -473,6 +473,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
             if (isValid == true) {
                 user.setUsername(username);
                 user.setPassword(password);
+                // TODO: add a setter that finds userID from metadata to change userID
                 /**
                  * Set admin status for admin
                  */
