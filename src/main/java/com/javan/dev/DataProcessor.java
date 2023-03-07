@@ -166,7 +166,7 @@ public final class DataProcessor {
              */
             for (int i = 0; i < campusMap.getBuildingArray().size(); i++) {
                 BuildingMap building = campusMap.getBuildingArray().get(i);
-                PointOfInterest poi = new PointOfInterest(building.getMapName(), building.getMapID(), false, "BUILDING", 0, 0, 1, building.getMapID(), false, "", 0);
+                PointOfInterest poi = new PointOfInterest(building.getMapName(), building.getMapID(), false, "BUILDING", 0, 0, 1, building.getMapID(), false, "", 0, true);
                 universalPOIs.add(poi);
             }
         }
@@ -375,7 +375,7 @@ public final class DataProcessor {
                     Boolean isFavourited = poiObject.get("isFavourited").getAsBoolean();
                     String description = poiObject.get("description").getAsString();
                     int roomNumber = poiObject.get("roomNumber").getAsInt();
-                    PointOfInterest POIdata = new PointOfInterest(name, userID, isUserMade, POI_Type, coordinateArray[0], coordinateArray[1], floorID, buildingID, isFavourited, description, roomNumber);
+                    PointOfInterest POIdata = new PointOfInterest(name, userID, isUserMade, POI_Type, coordinateArray[0], coordinateArray[1], floorID, buildingID, isFavourited, description, roomNumber, true);
                     POIdata.setID(poiID);
                     return POIdata;
                 }       

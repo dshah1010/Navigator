@@ -22,18 +22,20 @@ public class PointOfInterest {
     private String description;
     private int roomNumber;
     private String mapFilePath;
+    private Boolean isVisible;
 
     /**
      * Private variable to hold the instance of the data processor
      */
     private DataProcessor processor = DataProcessor.getInstance();
+    
 
 
     /**
      * Constructor for the POI
      * @param name, the name of the POI
      */
-    public PointOfInterest(String name, int userID, boolean isUsermade, String POI_Type, int coordinatesX, int coordinatesY, int floorID, int buildingID, Boolean isFavourited, String description, int roomNumber)  {
+    public PointOfInterest(String name, int userID, boolean isUsermade, String POI_Type, int coordinatesX, int coordinatesY, int floorID, int buildingID, Boolean isFavourited, String description, int roomNumber, Boolean isVisible)  {
         this.name = name;
         this.userID = userID;
         this.isUserMade = isUsermade;
@@ -47,6 +49,7 @@ public class PointOfInterest {
         this.roomNumber = roomNumber;
         this.ID = processor.makeNewPOIID();
         this.mapFilePath = processor.loadMapFilePath(this.buildingID, this.floorID, "FLOOR");
+        this.isVisible = isVisible;
     }
 
     /**
