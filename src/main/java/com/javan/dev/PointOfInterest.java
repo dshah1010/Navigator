@@ -149,6 +149,49 @@ public class PointOfInterest {
         return this.buildingID;
     }
 
+<<<<<<< HEAD
+=======
+    /** 
+     * Getter for the favourited POI
+     * @return int of the favourited 
+     */
+    public Boolean getIsFavourited() {
+        return this.isFavourited;
+    }
+
+    /**
+     * Getter for the description of the POI
+     * @return String of the description 
+     */
+    public String getDescription() {
+        return this.description;
+    }
+
+    /**
+     * Getter for the room number of the POI
+     * @return int of the room number 
+     */
+    public int getRoomNumber() {
+        return this.roomNumber;
+    }
+    /**
+     * Getter for the isVisible state of POI
+     * @return boolena of isVisible state
+     */
+    public Boolean getisVisible(){
+        return this.isVisible;
+    }
+
+    /**
+     * ToString method for PointOfInterest, to display POIs as list
+     * in search function of SidebarComponent.java.
+     * @return  The name of the POI. 
+     */
+    public String toString() {
+        return name;
+    }
+
+>>>>>>> de77326 (updated isVisible state to POI objects -)
     public JSONObject toJSON() {
         JSONObject json = new JSONObject();
         json.put("name", this.name);
@@ -165,6 +208,26 @@ public class PointOfInterest {
         json.put("isVisible", this.isVisible);
         return json;
     }
+<<<<<<< HEAD
+=======
+
+    /**
+     * TODO: This should be temporary. Not sure how we want to set favourited for a particular user but also know how to get favourite
+     * for a specific user because getIsFavourited() is for an entire POI. not sure how it will work for a POI that is not user-created and
+     * favourited by multiple users
+     */
+    public void setIsFavourited(boolean isFavourited) {
+        this.isFavourited = isFavourited;
+    }
+
+    /**
+     * Setter for ID
+     */
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+<<<<<<< HEAD
+>>>>>>> de77326 (updated isVisible state to POI objects -)
     
     /**
      * Setter for POI X and Y position
@@ -189,6 +252,7 @@ public class PointOfInterest {
     public void setPOItype(String newLayer) {
         this.POI_type = newLayer;
     }
+<<<<<<< HEAD
 
     /** 
      * Getter for the favourited POI
@@ -251,10 +315,18 @@ public class PointOfInterest {
     public void setID(int ID) {
         this.ID = ID;
     }
+=======
+=======
+>>>>>>> de77326 (updated isVisible state to POI objects -)
     /*
      * Setter for isVisible 
      */
     public void setisVisible(boolean isVisible) {
         this.isVisible= isVisible;
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 208cdfb (updated isVisible state to POI objects -)
+>>>>>>> de77326 (updated isVisible state to POI objects -)
 }
