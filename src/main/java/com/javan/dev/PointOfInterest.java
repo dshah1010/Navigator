@@ -132,7 +132,7 @@ public class PointOfInterest {
     public int[] getCoordinates() {
         return this.coordinates;
     }
-
+ 
     /** 
      * Getter for the floor ID of the POI
      * @return int of the floor ID

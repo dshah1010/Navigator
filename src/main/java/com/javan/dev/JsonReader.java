@@ -360,5 +360,47 @@ public class JsonReader {
         }
         return null;
     }
+
+    /**
+     * method to update isVisble state in POI JSON file and its objects
+     * @param nameofPOI
+     */
+    public void updateisVisble(String nameofPOI){
+        FileReader reader = null;
+        /*
+         * attempts to read file 
+         */
+        try {
+            reader = new FileReader("data/PointOfInterests/PointOfInterestMetadata.json");
+            JsonArray POIDataArray= JsonParser.parseReader(reader).getAsJsonArray();
+            /*
+             
+             * loops through json file to find user made POIs
+             */ 
+            for (JsonElement POI : POIDataArray) {
+                JsonObject poiObject = POI.getAsJsonObject();
+                if (poiObject.get("name").getAsString() == nameofPOI){
+                    if(poiObject.get("isVisible").getAsBoolean() == false){
+                        /*
+                         * changes isVisible property to false if true
+                         */
+                        poiObject.addProperty("isVisible", false);
+                        break;
+                    }
+                        /*
+                         * changes isVisible property to true if false
+                         */
+                    else{
+                        poiObject.addProperty("isVisible", true);
+                    }
+                }     
+
+            }
+
+        } 
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 }
     
