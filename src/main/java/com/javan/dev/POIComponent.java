@@ -291,11 +291,9 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
         /**
          * Get list of favourite PointOfInterest objects from DataProcessor
          */
-        if (mapComponent.getFloorMapObject() != null) {
-            favouritePOIList = dataProcessor.getFavouritePOIs(user.getUserID(), mapComponent.getFloorMapObject().getMapID());
-        } else {
-            favouritePOIList = dataProcessor.getFavouritePOIs(user.getUserID(), mapComponent.getMapObject().getMapID());
-        }
+
+        favouritePOIList = dataProcessor.getFavouritePOIs(user.getUserID());
+
 
          /**
           * Empty out favouritePOIStrings before adding updated list of favourite POIs
@@ -361,12 +359,7 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
         /**
          * Get list of strings of user-created POIs from DataProcessor
          */
-        if (mapComponent.getFloorMapObject() != null) {
-            userPOIList = dataProcessor.getUserPOIs(user.getUserID(), mapComponent.getFloorMapObject().getMapID());
-        } else {
-            userPOIList = dataProcessor.getUserPOIs(user.getUserID(), mapComponent.getMapObject().getMapID());
-        }
-
+        userPOIList = dataProcessor.getUserPOIs(user.getUserID());
          /**
           * Empty out userPOIStrings before adding updated list of user-created POIs
           */
@@ -448,15 +441,11 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
          * Get list of strings of other POIs from DataProcessor
          */
         if (mapComponent.getIsCampusMap()) {
-            otherPOIList = dataProcessor.getUniversalPOIs(true, user.getUserID(), mapComponent.getMapObject().getMapID());
+            otherPOIList = dataProcessor.getUniversalPOIs(true, user.getUserID());
         }
         else {
             System.out.println("GETTING UNIVERSAL POIS");
-            if (mapComponent.getFloorMapObject() != null) {
-                otherPOIList = dataProcessor.getUniversalPOIs(false, user.getUserID(), mapComponent.getFloorMapObject().getMapID());
-            } else {
-                otherPOIList = dataProcessor.getUniversalPOIs(false, user.getUserID(), mapComponent.getMapObject().getMapID());
-            }
+            otherPOIList = dataProcessor.getUniversalPOIs(false, user.getUserID());
         }
 
          /**
@@ -762,12 +751,15 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
                  * Get the Map object associated with the Map ID and Building ID
                  */
                 Map map = dataProcessor.getFloorMapFromMapID(buildingID, mapID);
+                FloorMap floorMap = dataProcessor.getFloorMapFromMapID(buildingID, mapID);
 
                 /*
                  * Change Map to MapID, update map ID
                  */
                 this.currMapID = mapID;
+                mapComponent.changeFloorMap(floorMap);
                 mapComponent.changeMap(map);
+
             }
             /**
              * POI From Floor Map Case

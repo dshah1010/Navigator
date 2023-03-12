@@ -139,8 +139,8 @@ public final class DataProcessor {
      * @param int userID - the ID of the user
      * @return List of favourite POIs
      */
-    public ArrayList<PointOfInterest> getFavouritePOIs(int userID, int floorID) {
-        return JsonReader.favouritesList(userID, floorID);
+    public ArrayList<PointOfInterest> getFavouritePOIs(int userID) {
+        return JsonReader.favouritesList(userID);
     }
 
     /**
@@ -148,11 +148,11 @@ public final class DataProcessor {
      * @param int userID - the ID of the user
      * @return List of user-created POIs
      */
-    public ArrayList<PointOfInterest> getUserPOIs(int userID, int floorID) {
-        return JsonReader.userPOIList(userID, floorID);
+    public ArrayList<PointOfInterest> getUserPOIs(int userID) {
+        return JsonReader.userPOIList(userID);
     }  
 
-    public ArrayList<PointOfInterest> getUniversalPOIs(boolean isCampusMap, int userID, int floorID) {
+    public ArrayList<PointOfInterest> getUniversalPOIs(boolean isCampusMap, int userID) {
         CampusMap campusMap = CampusMap.getInstance(0);
         ArrayList<PointOfInterest> universalPOIs = new ArrayList<PointOfInterest>();
 
@@ -166,7 +166,7 @@ public final class DataProcessor {
              */
             for (int i = 0; i < campusMap.getBuildingArray().size(); i++) {
                 BuildingMap building = campusMap.getBuildingArray().get(i);
-                PointOfInterest poi = new PointOfInterest(building.getMapName(), building.getMapID(), false, "BUILDING", 0, 0, 1, 1, false, "", 0);
+                PointOfInterest poi = new PointOfInterest(building.getMapName(), building.getMapID(), false, "BUILDING", 0, 0, 1, building.getMapID(), false, "", 0);
                 universalPOIs.add(poi);
             }
         }
@@ -175,11 +175,7 @@ public final class DataProcessor {
             /**
              * Floor Map Condition: Get all POIs within the current floor map
              */
-            try {
-                JsonReader.universalPOIs(userID, floorID);
-            } catch (Exception error) {
-                error.printStackTrace();
-            }
+            universalPOIs = JsonReader.universalPOIs(userID);
         }
 
         return universalPOIs;
@@ -315,8 +311,68 @@ public final class DataProcessor {
     }
 
 
-    public PointOfInterest getPOI(int parseInt) {
-        return new PointOfInterest("TEST", 0, false, "BUILDING", 0, 0, 1, 1, false, "", 0);
+    public int makeNewPOIID() {
+        FileReader reader = null;
+
+        /*
+         * attempts to read file 
+         */
+        try {
+            reader = new FileReader("data/PointOfInterests/PointOfInterestMetadata.json");
+            JsonArray POIDataArray= JsonParser.parseReader(reader).getAsJsonArray();
+            return POIDataArray.size() + 1;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+
+    public PointOfInterest getPOI(int poiID) {
+        FileReader reader = null;
+
+        /*
+         * attempts to read file 
+         */
+        try {
+            reader = new FileReader("data/PointOfInterests/PointOfInterestMetadata.json");
+            JsonArray POIDataArray= JsonParser.parseReader(reader).getAsJsonArray();
+            /*
+             * loops through json file to find POIs available to this user
+             */ 
+
+            for (JsonElement POI : POIDataArray) {
+                JsonObject poiObject = POI.getAsJsonObject();
+                // either developer made or user made POIs
+                if (poiObject.get("ID").getAsInt() == poiID){
+                    /*
+                    * declares all data from json file
+                    * then creates a POI object
+                    * which is then added to arraylist of type POI
+                    */
+                    String name  = poiObject.get("name").getAsString();
+                    int userID  = poiObject.get("userID").getAsInt();
+                    boolean isUserMade = poiObject.get("isUserMade").getAsBoolean();
+                    String POI_Type = poiObject.get("POI_type").getAsString();
+                    JsonArray jsoncoordinateArray = poiObject.get("coordinates").getAsJsonArray();
+                    int[] coordinateArray = new int[2];
+                    for (int i=0; i< coordinateArray.length; i++){
+                        coordinateArray[i] = jsoncoordinateArray.get(i).getAsInt();
+                    }
+                    int floorID = poiObject.get("floorID").getAsInt();
+                    int buildingID = poiObject.get("buildingID").getAsInt();
+                    Boolean isFavourited = poiObject.get("isFavourited").getAsBoolean();
+                    String description = poiObject.get("description").getAsString();
+                    int roomNumber = poiObject.get("roomNumber").getAsInt();
+                    PointOfInterest POIdata = new PointOfInterest(name, userID, isUserMade, POI_Type, coordinateArray[0], coordinateArray[1], floorID, buildingID, isFavourited, description, roomNumber);
+                    POIdata.setID(poiID);
+                    return POIdata;
+                }       
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

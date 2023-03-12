@@ -311,6 +311,9 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         return button;
     }
 
+    public void changeFloorMap(FloorMap floorMap) {
+        this.floorMap = floorMap;
+    }
     /**
      * Method to change the map being displayed in the map panel based on the String filepath being provided
      * @param filepath, mapID
@@ -529,34 +532,18 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          * Get the Universal POIs for the map (not user based)
          */
         if (isCampusMap == true) {
-            if (this.floorMap != null) {
-                pois = dataProcessor.getUniversalPOIs(true, user.getUserID(), this.getFloorMapObject().getMapID());
-            } else {
-                pois = dataProcessor.getUniversalPOIs(true, user.getUserID(), this.getMapObject().getMapID());
-            }
+            pois = dataProcessor.getUniversalPOIs(true, user.getUserID());
         }
         else {
-            if (this.floorMap != null) {
-                pois = dataProcessor.getUniversalPOIs(false, user.getUserID(), this.getFloorMapObject().getMapID());
-            } else {
-                pois = dataProcessor.getUniversalPOIs(false, user.getUserID(), this.getMapObject().getMapID());
-            }
+            pois = dataProcessor.getUniversalPOIs(false, user.getUserID());
         }
         /**
          * Get the User and Favourite POIs for the map (based on userID)
          */
-        if (this.getFloorMapObject() != null) {
-            favouritePOIs = dataProcessor.getFavouritePOIs(user.getUserID(), this.getFloorMapObject().getMapID());
-        } else {
-            favouritePOIs = dataProcessor.getFavouritePOIs(user.getUserID(), this.getMapObject().getMapID());
-        }
-        
-        if (this.getFloorMapObject() != null) {
-            userPOIs = dataProcessor.getUserPOIs(user.getUserID(), this.getFloorMapObject().getMapID());
-        } else {
-            userPOIs = dataProcessor.getUserPOIs(user.getUserID(), this.getMapObject().getMapID());
-        }
 
+        favouritePOIs = dataProcessor.getFavouritePOIs(user.getUserID());
+        userPOIs = dataProcessor.getUserPOIs(user.getUserID());
+       
         /**
          * Add each POI list to the map
          */
@@ -573,6 +560,10 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          * Loop through the POIs and add a flag icon to the map at the POI's coordinates
          */
         for (PointOfInterest poi : pois) {
+            if (this.floorMap != null && poi.getBuildingID() != this.floorMap.getBuildingID() 
+            && poi.getFloorID() != this.floorMap.getMapID()){
+                continue;
+            }
             /**
              * Get the POI's coordinates
              */
@@ -702,11 +693,12 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                  * Get the POI Id of the label
                  */
                 String id = label.getText();
+                System.out.println(id);
 
                 /**
                  * Get the POI object from the POI Id
                  */
-                PointOfInterest poi = dataProcessor.getPOI(Integer.parseInt(id));
+                PointOfInterest poi = dataProcessor.getPOI(Integer.parseInt(id) - 1);
 
                 /**
                  * Create a new POIInfoWindow object and pass the POI object to it

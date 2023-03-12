@@ -34,6 +34,7 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
     private DataProcessor processor = DataProcessor.getInstance();
     private User user = User.getInstance();
     private MapComponent mapComponent = MapComponent.getInstance();
+    private POIComponent poiComponent = POIComponent.getInstance();
     private SidebarComponent sidebar = SidebarComponent.getInstance();
 
 
@@ -190,7 +191,7 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
             }
             PointOfInterest poi = new PointOfInterest(
                 newPOIData.get(0), user.getUserID(), 
-                !user.getIsAdmin(), newPOIData.get(2), 
+                !user.getIsAdmin(), newPOIData.get(3), 
                 Integer.parseInt(newPOIData.get(4)), 
                 Integer.parseInt(newPOIData.get(5)), 
                 mapComponent.getMapObject().getMapID(), 
@@ -204,6 +205,7 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
                 err.printStackTrace();
             }
             mapComponent.displayPOIs();
+            poiComponent.changeDisplayIfCampusMap(mapComponent.getMapObject().getMapID());
             frame.dispose();
         }
         /**
