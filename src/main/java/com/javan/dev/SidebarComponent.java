@@ -42,7 +42,6 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
      * private instance of MapComponent to receive information from
      */
     private MapComponent mapComponent = MapComponent.getInstance();
-    private User user = User.getInstance();
 
     /**
      * Constructor to initialize the sidebar component
@@ -381,7 +380,7 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
                     /**
                      * Temporary solution for getting the list of all buildings (as POIs haven't been created for them yet).
                      */
-                    ArrayList<PointOfInterest> buildingList = processor.getUniversalPOIs(true, user.getUserID());
+                    ArrayList<PointOfInterest> buildingList = processor.getUniversalPOIs(true, mapComponent.getUser().getUserID());
                     /**
                      * Compare the search to the available buildings on the campus.
                      */

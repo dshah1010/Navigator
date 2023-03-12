@@ -209,6 +209,14 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     }
 
     /**
+     * Getter for the user of the MapComponent
+     * @return  user
+     */
+    public User getUser() {
+        return user;
+    }
+
+    /**
      * Getter for map panel
      * @return mapPanel
      */
@@ -379,7 +387,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         /**
          * Navigate to the POI's coordinates
          */
-        scrollPane.getViewport().setViewPosition(new Point(coordinates[0], coordinates[1]));
+        scrollPane.getViewport().setViewPosition(new Point(coordinates[0] - (int) scrollPane.getViewport().getSize().getWidth()/2, coordinates[1] - (int) scrollPane.getViewport().getSize().getHeight()/2));
     }
 
     /**
