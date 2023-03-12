@@ -3,6 +3,8 @@ package com.javan.dev;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -10,7 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import com.google.gson.Gson;
+import com.google.gson.*;
 import com.google.gson.JsonIOException;
 
 /**
@@ -137,8 +139,8 @@ public final class DataProcessor {
      * @param int userID - the ID of the user
      * @return List of favourite POIs
      */
-    public ArrayList<PointOfInterest> getFavouritePOIs(int userID) {
-        return JsonReader.favouritesList(userID);
+    public ArrayList<PointOfInterest> getFavouritePOIs(int userID, int floorID) {
+        return JsonReader.favouritesList(userID, floorID);
     }
 
     /**
@@ -146,11 +148,11 @@ public final class DataProcessor {
      * @param int userID - the ID of the user
      * @return List of user-created POIs
      */
-    public ArrayList<PointOfInterest> getUserPOIs() {
-        return JsonReader.userPOIList();
+    public ArrayList<PointOfInterest> getUserPOIs(int userID, int floorID) {
+        return JsonReader.userPOIList(userID, floorID);
     }  
 
-    public ArrayList<PointOfInterest> getUniversalPOIs(boolean isCampusMap) {
+    public ArrayList<PointOfInterest> getUniversalPOIs(boolean isCampusMap, int userID, int floorID) {
         CampusMap campusMap = CampusMap.getInstance(0);
         ArrayList<PointOfInterest> universalPOIs = new ArrayList<PointOfInterest>();
 
@@ -173,8 +175,10 @@ public final class DataProcessor {
             /**
              * Floor Map Condition: Get all POIs within the current floor map
              */
-            for (int i = 0; i < 10; i++) {
-                universalPOIs.add(new PointOfInterest("Universal Test", 1, false, "BUILDING", 0, 0, 1, 1, false, "", 0));
+            try {
+                JsonReader.universalPOIs(userID, floorID);
+            } catch (Exception error) {
+                error.printStackTrace();
             }
         }
 
@@ -192,6 +196,25 @@ public final class DataProcessor {
         return coords;
     }
 
+    
+    /**
+     * Method to add a new poi created to the PointOfInterestMetadata.json file array
+     * @param poi PointOfInterest object
+     */
+    public void addPointOfInterestToJsonFile(PointOfInterest POI) throws IOException {
+        
+        String jsonString = new String(Files.readAllBytes(Paths.get("data/PointOfInterests/PointOfInterestMetadata.json")));
+        JSONArray jsonArray = new JSONArray(jsonString);
+        
+        JSONObject poiJson = POI.toJSON();
+        jsonArray.put(poiJson);
+        
+        FileWriter fileWriter = new FileWriter("data/PointOfInterests/PointOfInterestMetadata.json");
+        fileWriter.write(jsonArray.toString());
+        fileWriter.flush();
+        fileWriter.close();
+        
+    }
     /**
      * @param currentMapID
      * @return boolean indicating if there is a floor above or not

@@ -53,7 +53,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      */
     private boolean isCampusMap;
     private int currentMapID;
-    private FloorMap floorMap;
+    private FloorMap floorMap = null;
     private Map campus = MapFactory.createMap("CAMPUS", 0, 0);
     private String mapType = "CAMPUS";
     private Map mapObject;
@@ -236,6 +236,14 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      */
     public Map getMapObject() {
         return mapObject;
+    }
+
+    /**
+     * Getter for the current floor object
+     * @return mapObject
+     */
+    public FloorMap getFloorMapObject() {
+        return floorMap;
     }
 
     /**
@@ -521,21 +529,38 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          * Get the Universal POIs for the map (not user based)
          */
         if (isCampusMap == true) {
-            pois = dataProcessor.getUniversalPOIs(true);
+            if (this.floorMap != null) {
+                pois = dataProcessor.getUniversalPOIs(true, user.getUserID(), this.getFloorMapObject().getMapID());
+            } else {
+                pois = dataProcessor.getUniversalPOIs(true, user.getUserID(), this.getMapObject().getMapID());
+            }
         }
         else {
-            pois = dataProcessor.getUniversalPOIs(false);
+            if (this.floorMap != null) {
+                pois = dataProcessor.getUniversalPOIs(false, user.getUserID(), this.getFloorMapObject().getMapID());
+            } else {
+                pois = dataProcessor.getUniversalPOIs(false, user.getUserID(), this.getMapObject().getMapID());
+            }
         }
-
         /**
          * Get the User and Favourite POIs for the map (based on userID)
          */
-        userPOIs = dataProcessor.getUserPOIs();
-        favouritePOIs = dataProcessor.getFavouritePOIs(user.getUserID());
+        if (this.getFloorMapObject() != null) {
+            favouritePOIs = dataProcessor.getFavouritePOIs(user.getUserID(), this.getFloorMapObject().getMapID());
+        } else {
+            favouritePOIs = dataProcessor.getFavouritePOIs(user.getUserID(), this.getMapObject().getMapID());
+        }
+        
+        if (this.getFloorMapObject() != null) {
+            userPOIs = dataProcessor.getUserPOIs(user.getUserID(), this.getFloorMapObject().getMapID());
+        } else {
+            userPOIs = dataProcessor.getUserPOIs(user.getUserID(), this.getMapObject().getMapID());
+        }
 
         /**
          * Add each POI list to the map
          */
+
         addPOIList(pois);
         addPOIList(userPOIs);
         addPOIList(favouritePOIs);

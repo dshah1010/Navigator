@@ -1,10 +1,1 @@
-[{"POI_id":1,
-"userID":1,
-"isUserMade": false,
-"POI_type":"PRE-BUILT",
-"coordinates": [0, 0],
-"floorID": 1,
-"mapID": 1,
-"layerType": "",
-"isFavourited": false,
-"description":""}]
+[{"floorID":1,"POI_type":"room 1220","roomNumber":1220,"name":"room 1220","isUserMade":false,"coordinates":[1323,1043],"description":"room 1220","isFavourited":false,"userID":1,"buildingID":1},{"floorID":1,"POI_type":"room","roomNumber":1310,"name":"room 1310","isUserMade":false,"coordinates":[1943,835],"description":"room","isFavourited":false,"userID":1,"buildingID":1},{"floorID":1,"POI_type":"gg","roomNumber":1,"name":"gg","isUserMade":false,"coordinates":[1339,1014],"description":"gg","isFavourited":false,"userID":1,"buildingID":1},{"floorID":1,"POI_type":"test","roomNumber":1220,"name":"test","isUserMade":false,"coordinates":[1345,999],"description":"test","isFavourited":false,"userID":1,"buildingID":1},{"floorID":1,"POI_type":"test","roomNumber":1310,"name":"test","isUserMade":false,"coordinates":[1949,840],"description":"test","isFavourited":false,"userID":1,"buildingID":1},{"floorID":1,"POI_type":"1260c","roomNumber":1260,"name":"test1","isUserMade":false,"coordinates":[1833,1144],"description":"1260c","isFavourited":false,"userID":1,"buildingID":1}]

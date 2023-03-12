@@ -5,6 +5,8 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.io.IOException;
+
 
 
 /**
@@ -25,6 +27,15 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
     private JButton create;
     private JButton cancel;
     private JPanel buttonPanel;
+
+    /**
+     * Private variables to hold the instance of the data processor and user
+     */
+    private DataProcessor processor = DataProcessor.getInstance();
+    private User user = User.getInstance();
+    private MapComponent mapComponent = MapComponent.getInstance();
+    private SidebarComponent sidebar = SidebarComponent.getInstance();
+
 
     /**
      * Constructor for POICreationWindow given x and y coordinates
@@ -54,20 +65,16 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
          */
         ArrayList<String> metadata = new ArrayList<String>();
         metadata.add("Name");
+        metadata.add("Room Number");
         metadata.add("Description");
         metadata.add("Layer Type");
         metadata.add("X-Value");
         metadata.add("Y-value");
-        metadata.add("Other");
-        metadata.add("Other");
-        metadata.add("Other");
-        metadata.add("Other");
-        metadata.add("Other");
 
         /**
          * Loop 10 times, creating a JPanel that holds a JLabel and a JTextField
          */
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < metadata.size(); i++) {
             JPanel tempPanel = new JPanel();
             tempPanel.setBackground(Color.WHITE);
             tempPanel.setLayout(new GridLayout());
@@ -75,14 +82,14 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
             labelHolder.setBackground(Color.WHITE);
             JLabel tempLabel = new JLabel(metadata.get(i));
             labelHolder.add(tempLabel);
-            if (i == 3) {
+            if (i == 4) {
                 JTextField tempField = createTextField(Integer.toString(x));
                 tempPanel.add(labelHolder);
                 tempPanel.add(tempField);
                 panel.add(tempPanel);
                 continue;
             }
-            if (i == 4) {
+            if (i == 5) {
                 JTextField tempField = createTextField(Integer.toString(y));
                 tempPanel.add(labelHolder);
                 tempPanel.add(tempField);
@@ -166,8 +173,37 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
          * When the create button is clicked, create a new POI
          */
         if (e.getSource() == create) {
-            PointOfInterest poi = new PointOfInterest(title.getText(), 0, false, "BUILDING", 0, 0, 1, 1, false, "", 0);
-            // TODO: Create the POI with all the metadata filled in (add via methods below)
+            Component[] children = panel.getComponents();
+            // iterate over all subPanels...
+            ArrayList<String> newPOIData = new ArrayList<String>();
+            for (Component sp : children) {
+                if (sp instanceof JPanel) {
+                    Component[] spChildren = ((JPanel)sp).getComponents();
+                    // now iterate over all JTextFields...
+                    for (Component spChild : spChildren) {
+                        if (spChild instanceof JTextField) {
+                            String text = ((JTextField)spChild).getText();
+                            newPOIData.add(text);
+                        } 
+                    }
+                }
+            }
+            PointOfInterest poi = new PointOfInterest(
+                newPOIData.get(0), user.getUserID(), 
+                !user.getIsAdmin(), newPOIData.get(2), 
+                Integer.parseInt(newPOIData.get(4)), 
+                Integer.parseInt(newPOIData.get(5)), 
+                mapComponent.getMapObject().getMapID(), 
+                mapComponent.getFloorMapObject().getBuildingID(), 
+                false, newPOIData.get(2), 
+                Integer.parseInt(newPOIData.get(1))
+                );
+            try {
+                processor.addPointOfInterestToJsonFile(poi);
+            } catch (IOException err) {
+                err.printStackTrace();
+            }
+            mapComponent.displayPOIs();
             frame.dispose();
         }
         /**
