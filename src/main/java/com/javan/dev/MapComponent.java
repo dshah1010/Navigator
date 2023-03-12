@@ -560,7 +560,6 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         /**
          * Add each POI list to the map
          */
-
         addPOIList(pois);
         addPOIList(userPOIs);
         addPOIList(favouritePOIs);
