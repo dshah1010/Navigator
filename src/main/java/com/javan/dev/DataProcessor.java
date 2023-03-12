@@ -16,7 +16,7 @@ import com.google.gson.*;
 import com.google.gson.JsonIOException;
 
 /**
- * @author: Riley Emma Gavigan <rgavigan@uwo.ca>, Dylan Sta Ana <dstaana@uwo.ca>, Brad McGlynn <bmcglyn4@uwo.ca>, Deep Ashishkumar Shah <dshah228@uwo.ca>
+ * @author: Riley Emma Gavigan <rgavigan@uwo.ca>, Dylan Sta Ana <dstaana@uwo.ca>, Brad McGlynn <bmcglyn4@uwo.ca>, Deep Ashishkumar Shah <dshah228@uwo.ca>, Jake Choi <jchoi492@uwo.ca>
  * @version: 1.1
  * @since: 1.0
  */
@@ -196,7 +196,6 @@ public final class DataProcessor {
      * @param poi PointOfInterest object
      */
     public boolean addPointOfInterestToJsonFile(PointOfInterest POI) throws IOException {
-        
         String jsonString = new String(Files.readAllBytes(Paths.get("data/PointOfInterests/PointOfInterestMetadata.json")));
         JSONArray jsonArray = new JSONArray(jsonString);
         
@@ -271,7 +270,6 @@ public final class DataProcessor {
         JSONObject poiJson = poi.toJSON();
         boolean isDeleted = false;
         JSONArray newJsonArray = new JSONArray();
-
         for (Object poiObject : jsonArray) {
             JSONObject currentPoi = (JSONObject) poiObject;
 
@@ -306,7 +304,6 @@ public final class DataProcessor {
         }
         return isDeleted;
     }
-
 
     /**
      * @param currentMapID
@@ -448,11 +445,7 @@ public final class DataProcessor {
 
                 if (userFavouritesArray != null) {
                     for (int i =0; i < userFavouritesArray.size(); i++) {
-                        /**
-                         * Get current value from the userFavouritesArray and store as int, then add to array
-                         */
-                        int userFavourite = userFavouritesArray.get(i).getAsInt();
-                        userFavouritesData.add(userFavourite);
+                        userFavouritesData.add(i, userFavouritesArray.getAsInt());
                     }
                 }
 
@@ -479,11 +472,7 @@ public final class DataProcessor {
                     ArrayList<Integer> userFavouritesList = new ArrayList<Integer>();
 
                     for (int i = 0; i < userFavouritesData.size(); i++) {
-                        /**
-                         * Get current value from the userFavouritesArray and store as int, then add to array
-                         */
-                        int userFavourite = userFavouritesData.get(i);
-                        userFavouritesList.add(userFavourite);
+                        userFavouritesList.add(i, userFavouritesData.get(i));
                     }
 
                     String description = poiObject.get("description").getAsString();
@@ -584,6 +573,7 @@ public final class DataProcessor {
                  */
                 if (username.equals(user.getString("username")) && password.equals(decryptedPassword)) {
                     String userType = user.getString("userType");
+                    System.out.println("User " + username + " logged in as " + userType + ".");
                     return (Integer) user.get("userID");
                 }
             }
@@ -593,6 +583,7 @@ public final class DataProcessor {
         /**
          * If no match was found, return false
          */
+        System.out.println("Invalid username or password.");
         return -1;
     }
 
@@ -665,7 +656,8 @@ public final class DataProcessor {
                 /** 
                  * Check if the usernames match
                  */
-                if (username.equals(user.getString("username"))) {                  System.out.println("Error: account already exists");
+                if (username.equals(user.getString("username"))) {
+                    System.out.println("Error: account already exists");
                     return false;
                 }
             }
@@ -703,6 +695,8 @@ public final class DataProcessor {
             jsonArray.write(fileWriter);
             fileWriter.flush();
             fileWriter.close();
+
+            System.out.println("New account created for " + username + " with userID " + nextUserID + ".");
             return true;
 
         } catch (Exception e) {
