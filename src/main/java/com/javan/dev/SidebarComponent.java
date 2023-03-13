@@ -5,10 +5,11 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
- * @author: Riley Emma Gavigan <rgavigan@uwo.ca>
- * @version: 1.0
+ * @author: Riley Emma Gavigan <rgavigan@uwo.ca>, Jake Choi <jchoi492@uwo.ca>
+ * @version: 1.1
  * @since: 1.0
  */
 public final class SidebarComponent extends JPanel implements ActionListener, MouseListener, FocusListener {
@@ -41,6 +42,7 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
      * private instance of MapComponent to receive information from
      */
     private MapComponent mapComponent = MapComponent.getInstance();
+    private User user = User.getInstance();
 
     /**
      * Constructor to initialize the sidebar component
@@ -367,21 +369,52 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
              */
             String text = searchText.getText();
             searchText.setText("");
-
             /**
              * If the text is not empty / the default text, search for the POI
              */
             if ((!text.equals("")) && (!text.equals("Search for a Point of Interest"))) {
                 /**
-                 * Search for the POI
+                 * Check if user is currently on campus map or a floor map.
                  */
+                ArrayList<PointOfInterest> searchMatch = new ArrayList<PointOfInterest>();
+                if (mapComponent.getIsCampusMap()) {
+                    /**
+                     * Temporary solution for getting the list of all buildings (as POIs haven't been created for them yet).
+                     */
+                    ArrayList<PointOfInterest> buildingList = processor.getUniversalPOIs(true, user.getUserID());
+                    /**
+                     * Compare the search to the available buildings on the campus.
+                     */
+                    for (PointOfInterest building : buildingList) {
+                        if (building.getName().toLowerCase().contains(text.toLowerCase())) {
+                            searchMatch.add(building);
+                        }
+                    }
+                }
+                else {
+                    // search through current floor's POI's first then search through the building's POI's
+                }
                 // TODO: PointOfInterest poi = processor.searchPOI(text); // Need to search for POI on the currently displayed map
                 /**
                  * If the POI is not null, display it on the map
                  */
-                Integer poi = null; // TEMPORARY
-                if (poi != null) {
-                    // mapComponent.navigateToPOI(poi.getID()); // need to interact with UI to display on MapComponent
+                if (searchMatch.size() > 0 && searchMatch.size() <= 15) {
+                    // Test
+                    System.out.println("We found " + searchMatch.size() + " POI's that match your search. They are the following.");
+                    for (PointOfInterest building : searchMatch) {
+                        System.out.println(building.getName());
+                    }
+                    /**
+                     * Create new Search Results Window listning all the results.
+                     */
+                    SearchResultsWindow resultWindow = new SearchResultsWindow(searchMatch, text.toLowerCase(), mapComponent);
+                    resultWindow.openSearchResults();
+                }
+                else if (searchMatch.size() > 15) {
+                    /**
+                     * Display a JOptionPane to the user to inform them that the search was too broad.
+                     */
+                    JOptionPane.showMessageDialog(null, "Too broad of a search, please narrow down your query.", "Point of Interest Not Found", JOptionPane.ERROR_MESSAGE);
                 }
                 else {
                     /**

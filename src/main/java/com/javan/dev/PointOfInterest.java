@@ -227,6 +227,16 @@ public class PointOfInterest {
     }
 
     /**
+     * ToString method for PointOfInterest, to display POIs as list
+     * in search function of SidebarComponent.java.
+     * @return  The name of the POI. 
+     */
+    public String toString() {
+        return this.name;
+    }
+
+
+    /**
      * TODO: This should be temporary. Not sure how we want to set favourited for a particular user but also know how to get favourite
      * for a specific user because getIsFavourited() is for an entire POI. not sure how it will work for a POI that is not user-created and
      * favourited by multiple users
