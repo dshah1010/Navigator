@@ -161,6 +161,7 @@ public class PointOfInterest {
         json.put("isFavourited", this.isFavourited);
         json.put("description", this.description);
         json.put("roomNumber", this.roomNumber);
+        json.put("isVisible", this.isVisible);
         return json;
     }
     
