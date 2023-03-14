@@ -443,6 +443,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
              * Change the map
              */
             changeMap(mapObject);
+            poiComponent.updatePOIComponent();
         }
     }
 
@@ -464,6 +465,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
              * Change the map
              */
             changeMap(mapObject);
+            poiComponent.updatePOIComponent();
         }
     }
 
@@ -753,6 +755,16 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                 poiCreationWindow.setVisibleFrame();
             }
         }
+    }
+
+    /**
+     * Method to change map to campus map
+     */
+    public void changeToCampusMap() {
+        /**
+         * Change the map to the campus map
+         */
+        changeMap(campus);
     }
 
     public void mousePressed(MouseEvent e) {

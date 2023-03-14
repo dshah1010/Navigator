@@ -226,6 +226,10 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
             }
             mapComponent.displayPOIs();
             poiComponent.changeDisplayIfCampusMap(mapComponent.getMapObject().getMapID());
+            /**
+             * Update the sidebar component to display the new POI
+             */
+            poiComponent.updatePOIComponent();
             frame.dispose();
         }
         /**

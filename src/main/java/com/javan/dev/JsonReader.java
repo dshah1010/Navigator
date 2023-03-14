@@ -304,6 +304,11 @@ public class JsonReader {
      */
     public static ArrayList<PointOfInterest> universalPOIs(int userID) {
         FileReader reader = null;
+        /**
+         * Get the current map ID
+         */
+        MapComponent mapComponent = MapComponent.getInstance();
+        int mapID = mapComponent.getCurrentMapID();
 
         /*
          * attempts to read file 
@@ -339,9 +344,11 @@ public class JsonReader {
                     Boolean isFavourited = poiObject.get("isFavourited").getAsBoolean();
                     String description = poiObject.get("description").getAsString();
                     int roomNumber = poiObject.get("roomNumber").getAsInt();
-                    PointOfInterest POIdata = new PointOfInterest(name, userID, isUserMade, POI_Type, coordinateArray[0], coordinateArray[1], floorID, buildingID, isFavourited, description, roomNumber);
-                    POIdata.setID(poiID);
-                    arrayList.add(POIdata);
+                    if (mapID == floorID) {
+                        PointOfInterest POIdata = new PointOfInterest(name, userID, isUserMade, POI_Type, coordinateArray[0], coordinateArray[1], floorID, buildingID, isFavourited, description, roomNumber);
+                        POIdata.setID(poiID);
+                        arrayList.add(POIdata);
+                    }
                 }       
             }
             return arrayList;

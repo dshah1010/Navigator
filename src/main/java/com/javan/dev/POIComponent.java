@@ -240,7 +240,7 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
      * @param None
      * @return None
      */
-    private void addFavouritePOIPanel() {
+    public void addFavouritePOIPanel() {
         /**
          * Clear the POI Panel first
          */
@@ -313,7 +313,7 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
     /**
      * Method to add POIs that were created by users to the user POI panel, the same way Favourites POIs are added
      */
-    private void addUserPOIPanel() {
+    public void addUserPOIPanel() {
         /**
          * Clear the POI Panel first
          */
@@ -355,7 +355,7 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
         POIPanels.get(2).setVisible(true);
     }
 
-    private void updateUserPOIList() {
+    public void updateUserPOIList() {
         /**
          * Get list of strings of user-created POIs from DataProcessor
          */
@@ -376,7 +376,7 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
     /**
      * Method to add all other POIs to the other POI panel, the same way Favourites POIs and User POIs are added
      */
-    private void addOtherPOIPanel() {
+    public void addOtherPOIPanel() {
         /**
          * Clear the POI Panel first
          */
@@ -436,7 +436,7 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
         POIPanels.get(3).setVisible(true);
     }
 
-    private void updateOtherPOIList() {
+    public void updateOtherPOIList() {
         /**
          * Get list of strings of other POIs from DataProcessor
          */
@@ -775,6 +775,25 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
                 mapComponent.navigateToPOI(poiID);
             }
         }
+    }
+
+    /**
+     * Method to update the POI Panel components
+     */
+    public void updatePOIComponent() {
+        this.addOtherPOIPanel();
+        this.addFavouritePOIPanel();
+        this.addUserPOIPanel();
+        for (int i = 0; i < POIPanels.size(); i++) {
+            POIPanels.get(i).revalidate();
+            POIPanels.get(i).repaint();
+        }
+        /**
+         * Refresh POIComponent display
+         */
+        this.revalidate();
+        this.repaint();
+        POIPanel.setVisible(true);
     }
 
     /**

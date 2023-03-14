@@ -18,6 +18,7 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
     private JButton favourite;
     private ImageIcon favouriteIcon = new ImageIcon("data/images/favourited_poi.png");
     private ImageIcon unfavouriteIcon = new ImageIcon("data/images/unfavourited_poi.png");
+    private User userInstance = User.getInstance();
 
     /**
      * Constructor that creates the POI information window given the PointOfInterest object
@@ -76,7 +77,9 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
         labels.get(4).setText("Layer Type: " + poi.getPOItype());
         labels.get(5).setText("X-Value: " + poi.getCoordinates()[0]);
         labels.get(6).setText("Y-Value: " + poi.getCoordinates()[1]);
-        labels.get(7).setText("User ID: " + poi.getUserID());
+        if (userInstance.getIsAdmin() == true) {
+            labels.get(7).setText("User ID: " + poi.getUserID());
+        }
 
         /**
          * Add the favourite button to the panel
