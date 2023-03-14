@@ -201,4 +201,28 @@ public class PointOfInterest {
     public void setID(int ID) {
         this.ID = ID;
     }
+    
+    /**
+     * Setter for POI X and Y position
+     */
+    public void setCoordinates(int x, int y) {
+        this.coordinates[0] = x;
+        this.coordinates[1] = y;
+    }
+
+    public void setName(String newName) {
+        this.name = newName;
+    }
+
+    public void setRoomNumber(int newRoomNumber) {
+        this.roomNumber = newRoomNumber;
+    }
+
+    public void setDescription(String newDesc) {
+        this.description = newDesc;
+    }
+
+    public void setPOItype(String newLayer) {
+        this.POI_type = newLayer;
+    }
 }

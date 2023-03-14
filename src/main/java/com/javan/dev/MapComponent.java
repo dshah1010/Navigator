@@ -740,19 +740,61 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         else if (isNavigationMode == false) {
             if (e.getSource() instanceof JLabel) {
                 /**
-                 * Get the coordinates of the mouse click
+                 * If on the map
                  */
-                JLabel label = (JLabel) e.getSource();
-                int x = e.getX();
-                int y = e.getY();
+                if (e.getSource() == map) {
+                    /**
+                     * Get the coordinates of the mouse click
+                     */
+                    JLabel label = (JLabel) e.getSource();
+                    int x = e.getX();
+                    int y = e.getY();
 
+                    /**
+                     * Create a new Point of Interest with EditingTool by opening POICreationWindow with the coordinates
+                     * This window will work with EditingTool to create a new POI
+                     */
+                    POICreationWindow poiCreationWindow = new POICreationWindow(x, y);
+                    poiCreationWindow.getFrame().setLocationRelativeTo(mapPanel);
+                    poiCreationWindow.setVisibleFrame();
+                }
                 /**
-                 * Create a new Point of Interest with EditingTool by opening POICreationWindow with the coordinates
-                 * This window will work with EditingTool to create a new POI
+                 * Open up an edit window for the POI object
                  */
-                POICreationWindow poiCreationWindow = new POICreationWindow(x, y);
-                poiCreationWindow.getFrame().setLocationRelativeTo(mapPanel);
-                poiCreationWindow.setVisibleFrame();
+                else {
+                    /**
+                     * Get the label that was clicked
+                     */
+                    JLabel label = (JLabel) e.getSource();
+
+                    /**
+                     * Get the POI Id of the label
+                     */
+                    String id = label.getText();
+
+                    /**
+                     * Get the POI object from the POI Id
+                     */
+                    PointOfInterest poi = dataProcessor.getPOI(Integer.parseInt(id));
+
+                    /**
+                     * Check if user is an admin and POI type is not user
+                     */
+                    if (user.getIsAdmin() == false && !(poi.getPOItype().contains("USER"))) {
+                        return;
+                    }
+
+                    /**
+                     * Create a new POI Editing Window object and pass the POI object to it
+                     */
+                    POIEditWindow poiEditWindow = new POIEditWindow(poi);
+
+                    /**
+                     * Display the POIInfoWindow right on top of the map
+                     */
+                    poiEditWindow.getFrame().setLocationRelativeTo(mapPanel);
+                    poiEditWindow.setVisibleFrame();
+                }
             }
         }
     }
@@ -781,6 +823,28 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
             Point vpp = viewPort.getViewPosition();
             vpp.translate(mouseStartX-e.getX(), mouseStartY-e.getY());
             map.scrollRectToVisible(new Rectangle(vpp, viewPort.getSize()));
+        }
+        /**
+         * If on campus map and in editing mode, let users move their own POIs they created
+         */
+        else {
+            if (isNavigationMode == false) {
+                if (e.getSource() instanceof JLabel) {
+                    JLabel label = (JLabel) e.getSource();
+                    /**
+                     * Get the POI Id of the label
+                     */
+                    String id = label.getText();
+                    /**
+                     * Get the POI object from the POI Id
+                     */
+                    PointOfInterest poi = dataProcessor.getPOI(Integer.parseInt(id));
+                    
+                    /**
+                     * TODO: Update the POI coordinates and display
+                     */
+                }
+            }
         }
     }
 
