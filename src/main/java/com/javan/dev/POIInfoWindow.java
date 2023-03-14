@@ -18,6 +18,7 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
     private JButton favourite;
     private ImageIcon favouriteIcon = new ImageIcon("data/images/favourited_poi.png");
     private ImageIcon unfavouriteIcon = new ImageIcon("data/images/unfavourited_poi.png");
+    private User userInstance = User.getInstance();
 
     /**
      * Constructor that creates the POI information window given the PointOfInterest object
@@ -61,7 +62,7 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
          * Initialize array of 5 JLabels to hold the POI information
          */
         labels = new ArrayList<JLabel>();
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 8; i++) {
             labels.add(new JLabel());
         }
 
@@ -70,11 +71,15 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
          * Create JLabels to hold the POI information
          */
         labels.get(0).setText(poi.getName());
-        labels.get(1).setText("ID: " + poi.getID());
-        labels.get(2).setText("Description: " + poi.getDescription());
-        labels.get(3).setText("X: " + poi.getCoordinates()[0]);
-        labels.get(4).setText("Y: " + poi.getCoordinates()[1]);
-        labels.get(5).setText("POI Type: " + poi.getPOItype());
+        labels.get(1).setText("POI ID: " + poi.getID());
+        labels.get(2).setText("RoomNumber: " + poi.getRoomNumber());
+        labels.get(3).setText("Description: " + poi.getDescription());
+        labels.get(4).setText("Layer Type: " + poi.getPOItype());
+        labels.get(5).setText("X-Value: " + poi.getCoordinates()[0]);
+        labels.get(6).setText("Y-Value: " + poi.getCoordinates()[1]);
+        if (userInstance.getIsAdmin() == true) {
+            labels.get(7).setText("User ID: " + poi.getUserID());
+        }
 
         /**
          * Add the favourite button to the panel
@@ -128,7 +133,7 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
          * Style labels
          */
         style(labels.get(0), 20);
-        for (int i = 1; i < 6; i++) {
+        for (int i = 1; i < 8; i++) {
             style(labels.get(i), 15);
         }
 
@@ -154,7 +159,7 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
         /**
          * Add the JLabels to the JPanel
          */
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 8; i++) {
             panel.add(labels.get(i));
             panel.add(Box.createRigidArea(new Dimension(0, 10)));
         }

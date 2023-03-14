@@ -53,7 +53,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      */
     private boolean isCampusMap;
     private int currentMapID;
-    private FloorMap floorMap;
+    private FloorMap floorMap = null;
     private Map campus = MapFactory.createMap("CAMPUS", 0, 0);
     private String mapType = "CAMPUS";
     private Map mapObject;
@@ -239,6 +239,14 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     }
 
     /**
+     * Getter for the current floor object
+     * @return mapObject
+     */
+    public FloorMap getFloorMapObject() {
+        return floorMap;
+    }
+
+    /**
      * Setter for the Map object and Map ID, and isCampusMap status
      * @param mapObject
      */
@@ -303,6 +311,9 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         return button;
     }
 
+    public void changeFloorMap(FloorMap floorMap) {
+        this.floorMap = floorMap;
+    }
     /**
      * Method to change the map being displayed in the map panel based on the String filepath being provided
      * @param filepath, mapID
@@ -427,11 +438,12 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
              */
             mapObject = floorMap.getFloorAbove();
             floorMap = floorMap.getFloorAbove();
-
+            displayPOIs();
             /**
              * Change the map
              */
             changeMap(mapObject);
+            poiComponent.updatePOIComponent();
         }
     }
 
@@ -447,11 +459,13 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
              */
             mapObject = floorMap.getFloorBelow();
             floorMap = floorMap.getFloorBelow();
+            displayPOIs();
 
             /**
              * Change the map
              */
             changeMap(mapObject);
+            poiComponent.updatePOIComponent();
         }
     }
 
@@ -514,25 +528,46 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     }
 
     /**
-     * Method to display all POIs for the map currently being displayed on the map with a flag icon representing its location
+     * Method to clear Floor POIs from the map
+     */
+    public void clearPois() {
+        pois.clear();
+        favouritePOIs.clear();
+        userPOIs.clear();
+        imagePanel.remove(map);
+        mapImg = new ImageIcon(mapObject.getFilePath());
+        map = new JLabel(mapImg);
+        map.addMouseListener(this);
+        map.addMouseMotionListener(this);
+        map.setLayout(null);
+        map.setBounds(0, 0, mapImg.getIconWidth(), mapImg.getIconHeight());
+        imagePanel.setPreferredSize(new Dimension(mapImg.getIconWidth(), mapImg.getIconHeight()));
+        imagePanel.add(map);
+    }
+
+    /**
+     * Method to display Floor POIs for the map currently being displayed on the map with a flag icon representing its location
      */
     public void displayPOIs() {
         /**
          * Get the Universal POIs for the map (not user based)
          */
+        if (this.pois != null) {
+            clearPois();
+        }
         if (isCampusMap == true) {
-            pois = dataProcessor.getUniversalPOIs(true);
+            pois = dataProcessor.getUniversalPOIs(true, user.getUserID());
         }
         else {
-            pois = dataProcessor.getUniversalPOIs(false);
+            pois = dataProcessor.getUniversalPOIs(false, user.getUserID());
         }
-
         /**
          * Get the User and Favourite POIs for the map (based on userID)
          */
-        userPOIs = dataProcessor.getUserPOIs();
-        favouritePOIs = dataProcessor.getFavouritePOIs(user.getUserID());
 
+        favouritePOIs = dataProcessor.getFavouritePOIs(user.getUserID());
+        userPOIs = dataProcessor.getUserPOIs(user.getUserID());
+       
         /**
          * Add each POI list to the map
          */
@@ -549,49 +584,52 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          * Loop through the POIs and add a flag icon to the map at the POI's coordinates
          */
         for (PointOfInterest poi : pois) {
-            /**
-             * Get the POI's coordinates
-             */
-            int[] coordinates = poi.getCoordinates();
+            if (this.floorMap != null && poi.getBuildingID() == this.floorMap.getBuildingID() 
+            && poi.getFloorID() == this.floorMap.getMapID()){
+                /**
+                 * Get the POI's coordinates
+                 */
+                int[] coordinates = poi.getCoordinates();
 
-            /**
-             * Add the flag icon to the map at the POI's coordinates (x and y position)
-             */
-            ImageIcon flagIcon = flag;
-            /**
-             * Get scaled version of 40x40 pixels as ImageIcon
-             */
-            Image scaledFlag = flagIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+                /**
+                 * Add the flag icon to the map at the POI's coordinates (x and y position)
+                 */
+                ImageIcon flagIcon = flag;
+                /**
+                 * Get scaled version of 40x40 pixels as ImageIcon
+                 */
+                Image scaledFlag = flagIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
 
-            /**
-             * Create a JLabel with the scaled flag icon
-             */
-            JLabel flag = new JLabel(new ImageIcon(scaledFlag));
+                /**
+                 * Create a JLabel with the scaled flag icon
+                 */
+                JLabel flag = new JLabel(new ImageIcon(scaledFlag));
 
-            /**
-             * Add the ID of the POI to the flag icon as metadata
-             */
-            flag.setText(Integer.toString(poi.getID()));
+                /**
+                 * Add the ID of the POI to the flag icon as metadata
+                 */
+                flag.setText(Integer.toString(poi.getID()));
 
 
-            flag.setBounds(coordinates[0], coordinates[1], 40, 40);
-            
-            /**
-             * Add a mouse listener to the flag icon to navigate to the POI when clicked
-             */
-            flag.addMouseListener(this);
+                flag.setBounds(coordinates[0], coordinates[1], 40, 40);
+                
+                /**
+                 * Add a mouse listener to the flag icon to navigate to the POI when clicked
+                 */
+                flag.addMouseListener(this);
 
-            /**
-             * Add the flag icon to the map
-             */
-            map.add(flag);
+                /**
+                 * Add the flag icon to the map
+                 */
+                map.add(flag);
 
-            /**
-             * Repaint the map panel
-             */
-            mapPanel.repaint();
-            flag.setVisible(true);
-            imagePanel.setVisible(true);
+                /**
+                 * Repaint the map panel
+                 */
+                mapPanel.repaint();
+                flag.setVisible(true);
+                imagePanel.setVisible(true);
+                }
         }
     }
 
@@ -717,6 +755,16 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                 poiCreationWindow.setVisibleFrame();
             }
         }
+    }
+
+    /**
+     * Method to change map to campus map
+     */
+    public void changeToCampusMap() {
+        /**
+         * Change the map to the campus map
+         */
+        changeMap(campus);
     }
 
     public void mousePressed(MouseEvent e) {

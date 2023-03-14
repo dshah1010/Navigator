@@ -62,6 +62,8 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
      */
     private DataProcessor processor = DataProcessor.getInstance();
     private User user = User.getInstance();
+    private MapComponent mapComponent = MapComponent.getInstance();
+    private POIComponent poiComponent = POIComponent.getInstance();
 
     /**
      * Constructor to create Login Component of the UI. This will be in the main frame when the application is opened,
@@ -459,7 +461,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
              */
             String username = usernameInput.getText();
             String password = new String(passwordInput.getPassword());
-            boolean isValid = processor.authenticateLogin(username, password);
+            int userID = processor.authenticateLogin(username, password);
 
             /**
              * Empty text fields
@@ -470,10 +472,10 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
             /**
              * If the login is valid (isValid != 0), then remove the login panel from the frame and add the main panel
              */
-            if (isValid == true) {
+            if (userID != -1) {
                 user.setUsername(username);
                 user.setPassword(password);
-                // TODO: add a setter that finds userID from metadata to change userID
+                user.setUserID(userID);
                 /**
                  * Set admin status for admin
                  */
@@ -489,6 +491,19 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
                 remove(loginPanel);
                 revalidate();
                 repaint();
+                /**
+                 * Update map component to display Floor POIs
+                 */
+                mapComponent.clearPois();
+                mapComponent.displayPOIs();
+                /**
+                 * Update sidebar component to display Floor POIs
+                 */
+                poiComponent.updatePOIComponent();
+                /**
+                 * Change to campus map
+                 */
+                mapComponent.changeToCampusMap();
                 isLoggedIn = true;
             }
             else {

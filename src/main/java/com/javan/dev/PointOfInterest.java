@@ -1,6 +1,7 @@
 package com.javan.dev;
 import org.json.JSONObject;
 import org.json.JSONArray;
+import com.google.gson.*;
 
 /**
  * @author: Deep Shah <dshah228@uwo.ca>
@@ -20,6 +21,12 @@ public class PointOfInterest {
     private Boolean isFavourited;
     private String description;
     private int roomNumber;
+    private String mapFilePath;
+
+    /**
+     * Private variable to hold the instance of the data processor
+     */
+    private DataProcessor processor = DataProcessor.getInstance();
 
 
     /**
@@ -28,7 +35,6 @@ public class PointOfInterest {
      */
     public PointOfInterest(String name, int userID, boolean isUsermade, String POI_Type, int coordinatesX, int coordinatesY, int floorID, int buildingID, Boolean isFavourited, String description, int roomNumber)  {
         this.name = name;
-
         this.userID = userID;
         this.isUserMade = isUsermade;
         this.POI_type = POI_Type;
@@ -39,6 +45,8 @@ public class PointOfInterest {
         this.isFavourited = isFavourited;
         this.description = description;
         this.roomNumber = roomNumber;
+        this.ID = processor.makeNewPOIID();
+        this.mapFilePath = processor.loadMapFilePath(this.buildingID, this.floorID, "FLOOR");
     }
 
     /**
@@ -80,6 +88,14 @@ public class PointOfInterest {
      */
     public String getName() {
         return this.name; 
+    }
+
+    /**
+     * Getter for the file path of the map that the POI is on
+     * @return String of the name
+     */
+    public String getMapFilePath() {
+        return this.mapFilePath; 
     }
 
     /**
@@ -156,16 +172,17 @@ public class PointOfInterest {
 
     public JSONObject toJSON() {
         JSONObject json = new JSONObject();
-        json.put("name", name);
-        json.put("userID", userID);
-        json.put("isUserMade", isUserMade);
-        json.put("POI_type", POI_type);
-        json.put("coordinates", new JSONArray(coordinates));
-        json.put("floorID", floorID);
-        json.put("buildingID", buildingID);
-        json.put("isFavourited", isFavourited);
-        json.put("description", description);
-        json.put("roomNumber", roomNumber);
+        json.put("name", this.name);
+        json.put("ID", this.ID);
+        json.put("userID", this.userID);
+        json.put("isUserMade", this.isUserMade);
+        json.put("POI_type", this.POI_type);
+        json.put("coordinates", new JSONArray(this.coordinates));
+        json.put("floorID", this.floorID);
+        json.put("buildingID", this.buildingID);
+        json.put("isFavourited", this.isFavourited);
+        json.put("description", this.description);
+        json.put("roomNumber", this.roomNumber);
         return json;
     }
 

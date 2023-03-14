@@ -1,10 +1,1 @@
-[{"POI_id":1,
-"userID":1,
-"isUserMade": false,
-"POI_type":"PRE-BUILT",
-"coordinates": [0, 0],
-"floorID": 1,
-"mapID": 1,
-"layerType": "",
-"isFavourited": false,
-"description":""}]
+[{"floorID":1,"POI_type":"test","roomNumber":1220,"name":"test","isUserMade":true,"coordinates":[1319,1018],"description":"test","ID":1,"isFavourited":false,"userID":1,"buildingID":1},{"floorID":1,"POI_type":"USER","roomNumber":1310,"name":"test","isUserMade":true,"coordinates":[825,825],"description":"gg","ID":2,"isFavourited":false,"userID":1,"buildingID":1},{"floorID":1,"POI_type":"USER","roomNumber":2,"name":"test","isUserMade":true,"coordinates":[621,621],"description":"test","ID":3,"isFavourited":false,"userID":1,"buildingID":1},{"floorID":1,"POI_type":"USER","roomNumber":1310,"name":"test","isUserMade":true,"coordinates":[1953,817],"description":"test","ID":4,"isFavourited":false,"userID":2,"buildingID":1},{"floorID":2,"POI_type":"USER","roomNumber":2113,"name":"test","isUserMade":true,"coordinates":[1320,860],"description":"test","ID":5,"isFavourited":false,"userID":4,"buildingID":1},{"floorID":1,"POI_type":"USER","roomNumber":1340,"name":"Room 1340","isUserMade":true,"coordinates":[2547,436],"description":"This is room 1340.","ID":6,"isFavourited":false,"userID":3,"buildingID":1},{"floorID":2,"POI_type":"USER","roomNumber":2357,"name":"Women's Bathroom","isUserMade":true,"coordinates":[2305,1191],"description":"This is the women's bathroom on the second floor.","ID":7,"isFavourited":false,"userID":3,"buildingID":1},{"floorID":1,"POI_type":"classroom","roomNumber":1310,"name":"Classroom 1310","isUserMade":false,"coordinates":[1951,792],"description":"This is classroom 1310","ID":8,"isFavourited":false,"userID":1,"buildingID":1},{"floorID":1,"POI_type":"accessibility","roomNumber":1240,"name":"Women's bathroom","isUserMade":false,"coordinates":[1712,1172],"description":"This is a women's bathroom on the first floor","ID":9,"isFavourited":false,"userID":1,"buildingID":1},{"floorID":1,"POI_type":"classroom","roomNumber":1240,"name":"Room 1240","isUserMade":false,"coordinates":[1684,936],"description":"This is room 1240","ID":10,"isFavourited":false,"userID":1,"buildingID":1}]
