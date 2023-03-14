@@ -144,7 +144,7 @@ public final class DataProcessor {
     }
 
     /**
-     * Method to return the POIs created by a user // TODO: TEMPORARY FOR RESTING
+     * Method to return the POIs created by a user 
      * @param int userID - the ID of the user
      * @return List of user-created POIs
      */
@@ -197,18 +197,29 @@ public final class DataProcessor {
      * Method to add a new poi created to the PointOfInterestMetadata.json file array
      * @param poi PointOfInterest object
      */
-    public void addPointOfInterestToJsonFile(PointOfInterest POI) throws IOException {
+    public boolean addPointOfInterestToJsonFile(PointOfInterest POI) throws IOException {
         
         String jsonString = new String(Files.readAllBytes(Paths.get("data/PointOfInterests/PointOfInterestMetadata.json")));
         JSONArray jsonArray = new JSONArray(jsonString);
         
         JSONObject poiJson = POI.toJSON();
+        for (Object poi : jsonArray) {
+            JSONObject currentPoi = (JSONObject) poi;
+            /*
+             * Checks to see if the POI user + floorNumber already exists
+             */
+            if (currentPoi.get("userID") == poiJson.get("userID") 
+            && currentPoi.get("roomNumber") == poiJson.get("roomNumber")) {
+                return false;
+            }
+        }
         jsonArray.put(poiJson);
         
         FileWriter fileWriter = new FileWriter("data/PointOfInterests/PointOfInterestMetadata.json");
         fileWriter.write(jsonArray.toString());
         fileWriter.flush();
         fileWriter.close();
+        return true;
         
     }
     /**
@@ -428,7 +439,7 @@ public final class DataProcessor {
      * @param String password, unencrypted password attempt
      * @return boolean
      */
-    public boolean authenticateLogin(String username, String password) {
+    public Integer authenticateLogin(String username, String password) {
         /**
          * JSON file location
          */
@@ -460,7 +471,7 @@ public final class DataProcessor {
                 if (username.equals(user.getString("username")) && password.equals(decryptedPassword)) {
                     String userType = user.getString("userType");
                     System.out.println("User " + username + " logged in as " + userType + ".");
-                    return true;
+                    return (Integer) user.get("userID");
                 }
             }
         } catch (Exception e) {
@@ -470,7 +481,7 @@ public final class DataProcessor {
          * If no match was found, return false
          */
         System.out.println("Invalid username or password.");
-        return false;
+        return -1;
     }
 
     /**

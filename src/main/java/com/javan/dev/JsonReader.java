@@ -195,7 +195,7 @@ public class JsonReader {
     /**
      * function to get userFavouites POI Data
      * @param int userID
-     * @return
+     * @return ArrayList<PointOfInterest>
      */
     public static ArrayList<PointOfInterest> favouritesList(int userID) {
         FileReader reader = null;
@@ -246,9 +246,8 @@ public class JsonReader {
 
      /**
      * function to get user made POI Data
-     * @param username
-     * @param password
-     * @return
+     * @param int userID
+     * @return ArrayList<PointOfInterest>
      */
     public static ArrayList<PointOfInterest> userPOIList(int userID) {
         FileReader reader = null;
@@ -300,9 +299,8 @@ public class JsonReader {
 
      /**
      * function to get all POIs currently available to the user
-     * @param username
-     * @param password
-     * @return
+     * @param int userID
+     * @return ArrayList<PointOfInterest>
      */
     public static ArrayList<PointOfInterest> universalPOIs(int userID) {
         FileReader reader = null;

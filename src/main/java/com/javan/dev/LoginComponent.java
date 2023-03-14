@@ -459,7 +459,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
              */
             String username = usernameInput.getText();
             String password = new String(passwordInput.getPassword());
-            boolean isValid = processor.authenticateLogin(username, password);
+            int userID = processor.authenticateLogin(username, password);
 
             /**
              * Empty text fields
@@ -470,10 +470,10 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
             /**
              * If the login is valid (isValid != 0), then remove the login panel from the frame and add the main panel
              */
-            if (isValid == true) {
+            if (userID != -1) {
                 user.setUsername(username);
                 user.setPassword(password);
-                // TODO: add a setter that finds userID from metadata to change userID
+                user.setUserID(userID);
                 /**
                  * Set admin status for admin
                  */

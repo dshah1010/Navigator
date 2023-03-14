@@ -76,6 +76,7 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
         labels.get(4).setText("Layer Type: " + poi.getPOItype());
         labels.get(5).setText("X-Value: " + poi.getCoordinates()[0]);
         labels.get(6).setText("Y-Value: " + poi.getCoordinates()[1]);
+        labels.get(7).setText("User ID: " + poi.getUserID());
 
         /**
          * Add the favourite button to the panel
