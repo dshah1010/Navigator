@@ -859,6 +859,14 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         }
     }
 
+    /**
+     * Set navigation mode to true
+     */
+    public void setNavigationMode() {
+        isNavigationMode = true;
+        mapMode.setText("Navigation Mode");
+    }
+
     public void mouseReleased(MouseEvent e) {
         // TODO Auto-generated method stub
         
