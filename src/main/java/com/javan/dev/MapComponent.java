@@ -532,7 +532,15 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         pois.clear();
         favouritePOIs.clear();
         userPOIs.clear();
-
+        imagePanel.remove(map);
+        mapImg = new ImageIcon(mapObject.getFilePath());
+        map = new JLabel(mapImg);
+        map.addMouseListener(this);
+        map.addMouseMotionListener(this);
+        map.setLayout(null);
+        map.setBounds(0, 0, mapImg.getIconWidth(), mapImg.getIconHeight());
+        imagePanel.setPreferredSize(new Dimension(mapImg.getIconWidth(), mapImg.getIconHeight()));
+        imagePanel.add(map);
     }
 
     /**
@@ -557,76 +565,13 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
 
         favouritePOIs = dataProcessor.getFavouritePOIs(user.getUserID());
         userPOIs = dataProcessor.getUserPOIs(user.getUserID());
-        System.out.println(pois + " " + favouritePOIs + " " + userPOIs);
        
         /**
          * Add each POI list to the map
          */
-        removeFlags(pois);
-        removeFlags(favouritePOIs);
-        removeFlags(userPOIs);
         addPOIList(pois);
         addPOIList(userPOIs);
         addPOIList(favouritePOIs);
-    }
-
-    /**
-     * Method to remove flags
-     */
-    public void removeFlags(ArrayList<PointOfInterest> pois) {
-        /**
-         * Loop through the POIs and add a flag icon to the map at the POI's coordinates
-         */
-        for (PointOfInterest poi : pois) {
-            if (this.floorMap != null && poi.getBuildingID() == this.floorMap.getBuildingID() 
-            && poi.getFloorID() == this.floorMap.getMapID()){
-                System.out.println(poi.getFloorID() + " " + this.floorMap.getMapID());
-                System.out.println(poi.getBuildingID() + " " + this.floorMap.getBuildingID());
-                /**
-                 * Get the POI's coordinates
-                 */
-                int[] coordinates = poi.getCoordinates();
-
-                /**
-                 * Add the flag icon to the map at the POI's coordinates (x and y position)
-                 */
-                ImageIcon flagIcon = flag;
-                /**
-                 * Get scaled version of 40x40 pixels as ImageIcon
-                 */
-                Image scaledFlag = flagIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-
-                /**
-                 * Create a JLabel with the scaled flag icon
-                 */
-                JLabel flag = new JLabel(new ImageIcon(scaledFlag));
-
-                /**
-                 * Add the ID of the POI to the flag icon as metadata
-                 */
-                flag.setText(Integer.toString(poi.getID()));
-
-
-                flag.setBounds(coordinates[0], coordinates[1], 40, 40);
-                
-                /**
-                 * Add a mouse listener to the flag icon to navigate to the POI when clicked
-                 */
-                flag.addMouseListener(this);
-
-                /**
-                 * Add the flag icon to the map
-                 */
-                map.remove(flag);
-
-                /**
-                 * Repaint the map panel
-                 */
-                mapPanel.repaint();
-                flag.setVisible(true);
-                imagePanel.setVisible(true);
-                }
-        }
     }
 
     /**
@@ -639,8 +584,6 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         for (PointOfInterest poi : pois) {
             if (this.floorMap != null && poi.getBuildingID() == this.floorMap.getBuildingID() 
             && poi.getFloorID() == this.floorMap.getMapID()){
-                System.out.println(poi.getFloorID() + " " + this.floorMap.getMapID());
-                System.out.println(poi.getBuildingID() + " " + this.floorMap.getBuildingID());
                 /**
                  * Get the POI's coordinates
                  */
@@ -771,7 +714,6 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                  * Get the POI Id of the label
                  */
                 String id = label.getText();
-                System.out.println(id);
 
                 /**
                  * Get the POI object from the POI Id
