@@ -394,7 +394,7 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
          */
         JPanel titleOther = new JPanel();
         titleOther.setBackground(Color.WHITE);
-        otherPOIButton = createPOIButton("All POIs");
+        otherPOIButton = createPOIButton("Floor POIs");
         titleOther.add(otherPOIButton);
 
         /**
@@ -468,7 +468,7 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
      */
     public int addPOIsToPanel(JPanel gridDisplay, ArrayList<PointOfInterest> POIList) {
         /**
-         * Loop through all POIs in the list and add JPanels to the POI Panel on top of one another
+         * Loop through Floor POIs in the list and add JPanels to the POI Panel on top of one another
          */
         for (PointOfInterest poi : POIList) {
             JPanel POIPanel = new JPanel();
@@ -560,7 +560,7 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
             addOtherPOIPanel();
             addUserPOIPanel();
             /**
-             * Change the title of All POIs to Building Directory
+             * Change the title of Floor POIs to Building Directory
              */
             otherPOIButton.setText("Building Directory");
         }
@@ -576,9 +576,9 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
             addUserPOIPanel();
 
             /**
-             * Change the title of All POIs to Other POIs
+             * Change the title of Floor POIs to Other POIs
              */
-            otherPOIButton.setText("All POIs");
+            otherPOIButton.setText("Floor POIs");
         }
     }
 
@@ -700,7 +700,7 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
                     }
                 }
             }
-            else if (button.getText().equals("All POIs") || button.getText().equals("Building Directory")) {
+            else if (button.getText().equals("Floor POIs") || button.getText().equals("Building Directory")) {
                 if (POIPanels.get(3).getComponent(1).isVisible()) {
                     for (int i = 1; i < POIPanels.get(3).getComponentCount(); i++) {
                         POIPanels.get(3).getComponent(i).setVisible(false);

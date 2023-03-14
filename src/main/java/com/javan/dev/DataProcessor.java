@@ -173,7 +173,7 @@ public final class DataProcessor {
         else {
             universalPOIs.clear();
             /**
-             * Floor Map Condition: Get all POIs within the current floor map
+             * Floor Map Condition: Get Floor POIs within the current floor map
              */
             universalPOIs = JsonReader.universalPOIs(userID);
         }

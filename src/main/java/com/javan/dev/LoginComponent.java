@@ -492,12 +492,12 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
                 revalidate();
                 repaint();
                 /**
-                 * Update map component to display all POIs
+                 * Update map component to display Floor POIs
                  */
                 mapComponent.clearPois();
                 mapComponent.displayPOIs();
                 /**
-                 * Update sidebar component to display all POIs
+                 * Update sidebar component to display Floor POIs
                  */
                 poiComponent.updatePOIComponent();
                 /**

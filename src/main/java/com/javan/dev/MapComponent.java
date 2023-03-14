@@ -528,7 +528,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     }
 
     /**
-     * Method to clear all POIs from the map
+     * Method to clear Floor POIs from the map
      */
     public void clearPois() {
         pois.clear();
@@ -546,7 +546,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     }
 
     /**
-     * Method to display all POIs for the map currently being displayed on the map with a flag icon representing its location
+     * Method to display Floor POIs for the map currently being displayed on the map with a flag icon representing its location
      */
     public void displayPOIs() {
         /**

@@ -298,7 +298,7 @@ public class JsonReader {
     }    
 
      /**
-     * function to get all POIs currently available to the user
+     * function to get Floor POIs currently available to the user
      * @param int userID
      * @return ArrayList<PointOfInterest>
      */
