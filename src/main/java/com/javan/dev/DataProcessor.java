@@ -209,7 +209,7 @@ public final class DataProcessor {
              * Checks to see if the POI user + floorNumber already exists
              */
             if (currentPoi.get("userID") == poiJson.get("userID") 
-            && currentPoi.get("roomNumber") == poiJson.get("roomNumber")) {
+            && currentPoi.get("roomNumber") == poiJson.get("roomNumber") && currentPoi.get("floorID") == poiJson.get("floorID")) {
                 return false;
             }
         }
@@ -271,7 +271,9 @@ public final class DataProcessor {
         JSONArray jsonArray = new JSONArray(jsonString);
         
         JSONObject poiJson = poi.toJSON();
-        int counter = 0;
+        boolean isDeleted = false;
+        JSONArray newJsonArray = new JSONArray();
+
         for (Object poiObject : jsonArray) {
             JSONObject currentPoi = (JSONObject) poiObject;
 
@@ -279,26 +281,32 @@ public final class DataProcessor {
              * Check to see if the POI ID matches a POI
              */
             if (currentPoi.get("ID") == poiJson.get("ID")) {
-                /**
-                 * Remove the current POI from the JSON Array
-                 */
-                jsonArray.remove(counter);
-
-                FileWriter fileWriter;
-                try {
-                    fileWriter = new FileWriter("data/PointOfInterests/PointOfInterestMetadata.json");
-                    fileWriter.write(jsonArray.toString());
-                    fileWriter.flush();
-                    fileWriter.close();
-                    return true;
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+                isDeleted = true;
             }
-            counter += 1;
+            else if (isDeleted == true) {
+                /**
+                 * Change the POI ID of every POI following to ID - 1 and update jsonArray
+                 */
+                currentPoi.put("ID", currentPoi.getInt("ID") - 1);
+                newJsonArray.put(currentPoi);
+            }
+            else {
+                /**
+                 * Add the POI to the new JSON Array
+                 */
+                newJsonArray.put(currentPoi);
+            }
         }
-        return false;
+        FileWriter fileWriter;
+        try {
+            fileWriter = new FileWriter("data/PointOfInterests/PointOfInterestMetadata.json");
+            fileWriter.write(newJsonArray.toString());
+            fileWriter.flush();
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return isDeleted;
     }
 
 
