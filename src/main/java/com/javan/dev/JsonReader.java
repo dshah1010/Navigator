@@ -232,7 +232,8 @@ public class JsonReader {
                     Boolean isFavourited = poiObject.get("isFavourited").getAsBoolean();
                     String description = poiObject.get("description").getAsString();
                     int roomNumber = poiObject.get("roomNumber").getAsInt();
-                    PointOfInterest POIdata = new PointOfInterest(name, userID, isUserMade, POI_Type, coordinateArray[0], coordinateArray[1], floorID, buildingID, isFavourited, description, roomNumber);
+                    Boolean isVisible = poiObject.get("isVisible").getAsBoolean();
+                    PointOfInterest POIdata = new PointOfInterest(name, userID, isUserMade, POI_Type, coordinateArray[0], coordinateArray[1], floorID, buildingID, isFavourited, description, roomNumber, isVisible);
                     POIdata.setID(poiID);
                     arrayList.add(POIdata);
                 }   
@@ -285,7 +286,8 @@ public class JsonReader {
                     Boolean isFavourited = poiObject.get("isFavourited").getAsBoolean();
                     String description = poiObject.get("description").getAsString();
                     int roomNumber = poiObject.get("roomNumber").getAsInt();
-                    PointOfInterest POIdata = new PointOfInterest(name, userID, isUserMade, POI_Type, coordinateArray[0], coordinateArray[1], floorID, buildingID, isFavourited, description, roomNumber);
+                    Boolean isVisible = poiObject.get("isVisible").getAsBoolean();
+                    PointOfInterest POIdata = new PointOfInterest(name, userID, isUserMade, POI_Type, coordinateArray[0], coordinateArray[1], floorID, buildingID, isFavourited, description, roomNumber, isVisible);
                     POIdata.setID(poiID);
                     arrayList.add(POIdata);
                 }             
@@ -344,8 +346,9 @@ public class JsonReader {
                     Boolean isFavourited = poiObject.get("isFavourited").getAsBoolean();
                     String description = poiObject.get("description").getAsString();
                     int roomNumber = poiObject.get("roomNumber").getAsInt();
+                    Boolean isVisible = poiObject.get("isVisible").getAsBoolean();
                     if (mapID == floorID) {
-                        PointOfInterest POIdata = new PointOfInterest(name, userID, isUserMade, POI_Type, coordinateArray[0], coordinateArray[1], floorID, buildingID, isFavourited, description, roomNumber);
+                        PointOfInterest POIdata = new PointOfInterest(name, userID, isUserMade, POI_Type, coordinateArray[0], coordinateArray[1], floorID, buildingID, isFavourited, description, roomNumber, isVisible);
                         POIdata.setID(poiID);
                         arrayList.add(POIdata);
                     }
@@ -356,6 +359,48 @@ public class JsonReader {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * method to update isVisble state in POI JSON file and its objects
+     * @param nameofPOI
+     */
+    public void updateisVisble(String nameofPOI){
+        FileReader reader = null;
+        /*
+         * attempts to read file 
+         */
+        try {
+            reader = new FileReader("data/PointOfInterests/PointOfInterestMetadata.json");
+            JsonArray POIDataArray= JsonParser.parseReader(reader).getAsJsonArray();
+            /*
+             
+             * loops through json file to find user made POIs
+             */ 
+            for (JsonElement POI : POIDataArray) {
+                JsonObject poiObject = POI.getAsJsonObject();
+                if (poiObject.get("name").getAsString() == nameofPOI){
+                    if(poiObject.get("isVisible").getAsBoolean() == false){
+                        /*
+                         * changes isVisible property to false if true
+                         */
+                        poiObject.addProperty("isVisible", false);
+                        break;
+                    }
+                        /*
+                         * changes isVisible property to true if false
+                         */
+                    else{
+                        poiObject.addProperty("isVisible", true);
+                    }
+                }     
+
+            }
+
+        } 
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
     
