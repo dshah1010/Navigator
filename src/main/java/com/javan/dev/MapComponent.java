@@ -781,6 +781,10 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                      * Check if user is an admin and POI type is not user
                      */
                     if (user.getIsAdmin() == false && !(poi.getPOItype().contains("USER"))) {
+                        /**
+                         * Open up a pop-up window saying they can't edit this POI
+                         */
+                        JOptionPane.showMessageDialog(null, "You can't edit this POI", "Error", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
 
@@ -818,6 +822,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     }
 
     public void mouseDragged(MouseEvent e) {
+        System.out.println(e.getSource());
         if (e.getSource() == map) {
             JViewport viewPort = scrollPane.getViewport();
             Point vpp = viewPort.getViewPosition();
@@ -828,8 +833,11 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          * If on campus map and in editing mode, let users move their own POIs they created
          */
         else {
+            System.out.println(isNavigationMode);
             if (isNavigationMode == false) {
+                System.out.println("not navigation mode");
                 if (e.getSource() instanceof JLabel) {
+                    System.out.println("label");
                     JLabel label = (JLabel) e.getSource();
                     /**
                      * Get the POI Id of the label
@@ -843,6 +851,9 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                     /**
                      * TODO: Update the POI coordinates and display
                      */
+                    int x = e.getX();
+                    int y = e.getY();
+                    System.out.println("x: " + x + " y: " + y);
                 }
             }
         }
