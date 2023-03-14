@@ -27,6 +27,8 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
     private JButton edit;
     private JButton cancel;
     private JPanel buttonPanel;
+    private JButton delete;
+    private JPanel deletePanel;
 
     /**
      * Private variables to hold the instance of the data processor and user
@@ -50,7 +52,7 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
          */
         frame = new JFrame("Edit POI");
         panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setLayout(new GridBagLayout());
         frame.setSize(450, 250);
         frame.setMinimumSize(new Dimension(200, 200));
         /**
@@ -58,6 +60,36 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
          */
         frame.setIconImage(new ImageIcon("data/images/flag.png").getImage());
 
+        /**
+         * Create Button to delete POI and add to panel
+         */
+        deletePanel = new JPanel();
+        deletePanel.setLayout(new GridBagLayout());
+        /**
+         * Make button take up entire horizontal space
+         */
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        deletePanel.setBackground(Color.WHITE);
+        delete = createMapButton("Delete POI");
+        delete.setBackground(Color.BLACK);
+        delete.setForeground(Color.WHITE);
+        deletePanel.add(delete, gridBagConstraints);
+
+        /**
+         * Add delete panel to the main panel
+         */
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.weighty = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        panel.add(deletePanel, gridBagConstraints);
+
+
+        
         /**
          * Create ArrayList of different metadata String titles
          */
@@ -82,17 +114,22 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
          * Loop 10 times, creating a JPanel that holds a JLabel and a JTextField
          */
         for (int i = 0; i < metadata.size(); i++) {
+            gridBagConstraints.gridy += 1;
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.weighty = 1;
+            gridBagConstraints.fill = GridBagConstraints.BOTH;
             JPanel tempPanel = new JPanel();
             tempPanel.setBackground(Color.WHITE);
             tempPanel.setLayout(new GridLayout());
             JPanel labelHolder = new JPanel();
             labelHolder.setBackground(Color.WHITE);
             JLabel tempLabel = new JLabel(metadata.get(i));
+            tempLabel.setFont(new Font("Georgia", 1, 17));
             labelHolder.add(tempLabel);
             JTextField tempField = createTextField(currentPOIData.get(i));
             tempPanel.add(labelHolder);
             tempPanel.add(tempField);
-            panel.add(tempPanel);
+            panel.add(tempPanel, gridBagConstraints);
         }
 
         /**
@@ -104,8 +141,9 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
         cancel = createMapButton("Cancel");
         buttonPanel.add(cancel);
         buttonPanel.add(edit);
+        gridBagConstraints.gridy += 1;
 
-        panel.add(buttonPanel);
+        panel.add(buttonPanel, gridBagConstraints);
 
         /**
          * Add panel to frame
@@ -151,8 +189,8 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
         button.setBackground(Color.WHITE);
         button.setForeground(Color.BLACK);
         button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-        button.setFont(new Font("Georgia", Font.PLAIN, 17));
+        //button.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        button.setFont(new Font("Georgia", Font.PLAIN, 19));
         button.addActionListener(this);
         button.addMouseListener(this);
 
@@ -224,6 +262,33 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
          * When the cancel button is clicked, close the window
          */
         if (e.getSource() == cancel) {
+            frame.dispose();
+        }
+        /**
+         * When the delete button is clicked, delete the POI from the map and JSON file
+         */
+        if (e.getSource() == delete) {
+            try {
+                boolean deletedSuccessfully = processor.deletePointOfInterestFromJsonFile(poi);
+                /*
+                 * Gives an error message if the POI already exists for the user
+                 */
+                if (!deletedSuccessfully) {
+                    JPanel errorPanel = new JPanel();
+                    JLabel errorMessage = new JLabel("Error: POI deletion failed");
+                    errorPanel.add(errorMessage);
+                
+                    JOptionPane.showMessageDialog(null, errorPanel, "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (IOException err) {
+                err.printStackTrace();
+            }
+            mapComponent.displayPOIs();
+            poiComponent.changeDisplayIfCampusMap(mapComponent.getMapObject().getMapID());
+            /**
+             * Update the sidebar component to display the new POI
+             */
+            poiComponent.updatePOIComponent();
             frame.dispose();
         }
     }

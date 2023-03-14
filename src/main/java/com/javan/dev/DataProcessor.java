@@ -260,6 +260,47 @@ public final class DataProcessor {
         return false;
     }
 
+    /**
+     * Method to delete a point of interest from the PointOfInterestMetadata.json file
+     * @param poi
+     * @return
+     * @throws IOException
+     */
+    public boolean deletePointOfInterestFromJsonFile(PointOfInterest poi) throws IOException {
+        String jsonString = new String(JsonReader.read("data/PointOfInterests/PointOfInterestMetadata.json"));
+        JSONArray jsonArray = new JSONArray(jsonString);
+        
+        JSONObject poiJson = poi.toJSON();
+        int counter = 0;
+        for (Object poiObject : jsonArray) {
+            JSONObject currentPoi = (JSONObject) poiObject;
+
+            /**
+             * Check to see if the POI ID matches a POI
+             */
+            if (currentPoi.get("ID") == poiJson.get("ID")) {
+                /**
+                 * Remove the current POI from the JSON Array
+                 */
+                jsonArray.remove(counter);
+
+                FileWriter fileWriter;
+                try {
+                    fileWriter = new FileWriter("data/PointOfInterests/PointOfInterestMetadata.json");
+                    fileWriter.write(jsonArray.toString());
+                    fileWriter.flush();
+                    fileWriter.close();
+                    return true;
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+            counter += 1;
+        }
+        return false;
+    }
+
 
     /**
      * @param currentMapID
