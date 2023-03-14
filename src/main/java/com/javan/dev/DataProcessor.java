@@ -220,8 +220,47 @@ public final class DataProcessor {
         fileWriter.flush();
         fileWriter.close();
         return true;
-        
     }
+
+    /**
+     * Method to edit the point of interest data for a POI given its ID in the PointOfInterestMetadata.json file
+     * @param poi
+     * @return
+     */
+    public boolean editPointOfInterestInJsonFile(PointOfInterest poi) throws IOException {
+        String jsonString = new String(JsonReader.read("data/PointOfInterests/PointOfInterestMetadata.json"));
+        JSONArray jsonArray = new JSONArray(jsonString);
+        
+        JSONObject poiJson = poi.toJSON();
+        int counter = 0;
+        for (Object poiObject : jsonArray) {
+            JSONObject currentPoi = (JSONObject) poiObject;
+
+            /**
+             * Check to see if the POI ID matches a POI
+             */
+            if (currentPoi.get("ID") == poiJson.get("ID")) {
+                /**
+                 * Remove the current POI from the JSON Array
+                 */
+                jsonArray.remove(counter);
+
+                /**
+                 * Add the new POI to the JSON Array
+                 */
+                jsonArray.put(poiJson);
+                FileWriter fileWriter = new FileWriter("data/PointOfInterests/PointOfInterestMetadata.json");
+                fileWriter.write(jsonArray.toString());
+                fileWriter.flush();
+                fileWriter.close();
+                return true;
+            }
+            counter += 1;
+        }
+        return false;
+    }
+
+
     /**
      * @param currentMapID
      * @return boolean indicating if there is a floor above or not
@@ -375,7 +414,8 @@ public final class DataProcessor {
                     Boolean isFavourited = poiObject.get("isFavourited").getAsBoolean();
                     String description = poiObject.get("description").getAsString();
                     int roomNumber = poiObject.get("roomNumber").getAsInt();
-                    PointOfInterest POIdata = new PointOfInterest(name, userID, isUserMade, POI_Type, coordinateArray[0], coordinateArray[1], floorID, buildingID, isFavourited, description, roomNumber, true);
+                    boolean isVisible = poiObject.get("isVisible").getAsBoolean();
+                    PointOfInterest POIdata = new PointOfInterest(name, userID, isUserMade, POI_Type, coordinateArray[0], coordinateArray[1], floorID, buildingID, isFavourited, description, roomNumber, isVisible);
                     POIdata.setID(poiID);
                     return POIdata;
                 }       
@@ -611,6 +651,4 @@ public final class DataProcessor {
         FloorMap mapObject = new FloorMap(buildingID, mapID);
         return mapObject;
     }
-    
-    
 }

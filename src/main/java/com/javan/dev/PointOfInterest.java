@@ -22,20 +22,19 @@ public class PointOfInterest {
     private String description;
     private int roomNumber;
     private String mapFilePath;
-    private Boolean isVisible;
+    private boolean isVisible;
 
     /**
      * Private variable to hold the instance of the data processor
      */
     private DataProcessor processor = DataProcessor.getInstance();
-    
 
 
     /**
      * Constructor for the POI
      * @param name, the name of the POI
      */
-    public PointOfInterest(String name, int userID, boolean isUsermade, String POI_Type, int coordinatesX, int coordinatesY, int floorID, int buildingID, Boolean isFavourited, String description, int roomNumber, Boolean isVisible)  {
+    public PointOfInterest(String name, int userID, boolean isUsermade, String POI_Type, int coordinatesX, int coordinatesY, int floorID, int buildingID, Boolean isFavourited, String description, int roomNumber, boolean isVisible)  {
         this.name = name;
         this.userID = userID;
         this.isUserMade = isUsermade;
@@ -132,7 +131,7 @@ public class PointOfInterest {
     public int[] getCoordinates() {
         return this.coordinates;
     }
- 
+
     /** 
      * Getter for the floor ID of the POI
      * @return int of the floor ID
@@ -147,6 +146,47 @@ public class PointOfInterest {
      */
     public int getBuildingID() {
         return this.buildingID;
+    }
+
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+        json.put("name", this.name);
+        json.put("ID", this.ID);
+        json.put("userID", this.userID);
+        json.put("isUserMade", this.isUserMade);
+        json.put("POI_type", this.POI_type);
+        json.put("coordinates", new JSONArray(this.coordinates));
+        json.put("floorID", this.floorID);
+        json.put("buildingID", this.buildingID);
+        json.put("isFavourited", this.isFavourited);
+        json.put("description", this.description);
+        json.put("roomNumber", this.roomNumber);
+        json.put("isVisible", this.isVisible);
+        return json;
+    }
+    
+    /**
+     * Setter for POI X and Y position
+     */
+    public void setCoordinates(int x, int y) {
+        this.coordinates[0] = x;
+        this.coordinates[1] = y;
+    }
+
+    public void setName(String newName) {
+        this.name = newName;
+    }
+
+    public void setRoomNumber(int newRoomNumber) {
+        this.roomNumber = newRoomNumber;
+    }
+
+    public void setDescription(String newDesc) {
+        this.description = newDesc;
+    }
+
+    public void setPOItype(String newLayer) {
+        this.POI_type = newLayer;
     }
 
     /** 
@@ -180,23 +220,6 @@ public class PointOfInterest {
         return this.isVisible;
     }
 
-    public JSONObject toJSON() {
-        JSONObject json = new JSONObject();
-        json.put("name", this.name);
-        json.put("ID", this.ID);
-        json.put("userID", this.userID);
-        json.put("isUserMade", this.isUserMade);
-        json.put("POI_type", this.POI_type);
-        json.put("coordinates", new JSONArray(this.coordinates));
-        json.put("floorID", this.floorID);
-        json.put("buildingID", this.buildingID);
-        json.put("isFavourited", this.isFavourited);
-        json.put("description", this.description);
-        json.put("roomNumber", this.roomNumber);
-        json.put("isVisible", this.isVisible);
-        return json;
-    }
-
     /**
      * TODO: This should be temporary. Not sure how we want to set favourited for a particular user but also know how to get favourite
      * for a specific user because getIsFavourited() is for an entire POI. not sure how it will work for a POI that is not user-created and
@@ -218,5 +241,4 @@ public class PointOfInterest {
     public void setisVisible(boolean isVisible) {
         this.isVisible= isVisible;
     }
-
 }

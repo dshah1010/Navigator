@@ -740,19 +740,65 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         else if (isNavigationMode == false) {
             if (e.getSource() instanceof JLabel) {
                 /**
-                 * Get the coordinates of the mouse click
+                 * If on the map
                  */
-                JLabel label = (JLabel) e.getSource();
-                int x = e.getX();
-                int y = e.getY();
+                if (e.getSource() == map) {
+                    /**
+                     * Get the coordinates of the mouse click
+                     */
+                    JLabel label = (JLabel) e.getSource();
+                    int x = e.getX();
+                    int y = e.getY();
 
+                    /**
+                     * Create a new Point of Interest with EditingTool by opening POICreationWindow with the coordinates
+                     * This window will work with EditingTool to create a new POI
+                     */
+                    POICreationWindow poiCreationWindow = new POICreationWindow(x, y);
+                    poiCreationWindow.getFrame().setLocationRelativeTo(mapPanel);
+                    poiCreationWindow.setVisibleFrame();
+                }
                 /**
-                 * Create a new Point of Interest with EditingTool by opening POICreationWindow with the coordinates
-                 * This window will work with EditingTool to create a new POI
+                 * Open up an edit window for the POI object
                  */
-                POICreationWindow poiCreationWindow = new POICreationWindow(x, y);
-                poiCreationWindow.getFrame().setLocationRelativeTo(mapPanel);
-                poiCreationWindow.setVisibleFrame();
+                else {                    
+                    /**
+                     * Get the label that was clicked
+                     */
+                    JLabel label = (JLabel) e.getSource();
+
+                    /**
+                     * Get the POI Id of the label
+                     */
+                    String id = label.getText();
+
+                    /**
+                     * Get the POI object from the POI Id
+                     */
+                    PointOfInterest poi = dataProcessor.getPOI(Integer.parseInt(id));
+
+                    /**
+                     * Check if user is an admin and POI type is not user
+                     */
+                    if (user.getIsAdmin() == false && !(poi.getPOItype().contains("USER"))) {
+                        /**
+                         * Open up a pop-up window saying they can't edit this POI
+                         */
+                        JOptionPane.showMessageDialog(null, "You can't edit this POI", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    /**
+                     * Create a new POI Editing Window object and pass the POI object to it
+                     */
+                    POIEditWindow poiEditWindow = new POIEditWindow(poi);
+
+                    /**
+                     * Display the POIInfoWindow right on top of the map
+                     */
+                    poiEditWindow.getFrame().setLocationRelativeTo(mapPanel);
+                    poiEditWindow.setVisibleFrame();
+                }
             }
         }
     }
@@ -772,7 +818,6 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
             mouseStartX = e.getX();
             mouseStartY = e.getY();
         }
-        
     }
 
     public void mouseDragged(MouseEvent e) {
@@ -784,10 +829,67 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         }
     }
 
-    public void mouseReleased(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
+    /**
+     * Set navigation mode to true
+     */
+    public void setNavigationMode() {
+        isNavigationMode = true;
+        mapMode.setText("Navigation Mode");
     }
+
+    /**
+     * Method to update POI coordinates on map
+     */
+    public void mouseReleased(MouseEvent e) {
+        if (e.getSource() != map) {
+            if (isNavigationMode == false) {
+                if (e.getSource() instanceof JLabel && e.isAltDown()) {
+                    JLabel label = (JLabel) e.getSource();
+                    /**
+                     * Get the POI Id of the label
+                     */
+                    String id = label.getText();
+                    /**
+                     * Get the POI object from the POI Id
+                     */
+                    PointOfInterest poi = dataProcessor.getPOI(Integer.parseInt(id));
+
+                    /**
+                     * Check if user is an admin and POI type is not user
+                     */
+                    if (user.getIsAdmin() == false && !(poi.getPOItype().contains("USER"))) {
+                        /**
+                         * Open up a pop-up window saying they can't edit this POI
+                         */
+                        JOptionPane.showMessageDialog(null, "You can't move this POI", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    /**
+                     * Get the coordinates of the mouse relative to the map's dimensions
+                     */
+                    int x = poi.getCoordinates()[0] + e.getX();
+                    int y = poi.getCoordinates()[1] + e.getY();
+
+                    /**
+                     * Update the POI coordinates
+                     */
+                    poi.setCoordinates(x, y);
+                    try {
+                        dataProcessor.editPointOfInterestInJsonFile(poi);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+
+                    /**
+                     * Refresh the map
+                     */
+                    displayPOIs();
+                    
+                }
+            }
+        }
+}
 
     public void mouseMoved(MouseEvent e) {
         // TODO Auto-generated method stub
