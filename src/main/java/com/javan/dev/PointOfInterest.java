@@ -22,18 +22,20 @@ public class PointOfInterest {
     private String description;
     private int roomNumber;
     private String mapFilePath;
+    private Boolean isVisible;
 
     /**
      * Private variable to hold the instance of the data processor
      */
     private DataProcessor processor = DataProcessor.getInstance();
+    
 
 
     /**
      * Constructor for the POI
      * @param name, the name of the POI
      */
-    public PointOfInterest(String name, int userID, boolean isUsermade, String POI_Type, int coordinatesX, int coordinatesY, int floorID, int buildingID, Boolean isFavourited, String description, int roomNumber)  {
+    public PointOfInterest(String name, int userID, boolean isUsermade, String POI_Type, int coordinatesX, int coordinatesY, int floorID, int buildingID, Boolean isFavourited, String description, int roomNumber, Boolean isVisible)  {
         this.name = name;
         this.userID = userID;
         this.isUserMade = isUsermade;
@@ -47,6 +49,7 @@ public class PointOfInterest {
         this.roomNumber = roomNumber;
         this.ID = processor.makeNewPOIID();
         this.mapFilePath = processor.loadMapFilePath(this.buildingID, this.floorID, "FLOOR");
+        this.isVisible = isVisible;
     }
 
     /**
@@ -129,7 +132,7 @@ public class PointOfInterest {
     public int[] getCoordinates() {
         return this.coordinates;
     }
-
+ 
     /** 
      * Getter for the floor ID of the POI
      * @return int of the floor ID
@@ -169,6 +172,13 @@ public class PointOfInterest {
     public int getRoomNumber() {
         return this.roomNumber;
     }
+    /**
+     * Getter for the isVisible state of POI
+     * @return boolena of isVisible state
+     */
+    public Boolean getisVisible(){
+        return this.isVisible;
+    }
 
     public JSONObject toJSON() {
         JSONObject json = new JSONObject();
@@ -183,6 +193,7 @@ public class PointOfInterest {
         json.put("isFavourited", this.isFavourited);
         json.put("description", this.description);
         json.put("roomNumber", this.roomNumber);
+        json.put("isVisible", this.isVisible);
         return json;
     }
 
@@ -201,4 +212,11 @@ public class PointOfInterest {
     public void setID(int ID) {
         this.ID = ID;
     }
+    /*
+     * Setter for isVisible 
+     */
+    public void setisVisible(boolean isVisible) {
+        this.isVisible= isVisible;
+    }
+
 }
