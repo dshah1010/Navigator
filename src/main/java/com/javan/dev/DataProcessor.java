@@ -186,8 +186,10 @@ public final class DataProcessor {
      * @return coords, int[] of x and y coordinates
      */
     public int[] getPOIPosition(int poiID) {
-        PointOfInterest poi = getPOI(poiID);
-        return poi.getCoordinates();
+        int x = (int) (Math.random() * 1000);
+        int y = (int) (Math.random() * 1000);
+        int[] coords = {x, y};
+        return coords;
     }
 
     
