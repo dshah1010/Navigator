@@ -414,7 +414,8 @@ public final class DataProcessor {
                     Boolean isFavourited = poiObject.get("isFavourited").getAsBoolean();
                     String description = poiObject.get("description").getAsString();
                     int roomNumber = poiObject.get("roomNumber").getAsInt();
-                    PointOfInterest POIdata = new PointOfInterest(name, userID, isUserMade, POI_Type, coordinateArray[0], coordinateArray[1], floorID, buildingID, isFavourited, description, roomNumber);
+                    boolean isVisible = poiObject.get("isVisible").getAsBoolean();
+                    PointOfInterest POIdata = new PointOfInterest(name, userID, isUserMade, POI_Type, coordinateArray[0], coordinateArray[1], floorID, buildingID, isFavourited, description, roomNumber, isVisible);
                     POIdata.setID(poiID);
                     return POIdata;
                 }       
@@ -650,6 +651,4 @@ public final class DataProcessor {
         FloorMap mapObject = new FloorMap(buildingID, mapID);
         return mapObject;
     }
-    
-    
 }
