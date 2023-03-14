@@ -166,7 +166,7 @@ public final class DataProcessor {
              */
             for (int i = 0; i < campusMap.getBuildingArray().size(); i++) {
                 BuildingMap building = campusMap.getBuildingArray().get(i);
-                PointOfInterest poi = new PointOfInterest(building.getMapName(), building.getMapID(), false, "BUILDING", 0, 0, 1, building.getMapID(), false, "", 0);
+                PointOfInterest poi = new PointOfInterest(building.getMapName(), building.getMapID(), false, "BUILDING", 0, 0, 1, building.getMapID(), false, "", 0, true);
                 universalPOIs.add(poi);
             }
         }
@@ -650,4 +650,6 @@ public final class DataProcessor {
         FloorMap mapObject = new FloorMap(buildingID, mapID);
         return mapObject;
     }
+    
+    
 }
