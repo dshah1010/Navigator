@@ -142,6 +142,8 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          * Add the scroll pane to the map panel
          */
         scrollPane.setViewportView(imagePanel);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(12);
+        scrollPane.getHorizontalScrollBar().setUnitIncrement(12);
 
         /**
          * Make it so that the scroll pane displays the upper third of the map image when the UI is opened (use ImageIcon dimensions)
