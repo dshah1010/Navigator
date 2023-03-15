@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * @version: 1.0
  * @since: 1.0
  */
-public final class LoginComponent extends JPanel implements ActionListener, FocusListener, MouseListener {
+public final class LoginComponent extends JPanel implements ActionListener, FocusListener, MouseListener, KeyListener {
     /**
      * Initialize private variables for the UI
      */
@@ -89,6 +89,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         mainPanel.add(loginPanel, BorderLayout.CENTER);
+        mainPanel.addKeyListener(this);
         createBackground(mainPanel);
 
         /**
@@ -243,6 +244,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
          * Focus listener to handle what text appears and when for the text field
          */
         newTextField.addFocusListener(this);
+        newTextField.addKeyListener(this);
 
         return newTextField;
     }
@@ -270,6 +272,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
          * Add action listener to password field to show default text of Password when focus is gained
          */
         passwordInput.addFocusListener(this);
+        passwordInput.addKeyListener(this);
         passwordInput.setEchoChar((char) 0);
 
         return passwordInput;
@@ -436,6 +439,145 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
         }
     }
 
+    /**
+     * Method to do login button actions
+     */
+    public void loginButtonAction() {
+        /**
+         * If username or password field are empty (the defaults), do nothing
+         */
+        if (usernameInput.getText().contains("Username:") || new String(passwordInput.getPassword()).contains("Password:")) {
+            JOptionPane.showMessageDialog(null, "Please enter a username and password");
+            return;
+        }
+
+        /**
+         * Verify the login credentials
+         */
+        String username = usernameInput.getText();
+        String password = new String(passwordInput.getPassword());
+        int userID = processor.authenticateLogin(username, password);
+
+        /**
+         * Empty text fields
+         */
+        usernameInput.setText("");
+        passwordInput.setText("");
+
+        /**
+         * If the login is valid (isValid != 0), then remove the login panel from the frame and add the main panel
+         */
+        if (userID != -1) {
+            user.setUsername(username);
+            user.setPassword(password);
+            user.setUserID(userID);
+            /**
+             * Set admin status for admin
+             */
+            if (user.getUsername().contains("admin")) {
+                user.setIsAdmin(true);
+            }
+            else {
+                user.setIsAdmin(false);
+            }
+            /**
+             * Remove the login panel from the frame and set loggedIn to true for the rest of the program
+             */
+            remove(loginPanel);
+            revalidate();
+            repaint();
+            /**
+             * Update map component to display Floor POIs
+             */
+            mapComponent.clearPois();
+            mapComponent.displayPOIs();
+            mapComponent.setNavigationMode();
+            /**
+             * Update sidebar component to display Floor POIs
+             */
+            poiComponent.updatePOIComponent();
+            /**
+             * Change to campus map
+             */
+            mapComponent.changeToCampusMap();
+            isLoggedIn = true;
+        }
+        else {
+            /**
+             * Display a message informing the user that they have entered an invalid username or password
+             */
+            JOptionPane.showMessageDialog(null, "Invalid username or password");
+        }
+    }
+
+    /**
+     * Method to do create account button actions
+     */
+    public void createAccountButtonAction() {
+        /**
+         * If username, password, or confirm password field are empty (the defaults), do nothing
+         */
+        if (createAccountUsername.getText().contains("Username:") || new String(createAccountPassword.getPassword()).contains("Password:") || new String(createAccountConfirmPassword.getPassword()).contains("Password:")) {
+            JOptionPane.showMessageDialog(null, "Please enter a username and password");
+            return;
+        }
+
+        /**
+         * Verify the create account credentials
+         */
+        String username = createAccountUsername.getText();
+        String password = new String(createAccountPassword.getPassword());
+        String confirmPassword = new String(createAccountConfirmPassword.getPassword());
+
+        /**
+         * Don't allow admin creation
+         */
+        if (username.contains("admin")) {
+            JOptionPane.showMessageDialog(null, "Cannot create admin account");
+            return;
+        }
+
+        /**
+         * If the password and confirm password fields do not match, display a message informing the user
+         */
+        if (!password.equals(confirmPassword)) {
+            JOptionPane.showMessageDialog(null, "Password and Confirm Password do not match.");
+            return;
+        }
+        else {
+            user.setUsername(username);
+            user.setPassword(password);
+            /**
+             * Set admin status for admin
+             */
+            if (user.getUsername() == "admin") {
+                user.setIsAdmin(true);
+            }
+            else {
+                user.setIsAdmin(false);
+            }
+            /**
+             * Create a user account and JSON storage of the user account using the DataProcessor class
+             */
+            boolean validLogin = processor.createAccount(username, password);
+            /**
+             * Bring user to login screen
+             */
+            if (validLogin) {
+                openLoginPanel();
+            }
+
+            else {
+                JOptionPane.showMessageDialog(null, "Error: Account with that username already exists.");
+            }
+            /**
+             * Reset password flags
+             */
+            passwordFlag = true;
+            confirmPassFlag = true;
+        }
+    }
+
 
     /**
      * Method to get username and password when login button is pressed, creating a User class to verify login\
@@ -448,138 +590,13 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
          * Logging In
          */
         if (e.getSource() == loginButton) {
-            /**
-             * If username or password field are empty (the defaults), do nothing
-             */
-            if (usernameInput.getText().contains("Username:") || new String(passwordInput.getPassword()).contains("Password:")) {
-                JOptionPane.showMessageDialog(null, "Please enter a username and password");
-                return;
-            }
-
-            /**
-             * Verify the login credentials
-             */
-            String username = usernameInput.getText();
-            String password = new String(passwordInput.getPassword());
-            int userID = processor.authenticateLogin(username, password);
-
-            /**
-             * Empty text fields
-             */
-            usernameInput.setText("");
-            passwordInput.setText("");
-
-            /**
-             * If the login is valid (isValid != 0), then remove the login panel from the frame and add the main panel
-             */
-            if (userID != -1) {
-                user.setUsername(username);
-                user.setPassword(password);
-                user.setUserID(userID);
-                /**
-                 * Set admin status for admin
-                 */
-                if (user.getUsername().contains("admin")) {
-                    user.setIsAdmin(true);
-                }
-                else {
-                    user.setIsAdmin(false);
-                }
-                /**
-                 * Remove the login panel from the frame and set loggedIn to true for the rest of the program
-                 */
-                remove(loginPanel);
-                revalidate();
-                repaint();
-                /**
-                 * Update map component to display Floor POIs
-                 */
-                mapComponent.clearPois();
-                mapComponent.displayPOIs();
-                mapComponent.setNavigationMode();
-                /**
-                 * Update sidebar component to display Floor POIs
-                 */
-                poiComponent.updatePOIComponent();
-                /**
-                 * Change to campus map
-                 */
-                mapComponent.changeToCampusMap();
-                isLoggedIn = true;
-            }
-            else {
-                /**
-                 * Display a message informing the user that they have entered an invalid username or password
-                 */
-                JOptionPane.showMessageDialog(null, "Invalid username or password");
-            }
+            loginButtonAction();
         }
         /**
          * Creating Account
          */
         else if (e.getSource() == createAccountButton) {
-            /**
-             * If username, password, or confirm password field are empty (the defaults), do nothing
-             */
-            if (createAccountUsername.getText().contains("Username:") || new String(createAccountPassword.getPassword()).contains("Password:") || new String(createAccountConfirmPassword.getPassword()).contains("Password:")) {
-                JOptionPane.showMessageDialog(null, "Please enter a username and password");
-                return;
-            }
-
-            /**
-             * Verify the create account credentials
-             */
-            String username = createAccountUsername.getText();
-            String password = new String(createAccountPassword.getPassword());
-            String confirmPassword = new String(createAccountConfirmPassword.getPassword());
-
-            /**
-             * Don't allow admin creation
-             */
-            if (username.contains("admin")) {
-                JOptionPane.showMessageDialog(null, "Cannot create admin account");
-                return;
-            }
-
-            /**
-             * If the password and confirm password fields do not match, display a message informing the user
-             */
-            if (!password.equals(confirmPassword)) {
-                JOptionPane.showMessageDialog(null, "Password and Confirm Password do not match.");
-                return;
-            }
-            else {
-                user.setUsername(username);
-                user.setPassword(password);
-                /**
-                 * Set admin status for admin
-                 */
-                if (user.getUsername() == "admin") {
-                    user.setIsAdmin(true);
-                }
-                else {
-                    user.setIsAdmin(false);
-                }
-                /**
-                 * Create a user account and JSON storage of the user account using the DataProcessor class
-                 */
-                boolean validLogin = processor.createAccount(username, password);
-                /**
-                 * Bring user to login screen
-                 */
-                if (validLogin) {
-                    openLoginPanel();
-                }
-
-                else {
-                    JOptionPane.showMessageDialog(null, "Error: Account with that username already exists.");
-                }
-                /**
-                 * Reset password flags
-                 */
-                passwordFlag = true;
-                confirmPassFlag = true;
-            }
+            createAccountButtonAction();
         }
     }
 
@@ -746,5 +763,26 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
      * @return None
      */
     public void mouseReleased(MouseEvent e) {
+    }
+
+    /**
+     * Method to make login button / create account button do what it does in actionListener when Enter key is pressed
+     */
+    public void keyTyped(KeyEvent e) {
+        if (e.getKeyChar() == KeyEvent.VK_ENTER) {
+            if (isLoginWindowOpen == true) {
+                loginButtonAction();
+            }
+            else {
+                createAccountButtonAction();
+            }
+        }
+    }
+
+    public void keyPressed(KeyEvent e) {
+    }
+
+    public void keyReleased(KeyEvent e) {
+
     }
 }
