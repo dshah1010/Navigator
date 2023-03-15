@@ -36,14 +36,17 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
 
     private MapComponent currMap;
 
+    private DataProcessor currProcessor;
+
     /**
      * This is the constructor of a SearchResults object. 
      * It will create a JList and JFrame to show a new window with the search results.
      * @param listData  This is the arra of Points of Interest that were found based on the search.
      */
-    public SearchResultsWindow(ArrayList<PointOfInterest> listData, String searchText, MapComponent currMap) {
+    public SearchResultsWindow(ArrayList<PointOfInterest> listData, String searchText, MapComponent currMap, DataProcessor processor) {
         currSelected = null;
         this.currMap = currMap;
+        this.currProcessor = processor;
         /**
          * Create the new frame.
          */
@@ -131,11 +134,17 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
                  * Close the current frame and go to currently selected POI.
                  */
                 frame.dispose();
-                
                 System.out.println("Going to " + currSelected + " on the map."); //test
 
-                currMap.navigateToPOI(currSelected.getID());
-                currSelected = null;
+                if (currSelected.getFloorID() == currMap.getFloorMapObject().getMapID()) {
+                    currMap.navigateToPOI(currSelected.getID());
+                    currSelected = null;
+                }
+                else {
+                    currMap.changeMap(currProcessor.getFloorMapFromMapID(currSelected.getBuildingID(), currSelected.getFloorID()));
+                    currMap.navigateToPOI(currSelected.getID());
+                    currSelected = null;
+                }
             }
         }
     }

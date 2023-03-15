@@ -16,34 +16,7 @@ import com.google.gson.*;
 import com.google.gson.JsonIOException;
 
 /**
-<<<<<<< HEAD
  * @author: Riley Emma Gavigan <rgavigan@uwo.ca>, Dylan Sta Ana <dstaana@uwo.ca>, Brad McGlynn <bmcglyn4@uwo.ca>, Deep Ashishkumar Shah <dshah228@uwo.ca>
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
- * @author: Riley Emma Gavigan <rgavigan@uwo.ca>, Dylan Sta Ana <dstaana@uwo.ca>, Brad McGlynn <bmcglyn4@uwo.ca>, Deep Ashishkumar Shah <dshah228@uwo.ca>
-=======
- * @author: Riley Emma Gavigan <rgavigan@uwo.ca>, Dylan Sta Ana <dstaana@uwo.ca>, Brad McGlynn <bmcglyn4@uwo.ca>, Jake Choi <jchoi492@uwo.ca>
->>>>>>> 44140c1 (COMPSCI2212W2023GROUP1-82 +)
-=======
-=======
->>>>>>> f3ff06b (COMPSCI2212W2023GROUP1-82 +)
- * @author: Riley Emma Gavigan <rgavigan@uwo.ca>, Dylan Sta Ana <dstaana@uwo.ca>, Brad McGlynn <bmcglyn4@uwo.ca>, Jake Choi <jchoi492@uwo.ca>
-=======
- * @author: Riley Emma Gavigan <rgavigan@uwo.ca>, Dylan Sta Ana <dstaana@uwo.ca>, Brad McGlynn <bmcglyn4@uwo.ca>, Deep Ashishkumar Shah <dshah228@uwo.ca>
->>>>>>> 7e62831 (COMPSCI2212W2023GROUP1-64 - Changing user favourites list type from boolean to list)
-<<<<<<< HEAD
->>>>>>> 1c6d3ae (COMPSCI2212W2023GROUP1-64 - Changing user favourites list type from boolean to list)
-=======
-=======
- * @author: Riley Emma Gavigan <rgavigan@uwo.ca>, Dylan Sta Ana <dstaana@uwo.ca>, Brad McGlynn <bmcglyn4@uwo.ca>, Deep Ashishkumar Shah <dshah228@uwo.ca>
-=======
- * @author: Riley Emma Gavigan <rgavigan@uwo.ca>, Dylan Sta Ana <dstaana@uwo.ca>, Brad McGlynn <bmcglyn4@uwo.ca>, Jake Choi <jchoi492@uwo.ca>
->>>>>>> 7ac5d71 (COMPSCI2212W2023GROUP1-82 +)
->>>>>>> 52c2067 (COMPSCI2212W2023GROUP1-82 +)
->>>>>>> f3ff06b (COMPSCI2212W2023GROUP1-82 +)
->>>>>>> ad02724 (COMPSCI2212W2023GROUP1-82 +)
  * @version: 1.1
  * @since: 1.0
  */
@@ -213,10 +186,8 @@ public final class DataProcessor {
      * @return coords, int[] of x and y coordinates
      */
     public int[] getPOIPosition(int poiID) {
-        int x = (int) (Math.random() * 1000);
-        int y = (int) (Math.random() * 1000);
-        int[] coords = {x, y};
-        return coords;
+        PointOfInterest poi = getPOI(poiID);
+        return poi.getCoordinates();
     }
 
     
