@@ -10,7 +10,7 @@ import java.io.IOException;
 
 
 /**
- * @author: Riley Emma Gavigan <rgavigan@uwo.ca>
+ * @author: Riley Emma Gavigan <rgavigan@uwo.ca>, Deep Ashishkumar Shah <dshah228@uwo.ca>
  * @version: 1.0
  * @since: 1.0
  */
@@ -206,7 +206,7 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
                 Integer.parseInt(newPOIData.get(4)), 
                 mapComponent.getMapObject().getMapID(), 
                 mapComponent.getFloorMapObject().getBuildingID(), 
-                false, newPOIData.get(2), 
+                new ArrayList<Integer>(), newPOIData.get(2), 
                 Integer.parseInt(newPOIData.get(1)), true
                 );
             try {

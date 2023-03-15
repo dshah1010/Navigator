@@ -2,6 +2,7 @@ package com.javan.dev;
 import org.json.JSONObject;
 import org.json.JSONArray;
 import com.google.gson.*;
+import java.util.*;
 
 /**
  * @author: Deep Shah <dshah228@uwo.ca>
@@ -18,7 +19,7 @@ public class PointOfInterest {
     private int[] coordinates = {0,0};
     private int floorID;
     private int buildingID;
-    private Boolean isFavourited;
+    private ArrayList<Integer> userFavouritesList = new ArrayList<Integer> ();
     private String description;
     private int roomNumber;
     private String mapFilePath;
@@ -34,7 +35,7 @@ public class PointOfInterest {
      * Constructor for the POI
      * @param name, the name of the POI
      */
-    public PointOfInterest(String name, int userID, boolean isUsermade, String POI_Type, int coordinatesX, int coordinatesY, int floorID, int buildingID, Boolean isFavourited, String description, int roomNumber, boolean isVisible)  {
+    public PointOfInterest(String name, int userID, boolean isUsermade, String POI_Type, int coordinatesX, int coordinatesY, int floorID, int buildingID, ArrayList<Integer> userFavouritesList, String description, int roomNumber, boolean isVisible)  {
         this.name = name;
         this.userID = userID;
         this.isUserMade = isUsermade;
@@ -43,7 +44,7 @@ public class PointOfInterest {
         this.coordinates[1] = coordinatesY;
         this.floorID = floorID;
         this.buildingID = buildingID;
-        this.isFavourited = isFavourited;
+        this.userFavouritesList = userFavouritesList;
         this.description = description;
         this.roomNumber = roomNumber;
         this.ID = processor.makeNewPOIID();
@@ -158,7 +159,7 @@ public class PointOfInterest {
         json.put("coordinates", new JSONArray(this.coordinates));
         json.put("floorID", this.floorID);
         json.put("buildingID", this.buildingID);
-        json.put("isFavourited", this.isFavourited);
+        json.put("userFavouritesList", this.userFavouritesList);
         json.put("description", this.description);
         json.put("roomNumber", this.roomNumber);
         json.put("isVisible", this.isVisible);
@@ -193,8 +194,8 @@ public class PointOfInterest {
      * Getter for the favourited POI
      * @return int of the favourited 
      */
-    public Boolean getIsFavourited() {
-        return this.isFavourited;
+    public ArrayList<Integer> getIsFavourited() {
+        return this.userFavouritesList;
     }
 
     /**
@@ -225,8 +226,17 @@ public class PointOfInterest {
      * for a specific user because getIsFavourited() is for an entire POI. not sure how it will work for a POI that is not user-created and
      * favourited by multiple users
      */
-    public void setIsFavourited(boolean isFavourited) {
-        this.isFavourited = isFavourited;
+    public void setIsFavourited(int userID) {
+        Boolean in = false;
+        for (int i = 0; i < userFavouritesList.size(); i++) {
+            if (userFavouritesList.get(i) == userID) {
+                userFavouritesList.remove(i);
+                in = true;
+            }
+        }
+        if (!in) {
+            userFavouritesList.add(userID);
+        }
     }
 
     /**
