@@ -189,7 +189,6 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
         button.setBackground(Color.WHITE);
         button.setForeground(Color.BLACK);
         button.setFocusPainted(false);
-        //button.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         button.setFont(new Font("Georgia", Font.PLAIN, 19));
         button.addActionListener(this);
         button.addMouseListener(this);
