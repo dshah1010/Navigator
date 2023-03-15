@@ -144,6 +144,7 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
                     currMap.changeMap(currProcessor.getFloorMapFromMapID(currSelected.getBuildingID(), currSelected.getFloorID()));
                     currMap.navigateToPOI(currSelected.getID());
                     currSelected = null;
+                    
                 }
             }
         }
