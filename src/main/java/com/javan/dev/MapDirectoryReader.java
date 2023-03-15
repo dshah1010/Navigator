@@ -98,7 +98,7 @@ public class MapDirectoryReader {
                 /**
                  * Loop through each image file and add it to the JSON array
                  */
-                String imagePath = imageFile.getAbsolutePath();
+                String imagePath = imageFile.getPath();
                 mapJson.put("filePath", imagePath);
                 mapsJson.put(mapJson);
                 
@@ -116,7 +116,7 @@ public class MapDirectoryReader {
             /**
              * Set the building path in the JSON object
              */
-            String buildingPath = subdirectory.getAbsolutePath();
+            String buildingPath = subdirectory.getPath();
             buildingJson.put("filePath", buildingPath);
     
             /**
