@@ -163,6 +163,7 @@ public class PointOfInterest {
         json.put("description", this.description);
         json.put("roomNumber", this.roomNumber);
         json.put("isVisible", this.isVisible);
+        System.out.println(json);
         return json;
     }
     
@@ -194,8 +195,13 @@ public class PointOfInterest {
      * Getter for the favourited POI
      * @return int of the favourited 
      */
-    public ArrayList<Integer> getIsFavourited() {
-        return this.userFavouritesList;
+    public Boolean getIsFavourited(int userID) {
+        for (int id : this.userFavouritesList) {
+            if(id == userID) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -230,13 +236,14 @@ public class PointOfInterest {
         Boolean in = false;
         for (int i = 0; i < userFavouritesList.size(); i++) {
             if (userFavouritesList.get(i) == userID) {
-                userFavouritesList.remove(i);
+                this.userFavouritesList.remove(i);
                 in = true;
             }
         }
         if (!in) {
-            userFavouritesList.add(userID);
+            this.userFavouritesList.add(userID);
         }
+        
     }
 
     /**

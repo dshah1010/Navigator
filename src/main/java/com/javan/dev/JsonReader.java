@@ -219,11 +219,11 @@ public class JsonReader {
                 JsonArray userFavouritesArray = poiObject.getAsJsonArray("userFavouritesList");
                 ArrayList<Integer> userFavouritesData = new ArrayList<Integer>();
 
-                if (userFavouritesArray != null) {
-                    for (int i =0; i < userFavouritesArray.size(); i++) {
+                if (userFavouritesArray.size() > 0) {
+                    for (int i = 0; i < userFavouritesArray.size(); i++) {
                         userFavouritesData.add(i, userFavouritesArray.getAsInt());
                     }
-                }
+                } System.out.println(userFavouritesData);
 
                 if (userFavouritesData.contains(userID)) {
 

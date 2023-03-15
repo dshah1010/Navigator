@@ -446,6 +446,7 @@ public final class DataProcessor {
 
                 JsonObject poiObject = POI.getAsJsonObject();
                 JsonArray userFavouritesArray = poiObject.getAsJsonArray("userFavouritesList");
+                System.out.println(userFavouritesArray);
                 ArrayList<Integer> userFavouritesData = new ArrayList<Integer>();
 
                 if (userFavouritesArray != null) {
