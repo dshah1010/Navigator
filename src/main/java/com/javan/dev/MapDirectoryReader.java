@@ -31,6 +31,11 @@ public class MapDirectoryReader {
         File directory = new File(directoryPath);
         File[] subdirectories = directory.listFiles();
 
+        /**
+         * Sort the subdirectories alphabetically
+         */
+        java.util.Arrays.sort(subdirectories);
+
         int mapID = 1;
         int buildingId = 1;
         /**
@@ -93,7 +98,7 @@ public class MapDirectoryReader {
                 /**
                  * Loop through each image file and add it to the JSON array
                  */
-                String imagePath = imageFile.getAbsolutePath();
+                String imagePath = imageFile.getPath();
                 mapJson.put("filePath", imagePath);
                 mapsJson.put(mapJson);
                 
@@ -111,7 +116,7 @@ public class MapDirectoryReader {
             /**
              * Set the building path in the JSON object
              */
-            String buildingPath = subdirectory.getAbsolutePath();
+            String buildingPath = subdirectory.getPath();
             buildingJson.put("filePath", buildingPath);
     
             /**
