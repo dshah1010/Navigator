@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 /**
- * @author: Riley Emma Gavigan <rgavigan@uwo.ca>
+ * @author: Riley Emma Gavigan <rgavigan@uwo.ca>, Deep Ashishkumar Shah <dshah228@uwo.ca>
  * @version: 1.0
  * @since: 1.0
  */
@@ -84,7 +84,7 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
         /**
          * Add the favourite button to the panel
          */
-        if (!poi.getIsFavourited()) {
+        if (poi.getIsFavourited() == null) {
             /**
              * Make JButton with icon image
              */
@@ -201,16 +201,16 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
         /**
          * If favourited, change to unfavourited
          */
-        if (poi.getIsFavourited()) {
+        if (poi.getIsFavourited() != null) {
             favourite.setIcon(unfavouriteIcon);
-            poi.setIsFavourited(false);
+            poi.setIsFavourited(userInstance.getUserID());
         }
         /**
          * If unfavourited, change to favourited
          */
         else {
             favourite.setIcon(favouriteIcon);
-            poi.setIsFavourited(true);
+            poi.setIsFavourited(userInstance.getUserID());
         }
     }
 

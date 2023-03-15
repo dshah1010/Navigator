@@ -16,7 +16,7 @@ import com.google.gson.*;
 import com.google.gson.JsonIOException;
 
 /**
- * @author: Riley Emma Gavigan <rgavigan@uwo.ca>, Dylan Sta Ana <dstaana@uwo.ca>, Brad McGlynn <bmcglyn4@uwo.ca>
+ * @author: Riley Emma Gavigan <rgavigan@uwo.ca>, Dylan Sta Ana <dstaana@uwo.ca>, Brad McGlynn <bmcglyn4@uwo.ca>, Deep Ashishkumar Shah <dshah228@uwo.ca>
  * @version: 1.1
  * @since: 1.0
  */
@@ -166,7 +166,7 @@ public final class DataProcessor {
              */
             for (int i = 0; i < campusMap.getBuildingArray().size(); i++) {
                 BuildingMap building = campusMap.getBuildingArray().get(i);
-                PointOfInterest poi = new PointOfInterest(building.getMapName(), building.getMapID(), false, "BUILDING", 0, 0, 1, building.getMapID(), false, "", 0, true);
+                PointOfInterest poi = new PointOfInterest(building.getMapName(), building.getMapID(), false, "BUILDING", 0, 0, 1, building.getMapID(), new ArrayList<Integer>(), "", 0, true);
                 universalPOIs.add(poi);
             }
         }
@@ -385,14 +385,26 @@ public final class DataProcessor {
          * attempts to read file 
          */
         try {
+
             reader = new FileReader("data/PointOfInterests/PointOfInterestMetadata.json");
             JsonArray POIDataArray= JsonParser.parseReader(reader).getAsJsonArray();
+
             /*
              * loops through json file to find POIs available to this user
              */ 
 
             for (JsonElement POI : POIDataArray) {
+
                 JsonObject poiObject = POI.getAsJsonObject();
+                JsonArray userFavouritesArray = poiObject.getAsJsonArray("userFavouritesList");
+                ArrayList<Integer> userFavouritesData = new ArrayList<Integer>();
+
+                if (userFavouritesArray != null) {
+                    for (int i =0; i < userFavouritesArray.size(); i++) {
+                        userFavouritesData.add(i, userFavouritesArray.getAsInt());
+                    }
+                }
+
                 // either developer made or user made POIs
                 if (poiObject.get("ID").getAsInt() == poiID){
                     /*
@@ -406,16 +418,23 @@ public final class DataProcessor {
                     String POI_Type = poiObject.get("POI_type").getAsString();
                     JsonArray jsoncoordinateArray = poiObject.get("coordinates").getAsJsonArray();
                     int[] coordinateArray = new int[2];
+
                     for (int i=0; i< coordinateArray.length; i++){
                         coordinateArray[i] = jsoncoordinateArray.get(i).getAsInt();
                     }
+
                     int floorID = poiObject.get("floorID").getAsInt();
                     int buildingID = poiObject.get("buildingID").getAsInt();
-                    Boolean isFavourited = poiObject.get("isFavourited").getAsBoolean();
+                    ArrayList<Integer> userFavouritesList = new ArrayList<Integer>();
+
+                    for (int i = 0; i < userFavouritesData.size(); i++) {
+                        userFavouritesList.add(i, userFavouritesData.get(i));
+                    }
+
                     String description = poiObject.get("description").getAsString();
                     int roomNumber = poiObject.get("roomNumber").getAsInt();
                     boolean isVisible = poiObject.get("isVisible").getAsBoolean();
-                    PointOfInterest POIdata = new PointOfInterest(name, userID, isUserMade, POI_Type, coordinateArray[0], coordinateArray[1], floorID, buildingID, isFavourited, description, roomNumber, isVisible);
+                    PointOfInterest POIdata = new PointOfInterest(name, userID, isUserMade, POI_Type, coordinateArray[0], coordinateArray[1], floorID, buildingID, userFavouritesList, description, roomNumber, isVisible);
                     POIdata.setID(poiID);
                     return POIdata;
                 }       
