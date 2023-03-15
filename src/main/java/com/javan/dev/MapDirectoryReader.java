@@ -31,6 +31,11 @@ public class MapDirectoryReader {
         File directory = new File(directoryPath);
         File[] subdirectories = directory.listFiles();
 
+        /**
+         * Sort the subdirectories alphabetically
+         */
+        java.util.Arrays.sort(subdirectories);
+
         int mapID = 1;
         int buildingId = 1;
         /**
