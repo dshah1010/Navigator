@@ -209,7 +209,7 @@ public final class DataProcessor {
              * Checks to see if the POI user + floorNumber already exists
              */
             if (currentPoi.get("userID") == poiJson.get("userID") 
-            && currentPoi.get("roomNumber") == poiJson.get("roomNumber")) {
+            && currentPoi.get("roomNumber") == poiJson.get("roomNumber") && currentPoi.get("floorID") == poiJson.get("floorID")) {
                 return false;
             }
         }
@@ -258,6 +258,55 @@ public final class DataProcessor {
             counter += 1;
         }
         return false;
+    }
+
+    /**
+     * Method to delete a point of interest from the PointOfInterestMetadata.json file
+     * @param poi
+     * @return
+     * @throws IOException
+     */
+    public boolean deletePointOfInterestFromJsonFile(PointOfInterest poi) throws IOException {
+        String jsonString = new String(JsonReader.read("data/PointOfInterests/PointOfInterestMetadata.json"));
+        JSONArray jsonArray = new JSONArray(jsonString);
+        
+        JSONObject poiJson = poi.toJSON();
+        boolean isDeleted = false;
+        JSONArray newJsonArray = new JSONArray();
+
+        for (Object poiObject : jsonArray) {
+            JSONObject currentPoi = (JSONObject) poiObject;
+
+            /**
+             * Check to see if the POI ID matches a POI
+             */
+            if (currentPoi.get("ID") == poiJson.get("ID")) {
+                isDeleted = true;
+            }
+            else if (isDeleted == true) {
+                /**
+                 * Change the POI ID of every POI following to ID - 1 and update jsonArray
+                 */
+                currentPoi.put("ID", currentPoi.getInt("ID") - 1);
+                newJsonArray.put(currentPoi);
+            }
+            else {
+                /**
+                 * Add the POI to the new JSON Array
+                 */
+                newJsonArray.put(currentPoi);
+            }
+        }
+        FileWriter fileWriter;
+        try {
+            fileWriter = new FileWriter("data/PointOfInterests/PointOfInterestMetadata.json");
+            fileWriter.write(newJsonArray.toString());
+            fileWriter.flush();
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return isDeleted;
     }
 
 
