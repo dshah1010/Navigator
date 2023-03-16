@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+
 import com.google.gson.*;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -221,9 +223,13 @@ public class JsonReader {
 
                 if (userFavouritesArray.size() > 0) {
                     for (int i = 0; i < userFavouritesArray.size(); i++) {
-                        userFavouritesData.add(i, userFavouritesArray.getAsInt());
+                        /**
+                         * Get current value from the userFavouritesArray and store as int, then add to array
+                         */
+                        int userFavourite = userFavouritesArray.get(i).getAsInt();
+                        userFavouritesData.add(userFavourite);
                     }
-                } System.out.println(userFavouritesData);
+                }
 
                 if (userFavouritesData.contains(userID)) {
 
@@ -260,7 +266,11 @@ public class JsonReader {
                     arrayList.add(POIdata);
                 }   
             }
-            return arrayList;
+            /**
+             * Sort arraylist by the POI name alphabetically (Each POI object's name attribute)
+             * Put it into a new arraylist that will be returned
+             */
+            return sortPOIArray(arrayList);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -296,7 +306,11 @@ public class JsonReader {
 
                 if (userFavouritesArray != null) {
                     for (int i =0; i < userFavouritesArray.size(); i++) {
-                        userFavouritesData.add(i, userFavouritesArray.getAsInt());
+                        /**
+                         * Get current value from the userFavouritesArray and store as int, then add to array
+                         */
+                        int userFavourite = userFavouritesArray.get(i).getAsInt();
+                        userFavouritesData.add(userFavourite);
                     }
                 }
 
@@ -335,7 +349,11 @@ public class JsonReader {
                     arrayList.add(POIdata);
                 }             
             }
-            return arrayList;
+            /**
+             * Sort arraylist by the POI name alphabetically (Each POI object's name attribute)
+             * Put it into a new arraylist that will be returned
+             */
+            return sortPOIArray(arrayList);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -377,7 +395,11 @@ public class JsonReader {
 
                 if (userFavouritesArray != null) {
                     for (int i =0; i < userFavouritesArray.size(); i++) {
-                        userFavouritesData.add(i, userFavouritesArray.getAsInt());
+                        /**
+                         * Get current value from the userFavouritesArray and store as int, then add to array
+                         */
+                        int userFavourite = userFavouritesArray.get(i).getAsInt();
+                        userFavouritesData.add(userFavourite);
                     }
                 }
                 
@@ -417,11 +439,38 @@ public class JsonReader {
                     }
                 }       
             }
-            return arrayList;
+            /**
+             * Sort arraylist by the POI name alphabetically (Each POI object's name attribute)
+             * Put it into a new arraylist that will be returned
+             */
+            return sortPOIArray(arrayList);
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * Method that sorts an arraylist of POIs by their name alphabetically
+     * @param arrayList
+     * @return
+     */
+    private static ArrayList<PointOfInterest> sortPOIArray(ArrayList<PointOfInterest> arrayList) {
+        ArrayList<PointOfInterest> sortedArrayList = new ArrayList<PointOfInterest>();
+        ArrayList<String> nameArray = new ArrayList<String>();
+        for (int i = 0; i < arrayList.size(); i++) {
+            nameArray.add(arrayList.get(i).getName());
+        }
+        Collections.sort(nameArray);
+        for (int i = 0; i < nameArray.size(); i++) {
+            for (int j = 0; j < arrayList.size(); j++) {
+                if (nameArray.get(i).equals(arrayList.get(j).getName())) {
+                    sortedArrayList.add(arrayList.get(j));
+                }
+            }
+        }
+        return sortedArrayList;
     }
 
     /**

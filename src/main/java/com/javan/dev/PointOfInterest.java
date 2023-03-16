@@ -163,7 +163,6 @@ public class PointOfInterest {
         json.put("description", this.description);
         json.put("roomNumber", this.roomNumber);
         json.put("isVisible", this.isVisible);
-        System.out.println(json);
         return json;
     }
     
