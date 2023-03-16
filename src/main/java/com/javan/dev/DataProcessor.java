@@ -16,7 +16,7 @@ import com.google.gson.*;
 import com.google.gson.JsonIOException;
 
 /**
- * @author: Riley Emma Gavigan <rgavigan@uwo.ca>, Dylan Sta Ana <dstaana@uwo.ca>, Brad McGlynn <bmcglyn4@uwo.ca>, Deep Ashishkumar Shah <dshah228@uwo.ca>
+ * @author: Riley Emma Gavigan <rgavigan@uwo.ca>, Dylan Sta Ana <dstaana@uwo.ca>, Brad McGlynn <bmcglyn4@uwo.ca>, Deep Ashishkumar Shah <dshah228@uwo.ca>, Jake Choi <jchoi492@uwo.ca>
  * @version: 1.1
  * @since: 1.0
  */
@@ -186,8 +186,6 @@ public final class DataProcessor {
      * @return coords, int[] of x and y coordinates
      */
     public int[] getPOIPosition(int poiID) {
-        int x = (int) (Math.random() * 1000);
-        int y = (int) (Math.random() * 1000);
         PointOfInterest poi = getPOI(poiID);
         return poi.getCoordinates();
     }
@@ -198,7 +196,6 @@ public final class DataProcessor {
      * @param poi PointOfInterest object
      */
     public boolean addPointOfInterestToJsonFile(PointOfInterest POI) throws IOException {
-        
         String jsonString = new String(Files.readAllBytes(Paths.get("data/PointOfInterests/PointOfInterestMetadata.json")));
         JSONArray jsonArray = new JSONArray(jsonString);
         
@@ -273,7 +270,6 @@ public final class DataProcessor {
         JSONObject poiJson = poi.toJSON();
         boolean isDeleted = false;
         JSONArray newJsonArray = new JSONArray();
-
         for (Object poiObject : jsonArray) {
             JSONObject currentPoi = (JSONObject) poiObject;
 
@@ -308,7 +304,6 @@ public final class DataProcessor {
         }
         return isDeleted;
     }
-
 
     /**
      * @param currentMapID

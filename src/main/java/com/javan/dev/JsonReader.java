@@ -486,7 +486,6 @@ public class JsonReader {
             reader = new FileReader("data/PointOfInterests/PointOfInterestMetadata.json");
             JsonArray POIDataArray= JsonParser.parseReader(reader).getAsJsonArray();
             /*
-             
              * loops through json file to find user made POIs
              */ 
             for (JsonElement POI : POIDataArray) {

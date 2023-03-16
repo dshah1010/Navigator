@@ -135,6 +135,7 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
                  */
                 frame.dispose();
                 System.out.println("Going to " + currSelected + " on the map."); //test
+                POIInfoWindow poiWindow = new POIInfoWindow(currSelected);
 
                 if (currSelected.getFloorID() == currMap.getFloorMapObject().getMapID()) {
                     currMap.navigateToPOI(currSelected.getID());
@@ -144,8 +145,8 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
                     currMap.changeMap(currProcessor.getFloorMapFromMapID(currSelected.getBuildingID(), currSelected.getFloorID()));
                     currMap.navigateToPOI(currSelected.getID());
                     currSelected = null;
-                    
                 }
+                poiWindow.setVisibleFrame();
             }
         }
     }
@@ -170,10 +171,10 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
          * Output text on panel based on if it's a search from the campus map or from a floor.
          */
         if (currMap.getIsCampusMap()) {
-            panel.add(new JLabel("Select your desired building, then click \"Okay\" at the bottom."), BorderLayout.PAGE_START);
+            panel.add(new JLabel("Double click on your desired building, then click \"Okay\" at the bottom."), BorderLayout.PAGE_START);
         }
         else {
-            panel.add(new JLabel("Select your desired POI, then click \"Okay\" at the bottom."), BorderLayout.PAGE_START);
+            panel.add(new JLabel("Double click on your desired POI, then click \"Okay\" at the bottom."), BorderLayout.PAGE_START);
         }
         /**
          * Create a new JList based on the search results list.
