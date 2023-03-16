@@ -53,6 +53,14 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
      */
     private int currMapID;
 
+    private JToggleButton accessibilityButton;
+    private JToggleButton restaurantsButton;
+    private JToggleButton classroomsButton;
+    private JToggleButton labsButton;
+    private JToggleButton userButton;
+
+
+
 
     /**
      * Constructor to create POIPanel that holds the four other panels vertically, allowing them to display their information
@@ -157,11 +165,11 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
         /**
          * Create 5 toggle buttons for the different POI layers
          */
-        JToggleButton accessibilityButton = createPOILayerToggleButton("Accessibility / Washrooms");
-        JToggleButton restaurantsButton = createPOILayerToggleButton("Restaurants");
-        JToggleButton classroomsButton = createPOILayerToggleButton("Classrooms");
-        JToggleButton labsButton = createPOILayerToggleButton("Labs");
-        JToggleButton userButton = createPOILayerToggleButton("User POI");
+        accessibilityButton = createPOILayerToggleButton("Accessibility");
+        restaurantsButton = createPOILayerToggleButton("Restaurants");
+        classroomsButton = createPOILayerToggleButton("Classrooms");
+        labsButton = createPOILayerToggleButton("Labs");
+        userButton = createPOILayerToggleButton("User POI");
 
         /**
          * Put the buttons into POIPanels.get(0), the POI Layer Panel
@@ -825,5 +833,19 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
      * Unused method from MouseListener
      */
     public void mouseReleased(MouseEvent e) { 
+    }
+
+    /**
+     * Method to enable all toggle buttons in the POI Layers Panel
+     */
+    public void enableAllToggleButtons() {
+        accessibilityButton.setSelected(true);
+        restaurantsButton.setSelected(true);
+        classroomsButton.setSelected(true);
+        labsButton.setSelected(true);
+        userButton.setSelected(true);
+        
+        POIPanels.get(0).revalidate();
+        POIPanels.get(0).repaint();
     }
 }

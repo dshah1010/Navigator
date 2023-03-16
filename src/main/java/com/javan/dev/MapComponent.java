@@ -438,6 +438,17 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
             mapObject = floorMap.getFloorAbove();
             floorMap = floorMap.getFloorAbove();
             displayPOIs();
+
+            /**
+             * Enable all POI Layers
+             */
+            enablePOILayer("Accessibility");
+            enablePOILayer("Restaurants");
+            enablePOILayer("Classrooms");
+            enablePOILayer("Labs");
+            enablePOILayer("User POI");
+            poiComponent.enableAllToggleButtons();
+
             /**
              * Change the map
              */
@@ -459,6 +470,16 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
             mapObject = floorMap.getFloorBelow();
             floorMap = floorMap.getFloorBelow();
             displayPOIs();
+
+            /**
+             * Enable all POI Layers
+             */
+            enablePOILayer("Accessibility");
+            enablePOILayer("Restaurants");
+            enablePOILayer("Classrooms");
+            enablePOILayer("Labs");
+            enablePOILayer("User POI");
+            poiComponent.enableAllToggleButtons();
 
             /**
              * Change the map
@@ -856,7 +877,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                     /**
                      * Check if user is an admin and POI type is not user
                      */
-                    if (user.getIsAdmin() == false && !(poi.getPOItype().contains("USER"))) {
+                    if (user.getIsAdmin() == false && !(poi.getPOItype().contains("User POI"))) {
                         /**
                          * Open up a pop-up window saying they can't edit this POI
                          */
