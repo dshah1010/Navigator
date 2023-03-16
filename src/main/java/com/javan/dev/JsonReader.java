@@ -223,7 +223,7 @@ public class JsonReader {
                     for (int i = 0; i < userFavouritesArray.size(); i++) {
                         userFavouritesData.add(i, userFavouritesArray.getAsInt());
                     }
-                } System.out.println(userFavouritesData);
+                }
 
                 if (userFavouritesData.contains(userID)) {
 

@@ -476,6 +476,45 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * @param text of the layer name
      */
     public void enablePOILayer(String text) {
+        for (PointOfInterest poi : userPOIs) {
+            if (poi.getPOItype().contains(text)) {
+                poi.setisVisible(true);
+                try {
+                    dataProcessor.editPointOfInterestInJsonFile(poi);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } 
+
+        for (PointOfInterest poi : favouritePOIs) {
+            if (poi.getPOItype().contains(text)) {
+                poi.setisVisible(true);
+                try {
+                    dataProcessor.editPointOfInterestInJsonFile(poi);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } 
+
+        for (PointOfInterest poi : pois) {
+            if (poi.getPOItype().contains(text)) {
+                poi.setisVisible(true);
+                try {
+                    dataProcessor.editPointOfInterestInJsonFile(poi);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+        displayPOIs();
+
+        poiComponent.changeDisplayIfCampusMap(this.getMapObject().getMapID());
+            /**
+             * Update the sidebar component to display the new POI
+             */
+        poiComponent.updatePOIComponent();
     }
 
     /**
@@ -483,6 +522,44 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * @param text of the layer name
      */
     public void disablePOILayer(String text) {
+        for (PointOfInterest poi : userPOIs) {
+            if (poi.getPOItype().contains(text)) {
+                poi.setisVisible(false);
+                try {
+                    dataProcessor.editPointOfInterestInJsonFile(poi);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } 
+
+        for (PointOfInterest poi : favouritePOIs) {
+            if (poi.getPOItype().contains(text)) {
+                poi.setisVisible(false);
+                try {
+                    dataProcessor.editPointOfInterestInJsonFile(poi);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } 
+
+        for (PointOfInterest poi : pois) {
+            if (poi.getPOItype().contains(text)) {
+                poi.setisVisible(false);
+                try {
+                    dataProcessor.editPointOfInterestInJsonFile(poi);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+        displayPOIs();
+        poiComponent.changeDisplayIfCampusMap(this.getMapObject().getMapID());
+            /**
+             * Update the sidebar component to display the new POI
+             */
+        poiComponent.updatePOIComponent();
     }
 
     /**
@@ -587,7 +664,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          */
         for (PointOfInterest poi : pois) {
             if (this.floorMap != null && poi.getBuildingID() == this.floorMap.getBuildingID() 
-            && poi.getFloorID() == this.floorMap.getMapID()){
+            && poi.getFloorID() == this.floorMap.getMapID() && poi.getisVisible()){
                 /**
                  * Get the POI's coordinates
                  */

@@ -643,9 +643,11 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
         if (e.getSource() instanceof JToggleButton) {
             JToggleButton button = (JToggleButton) e.getSource();
             if (button.isSelected()) {
+                System.out.println(button.getText());
                 mapComponent.enablePOILayer(button.getText());
             }
             else {
+                System.out.println(button.getText());
                 mapComponent.disablePOILayer(button.getText());
             }
         }

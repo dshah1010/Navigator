@@ -220,7 +220,7 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
             }
             String layerType; 
             if (user.getIsAdmin()) {
-                layerType = newPOIData.get(5);
+                layerType = newPOIData.get(3);
             }
             else {
                 layerType = "USER";
