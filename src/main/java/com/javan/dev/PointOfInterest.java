@@ -259,6 +259,9 @@ public class PointOfInterest {
     }
 
     public String toString() {
-        return name;
+        /**
+         * Return this padded string followed by the Floor # of the POI
+         */
+        return "Name: " + name + "     Floor: " + floorID;
     }
 }

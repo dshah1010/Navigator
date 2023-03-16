@@ -103,18 +103,18 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
          * Check if the mouse click event was on an item on the JList.
          */
         if (e.getSource() instanceof JList && e.getClickCount() == 1) {
-            JList<PointOfInterest> theList = (JList) e.getSource();
+            JList<PointOfInterest> poiList = (JList) e.getSource();
             /**
              * Restrict the clicking for within the items available in the list. The mouse click on any empty space within the JList scroll pane will do nothing.
              */
-            Rectangle r = theList.getCellBounds(0, theList.getLastVisibleIndex());
+            Rectangle r = poiList.getCellBounds(0, poiList.getLastVisibleIndex());
             if (r != null && r.contains(e.getPoint())) { 
                 /**
                  * Set currently selected POI to the POI selected by the user (by click).
                  */
-                int index = theList.locationToIndex(e.getPoint()); 
+                int index = poiList.locationToIndex(e.getPoint()); 
                 if (index >= 0) {
-                    PointOfInterest o = theList.getModel().getElementAt(index);
+                    PointOfInterest o = poiList.getModel().getElementAt(index);
                     currSelected = o;
                 }
             }
@@ -134,7 +134,6 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
                  * Close the current frame and go to currently selected POI.
                  */
                 frame.dispose();
-                System.out.println("Going to " + currSelected + " on the map."); //test
                 POIInfoWindow poiWindow = new POIInfoWindow(currSelected);
 
                 if (currSelected.getFloorID() == currMap.getFloorMapObject().getMapID()) {
@@ -163,25 +162,62 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
          * Create new frame.
          */
         frame = new JFrame("Search Results for \"" + search + "\"");
-        frame.setSize(500, 250);
+        frame.setSize(650, 250);
         /**
          * Create new panel to include text, JList, and JButton.
          */
         panel = new JPanel(new BorderLayout());
+        panel.setBackground(Color.WHITE);
         /**
          * Output text on panel based on if it's a search from the campus map or from a floor.
          */
         if (currMap.getIsCampusMap()) {
-            panel.add(new JLabel("Double click on your desired building, then click \"Okay\" at the bottom."), BorderLayout.PAGE_START);
+            JLabel textLabel = (new JLabel("Double click on your desired building, then click \"Okay\" at the bottom."));
+            textLabel.setBackground(Color.WHITE);
+            textLabel.setFont(new Font("Georgia", Font.BOLD, 15));
+            panel.add(textLabel, BorderLayout.PAGE_START);
         }
         else {
-            panel.add(new JLabel("Double click on your desired POI, then click \"Okay\" at the bottom."), BorderLayout.PAGE_START);
+            JLabel textLabel = (new JLabel("Double click on your desired POI, then click \"Okay\" at the bottom."));
+            textLabel.setBackground(Color.WHITE);
+            textLabel.setFont(new Font("Georgia", Font.BOLD, 15));
+            panel.add(textLabel, BorderLayout.PAGE_START);
         }
         /**
          * Create a new JList based on the search results list.
          */
         resultList = new JList(list.toArray());
         resultList.addMouseListener(this);
+        /**
+         * Style the JList
+         */
+        resultList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        resultList.setLayoutOrientation(JList.VERTICAL);
+        resultList.setVisibleRowCount(-1);
+        resultList.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        resultList.setBackground(Color.WHITE);
+        /**
+         * Style the contents of the JList
+         */
+        resultList.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (value instanceof PointOfInterest) {
+                    PointOfInterest poi = (PointOfInterest) value;
+                    /**
+                     * Set text to the name followed by the floor ID of the POI
+                     */
+                    setText(poi.getName() + " (Floor: " + poi.getFloorID() + ")");
+                    /**
+                     * Set the font of the JList items to be larger and Georgia
+                     */
+                    setFont(new Font("Georgia", Font.PLAIN, 17));
+                }
+                return c;
+            }
+        });
+
         /**
          * To enable scrolling if all items in list can't be showed in the frame.
          */
@@ -217,15 +253,35 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
     }
 
     /**
-     * Unused method from the implemented class MouseListener
+     * Mouse cursor change on button
      */
     public void mouseEntered(MouseEvent e) {
+        /**
+         * Change mouse pointer to hand when hovering over the button
+         */
+        if (e.getSource() instanceof JButton) {
+            ((JButton) e.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            /**
+             * Change background to gray
+             */
+            ((JButton) e.getSource()).setBackground(Color.LIGHT_GRAY);
+        }
     }
 
     /**
-     * Unused method from the implemented class MouseListener
+     * Mouse cursor change on not on button
      */
     public void mouseExited(MouseEvent e) {
+        /**
+         * Change mouse pointer to default when not hovering over the button
+         */
+        if (e.getSource() instanceof JButton) {
+            ((JButton) e.getSource()).setCursor(Cursor.getDefaultCursor());
+            /**
+             * Change background to white
+             */
+            ((JButton) e.getSource()).setBackground(Color.WHITE);
+        }
     }
     
 }

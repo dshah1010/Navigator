@@ -650,11 +650,9 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
         if (e.getSource() instanceof JToggleButton) {
             JToggleButton button = (JToggleButton) e.getSource();
             if (button.isSelected()) {
-                System.out.println(button.getText());
                 mapComponent.enablePOILayer(button.getText());
             }
             else {
-                System.out.println(button.getText());
                 mapComponent.disablePOILayer(button.getText());
             }
         }
@@ -777,9 +775,17 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
                 String poiName = label.getText();
                 int poiID = Integer.parseInt(poiName);
                 /**
+                 * Get the PointOfInterest object from the POI ID
+                 */
+                PointOfInterest currSelected = dataProcessor.getPOI(poiID);
+                /**
                  * Pass POI name to the MapPanel to be highlighted on the map
                  */
+                mapComponent.changeMap(dataProcessor.getFloorMapFromMapID(currSelected.getBuildingID(), currSelected.getFloorID()));
                 mapComponent.navigateToPOI(poiID);
+                POIInfoWindow poiWindow = new POIInfoWindow(currSelected);
+                poiWindow.getFrame().setLocationRelativeTo(mapComponent.getMapPanel());
+                poiWindow.setVisibleFrame();
             }
         }
     }
