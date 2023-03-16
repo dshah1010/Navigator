@@ -387,7 +387,9 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         /**
          * Navigate to the POI's coordinates
          */
-        scrollPane.getViewport().setViewPosition(new Point(coordinates[0], coordinates[1]));
+        int width = scrollPane.getViewport().getWidth();
+        int height = scrollPane.getViewport().getHeight();
+        scrollPane.getViewport().setViewPosition(new Point(coordinates[0] - width/2, coordinates[1] - height/2));
     }
 
     /**

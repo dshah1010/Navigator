@@ -401,8 +401,8 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
                      * Get the list of all POIs. Initialize new ArrayList of POIs to store the current building's POIs only, and the searchResults POI list.
                      */
                     ArrayList<PointOfInterest> pois = processor.getUniversalPOIs(false, mapComponent.getUser().getUserID());
-                    ArrayList<PointOfInterest> currBuildingPOIS = new ArrayList<PointOfInterest>();
                     for (PointOfInterest poi : pois) {
+                        System.out.println(poi);
                         /**
                          * Convert the room number of the current poi to a string.
                          */
@@ -421,16 +421,10 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
                                     searchMatch.add(poi);
                             }
                         }
-                        /**
-                         * Add the other building POIs to an array list to search through if no POIs matching the search were found
-                         * on the current floor.
-                         */
-                        else if (poi.getBuildingID() == currBuildingID && poi.getFloorID() != poi.getFloorID()) {
-                            currBuildingPOIS.add(poi);
-                        }
                     }
 
                     if (searchMatch.size() == 0) {
+                        ArrayList<PointOfInterest> currBuildingPOIS = JsonReader.buildingPOIS(mapComponent.getUser().getUserID(), currBuildingID);
                         for (PointOfInterest poi : currBuildingPOIS) {
                             /**
                              * Convert the room number of the current poi to a string.
@@ -458,6 +452,7 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
                      * Create new Search Results Window listning all the results.
                      */
                     SearchResultsWindow resultWindow = new SearchResultsWindow(searchMatch, text.toLowerCase(), mapComponent, processor);
+                    resultWindow.getFrame().setLocationRelativeTo(mapComponent.getMapPanel());
                     resultWindow.openSearchResults();
                 }
                 /**

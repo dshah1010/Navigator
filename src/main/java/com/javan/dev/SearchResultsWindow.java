@@ -146,6 +146,7 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
                     currMap.navigateToPOI(currSelected.getID());
                     currSelected = null;
                 }
+                poiWindow.getFrame().setLocationRelativeTo(currMap.getMapPanel());
                 poiWindow.setVisibleFrame();
             }
         }
@@ -190,7 +191,7 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
          * Create an "Okay" button at the bottom of the frame.
          */
         okay = new JButton("Okay");
-        okay.setMaximumSize(new Dimension(100, 50));
+        okay.setMaximumSize(new Dimension(200, 100));
         okay.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         okay.setBackground(Color.WHITE);
 

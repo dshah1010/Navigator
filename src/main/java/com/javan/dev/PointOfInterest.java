@@ -257,4 +257,8 @@ public class PointOfInterest {
     public void setisVisible(boolean isVisible) {
         this.isVisible= isVisible;
     }
+
+    public String toString() {
+        return name;
+    }
 }
