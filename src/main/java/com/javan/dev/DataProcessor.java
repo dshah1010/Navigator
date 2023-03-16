@@ -221,6 +221,9 @@ public final class DataProcessor {
         fileWriter.close();
         return true;
     }
+    /*
+     * method to add new buildingPOI to BuildingsPointOfInterestMetadata.json file array
+     */
 
     public boolean addBuildingPointOfInterestToJsonFile(BuildingPointOfInterest POI) throws IOException {
         

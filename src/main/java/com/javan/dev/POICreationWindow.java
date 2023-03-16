@@ -227,6 +227,9 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
                     err.printStackTrace();
                 }
             }
+            /*
+             * condition if not on campus map
+             */
             else{
                 PointOfInterest poi = new PointOfInterest(
                     newPOIData.get(0), user.getUserID(), 
