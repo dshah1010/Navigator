@@ -115,6 +115,7 @@ public class PointOfInterest {
      */
     public boolean getIsUserMade() {
         return this.isUserMade;
+        
     }
 
     /**

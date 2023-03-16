@@ -199,30 +199,60 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
             else {
                 layerType = "USER";
             }
-            PointOfInterest poi = new PointOfInterest(
-                newPOIData.get(0), user.getUserID(), 
-                !user.getIsAdmin(), layerType, 
-                Integer.parseInt(newPOIData.get(3)), 
-                Integer.parseInt(newPOIData.get(4)), 
-                mapComponent.getMapObject().getMapID(), 
-                mapComponent.getFloorMapObject().getBuildingID(), 
-                new ArrayList<Integer>(), newPOIData.get(2), 
-                Integer.parseInt(newPOIData.get(1)), true
-                );
-            try {
-                boolean addedSuccessfully = processor.addPointOfInterestToJsonFile(poi);
-                /*
-                 * Gives an error message if the POI already exists for the user
-                 */
-                if (!addedSuccessfully) {
-                    JPanel errorPanel = new JPanel();
-                    JLabel errorMessage = new JLabel("Error: POI already exists");
-                    errorPanel.add(errorMessage);
-                
-                    JOptionPane.showMessageDialog(null, errorPanel, "Error", JOptionPane.ERROR_MESSAGE);
+            /**
+             * condition if user on campus map
+             */
+            if (mapComponent.getIsCampusMap()){
+                BuildingPointOfInterest buildingPOI = new BuildingPointOfInterest(
+                    newPOIData.get(0), user.getUserID(),
+                    !user.getIsAdmin(), layerType,
+                    Integer.parseInt(newPOIData.get(3)), 
+                    Integer.parseInt(newPOIData.get(4)), 
+                    mapComponent.getFloorMapObject().getBuildingID(), 
+                    new ArrayList<Integer>(), true
+                    );
+                try{
+                    boolean addedSuccessfully = processor.addBuildingPointOfInterestToJsonFile(buildingPOI);
+                    /*
+                    * Gives an error message if the POI already exists for the user
+                    */
+                    if (!addedSuccessfully) {
+                        JPanel errorPanel = new JPanel();
+                        JLabel errorMessage = new JLabel("Error: POI already exists");
+                        errorPanel.add(errorMessage);
+                    
+                        JOptionPane.showMessageDialog(null, errorPanel, "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }catch (IOException err) {
+                    err.printStackTrace();
                 }
-            } catch (IOException err) {
-                err.printStackTrace();
+            }
+            else{
+                PointOfInterest poi = new PointOfInterest(
+                    newPOIData.get(0), user.getUserID(), 
+                    !user.getIsAdmin(), layerType, 
+                    Integer.parseInt(newPOIData.get(3)), 
+                    Integer.parseInt(newPOIData.get(4)), 
+                    mapComponent.getMapObject().getMapID(), 
+                    mapComponent.getFloorMapObject().getBuildingID(), 
+                    new ArrayList<Integer>(), newPOIData.get(2), 
+                    Integer.parseInt(newPOIData.get(1)), true
+                    );
+                try {
+                    boolean addedSuccessfully = processor.addPointOfInterestToJsonFile(poi);
+                    /*
+                    * Gives an error message if the POI already exists for the user
+                    */
+                    if (!addedSuccessfully) {
+                        JPanel errorPanel = new JPanel();
+                        JLabel errorMessage = new JLabel("Error: POI already exists");
+                        errorPanel.add(errorMessage);
+                    
+                        JOptionPane.showMessageDialog(null, errorPanel, "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (IOException err) {
+                    err.printStackTrace();
+                }
             }
             mapComponent.displayPOIs();
             poiComponent.changeDisplayIfCampusMap(mapComponent.getMapObject().getMapID());

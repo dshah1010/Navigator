@@ -222,6 +222,31 @@ public final class DataProcessor {
         return true;
     }
 
+    public boolean addBuildingPointOfInterestToJsonFile(BuildingPointOfInterest POI) throws IOException {
+        
+        String jsonString = new String(Files.readAllBytes(Paths.get("data/PointOfInterests/BuildingsPOIMetadata.json")));
+        JSONArray jsonArray = new JSONArray(jsonString);
+        
+        JSONObject poiJson = POI.toJSON();
+        for (Object poi : jsonArray) {
+            JSONObject currentPoi = (JSONObject) poi;
+            /*
+             * Checks to see if the POI user + floorNumber already exists
+             */
+            if (currentPoi.get("userID") == poiJson.get("userID") 
+            && currentPoi.get("buildingID") == poiJson.get("buildingID")) {
+                return false;
+            }
+        }
+        jsonArray.put(poiJson);
+        
+        FileWriter fileWriter = new FileWriter("data/PointOfInterests/BuildingsPOIMetadata.json");
+        fileWriter.write(jsonArray.toString());
+        fileWriter.flush();
+        fileWriter.close();
+        return true;
+    }
+
     /**
      * Method to edit the point of interest data for a POI given its ID in the PointOfInterestMetadata.json file
      * @param poi
@@ -418,6 +443,23 @@ public final class DataProcessor {
          */
         try {
             reader = new FileReader("data/PointOfInterests/PointOfInterestMetadata.json");
+            JsonArray POIDataArray= JsonParser.parseReader(reader).getAsJsonArray();
+            return POIDataArray.size() + 1;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    
+
+    public int makeNewBuildingPOIID() {
+        FileReader reader = null;
+
+        /*
+         * attempts to read file 
+         */
+        try {
+            reader = new FileReader("data/PointOfInterests/BuildingsPOIMetadata.json");
             JsonArray POIDataArray= JsonParser.parseReader(reader).getAsJsonArray();
             return POIDataArray.size() + 1;
         } catch (FileNotFoundException e) {
