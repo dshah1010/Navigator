@@ -211,7 +211,7 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
         /**
          * If favourited, change to unfavourited
          */
-        if (!poi.getIsFavourited(userInstance.getUserID())) {
+        if (poi.getIsFavourited(userInstance.getUserID())) {
             favourite.setIcon(unfavouriteIcon);
             poi.setIsFavourited(userInstance.getUserID());
             
@@ -223,6 +223,11 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
             favourite.setIcon(favouriteIcon);
             poi.setIsFavourited(userInstance.getUserID());
         }
+        /**
+         * Refresh window to display new icon
+         */
+        frame.revalidate();
+        frame.repaint();
         try {
             processor.editPointOfInterestInJsonFile(poi);
         } catch (IOException err) {

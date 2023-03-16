@@ -444,7 +444,6 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
             otherPOIList = dataProcessor.getUniversalPOIs(true, user.getUserID());
         }
         else {
-            System.out.println("GETTING UNIVERSAL POIS");
             otherPOIList = dataProcessor.getUniversalPOIs(false, user.getUserID());
         }
 
@@ -738,7 +737,6 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
             if (mapComponent.getIsCampusMap()) {
                 JPanel panel = (JPanel) e.getSource();
                 JLabel label = (JLabel) panel.getComponent(1);
-                System.out.println(label.getText());
 
                 /**
                  * Get the text from label, which is two integers separated by a space, and put both integers into an integer array
@@ -746,7 +744,6 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
                 String[] mapIDAndPOIID = label.getText().split(" ");
                 int buildingID = Integer.parseInt(mapIDAndPOIID[0]);
                 int mapID = Integer.parseInt(mapIDAndPOIID[1]);
-                System.out.println("Building ID: " + buildingID + " Map ID: " + mapID);
 
 
                 /**

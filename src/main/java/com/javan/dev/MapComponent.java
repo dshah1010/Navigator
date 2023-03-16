@@ -257,7 +257,6 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         /**
          * Set Campus Map Boolean and Map Type
          */
-        System.out.println("Map Type: " + newMap.getMapType());
         if (newMap.getMapType() == "FLOOR") {
             this.isCampusMap = false;
             this.mapType = "FLOOR";
@@ -280,7 +279,6 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      */
     public void updateFloorButtons() {
         if (this.mapType.contains("CAMPUS")) {
-            System.out.println("REMOVING FLOOR BUTTONS");
             floorBelow.setVisible(false);
             floorAbove.setVisible(false);
             buttonPanel.remove(floorBelow);
@@ -288,7 +286,6 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
             buttonPanel.setLayout(new GridLayout(1, 3));
         }
         else {
-            System.out.println("ADDING FLOOR BUTTONS");
             buttonPanel.add(floorBelow);
             buttonPanel.add(floorAbove);
             floorBelow.setVisible(true);

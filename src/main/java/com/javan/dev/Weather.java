@@ -67,7 +67,6 @@ public final class Weather {
         /**
          * Turn GET request URL into a URL object
          */
-        System.out.println(GET_URL);
         URL url = new URL(GET_URL);
 
         /**
