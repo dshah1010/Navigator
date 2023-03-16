@@ -670,6 +670,12 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         addPOIList(pois);
         addPOIList(userPOIs);
         addPOIList(favouritePOIs);
+
+        mapPanel.setVisible(true);
+        mapPanel.setFocusable(true);
+        mapPanel.requestFocusInWindow();
+        mapPanel.repaint();
+        mapPanel.revalidate();
     }
 
     /**
