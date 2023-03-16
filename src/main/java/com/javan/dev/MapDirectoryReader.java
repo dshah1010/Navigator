@@ -68,6 +68,7 @@ public class MapDirectoryReader {
              * Get a list of all PNG files in this subdirectory (these are the FloorMap imaages)
              */
             File[] imageFiles = subdirectory.listFiles();
+            java.util.Arrays.sort(imageFiles);
     
             /**
              * Create a JSON array to hold the floor maps for the building
