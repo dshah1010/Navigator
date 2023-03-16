@@ -437,7 +437,6 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
              */
             mapObject = floorMap.getFloorAbove();
             floorMap = floorMap.getFloorAbove();
-            displayPOIs();
 
             /**
              * Enable all POI Layers
@@ -453,6 +452,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
              * Change the map
              */
             changeMap(mapObject);
+            displayPOIs();
             poiComponent.updatePOIComponent();
         }
     }
@@ -526,13 +526,12 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                 }
             }
         }
-        displayPOIs();
-
-        poiComponent.changeDisplayIfCampusMap(this.getMapObject().getMapID());
-            /**
-             * Update the sidebar component to display the new POI
-             */
+        
+        /**
+         * Update the sidebar component to display the new POI
+         */
         poiComponent.updatePOIComponent();
+        displayPOIs();
     }
 
     /**
