@@ -197,7 +197,7 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
                 layerType = newPOIData.get(5);
             }
             else {
-                layerType = "USER";
+                layerType = "User POI";
             }
             PointOfInterest poi = new PointOfInterest(
                 newPOIData.get(0), user.getUserID(), 

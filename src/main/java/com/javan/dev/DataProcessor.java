@@ -450,7 +450,11 @@ public final class DataProcessor {
 
                 if (userFavouritesArray != null) {
                     for (int i =0; i < userFavouritesArray.size(); i++) {
-                        userFavouritesData.add(i, userFavouritesArray.getAsInt());
+                        /**
+                         * Get current value from the userFavouritesArray and store as int, then add to array
+                         */
+                        int userFavourite = userFavouritesArray.get(i).getAsInt();
+                        userFavouritesData.add(userFavourite);
                     }
                 }
 
@@ -477,7 +481,11 @@ public final class DataProcessor {
                     ArrayList<Integer> userFavouritesList = new ArrayList<Integer>();
 
                     for (int i = 0; i < userFavouritesData.size(); i++) {
-                        userFavouritesList.add(i, userFavouritesData.get(i));
+                        /**
+                         * Get current value from the userFavouritesArray and store as int, then add to array
+                         */
+                        int userFavourite = userFavouritesData.get(i);
+                        userFavouritesList.add(userFavourite);
                     }
 
                     String description = poiObject.get("description").getAsString();
@@ -578,7 +586,6 @@ public final class DataProcessor {
                  */
                 if (username.equals(user.getString("username")) && password.equals(decryptedPassword)) {
                     String userType = user.getString("userType");
-                    System.out.println("User " + username + " logged in as " + userType + ".");
                     return (Integer) user.get("userID");
                 }
             }
@@ -588,7 +595,6 @@ public final class DataProcessor {
         /**
          * If no match was found, return false
          */
-        System.out.println("Invalid username or password.");
         return -1;
     }
 
@@ -661,8 +667,7 @@ public final class DataProcessor {
                 /** 
                  * Check if the usernames match
                  */
-                if (username.equals(user.getString("username"))) {
-                    System.out.println("Error: account already exists");
+                if (username.equals(user.getString("username"))) {                  System.out.println("Error: account already exists");
                     return false;
                 }
             }
@@ -700,8 +705,6 @@ public final class DataProcessor {
             jsonArray.write(fileWriter);
             fileWriter.flush();
             fileWriter.close();
-
-            System.out.println("New account created for " + username + " with userID " + nextUserID + ".");
             return true;
 
         } catch (Exception e) {

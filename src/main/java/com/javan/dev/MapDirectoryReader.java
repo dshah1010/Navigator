@@ -179,8 +179,6 @@ public class MapDirectoryReader {
             FileWriter writer = new FileWriter(jsonFilePath);
             writer.write(mapData.toString());
             writer.close();
-
-            System.out.println("Building data added to JSON file.");
         } catch (IOException e) {
             System.err.println("Error adding building data to JSON file: " + e.getMessage());
         }
