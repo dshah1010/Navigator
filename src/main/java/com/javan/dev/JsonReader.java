@@ -407,7 +407,7 @@ public class JsonReader {
                 }
                 
                 // either developer made or user made POIs
-                if (poiObject.get("userID").getAsInt() == 1 || poiObject.get("userID").getAsInt() == userID){
+                if (poiObject.get("isUserMade").getAsBoolean() == false || poiObject.get("userID").getAsInt() == userID){
 
                     /*
                     * declares all data from json file
@@ -441,6 +441,12 @@ public class JsonReader {
                         arrayList.add(POIdata);
                     }
                 }       
+            }
+            /**
+             * Print out all POI names
+             */
+            for (int i = 0; i < arrayList.size(); i++) {
+                System.out.println(arrayList.get(i).getName());
             }
             /**
              * Sort arraylist by the POI name alphabetically (Each POI object's name attribute)
