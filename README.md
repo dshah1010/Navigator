@@ -50,7 +50,7 @@ User information (passwords) are encrypted for the safety of users of this appli
 
     * **Username**: admin
 
-    * **Password**: password
+    * **Password**: admin
 
 <br/><br/>
 

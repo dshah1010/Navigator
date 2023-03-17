@@ -54,7 +54,7 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
         frame = new JFrame("Create a new POI");
         panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        frame.setSize(350, 350);
+        frame.setSize(450, 300);
         frame.setMinimumSize(new Dimension(200, 200));
         /**
          * Add icon to the UI frame (Flag Icon)
@@ -108,19 +108,28 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
                 radioHolder.setBackground(Color.WHITE);
                 radioHolder.setLayout(new GridLayout(4, 2));
                 JRadioButton accessibilityRadio = new JRadioButton("Accessibility");
+                JRadioButton washroomsRadio = new JRadioButton("Washrooms");
+                JRadioButton navigationRadio = new JRadioButton("Navigation");
                 JRadioButton restaurantRadio = new JRadioButton("Restaurants");
                 JRadioButton classroomRadio = new JRadioButton("Classrooms");
                 JRadioButton labsRadio = new JRadioButton("Labs");
+
                 ButtonGroup group = new ButtonGroup();
                 accessibilityRadio.setBackground(Color.WHITE);
+                washroomsRadio.setBackground(Color.WHITE);
+                navigationRadio.setBackground(Color.WHITE);
                 restaurantRadio.setBackground(Color.WHITE);
                 classroomRadio.setBackground(Color.WHITE);
                 labsRadio.setBackground(Color.WHITE);
                 group.add(accessibilityRadio);
+                group.add(washroomsRadio);
+                group.add(navigationRadio);
                 group.add(restaurantRadio);
                 group.add(classroomRadio);
                 group.add(labsRadio);
                 radioHolder.add(accessibilityRadio);
+                radioHolder.add(washroomsRadio);
+                radioHolder.add(navigationRadio);
                 radioHolder.add(restaurantRadio);
                 radioHolder.add(classroomRadio);
                 radioHolder.add(labsRadio);
@@ -249,7 +258,7 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
                 mapComponent.getMapObject().getMapID(), 
                 mapComponent.getFloorMapObject().getBuildingID(), 
                 new ArrayList<Integer>(), newPOIData.get(2), 
-                Integer.parseInt(newPOIData.get(1)), true
+                newPOIData.get(1), true
                 );
             try {
                 boolean addedSuccessfully = processor.addPointOfInterestToJsonFile(poi);
