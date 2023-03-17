@@ -78,8 +78,6 @@ public class JsonReader {
                  * Create a new FloorMap object and add it to the ArrayList.
                  */
                 FloorMap floorMap = new FloorMap(buildingID, floorID);
-                //floorMap.setPOIs(processor.getPOIs(filePath)); TODO: implement both setPOIs in FloorMap and getPOIs in DataProcessor
-                //floorMap.setLayers(processor.getLayers(filePath)); TODO: implement both setLayers in FloorMap and getLayers in DataProcessor
                 floorMaps.add(floorMap);
             }
         }
@@ -259,7 +257,7 @@ public class JsonReader {
                     }
 
                     String description = poiObject.get("description").getAsString();
-                    int roomNumber = poiObject.get("roomNumber").getAsInt();
+                    String roomNumber = poiObject.get("roomNumber").getAsString();
                     Boolean isVisible = poiObject.get("isVisible").getAsBoolean();
                     PointOfInterest POIdata = new PointOfInterest(name, userID, isUserMade, POI_Type, coordinateArray[0], coordinateArray[1], floorID, buildingID, userFavouritesList, description, roomNumber, isVisible);
                     POIdata.setID(poiID);
@@ -342,7 +340,7 @@ public class JsonReader {
                     }
 
                     String description = poiObject.get("description").getAsString();
-                    int roomNumber = poiObject.get("roomNumber").getAsInt();
+                    String roomNumber = poiObject.get("roomNumber").getAsString();
                     Boolean isVisible = poiObject.get("isVisible").getAsBoolean();
                     PointOfInterest POIdata = new PointOfInterest(name, userID, isUserMade, POI_Type, coordinateArray[0], coordinateArray[1], floorID, buildingID, userFavouritesList, description, roomNumber, isVisible);
                     POIdata.setID(poiID);
@@ -374,6 +372,11 @@ public class JsonReader {
          */
         MapComponent mapComponent = MapComponent.getInstance();
         int mapID = mapComponent.getCurrentMapID();
+
+        /**
+         * Get building ID
+         */
+        int curbuildingID = mapComponent.getCurrentBuildingID();
 
         /*
          * attempts to read file 
@@ -430,9 +433,9 @@ public class JsonReader {
                     }
 
                     String description = poiObject.get("description").getAsString();
-                    int roomNumber = poiObject.get("roomNumber").getAsInt();
+                    String roomNumber = poiObject.get("roomNumber").getAsString();
                     boolean isVisible = poiObject.get("isVisible").getAsBoolean();
-                    if (mapID == floorID) {
+                    if (mapID == floorID && curbuildingID == buildingID) {
                         PointOfInterest POIdata = new PointOfInterest(name, userID, isUserMade, POI_Type, coordinateArray[0], coordinateArray[1], floorID, buildingID, userFavouritesList, description, roomNumber, isVisible);
                         POIdata.setID(poiID);
                         arrayList.add(POIdata);
@@ -522,7 +525,7 @@ public class JsonReader {
                     }
 
                     String description = poiObject.get("description").getAsString();
-                    int roomNumber = poiObject.get("roomNumber").getAsInt();
+                    String roomNumber = poiObject.get("roomNumber").getAsString();
                     boolean isVisible = poiObject.get("isVisible").getAsBoolean();
                     if (mapID != floorID && currBuilding == buildingID) {
                         PointOfInterest POIdata = new PointOfInterest(name, userID, isUserMade, POI_Type, coordinateArray[0], coordinateArray[1], floorID, buildingID, userFavouritesList, description, roomNumber, isVisible);

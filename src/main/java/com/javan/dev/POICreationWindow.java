@@ -249,7 +249,7 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
                 mapComponent.getMapObject().getMapID(), 
                 mapComponent.getFloorMapObject().getBuildingID(), 
                 new ArrayList<Integer>(), newPOIData.get(2), 
-                Integer.parseInt(newPOIData.get(1)), true
+                newPOIData.get(1), true
                 );
             try {
                 boolean addedSuccessfully = processor.addPointOfInterestToJsonFile(poi);
