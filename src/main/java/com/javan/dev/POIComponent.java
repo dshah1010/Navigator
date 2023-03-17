@@ -53,6 +53,14 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
      */
     private int currMapID;
 
+    private JToggleButton accessibilityButton;
+    private JToggleButton restaurantsButton;
+    private JToggleButton classroomsButton;
+    private JToggleButton labsButton;
+    private JToggleButton userButton;
+
+
+
 
     /**
      * Constructor to create POIPanel that holds the four other panels vertically, allowing them to display their information
@@ -157,11 +165,11 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
         /**
          * Create 5 toggle buttons for the different POI layers
          */
-        JToggleButton accessibilityButton = createPOILayerToggleButton("Accessibility / Washrooms");
-        JToggleButton restaurantsButton = createPOILayerToggleButton("Restaurants");
-        JToggleButton classroomsButton = createPOILayerToggleButton("Classrooms");
-        JToggleButton labsButton = createPOILayerToggleButton("Labs");
-        JToggleButton userButton = createPOILayerToggleButton("User POI");
+        accessibilityButton = createPOILayerToggleButton("Accessibility");
+        restaurantsButton = createPOILayerToggleButton("Restaurants");
+        classroomsButton = createPOILayerToggleButton("Classrooms");
+        labsButton = createPOILayerToggleButton("Labs");
+        userButton = createPOILayerToggleButton("User POI");
 
         /**
          * Put the buttons into POIPanels.get(0), the POI Layer Panel
@@ -444,7 +452,6 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
             otherPOIList = dataProcessor.getUniversalPOIs(true, user.getUserID());
         }
         else {
-            System.out.println("GETTING UNIVERSAL POIS");
             otherPOIList = dataProcessor.getUniversalPOIs(false, user.getUserID());
         }
 
@@ -736,7 +743,6 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
             if (mapComponent.getIsCampusMap()) {
                 JPanel panel = (JPanel) e.getSource();
                 JLabel label = (JLabel) panel.getComponent(1);
-                System.out.println(label.getText());
 
                 /**
                  * Get the text from label, which is two integers separated by a space, and put both integers into an integer array
@@ -744,7 +750,6 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
                 String[] mapIDAndPOIID = label.getText().split(" ");
                 int buildingID = Integer.parseInt(mapIDAndPOIID[0]);
                 int mapID = Integer.parseInt(mapIDAndPOIID[1]);
-                System.out.println("Building ID: " + buildingID + " Map ID: " + mapID);
 
 
                 /**
@@ -770,9 +775,17 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
                 String poiName = label.getText();
                 int poiID = Integer.parseInt(poiName);
                 /**
+                 * Get the PointOfInterest object from the POI ID
+                 */
+                PointOfInterest currSelected = dataProcessor.getPOI(poiID);
+                /**
                  * Pass POI name to the MapPanel to be highlighted on the map
                  */
+                mapComponent.changeMap(dataProcessor.getFloorMapFromMapID(currSelected.getBuildingID(), currSelected.getFloorID()));
                 mapComponent.navigateToPOI(poiID);
+                POIInfoWindow poiWindow = new POIInfoWindow(currSelected);
+                poiWindow.getFrame().setLocationRelativeTo(mapComponent.getMapPanel());
+                poiWindow.setVisibleFrame();
             }
         }
     }
@@ -826,5 +839,19 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
      * Unused method from MouseListener
      */
     public void mouseReleased(MouseEvent e) { 
+    }
+
+    /**
+     * Method to enable all toggle buttons in the POI Layers Panel
+     */
+    public void enableAllToggleButtons() {
+        accessibilityButton.setSelected(true);
+        restaurantsButton.setSelected(true);
+        classroomsButton.setSelected(true);
+        labsButton.setSelected(true);
+        userButton.setSelected(true);
+        
+        POIPanels.get(0).revalidate();
+        POIPanels.get(0).repaint();
     }
 }

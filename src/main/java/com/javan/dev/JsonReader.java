@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+
 import com.google.gson.*;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -219,9 +221,13 @@ public class JsonReader {
                 JsonArray userFavouritesArray = poiObject.getAsJsonArray("userFavouritesList");
                 ArrayList<Integer> userFavouritesData = new ArrayList<Integer>();
 
-                if (userFavouritesArray != null) {
-                    for (int i =0; i < userFavouritesArray.size(); i++) {
-                        userFavouritesData.add(i, userFavouritesArray.getAsInt());
+                if (userFavouritesArray.size() > 0) {
+                    for (int i = 0; i < userFavouritesArray.size(); i++) {
+                        /**
+                         * Get current value from the userFavouritesArray and store as int, then add to array
+                         */
+                        int userFavourite = userFavouritesArray.get(i).getAsInt();
+                        userFavouritesData.add(userFavourite);
                     }
                 }
 
@@ -260,7 +266,11 @@ public class JsonReader {
                     arrayList.add(POIdata);
                 }   
             }
-            return arrayList;
+            /**
+             * Sort arraylist by the POI name alphabetically (Each POI object's name attribute)
+             * Put it into a new arraylist that will be returned
+             */
+            return sortPOIArray(arrayList);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -370,7 +380,11 @@ public class JsonReader {
 
                 if (userFavouritesArray != null) {
                     for (int i =0; i < userFavouritesArray.size(); i++) {
-                        userFavouritesData.add(i, userFavouritesArray.getAsInt());
+                        /**
+                         * Get current value from the userFavouritesArray and store as int, then add to array
+                         */
+                        int userFavourite = userFavouritesArray.get(i).getAsInt();
+                        userFavouritesData.add(userFavourite);
                     }
                 }
 
@@ -409,7 +423,11 @@ public class JsonReader {
                     arrayList.add(POIdata);
                 }             
             }
-            return arrayList;
+            /**
+             * Sort arraylist by the POI name alphabetically (Each POI object's name attribute)
+             * Put it into a new arraylist that will be returned
+             */
+            return sortPOIArray(arrayList);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -488,7 +506,7 @@ public class JsonReader {
         return null;
     }    
 
-     /**
+    /**
      * function to get Floor POIs currently available to the user
      * @param int userID
      * @return ArrayList<PointOfInterest>
@@ -523,7 +541,11 @@ public class JsonReader {
 
                 if (userFavouritesArray != null) {
                     for (int i =0; i < userFavouritesArray.size(); i++) {
-                        userFavouritesData.add(i, userFavouritesArray.getAsInt());
+                        /**
+                         * Get current value from the userFavouritesArray and store as int, then add to array
+                         */
+                        int userFavourite = userFavouritesArray.get(i).getAsInt();
+                        userFavouritesData.add(userFavourite);
                     }
                 }
                 
@@ -563,11 +585,130 @@ public class JsonReader {
                     }
                 }       
             }
-            return arrayList;
+            /**
+             * Sort arraylist by the POI name alphabetically (Each POI object's name attribute)
+             * Put it into a new arraylist that will be returned
+             */
+            return sortPOIArray(arrayList);
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * function to get Current Building POIs currently available to the user
+     * @param int userID
+     * @param int currBuilding
+     * @return ArrayList<PointOfInterest>
+     */
+    public static ArrayList<PointOfInterest> buildingPOIS(int userID, int currBuilding) {
+
+        FileReader reader = null;
+
+        /**
+         * Get the current map ID
+         */
+        MapComponent mapComponent = MapComponent.getInstance();
+        int mapID = mapComponent.getCurrentMapID();
+
+        /*
+         * attempts to read file 
+         */
+        try {
+
+            reader = new FileReader("data/PointOfInterests/PointOfInterestMetadata.json");
+            JsonArray POIDataArray= JsonParser.parseReader(reader).getAsJsonArray();
+            ArrayList<PointOfInterest> arrayList = new ArrayList<PointOfInterest>();
+
+            /*
+             * loops through json file to find POIs available to this user
+             */ 
+            for (JsonElement POI : POIDataArray) {
+
+                JsonObject poiObject = POI.getAsJsonObject();
+                JsonArray userFavouritesArray = poiObject.getAsJsonArray("userFavouritesList");
+                ArrayList<Integer> userFavouritesData = new ArrayList<Integer>();
+
+                if (userFavouritesArray != null) {
+                    for (int i =0; i < userFavouritesArray.size(); i++) {
+                        /**
+                         * Get current value from the userFavouritesArray and store as int, then add to array
+                         */
+                        int userFavourite = userFavouritesArray.get(i).getAsInt();
+                        userFavouritesData.add(userFavourite);
+                    }
+                }
+                
+                // either developer made or user made POIs
+                if (poiObject.get("userID").getAsInt() == 1 || poiObject.get("userID").getAsInt() == userID){
+
+                    /*
+                    * declares all data from json file
+                    * then creates a POI object
+                    * which is then added to arraylist of type POI
+                    */
+
+                    int poiID = poiObject.get("ID").getAsInt();
+                    String name  = poiObject.get("name").getAsString();
+                    boolean isUserMade = poiObject.get("isUserMade").getAsBoolean();
+                    String POI_Type = poiObject.get("POI_type").getAsString();
+                    JsonArray jsoncoordinateArray = poiObject.get("coordinates").getAsJsonArray();
+                    int[] coordinateArray = new int[2];
+                    for (int i=0; i< coordinateArray.length; i++){
+                        coordinateArray[i] = jsoncoordinateArray.get(i).getAsInt();
+                    }
+                    int floorID = poiObject.get("floorID").getAsInt();
+                    int buildingID = poiObject.get("buildingID").getAsInt();
+                    ArrayList<Integer> userFavouritesList = new ArrayList<Integer>();
+
+                    for (int i = 0; i < userFavouritesData.size(); i++) {
+                        userFavouritesList.add(i, userFavouritesData.get(i));
+                    }
+
+                    String description = poiObject.get("description").getAsString();
+                    int roomNumber = poiObject.get("roomNumber").getAsInt();
+                    boolean isVisible = poiObject.get("isVisible").getAsBoolean();
+                    if (mapID != floorID && currBuilding == buildingID) {
+                        PointOfInterest POIdata = new PointOfInterest(name, userID, isUserMade, POI_Type, coordinateArray[0], coordinateArray[1], floorID, buildingID, userFavouritesList, description, roomNumber, isVisible);
+                        POIdata.setID(poiID);
+                        arrayList.add(POIdata);
+                    }
+                }       
+            }
+            /**
+             * Sort arraylist by the POI name alphabetically (Each POI object's name attribute)
+             * Put it into a new arraylist that will be returned
+             */
+            return arrayList;
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * Method that sorts an arraylist of POIs by their name alphabetically
+     * @param arrayList
+     * @return
+     */
+    private static ArrayList<PointOfInterest> sortPOIArray(ArrayList<PointOfInterest> arrayList) {
+        ArrayList<PointOfInterest> sortedArrayList = new ArrayList<PointOfInterest>();
+        ArrayList<String> nameArray = new ArrayList<String>();
+        for (int i = 0; i < arrayList.size(); i++) {
+            nameArray.add(arrayList.get(i).getName());
+        }
+        Collections.sort(nameArray);
+        for (int i = 0; i < nameArray.size(); i++) {
+            for (int j = 0; j < arrayList.size(); j++) {
+                if (nameArray.get(i).equals(arrayList.get(j).getName())) {
+                    sortedArrayList.add(arrayList.get(j));
+                }
+            }
+        }
+        return sortedArrayList;
     }
 
     /**
@@ -583,7 +724,6 @@ public class JsonReader {
             reader = new FileReader("data/PointOfInterests/PointOfInterestMetadata.json");
             JsonArray POIDataArray= JsonParser.parseReader(reader).getAsJsonArray();
             /*
-             
              * loops through json file to find user made POIs
              */ 
             for (JsonElement POI : POIDataArray) {

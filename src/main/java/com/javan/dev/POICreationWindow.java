@@ -76,7 +76,7 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
         
 
         /**
-         * Loop 10 times, creating a JPanel that holds a JLabel and a JTextField
+         * Loop, creating a JPanel that holds a JLabel and a JTextField
          */
         for (int i = 0; i < metadata.size(); i++) {
             JPanel tempPanel = new JPanel();
@@ -97,6 +97,35 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
                 JTextField tempField = createTextField(Integer.toString(y));
                 tempPanel.add(labelHolder);
                 tempPanel.add(tempField);
+                panel.add(tempPanel);
+                continue;
+            }
+            /**
+             * If it is Layer Type, create radio buttons
+             */
+            if (i == 5) {
+                JPanel radioHolder = new JPanel();
+                radioHolder.setBackground(Color.WHITE);
+                radioHolder.setLayout(new GridLayout(4, 2));
+                JRadioButton accessibilityRadio = new JRadioButton("Accessibility");
+                JRadioButton restaurantRadio = new JRadioButton("Restaurants");
+                JRadioButton classroomRadio = new JRadioButton("Classrooms");
+                JRadioButton labsRadio = new JRadioButton("Labs");
+                ButtonGroup group = new ButtonGroup();
+                accessibilityRadio.setBackground(Color.WHITE);
+                restaurantRadio.setBackground(Color.WHITE);
+                classroomRadio.setBackground(Color.WHITE);
+                labsRadio.setBackground(Color.WHITE);
+                group.add(accessibilityRadio);
+                group.add(restaurantRadio);
+                group.add(classroomRadio);
+                group.add(labsRadio);
+                radioHolder.add(accessibilityRadio);
+                radioHolder.add(restaurantRadio);
+                radioHolder.add(classroomRadio);
+                radioHolder.add(labsRadio);
+                tempPanel.add(labelHolder);
+                tempPanel.add(radioHolder);
                 panel.add(tempPanel);
                 continue;
             }
@@ -185,7 +214,20 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
                     Component[] spChildren = ((JPanel)sp).getComponents();
                     // now iterate over all JTextFields...
                     for (Component spChild : spChildren) {
-                        if (spChild instanceof JTextField) {
+                        /**
+                         * If it is a radio button get the radio button text
+                         */
+                        if (spChild instanceof JPanel) {
+                            Component[] radioChildren = ((JPanel)spChild).getComponents();
+                            for (Component radioChild : radioChildren) {
+                                if (radioChild instanceof JRadioButton) {
+                                    if (((JRadioButton)radioChild).isSelected()) {
+                                        newPOIData.add(((JRadioButton)radioChild).getText());
+                                    }
+                                }
+                            }
+                        }
+                        else if (spChild instanceof JTextField) {
                             String text = ((JTextField)spChild).getText();
                             newPOIData.add(text);
                         } 
@@ -197,7 +239,7 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
                 layerType = newPOIData.get(5);
             }
             else {
-                layerType = "USER";
+                layerType = "User POI";
             }
             /**
              * condition if user on campus map

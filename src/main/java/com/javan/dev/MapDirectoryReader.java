@@ -68,6 +68,7 @@ public class MapDirectoryReader {
              * Get a list of all PNG files in this subdirectory (these are the FloorMap imaages)
              */
             File[] imageFiles = subdirectory.listFiles();
+            java.util.Arrays.sort(imageFiles);
     
             /**
              * Create a JSON array to hold the floor maps for the building
@@ -179,8 +180,6 @@ public class MapDirectoryReader {
             FileWriter writer = new FileWriter(jsonFilePath);
             writer.write(mapData.toString());
             writer.close();
-
-            System.out.println("Building data added to JSON file.");
         } catch (IOException e) {
             System.err.println("Error adding building data to JSON file: " + e.getMessage());
         }

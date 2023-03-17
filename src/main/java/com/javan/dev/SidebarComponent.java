@@ -5,13 +5,14 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
- * @author: Riley Emma Gavigan <rgavigan@uwo.ca>
- * @version: 1.0
+ * @author: Riley Emma Gavigan <rgavigan@uwo.ca>, Jake Choi <jchoi492@uwo.ca>
+ * @version: 1.1
  * @since: 1.0
  */
-public final class SidebarComponent extends JPanel implements ActionListener, MouseListener, FocusListener {
+public final class SidebarComponent extends JPanel implements ActionListener, MouseListener, FocusListener, KeyListener {
     /**
      * Initialize private variables for the UI
      */
@@ -177,6 +178,7 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
          * Create a JTextField for the search bar
          */
         searchText = new JTextField();
+        searchText.addKeyListener(this);
         searchText.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30)); // Occupy entire horizontal space but limit vertical
         /**
          * Style the text field
@@ -361,46 +363,8 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
          * Button is the search button
          */
         else if (e.getSource() instanceof JButton) {
-            JButton button = (JButton) e.getSource();
-            /**
-             * Get the text from the search bar and then empty the search bar
-             */
-            String text = searchText.getText();
-            searchText.setText("");
-
-            /**
-             * If the text is not empty / the default text, search for the POI
-             */
-            if ((!text.equals("")) && (!text.equals("Search for a Point of Interest"))) {
-                /**
-                 * Search for the POI
-                 */
-                // TODO: PointOfInterest poi = processor.searchPOI(text); // Need to search for POI on the currently displayed map
-                /**
-                 * If the POI is not null, display it on the map
-                 */
-                Integer poi = null; // TEMPORARY
-                if (poi != null) {
-                    // mapComponent.navigateToPOI(poi.getID()); // need to interact with UI to display on MapComponent
-                }
-                else {
-                    /**
-                     * Display a JOptionPane to the user to inform them that the POI was not found
-                     */
-                    JOptionPane.showMessageDialog(null, "The Point of Interest you searched for was not found.", "Point of Interest Not Found", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-            else {
-                /**
-                 * Inform user that the search bar is empty
-                 */
-                JOptionPane.showMessageDialog(null, "The search bar is empty. Please enter a Point of Interest to search for.", "Search Bar Empty", JOptionPane.ERROR_MESSAGE);
-            }
+            searchPOI();
         }
-
-
-        
-        
     }
 
     /**
@@ -440,6 +404,121 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
          */
         if (e.getSource() == searchText) {
             ((JTextField) e.getSource()).setText("");
+        }
+    }
+
+    /**
+     * Method to perform search
+     */
+    public void searchPOI() {
+        JButton button = searchButton;
+        /**
+         * Get the text from the search bar and then empty the search bar
+         */
+        String text = searchText.getText();
+        searchText.setText("");
+        /**
+         * If the text is not empty / the default text, search for the POI
+         */
+        if ((!text.equals("")) && (!text.equals("Search for a Point of Interest"))) {
+            /**
+             * Check if user is currently on campus map or a floor map.
+             */
+            ArrayList<PointOfInterest> searchMatch = new ArrayList<PointOfInterest>();
+            if (mapComponent.getIsCampusMap()) {
+                /**
+                 * Temporary solution for getting the list of all buildings (as POIs haven't been created for them yet).
+                 */
+                ArrayList<PointOfInterest> buildingList = processor.getUniversalPOIs(true, mapComponent.getUser().getUserID());
+                /**
+                 * Compare the search to the available buildings on the campus.
+                 */
+                for (PointOfInterest building : buildingList) {
+                    if (building.getName().toLowerCase().contains(text.toLowerCase())) {
+                        searchMatch.add(building);
+                    }
+                }
+            }
+            else {
+                /**
+                 * Get current building ID and floor ID to know where we are on the map for poi searching purposes.
+                 * These will be used when searching for POIs.
+                 */
+                int currBuildingID = mapComponent.getFloorMapObject().getBuildingID();
+                int currFloorID = mapComponent.getFloorMapObject().getMapID();
+                /**
+                 * Get the list of all POIs. Initialize new ArrayList of POIs to store the current building's POIs only, and the searchResults POI list.
+                 */
+                ArrayList<PointOfInterest> pois = processor.getUniversalPOIs(false, mapComponent.getUser().getUserID());
+                for (PointOfInterest poi : pois) {
+                    /**
+                     * Convert the room number of the current poi to a string.
+                     */
+                    String roomNumString = String.valueOf(poi.getRoomNumber());
+                    /**
+                     * First check if the current poi is on the current floor of the current building.
+                     * Check if any of its metadata matches the search. If so, add it. If not, do not add it to the searchResults array.
+                     */
+                    if (poi.getBuildingID() == currBuildingID && poi.getFloorID() == poi.getFloorID()){
+                        /**
+                         * Compare search with the name, description, and room number of the POI's metadata.
+                         */
+                        if (poi.getName().toLowerCase().contains(text.toLowerCase()) 
+                            || poi.getDescription().toLowerCase().contains(text.toLowerCase()) 
+                            || roomNumString.toLowerCase().contains(text)) {
+                                searchMatch.add(poi);
+                        }
+                    }
+                }
+
+                if (searchMatch.size() == 0) {
+                    ArrayList<PointOfInterest> currBuildingPOIS = JsonReader.buildingPOIS(mapComponent.getUser().getUserID(), currBuildingID);
+                    for (PointOfInterest poi : currBuildingPOIS) {
+                        /**
+                         * Convert the room number of the current poi to a string.
+                         */
+                        String roomNumString = String.valueOf(poi.getRoomNumber());
+                        if (poi.getName().toLowerCase().contains(text.toLowerCase()) 
+                            || poi.getDescription().toLowerCase().contains(text.toLowerCase()) 
+                            || roomNumString.toLowerCase().contains(text)) {
+                                searchMatch.add(poi);
+                        }
+                    }
+                }
+
+            }
+            /**
+             * If there are at most 20 POIs found on the current map, or within the building.
+             */
+            if (searchMatch.size() > 0 && searchMatch.size() <= 20) {
+                /**
+                 * Create new Search Results Window listning all the results.
+                 */
+                SearchResultsWindow resultWindow = new SearchResultsWindow(searchMatch, text.toLowerCase(), mapComponent, processor);
+                resultWindow.getFrame().setLocationRelativeTo(mapComponent.getMapPanel());
+                resultWindow.openSearchResults();
+            }
+            /**
+             * If there are more than 20 POIs found on the current map, or within the building.
+             */
+            else if (searchMatch.size() > 20) {
+                /**
+                 * Display a JOptionPane to the user to inform them that the search was too broad.
+                 */
+                JOptionPane.showMessageDialog(null, "Too broad of a search, please narrow down your query.", "Point of Interest Not Found", JOptionPane.ERROR_MESSAGE);
+            }
+            else {
+                /**
+                 * Display a JOptionPane to the user to inform them that the POI was not found
+                 */
+                JOptionPane.showMessageDialog(null, "The Point of Interest you searched for was not found.", "Point of Interest Not Found", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        else {
+            /**
+             * Inform user that the search bar is empty
+             */
+            JOptionPane.showMessageDialog(null, "The search bar is empty. Please enter a Point of Interest to search for.", "Search Bar Empty", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -516,5 +595,20 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
      * Unused method from MouseListener interface
      */
     public void mouseReleased(MouseEvent e) {
+    }
+
+    /**
+     * Complete search when Enter hit
+     */
+    public void keyTyped(KeyEvent e) {
+        if (e.getKeyChar() == KeyEvent.VK_ENTER) {
+            searchPOI();
+        }
+    }
+
+    public void keyPressed(KeyEvent e) {
+    }
+
+    public void keyReleased(KeyEvent e) {
     }
 }
