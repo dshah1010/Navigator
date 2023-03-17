@@ -257,11 +257,4 @@ public class PointOfInterest {
     public void setisVisible(boolean isVisible) {
         this.isVisible= isVisible;
     }
-
-    public String toString() {
-        /**
-         * Return this padded string followed by the Floor # of the POI
-         */
-        return "Name: " + name + "     Floor: " + floorID;
-    }
 }
