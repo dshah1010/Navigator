@@ -5,7 +5,7 @@ import com.google.gson.*;
 import java.util.*;
 
 /**
- * @author: Dylan Sta Ana <dstaana8@uwo.ca>
+ * @author: Dylan Sta Ana <dstaana@uwo.ca>
  * @version: 1.0
  * @since: 1.0
  */
@@ -20,8 +20,6 @@ public class BuildingPointOfInterest {
     private int floorID;
     private int buildingID;
     private ArrayList<Integer> userFavouritesList = new ArrayList<Integer> ();
-    private String description;
-    private int roomNumber;
     private String mapFilePath;
     private boolean isVisible;
 
@@ -45,7 +43,7 @@ public class BuildingPointOfInterest {
         this.buildingID = buildingID;
         this.userFavouritesList = userFavouritesList;
         this.ID = processor.makeNewPOIID();
-        this.mapFilePath = processor.loadMapFilePath(this.buildingID, this.floorID, "FLOOR");
+        this.mapFilePath = processor.loadMapFilePath(this.buildingID, this.floorID, "BUILDING");
         this.isVisible = isVisible;
     }
     

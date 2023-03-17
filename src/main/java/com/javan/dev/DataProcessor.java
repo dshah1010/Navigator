@@ -143,6 +143,10 @@ public final class DataProcessor {
         return JsonReader.favouritesList(userID);
     }
 
+    public ArrayList<BuildingPointOfInterest> getBuildingFavouritePOIs(int userID) {
+        return JsonReader.buildingfavouritesList(userID);
+    }
+
     /**
      * Method to return the POIs created by a user 
      * @param int userID - the ID of the user
@@ -150,6 +154,10 @@ public final class DataProcessor {
      */
     public ArrayList<PointOfInterest> getUserPOIs(int userID) {
         return JsonReader.userPOIList(userID);
+    }  
+
+    public ArrayList<BuildingPointOfInterest> getBuildingUserPOIs(int userID) {
+        return JsonReader.buildinguserPOIList(userID);
     }  
 
     public ArrayList<PointOfInterest> getUniversalPOIs(boolean isCampusMap, int userID) {
@@ -179,6 +187,28 @@ public final class DataProcessor {
         }
 
         return universalPOIs;
+    }
+
+    public ArrayList<BuildingPointOfInterest> getBuildingUniversalPOIs(boolean isCampusMap, int userID) {
+        CampusMap campusMap = CampusMap.getInstance(0);
+        ArrayList<BuildingPointOfInterest> buildinguniversalPOIs = new ArrayList<BuildingPointOfInterest>();
+
+        /**
+         * Campus Map Condition: Get all Campus Map POIs for Building Directory
+         */
+        if (isCampusMap == true) {
+            buildinguniversalPOIs.clear();
+            /**
+             * Go through campusMap object building Array and create POIs for each building
+             */
+            for (int i = 0; i < campusMap.getBuildingArray().size(); i++) {
+                BuildingMap building = campusMap.getBuildingArray().get(i);
+                BuildingPointOfInterest buildingpoi = new BuildingPointOfInterest(building.getMapName(), building.getMapID(), false, "BUILDING", 0, 0, building.getMapID(), new ArrayList<Integer>(), true);
+                buildinguniversalPOIs.add(buildingpoi);
+            }
+        }
+
+        return buildinguniversalPOIs;
     }
 
     /**

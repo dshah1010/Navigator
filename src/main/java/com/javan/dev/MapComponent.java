@@ -39,6 +39,13 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     private ArrayList<PointOfInterest> favouritePOIs;
 
     /**
+     * ArrayList to hold the building points of interest
+     */
+    private ArrayList<BuildingPointOfInterest> buildingpois;
+    private ArrayList<BuildingPointOfInterest> buildinguserPOIs;
+    private ArrayList<BuildingPointOfInterest> buildingfavouritePOIs;
+
+    /**
      * ImageIcon for the flags
      */
     private ImageIcon flag = new ImageIcon("data/images/flag.png");
@@ -548,6 +555,24 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     }
 
     /**
+     * Method to clear Building POIs from the map
+     */
+    public void clearBuildingPois() {
+        buildingpois.clear();
+        buildingfavouritePOIs.clear();
+        buildinguserPOIs.clear();
+        imagePanel.remove(map);
+        mapImg = new ImageIcon(mapObject.getFilePath());
+        map = new JLabel(mapImg);
+        map.addMouseListener(this);
+        map.addMouseMotionListener(this);
+        map.setLayout(null);
+        map.setBounds(0, 0, mapImg.getIconWidth(), mapImg.getIconHeight());
+        imagePanel.setPreferredSize(new Dimension(mapImg.getIconWidth(), mapImg.getIconHeight()));
+        imagePanel.add(map);
+    }
+
+    /**
      * Method to display Floor POIs for the map currently being displayed on the map with a flag icon representing its location
      */
     public void displayPOIs() {
@@ -557,25 +582,98 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         if (this.pois != null) {
             clearPois();
         }
-        if (isCampusMap == true) {
-            pois = dataProcessor.getUniversalPOIs(true, user.getUserID());
+        if (this.buildingpois != null){
+            clearBuildingPois();
         }
+        /*
+         * gets building POIS if on campus map
+         */
+        if (isCampusMap == true) {
+            buildingpois = dataProcessor.getBuildingUniversalPOIs(true, user.getUserID());
+            buildingfavouritePOIs = dataProcessor.getBuildingFavouritePOIs(user.getUserID());
+            buildinguserPOIs = dataProcessor.getBuildingUserPOIs(user.getUserID());
+
+            addBuildingPOIList(buildingpois);
+            addBuildingPOIList(buildingfavouritePOIs);
+            addBuildingPOIList(buildinguserPOIs);
+
+        }
+        /*
+         * gets  POIS if on not on campus map
+         */
         else {
             pois = dataProcessor.getUniversalPOIs(false, user.getUserID());
-        }
-        /**
-         * Get the User and Favourite POIs for the map (based on userID)
-         */
+             /**
+             * Get the User and Favourite POIs for the map (based on userID)
+             */
 
-        favouritePOIs = dataProcessor.getFavouritePOIs(user.getUserID());
-        userPOIs = dataProcessor.getUserPOIs(user.getUserID());
+            favouritePOIs = dataProcessor.getFavouritePOIs(user.getUserID());
+            userPOIs = dataProcessor.getUserPOIs(user.getUserID());
+        
+            /**
+             * Add each POI list to the map
+             */
+            addPOIList(pois);
+            addPOIList(userPOIs);
+            addPOIList(favouritePOIs);
+            }
        
+    }
+
+    /**
+     * Method to loop through POI arraylist and add to map
+     */
+    public void addBuildingPOIList(ArrayList<BuildingPointOfInterest> pois) {
         /**
-         * Add each POI list to the map
+         * Loop through the POIs and add a flag icon to the map at the POI's coordinates
          */
-        addPOIList(pois);
-        addPOIList(userPOIs);
-        addPOIList(favouritePOIs);
+        for (BuildingPointOfInterest poi : pois) {
+            if (this.floorMap != null && poi.getBuildingID() == this.floorMap.getBuildingID()){
+                /**
+                 * Get the POI's coordinates
+                 */
+                int[] coordinates = poi.getCoordinates();
+
+                /**
+                 * Add the flag icon to the map at the POI's coordinates (x and y position)
+                 */
+                ImageIcon flagIcon = flag;
+                /**
+                 * Get scaled version of 40x40 pixels as ImageIcon
+                 */
+                Image scaledFlag = flagIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+
+                /**
+                 * Create a JLabel with the scaled flag icon
+                 */
+                JLabel flag = new JLabel(new ImageIcon(scaledFlag));
+
+                /**
+                 * Add the ID of the POI to the flag icon as metadata
+                 */
+                flag.setText(Integer.toString(poi.getID()));
+
+
+                flag.setBounds(coordinates[0], coordinates[1], 40, 40);
+                
+                /**
+                 * Add a mouse listener to the flag icon to navigate to the POI when clicked
+                 */
+                flag.addMouseListener(this);
+
+                /**
+                 * Add the flag icon to the map
+                 */
+                map.add(flag);
+
+                /**
+                 * Repaint the map panel
+                 */
+                mapPanel.repaint();
+                flag.setVisible(true);
+                imagePanel.setVisible(true);
+                }
+        }
     }
 
     /**

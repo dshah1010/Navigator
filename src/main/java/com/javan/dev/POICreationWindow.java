@@ -226,6 +226,13 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
                 }catch (IOException err) {
                     err.printStackTrace();
                 }
+            mapComponent.displayPOIs();
+            poiComponent.changeDisplayIfCampusMap(mapComponent.getMapObject().getMapID());
+            /**
+            * Update the sidebar component to display the new POI
+             */
+            poiComponent.updatePOIComponent();
+            frame.dispose();
             }
             /*
              * condition if not on campus map
@@ -256,7 +263,6 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
                 } catch (IOException err) {
                     err.printStackTrace();
                 }
-            }
             mapComponent.displayPOIs();
             poiComponent.changeDisplayIfCampusMap(mapComponent.getMapObject().getMapID());
             /**
@@ -264,6 +270,8 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
              */
             poiComponent.updatePOIComponent();
             frame.dispose();
+            }
+           
         }
         /**
          * When the cancel button is clicked, close the window
