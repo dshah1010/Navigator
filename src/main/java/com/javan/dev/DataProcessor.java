@@ -236,7 +236,7 @@ public final class DataProcessor {
             /**
              * Check to see if the POI ID matches a POI
              */
-            if (currentPoi.get("ID") == poiJson.get("ID")) {
+            if (currentPoi.get("ID").equals(poiJson.get("ID"))) {
                 /**
                  * Remove the current POI from the JSON Array
                  */

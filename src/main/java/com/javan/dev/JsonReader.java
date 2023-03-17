@@ -443,12 +443,6 @@ public class JsonReader {
                 }       
             }
             /**
-             * Print out all POI names
-             */
-            for (int i = 0; i < arrayList.size(); i++) {
-                System.out.println(arrayList.get(i).getName());
-            }
-            /**
              * Sort arraylist by the POI name alphabetically (Each POI object's name attribute)
              * Put it into a new arraylist that will be returned
              */
