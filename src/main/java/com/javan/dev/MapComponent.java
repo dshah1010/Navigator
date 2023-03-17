@@ -726,6 +726,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         mapPanel.requestFocusInWindow();
         mapPanel.repaint();
         mapPanel.revalidate();
+        }
     }
 
     /**
