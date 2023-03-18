@@ -18,7 +18,6 @@ public class FloorMap implements Map{
     private int buildingID;
     private String mapType;
     private ArrayList<PointOfInterest> POIs = new ArrayList<PointOfInterest>();
-    private ArrayList<Integer> layers = new ArrayList<Integer>();
     
     /**
      * Private variable to hold the instance of the data processor

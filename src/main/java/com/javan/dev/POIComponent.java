@@ -1,12 +1,7 @@
 package com.javan.dev;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -29,14 +24,10 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
      * {POILayerScrollPane, FavouritePOIScrollPane, UserPOIScrollPane, OtherPOIScrollPane}
      */
     private ArrayList<JScrollPane> POIScrollPanes = new ArrayList<JScrollPane>();
-    private JList<String> favouriteList;
-    private ArrayList<JPanel> favouritePOIPanels = new ArrayList<JPanel>();
     private ArrayList<PointOfInterest> favouritePOIList;
     private ArrayList<String> favouritePOIStrings = new ArrayList<String>();
-    private ArrayList<JPanel> userPOIPanels = new ArrayList<JPanel>();
     private ArrayList<PointOfInterest> userPOIList;
     private ArrayList<String> userPOIStrings = new ArrayList<String>();
-    private ArrayList<JPanel> otherPOIPanels = new ArrayList<JPanel>();
     private ArrayList<PointOfInterest> otherPOIList;
     private ArrayList<String> otherPOIStrings = new ArrayList<String>();
     private JButton otherPOIButton;
@@ -48,10 +39,6 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
     private User user = User.getInstance();
     private MapComponent mapComponent = MapComponent.getInstance();
     private static POIComponent INSTANCE;
-    /**
-     * Current Map ID
-     */
-    private int currMapID;
 
     private JToggleButton accessibilityButton;
     private JToggleButton restaurantsButton;
@@ -110,9 +97,8 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
         addOtherPOIPanel();
 
         /**
-         * Start at campus map, set ID to it and change display if campus map
+         * change display if campus map
          */
-        currMapID = 0;
         changeDisplayIfCampusMap(0);
 
         /**
@@ -553,10 +539,6 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
      * Method to hide the POI layers panel, favourite POIs, and User POIs if the campus map is selected
      */
     public void changeDisplayIfCampusMap(int mapIDFromMapComponent) {
-        /**
-         * Get current map ID from map component
-         */
-        this.currMapID = mapIDFromMapComponent;
         if (mapComponent.getIsCampusMap()) {
             /**
              * Make the first 3 scroll panes not show on UI
@@ -760,9 +742,8 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
                 FloorMap floorMap = dataProcessor.getFloorMapFromMapID(buildingID, mapID);
 
                 /*
-                 * Change Map to MapID, update map ID
+                 * Change Map
                  */
-                this.currMapID = mapID;
                 mapComponent.changeFloorMap(floorMap);
                 mapComponent.changeMap(map);
 

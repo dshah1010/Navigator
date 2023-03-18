@@ -20,10 +20,6 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
      */
     private JFrame frame;
     private JPanel panel;
-    private JLabel title;
-    private JLabel description;
-    private int x;
-    private int y;
     private JButton create;
     private JButton cancel;
     private JPanel buttonPanel;
@@ -35,19 +31,12 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
     private User user = User.getInstance();
     private MapComponent mapComponent = MapComponent.getInstance();
     private POIComponent poiComponent = POIComponent.getInstance();
-    private SidebarComponent sidebar = SidebarComponent.getInstance();
 
 
     /**
      * Constructor for POICreationWindow given x and y coordinates
      */
     public POICreationWindow(int x, int y) {
-        /**
-         * Get Coordinates from click
-         */
-        this.x = x;
-        this.y = y;
-
         /**
          * Create Frame and Panel
          */
@@ -362,17 +351,11 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
     }
 
     public void mouseClicked(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
     }
 
     public void mousePressed(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
     }
 
     public void mouseReleased(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
     }
 }

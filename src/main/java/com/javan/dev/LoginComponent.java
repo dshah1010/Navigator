@@ -469,7 +469,6 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
          */
         if (userID != -1) {
             user.setUsername(username);
-            user.setPassword(password);
             user.setUserID(userID);
             /**
              * Set admin status for admin
@@ -547,7 +546,6 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
         }
         else {
             user.setUsername(username);
-            user.setPassword(password);
             /**
              * Set admin status for admin
              */

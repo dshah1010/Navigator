@@ -90,12 +90,6 @@ public final class CampusMap implements Map{
         return this.mapType;
     }
 
-    // TODO: either keep this as a required thing to bring over from Map.java
-    // or implement it like in BuildingMap and FloorMap
-    public JSONObject toJSON() {
-        return null;
-    }
-
     /**
      * Adds Bulding to BuildingArray
      * @param PointOfInterest
@@ -125,5 +119,9 @@ public final class CampusMap implements Map{
      */
     public ArrayList<BuildingMap> getBuildingArray() {
         return this.buildingArray;
+    }
+
+    public JSONObject toJSON() {
+        return null;
     }
 }

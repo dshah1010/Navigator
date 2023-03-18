@@ -3,8 +3,6 @@ package com.javan.dev;
 // Import Necessary Libraries
 import javax.swing.*;
 
-import org.json.JSONException;
-
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.awt.*;
@@ -1018,7 +1016,6 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                             /**
                              * Get the coordinates of the mouse click
                              */
-                            JLabel label = (JLabel) e.getSource();
                             int x = e.getX();
                             int y = e.getY();
 
@@ -1042,7 +1039,6 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                         /**
                          * Get the coordinates of the mouse click
                          */
-                        JLabel label = (JLabel) e.getSource();
                         int x = e.getX();
                         int y = e.getY();
 
@@ -1229,7 +1225,5 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
 }
 
     public void mouseMoved(MouseEvent e) {
-        // TODO Auto-generated method stub
     }
-    
 }

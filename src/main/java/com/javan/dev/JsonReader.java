@@ -2,7 +2,6 @@ package com.javan.dev;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -10,7 +9,6 @@ import com.google.gson.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -52,10 +50,9 @@ public class JsonReader {
         for (int i = 0; i < buildings.length(); i++) {
             JSONObject buildingObj = (JSONObject) buildings.get(i);
             /*
-             * Get the building ID and name.
+             * Get the building ID
              */
             int buildingID = ((Integer) buildingObj.get("buildingID")).intValue();
-            String buildingName = (String) buildingObj.get("mapName");
             /*
              * Get the floor maps for this building.
              */
@@ -69,11 +66,7 @@ public class JsonReader {
                  * Get the floor map ID and name.
                  */
                 int floorID = ((Integer) floorObj.get("mapID")).intValue();
-                String floorName = (String) floorObj.get("mapName");
-                /*
-                 * Get the file path for the floor map image.
-                 */
-                String filePath = (String) floorObj.get("filePath");
+
                 /*
                  * Create a new FloorMap object and add it to the ArrayList.
                  */

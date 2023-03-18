@@ -46,7 +46,7 @@ class TestPOIComponent {
          */
         ArrayList<PointOfInterest> testPOIs = new ArrayList<PointOfInterest>();
         for (int i = 0; i < 5; i++) {
-            testPOIs.add(new PointOfInterest("Test"));
+            testPOIs.add(new PointOfInterest(null, i, false, null, i, i, i, i, null, null, null, false));
         }
 
         /**

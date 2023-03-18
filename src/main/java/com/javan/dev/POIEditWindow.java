@@ -20,10 +20,6 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
      */
     private JFrame frame;
     private JPanel panel;
-    private JLabel title;
-    private JLabel description;
-    private int x;
-    private int y;
     private JButton edit;
     private JButton cancel;
     private JPanel buttonPanel;
@@ -37,7 +33,6 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
     private User user = User.getInstance();
     private MapComponent mapComponent = MapComponent.getInstance();
     private POIComponent poiComponent = POIComponent.getInstance();
-    private SidebarComponent sidebar = SidebarComponent.getInstance();
 
     private PointOfInterest poi;
     private BuildingPointOfInterest buildingPOI;
@@ -394,17 +389,11 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
     }
 
     public void mouseClicked(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
     }
 
     public void mousePressed(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
     }
 
     public void mouseReleased(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
     }
 }

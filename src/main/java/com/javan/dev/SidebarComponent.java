@@ -411,7 +411,6 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
      * Method to perform search
      */
     public void searchPOI() {
-        JButton button = searchButton;
         /**
          * Get the text from the search bar and then empty the search bar
          */
@@ -442,11 +441,10 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
             }
             else {
                 /**
-                 * Get current building ID and floor ID to know where we are on the map for poi searching purposes.
+                 * Get current building ID to know where we are on the map for poi searching purposes.
                  * These will be used when searching for POIs.
                  */
                 int currBuildingID = mapComponent.getFloorMapObject().getBuildingID();
-                int currFloorID = mapComponent.getFloorMapObject().getMapID();
                 /**
                  * Get the list of all POIs. Initialize new ArrayList of POIs to store the current building's POIs only, and the searchResults POI list.
                  */

@@ -1,7 +1,6 @@
 package com.javan.dev;
 import org.json.JSONObject;
 import org.json.JSONArray;
-import com.google.gson.*;
 import java.util.*;
 
 /**
@@ -195,11 +194,6 @@ public class BuildingPointOfInterest {
         return this.isVisible;
     }
 
-    /**
-     * TODO: This should be temporary. Not sure how we want to set favourited for a particular user but also know how to get favourite
-     * for a specific user because getIsFavourited() is for an entire POI. not sure how it will work for a POI that is not user-created and
-     * favourited by multiple users
-     */
     public void setIsFavourited(int userID) {
         Boolean in = false;
         for (int i = 0; i < userFavouritesList.size(); i++) {

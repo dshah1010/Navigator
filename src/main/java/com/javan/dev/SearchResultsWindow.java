@@ -2,13 +2,8 @@ package com.javan.dev;
 
 // Import necessary libraries
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 /**
@@ -113,6 +108,7 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
      * @param e     The mouse event
      * @return  
      */
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public void mouseClicked(MouseEvent e) {
         /**
          * Check if the mouse click event was on an item on the JList.
@@ -137,6 +133,7 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
             }
             else {
                 JList<PointOfInterest> poiList = (JList) e.getSource();
+                
                 /**
                  * Restrict the clicking for within the items available in the list. The mouse click on any empty space within the JList scroll pane will do nothing.
                  */
@@ -238,7 +235,7 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
         /**
          * Create a new JList based on the search results list.
          */
-        resultList = new JList(list.toArray());
+        resultList = new JList<PointOfInterest>(list.toArray(new PointOfInterest[list.size()]));
         resultList.addMouseListener(this);
         /**
          * Style the JList
@@ -324,7 +321,7 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
         /**
          * Create a new JList based on the search results list.
          */
-        buildingResultList = new JList(list.toArray());
+        buildingResultList = new JList<BuildingPointOfInterest>(list.toArray(new BuildingPointOfInterest[list.size()]));
         buildingResultList.addMouseListener(this);
         /**
          * Style the JList

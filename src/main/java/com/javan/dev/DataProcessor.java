@@ -357,7 +357,7 @@ public final class DataProcessor {
             /**
              * Check to see if the POI ID matches a POI
              */
-            if (currentPoi.get("ID") == poiJson.get("ID")) {
+            if (currentPoi.get("ID").equals(poiJson.get("ID"))) {
                 isDeleted = true;
             }
             else if (isDeleted == true) {
@@ -827,7 +827,6 @@ public final class DataProcessor {
                  * Check if the username and decrypted password match
                  */
                 if (username.equals(user.getString("username")) && password.equals(decryptedPassword)) {
-                    String userType = user.getString("userType");
                     return (Integer) user.get("userID");
                 }
             }
