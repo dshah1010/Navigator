@@ -9,8 +9,10 @@ import com.google.gson.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.JSONArray;
+import java.io.File;
+import java.io.FileWriter;
 
 /**
  * @author: Brad McGlynn <bmcglyn4@uwo.ca>, Dylan Sta Ana <dstaana@uwo.ca>, Deep Ashishkumar Shah <dshah228@uwo.ca>
@@ -28,6 +30,144 @@ public class JsonReader {
     public static String read(String fileName) throws IOException {
         String content = new String(Files.readAllBytes(Paths.get(fileName)));
         return content;
+    }
+
+    /**
+     * method to create map metadata based on images in directory
+     * @param String directoryPath, directory path of the directory of directories containing map pngs
+     * @param String jsonFilePath, the target path for the json file of metadata to be created at
+     * @return None
+     */
+    public static void addMapInfoToJSON(String directoryPath, String jsonFilePath) {
+        /**
+         * Create a JSON array to hold the maps
+         */
+        JSONArray buildingsJson = new JSONArray();
+    
+        /**
+         * Get a list of sub-directories in the specified directory
+         */
+        File directory = new File(directoryPath);
+        File[] subdirectories = directory.listFiles();
+
+        /**
+         * Sort the subdirectories alphabetically
+         */
+        java.util.Arrays.sort(subdirectories);
+
+        int mapID = 1;
+        int buildingId = 1;
+        /**
+         * Loop through each subdirectory inside floorPlans (each Building's directory of maps)
+         */
+        for (File subdirectory : subdirectories) {
+            /**
+             * Set floor ID to 1 for each building
+             */
+            mapID = 1;
+
+            /**
+             * Create a new JSON object for this building
+             */
+            JSONObject buildingJson = new JSONObject();
+
+            /**
+             * Get the building name subdirectory
+             */
+            String buildingName = subdirectory.getName();
+    
+            /**
+             * Set the building name, type and ID in the JSON object
+             */
+            buildingJson.put("mapName", buildingName);
+            buildingJson.put("mapType", "BUILDING");
+            buildingJson.put("buildingID", buildingId);
+    
+            /**
+             * Get a list of all PNG files in this subdirectory (these are the FloorMap imaages)
+             */
+            File[] imageFiles = subdirectory.listFiles();
+            java.util.Arrays.sort(imageFiles);
+    
+            /**
+             * Create a JSON array to hold the floor maps for the building
+             */
+            JSONArray mapsJson = new JSONArray();
+
+            /**
+             * Loop through each image file and add it to the JSON array
+             */
+            for (File imageFile : imageFiles) {
+                /**
+                 * Create a new JSON object for this floor
+                 */
+                JSONObject mapJson = new JSONObject();
+
+                /**
+                 * Get the map name from the subdirectory 
+                 */
+                String mapName = imageFile.getName();
+        
+                /**
+                 * Set the map name, map type and ID in the JSON object
+                 */
+                mapJson.put("mapName", mapName);
+                mapJson.put("mapType", "FLOOR");
+                mapJson.put("mapID", mapID);
+                
+                /**
+                 * Loop through each image file and add it to the JSON array
+                 */
+                String imagePath = imageFile.getPath();
+                mapJson.put("filePath", imagePath);
+                mapsJson.put(mapJson);
+                
+                /**
+                 * Increment mapID by 1 for next floor within the building
+                 */
+                mapID++;
+            }
+    
+            /**
+             * Set the floor maps in the JSON object
+             */
+            buildingJson.put("floorMaps", mapsJson);
+
+            /**
+             * Set the building path in the JSON object
+             */
+            String buildingPath = subdirectory.getPath();
+            buildingJson.put("filePath", buildingPath);
+    
+            /**
+             * Add the map JSON object to the buildings JSON array
+             */
+            buildingsJson.put(buildingJson);
+
+            /**
+             * Increment the building ID for next building
+             */
+            buildingId++;
+        }
+
+        /**
+         * Write the maps to the JSON file
+         */
+        FileWriter file = null;
+        try {
+            file = new FileWriter(jsonFilePath);
+            file.write(buildingsJson.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (file != null) {
+                try {
+                    file.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     /**
@@ -121,7 +261,7 @@ public class JsonReader {
 
 
     /**
-     * Function to find filePath of FloorMap using Gson
+     * method to find filePath of FloorMap using Gson
      * @param int buildingID
      * @param int mapID
      * @return file path of floor map
@@ -130,6 +270,10 @@ public class JsonReader {
     public static String getFloorMapPathFromID(int buildingID, int mapID, String jsonFilePath) {
         FileReader reader = null;
         try {
+            /*
+             * Reads from jsonFilePath in order to get the appropriate building maps info,
+             * then loops through the building maps the to find the floormap paths
+             */
             reader = new FileReader(jsonFilePath);
             JsonArray buildingMaps = JsonParser.parseReader(reader).getAsJsonArray();
             String mapPath;
@@ -138,8 +282,11 @@ public class JsonReader {
             int floorCounter = 0;
 
             while (counter < buildingMaps.size()) {
-                if (counter + 1 == buildingID){ // counter + 1 because buildingIDs start at 1 rather than 0, but 
-                    // the JsonArray is 0 indexed
+                if (counter + 1 == buildingID){ 
+                    /* 
+                     * counter + 1 because buildingIDs start at 1 rather than 0, but 
+                     * the JsonArray is 0 indexed
+                     */
                     floorMaps = buildingMaps.get(counter).getAsJsonObject().get("floorMaps").getAsJsonArray();
                     while (floorCounter < floorMaps.size()) {
                         mapPath = floorMaps.get(floorCounter).getAsJsonObject().get("filePath").getAsString();
@@ -159,7 +306,7 @@ public class JsonReader {
         return null;
     }
     /**
-     * Function to find filePath of BuildingMap using Gson
+     * method to find filePath of BuildingMap using Gson
      * @param int buildingID
      * @return file path of building map
      * @throws FileNotFoundException
@@ -186,7 +333,7 @@ public class JsonReader {
         return null;
     }
     /**
-     * function to get userFavouites POI Data
+     * method to get userFavouites POI Data
      * @param int userID
      * @return ArrayList<PointOfInterest>
      */
@@ -269,10 +416,10 @@ public class JsonReader {
     }
 
 
-      /**
-     * function to get buildinguserFavouites POI Data
+    /**
+     * method to get buildinguserFavouites POI Data
      * @param int userID
-     * @return ArrayList<PointOfInterest>
+     * @return ArrayList<BuildingPointOfInterest>
      */
     public static ArrayList<BuildingPointOfInterest> buildingfavouritesList(int userID) {
 
@@ -283,7 +430,7 @@ public class JsonReader {
          */
         try {
             
-            reader = new FileReader("data/PointOfInterests/BuildingsPOIMetadata.json");
+            reader = new FileReader("data/PointOfInterests/BuildingPOIMetadata.json");
             JsonArray POIDataArray = JsonParser.parseReader(reader).getAsJsonArray();
             ArrayList<BuildingPointOfInterest> arrayList = new ArrayList<BuildingPointOfInterest>();
 
@@ -344,7 +491,7 @@ public class JsonReader {
 
 
      /**
-     * function to get user made POI Data
+     * method to get user made POI Data
      * @param int userID
      * @return ArrayList<PointOfInterest>
      */
@@ -427,7 +574,7 @@ public class JsonReader {
     }
     
      /**
-     * function to get user made building POI Data
+     * method to get user made building POI Data
      * @param int userID
      * @return ArrayList<BuildingPointOfInterest>
      */
@@ -440,7 +587,7 @@ public class JsonReader {
          */
         try {
 
-            reader = new FileReader("data/PointOfInterests/BuildingsPOIMetadata.json");
+            reader = new FileReader("data/PointOfInterests/BuildingPOIMetadata.json");
             JsonArray POIDataArray= JsonParser.parseReader(reader).getAsJsonArray();
             ArrayList<BuildingPointOfInterest> arrayList = new ArrayList<BuildingPointOfInterest>();
 
@@ -499,7 +646,7 @@ public class JsonReader {
     }    
 
     /**
-     * function to get Floor POIs currently available to the user
+     * method to get Floor POIs currently available to the user
      * @param int userID
      * @return ArrayList<PointOfInterest>
      */
@@ -596,9 +743,9 @@ public class JsonReader {
 
 
         /**
-     * function to get Floor POIs currently available to the user
+     * method to get Building POIs currently available to the user
      * @param int userID
-     * @return ArrayList<PointOfInterest>
+     * @return ArrayList<BuildingPointOfInterest>
      */
     public static ArrayList<BuildingPointOfInterest> universalBuildingPOIs(int userID) {
 
@@ -609,7 +756,7 @@ public class JsonReader {
          */
         try {
 
-            reader = new FileReader("data/PointOfInterests/BuildingsPOIMetadata.json");
+            reader = new FileReader("data/PointOfInterests/BuildingPOIMetadata.json");
             JsonArray POIDataArray= JsonParser.parseReader(reader).getAsJsonArray();
             ArrayList<BuildingPointOfInterest> arrayList = new ArrayList<BuildingPointOfInterest>();
 
@@ -633,7 +780,9 @@ public class JsonReader {
                 }
                 
 
-                // either developer made or user made POIs
+                /* 
+                 * either developer made or user made POIs
+                 */
                 if (poiObject.get("userID").getAsInt() == 1 || poiObject.get("userID").getAsInt() == userID){
 
                     /*
@@ -680,7 +829,7 @@ public class JsonReader {
     }
 
     /**
-     * function to get Current Building POIs currently available to the user
+     * method to get Current Building POIs currently available to the user
      * @param int userID
      * @param int currBuilding
      * @return ArrayList<PointOfInterest>
@@ -723,7 +872,9 @@ public class JsonReader {
                     }
                 }
                 
-                // either developer made or user made POIs
+                /* 
+                 * either developer made or user made POIs
+                 */ 
                 if (poiObject.get("userID").getAsInt() == 1 || poiObject.get("userID").getAsInt() == userID){
 
                     /*
@@ -773,8 +924,8 @@ public class JsonReader {
 
     /**
      * Method that sorts an arraylist of POIs by their name alphabetically
-     * @param arrayList
-     * @return
+     * @param ArrayList<PointOfInterest> arrayList
+     * @return ArrayList<PointOfInterest>
      */
     private static ArrayList<PointOfInterest> sortPOIArray(ArrayList<PointOfInterest> arrayList) {
         ArrayList<PointOfInterest> sortedArrayList = new ArrayList<PointOfInterest>();
@@ -794,9 +945,9 @@ public class JsonReader {
     }
 
 /**
-     * Method that sorts an arraylist of POIs by their name alphabetically
-     * @param arrayList
-     * @return
+     * Method that sorts an arraylist of Building POIs by their name alphabetically
+     * @param ArrayList<BuildingPointOfInterest> arrayList
+     * @return ArrayList<BuildingPointOfInterest>
      */
     private static ArrayList<BuildingPointOfInterest> sortBuildingPOIArray(ArrayList<BuildingPointOfInterest> arrayList) {
         ArrayList<BuildingPointOfInterest> sortedArrayList = new ArrayList<BuildingPointOfInterest>();
@@ -813,48 +964,6 @@ public class JsonReader {
             }
         }
         return sortedArrayList;
-    }
-
-
-    /**
-     * method to update isVisble state in POI JSON file and its objects
-     * @param nameofPOI
-     */
-    public void updateisVisble(String nameofPOI){
-        FileReader reader = null;
-        /*
-         * attempts to read file 
-         */
-        try {
-            reader = new FileReader("data/PointOfInterests/PointOfInterestMetadata.json");
-            JsonArray POIDataArray= JsonParser.parseReader(reader).getAsJsonArray();
-            /*
-             * loops through json file to find user made POIs
-             */ 
-            for (JsonElement POI : POIDataArray) {
-                JsonObject poiObject = POI.getAsJsonObject();
-                if (poiObject.get("name").getAsString() == nameofPOI){
-                    if(poiObject.get("isVisible").getAsBoolean() == false){
-                        /*
-                         * changes isVisible property to false if true
-                         */
-                        poiObject.addProperty("isVisible", false);
-                        break;
-                    }
-                        /*
-                         * changes isVisible property to true if false
-                         */
-                    else{
-                        poiObject.addProperty("isVisible", true);
-                    }
-                }     
-
-            }
-
-        } 
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 }
     

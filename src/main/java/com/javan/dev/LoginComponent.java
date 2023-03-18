@@ -58,7 +58,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
     private static LoginComponent INSTANCE;
 
     /**
-     * Private variables to hold the instance of the data processor and user
+     * Private variables to hold the instance of the data processor, user, mapCOmponent and poiComponent
      */
     private DataProcessor processor = DataProcessor.getInstance();
     private User user = User.getInstance();
@@ -98,6 +98,10 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
         isLoginWindowOpen = true;
     }
 
+    /**
+     * Method to get the instance of LoginComponent
+     * @return LoginComponent
+     */
     public static LoginComponent getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new LoginComponent();
@@ -107,7 +111,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
 
     /**
      * Getter for the main JPanel
-     * @return
+     * @return Jpanel of mainPanel
      */
     public JPanel getMainPanel() {
         return mainPanel;

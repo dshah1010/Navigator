@@ -21,11 +21,6 @@ public interface Map {
      */
     public int getMapID();
 
-    /**
-     * (WIP) Updates map
-     * @return None
-     */
-    public void updateMap(int mapID);
 
     /**
      * Getter for map type
@@ -33,5 +28,4 @@ public interface Map {
      */
     public String getMapType();
 
-    public JSONObject toJSON();
 }

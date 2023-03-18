@@ -1,7 +1,4 @@
 package com.javan.dev;
-import java.util.ArrayList;
-import org.json.JSONObject;
-import org.json.JSONArray;
 import java.io.IOException;
 
 /**
@@ -11,13 +8,12 @@ import java.io.IOException;
  */
 public class FloorMap implements Map{
     /**
-     * Declaring the mapID, buildindID, filePath, map type, Point of Interest array and layers array of the Floor.
+     * Declaring the mapID, buildingID, filePath and map type of the Floor.
      */
     private String filePath;
     private int mapID;
     private int buildingID;
     private String mapType;
-    private ArrayList<PointOfInterest> POIs = new ArrayList<PointOfInterest>();
     
     /**
      * Private variable to hold the instance of the data processor
@@ -54,15 +50,6 @@ public class FloorMap implements Map{
     }
 
 
-    /**
-     * Updates Map (WIP)
-     * @param None
-     * @return int
-     */
-    public void updateMap(int mapID) {
-        this.mapID = mapID;
-        // Perform update of Campus Map
-    }
 
     /**
      * Getter for the buildingID
@@ -83,56 +70,37 @@ public class FloorMap implements Map{
         return this.mapType;
     }
 
-    public JSONObject toJSON() {
-        JSONObject json = new JSONObject();
-        json.put("filePath", this.filePath);
-        json.put("mapID", this.mapID);
-        json.put("mapType", this.mapType);
-        json.put("buildingID", this.buildingID);
-        JSONArray POIsJson = new JSONArray();
-        for (PointOfInterest POI : this.POIs) {
-            POIsJson.put(POI.toJSON());
-        }
-        json.put("POIs", POIsJson);
-        return json;
-    }
 
     /**
-     * Adds PointOfInterest to POIs
-     * @param PointOfInterest
-     * @return POI
+     * Method to check if there is a floorMap above this one
+     * @return boolean that determines if the above floor exists
      */
-    public void addPOI(PointOfInterest newPointOfInterest) {
-        this.POIs.add(newPointOfInterest);
-    }
-
-    /**
-     * Searches for the PointOfInterest that matches search string
-     * @param PointOfInterest
-     * @return POI
-     */
-    public PointOfInterest searchPOI(String PointOfInterest) {
-        for (int i = 0; i < this.POIs.size(); i++) {
-            if (this.POIs.get(i).getName().equalsIgnoreCase(PointOfInterest)) {
-                return this.POIs.get(i);
-            }
-        }
-        return null;
-    }
-
-
     public boolean checkfloorAbove() {
         return this.processor.checkFloorAbove(this.mapID, this.buildingID);
     }
 
+    /**
+     * Method to check if there is a floorMap below this one
+     * @return boolean that determines if the below floor exists
+     */
     public boolean checkFloorBelow() {
         return this.processor.checkFloorBelow(this.mapID, this.buildingID);
     }
 
+    /**
+     * Method to check if get the floorMap above this one
+     * @return FloorMap object above the current floorMap
+     * @throws IOException
+     */
     public FloorMap getFloorAbove() throws IOException {
         return this.processor.getFloorAbove(this.mapID, this.buildingID);
     }
 
+    /**
+     * Method to check if get the floorMap below this one
+     * @return FloorMap object below the current floorMap
+     * @throws IOException
+     */
     public FloorMap getFloorBelow() throws IOException {
         return this.processor.getFloorBelow(this.mapID, this.buildingID);
     }

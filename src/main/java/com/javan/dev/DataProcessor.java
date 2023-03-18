@@ -27,6 +27,8 @@ public final class DataProcessor {
      */
     private static DataProcessor INSTANCE;
     private String mapJsonFilePath = "data/images/maps/metadata/mapMetadata.json";
+    private String POIMetadataFile = "data/PointOfInterests/PointOfInterestMetadata.json";
+    private String buildingPOIMetadataFile = "data/PointOfInterests/BuildingPOIMetadata.json";
 
     /**
      * Getter for the DataProcessor singleton instance
@@ -38,37 +40,6 @@ public final class DataProcessor {
         return INSTANCE;
     }
 
-
-    /**
-     * Function to store user info as a JSON object using Gson
-     * @param user, the user object to be stored as a JSON string
-     * @return None
-     * @throws IOException
-     * @throws JsonIOException
-     */
-    public void storeUser(User user) throws JsonIOException, IOException {
-        Gson gson = new Gson();
-        /**
-         * Writes the user object to JSON file in the users folder under data
-         */
-        FileWriter writer = new FileWriter("data/users/userMetadata.json");
-        gson.toJson(user, writer);
-        writer.flush();
-        writer.close();
-    }
-
-    /**
-     * Function to load user info from a JSON object using Gson
-     * @param String json, the json string to be loaded and stored as a user object
-     * @return the User object that was loaded from the JSON string
-     * @throws FileNotFoundException
-     */
-    public User loadUser(String name) throws FileNotFoundException {
-        Gson gson = new Gson();
-        FileReader reader = new FileReader("group1/data/users" + "/" + name + ".json");
-        User user = gson.fromJson(reader, User.class);
-        return user;
-    }
 
     /**
      * Function to load map filePaths from our metadata JSON object using Gson
@@ -137,6 +108,7 @@ public final class DataProcessor {
     }
 
     /**
+     * Method to get user's favourite POIs
      * @param int userID - the ID of the user
      * @return List of favourite POIs
      */
@@ -144,6 +116,11 @@ public final class DataProcessor {
         return JsonReader.favouritesList(userID);
     }
 
+    /**
+    * Method to get user's favourite POIs
+     * @param int userID - the ID of the user
+     * @return List of favourite POIs
+     */
     public ArrayList<BuildingPointOfInterest> getBuildingFavouritePOIs(int userID) {
         return JsonReader.buildingfavouritesList(userID);
     }
@@ -155,12 +132,23 @@ public final class DataProcessor {
      */
     public ArrayList<PointOfInterest> getUserPOIs(int userID) {
         return JsonReader.userPOIList(userID);
-    }  
+    }
+    
+    /**
+     * Method to return the Building POIs created by a user 
+     * @param int userID - the ID of the user
+     * @return List of user-created Building POIs
+     */
 
     public ArrayList<BuildingPointOfInterest> getBuildingUserPOIs(int userID) {
         return JsonReader.buildingUserPOIList(userID);
     }  
 
+    /**
+     * Method to return the all POIs created by a user or admin
+     * @param int userID - the ID of the user
+     * @return List of all POIs visible to user
+     */
     public ArrayList<PointOfInterest> getUniversalPOIs(boolean isCampusMap, int userID) {
         CampusMap campusMap = CampusMap.getInstance(0);
         ArrayList<PointOfInterest> universalPOIs = new ArrayList<PointOfInterest>();
@@ -190,12 +178,18 @@ public final class DataProcessor {
         return universalPOIs;
     }
 
+    /**
+     * Method to return the all building POIs created by a user or admin
+     * @param int userID - the ID of the user
+     * @return List of all visible POIs to user
+     */
     public ArrayList<BuildingPointOfInterest> getBuildingUniversalPOIs(boolean isCampusMap, int userID) {
         return JsonReader.universalBuildingPOIs(userID);
     }
 
     /**
-     * @param poiID - the ID of the POI
+     * Method to get the x,y coordinates of a POI based on its poiID
+     * @param int poiID - the ID of the POI
      * @return coords, int[] of x and y coordinates
      */
     public int[] getPOIPosition(int poiID) {
@@ -209,7 +203,7 @@ public final class DataProcessor {
      * @param poi PointOfInterest object
      */
     public boolean addPointOfInterestToJsonFile(PointOfInterest POI) throws IOException {
-        String jsonString = new String(Files.readAllBytes(Paths.get("data/PointOfInterests/PointOfInterestMetadata.json")));
+        String jsonString = new String(Files.readAllBytes(Paths.get(POIMetadataFile)));
         JSONArray jsonArray = new JSONArray(jsonString);
         
         JSONObject poiJson = POI.toJSON();
@@ -225,19 +219,19 @@ public final class DataProcessor {
         }
         jsonArray.put(poiJson);
         
-        FileWriter fileWriter = new FileWriter("data/PointOfInterests/PointOfInterestMetadata.json");
+        FileWriter fileWriter = new FileWriter(POIMetadataFile);
         fileWriter.write(jsonArray.toString());
         fileWriter.flush();
         fileWriter.close();
         return true;
     }
     /*
-     * method to add new buildingPOI to BuildingsPointOfInterestMetadata.json file array
+     * method to add new buildingPOI to BuildingPOIMetadata.json file array
      */
 
     public boolean addBuildingPointOfInterestToJsonFile(BuildingPointOfInterest POI) throws IOException {
         
-        String jsonString = new String(Files.readAllBytes(Paths.get("data/PointOfInterests/BuildingsPOIMetadata.json")));
+        String jsonString = new String(Files.readAllBytes(Paths.get(buildingPOIMetadataFile)));
         JSONArray jsonArray = new JSONArray(jsonString);
         
         JSONObject poiJson = POI.toJSON();
@@ -253,7 +247,7 @@ public final class DataProcessor {
         }
         jsonArray.put(poiJson);
         
-        FileWriter fileWriter = new FileWriter("data/PointOfInterests/BuildingsPOIMetadata.json");
+        FileWriter fileWriter = new FileWriter(buildingPOIMetadataFile);
         fileWriter.write(jsonArray.toString());
         fileWriter.flush();
         fileWriter.close();
@@ -262,11 +256,11 @@ public final class DataProcessor {
 
     /**
      * Method to edit the point of interest data for a POI given its ID in the PointOfInterestMetadata.json file
-     * @param poi
-     * @return
+     * @param PointOfInterest poi
+     * @return boolean - success of editing POI
      */
     public boolean editPointOfInterestInJsonFile(PointOfInterest poi) throws IOException {
-        String jsonString = new String(JsonReader.read("data/PointOfInterests/PointOfInterestMetadata.json"));
+        String jsonString = new String(JsonReader.read(POIMetadataFile));
         JSONArray jsonArray = new JSONArray(jsonString);
         
         JSONObject poiJson = poi.toJSON();
@@ -287,7 +281,7 @@ public final class DataProcessor {
                  * Add the new POI to the JSON Array
                  */
                 jsonArray.put(poiJson);
-                FileWriter fileWriter = new FileWriter("data/PointOfInterests/PointOfInterestMetadata.json");
+                FileWriter fileWriter = new FileWriter(POIMetadataFile);
                 fileWriter.write(jsonArray.toString());
                 fileWriter.flush();
                 fileWriter.close();
@@ -300,12 +294,12 @@ public final class DataProcessor {
 
 
     /**
-     * Method to edit the point of interest data for a POI given its ID in the PointOfInterestMetadata.json file
-     * @param poi
-     * @return
+     * Method to edit the building point of interest data for a POI given its ID in the PointOfInterestMetadata.json file
+     * @param BuildingPointOfInterest poi
+     * @return boolean - success of editing Building POI
      */
     public boolean editBuildingPointOfInterestInJsonFile(BuildingPointOfInterest poi) throws IOException {
-        String jsonString = new String(JsonReader.read("data/PointOfInterests/BuildingsPOIMetadata.json"));
+        String jsonString = new String(JsonReader.read(buildingPOIMetadataFile));
         JSONArray jsonArray = new JSONArray(jsonString);
         
         JSONObject poiJson = poi.toJSON();
@@ -326,7 +320,7 @@ public final class DataProcessor {
                  * Add the new POI to the JSON Array
                  */
                 jsonArray.put(poiJson);
-                FileWriter fileWriter = new FileWriter("data/PointOfInterests/BuildingsPOIMetadata.json");
+                FileWriter fileWriter = new FileWriter(buildingPOIMetadataFile);
                 fileWriter.write(jsonArray.toString());
                 fileWriter.flush();
                 fileWriter.close();
@@ -340,12 +334,12 @@ public final class DataProcessor {
 
     /**
      * Method to delete a point of interest from the PointOfInterestMetadata.json file
-     * @param poi
-     * @return
+     * @param PointOfInterest poi
+     * @return boolean - sucess of deleting POI
      * @throws IOException
      */
     public boolean deletePointOfInterestFromJsonFile(PointOfInterest poi) throws IOException {
-        String jsonString = new String(JsonReader.read("data/PointOfInterests/PointOfInterestMetadata.json"));
+        String jsonString = new String(JsonReader.read(POIMetadataFile));
         JSONArray jsonArray = new JSONArray(jsonString);
         
         JSONObject poiJson = poi.toJSON();
@@ -376,7 +370,7 @@ public final class DataProcessor {
         }
         FileWriter fileWriter;
         try {
-            fileWriter = new FileWriter("data/PointOfInterests/PointOfInterestMetadata.json");
+            fileWriter = new FileWriter(POIMetadataFile);
             fileWriter.write(newJsonArray.toString());
             fileWriter.flush();
             fileWriter.close();
@@ -387,10 +381,13 @@ public final class DataProcessor {
     }
 
     /**
-     * Method to delete point of interest from BuildingsPOIMetadata.json file
+     * Method to delete a building point of interest from the BuildingPOIMetadata.json file
+     * @param BuildingPointOfInterest poi
+     * @return boolean - sucess of deleting POI
+     * @throws IOException
      */
     public boolean deleteBuildingPointOfInterestFromJsonFile(BuildingPointOfInterest poi) throws IOException {
-        String jsonString = new String(JsonReader.read("data/PointOfInterests/BuildingsPOIMetadata.json"));
+        String jsonString = new String(JsonReader.read(buildingPOIMetadataFile));
         JSONArray jsonArray = new JSONArray(jsonString);
         
         JSONObject poiJson = poi.toJSON();
@@ -421,7 +418,7 @@ public final class DataProcessor {
         }
         FileWriter fileWriter;
         try {
-            fileWriter = new FileWriter("data/PointOfInterests/BuildingsPOIMetadata.json");
+            fileWriter = new FileWriter(buildingPOIMetadataFile);
             fileWriter.write(newJsonArray.toString());
             fileWriter.flush();
             fileWriter.close();
@@ -432,37 +429,9 @@ public final class DataProcessor {
     }
 
     /**
-     * Method that gets the filepath of the first floor of a building given the building ID
-     * @throws IOException
-     * @throws JSONException
-     */
-    public String getFirstFloorFilePath(int buildingID) throws JSONException, IOException {
-
-        /**
-         * Read the JSON file
-         */
-        JSONArray metadataArray = new JSONArray(new String(JsonReader.read(mapJsonFilePath)));
-        
-        /**
-         * Get the first floor of the building
-         */
-        for (int i = 0; i < metadataArray.length(); i++) {
-            JSONObject metadata = metadataArray.getJSONObject(i);
-            if (metadata.getInt("buildingID") == buildingID) {
-                JSONArray floorMaps = metadata.getJSONArray("floorMaps");
-                for (int j = 0; j < floorMaps.length(); j++) {
-                    JSONObject floorMap = floorMaps.getJSONObject(j);
-                    if (floorMap.getInt("mapID") == 1) {
-                        return floorMap.getString("filePath");
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
-     * @param currentMapID
+     * Method to check if there is a floorMap above the current floor
+     * @param int currentMapID
+     * @Param int currentBuildingID
      * @return boolean indicating if there is a floor above or not
      */
     public boolean checkFloorAbove(int currentMapID, int currentBuildingID) {
@@ -493,41 +462,42 @@ public final class DataProcessor {
     }
 
     /**
-     * Method that checks if there is a floor below the current one.
+     * Method that checks if there is a floorMap below the current one.
      * @param int currentMapID
      * @param int currentBuildingID
      * @return boolean indicating if there is a floor below 
      */
     
     public boolean checkFloorBelow(int currentMapID, int currentBuildingID) {
-    try {
-        /**
-         * Read the JSON file
-         */
-        JSONArray metadataArray = new JSONArray(new String(JsonReader.read(mapJsonFilePath)));
+        try {
+            /**
+             * Read the JSON file
+             */
+            JSONArray metadataArray = new JSONArray(new String(JsonReader.read(mapJsonFilePath)));
 
-        /**
-         * Loop through the metadata array
-         */
-        for (int i = 0; i < metadataArray.length(); i++) {
-            JSONObject metadata = metadataArray.getJSONObject(i);
-            if (metadata.getInt("buildingID") == currentBuildingID) {
-                JSONArray floorMaps = metadata.getJSONArray("floorMaps");
-                for (int j = 0; j < floorMaps.length(); j++) {
-                    JSONObject floorMap = floorMaps.getJSONObject(j);
-                    if (floorMap.getInt("mapID") == currentMapID - 1) {
-                        return true;
+            /**
+             * Loop through the metadata array
+             */
+            for (int i = 0; i < metadataArray.length(); i++) {
+                JSONObject metadata = metadataArray.getJSONObject(i);
+                if (metadata.getInt("buildingID") == currentBuildingID) {
+                    JSONArray floorMaps = metadata.getJSONArray("floorMaps");
+                    for (int j = 0; j < floorMaps.length(); j++) {
+                        JSONObject floorMap = floorMaps.getJSONObject(j);
+                        if (floorMap.getInt("mapID") == currentMapID - 1) {
+                            return true;
+                        }
                     }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    return false;
+        return false;
     }
 
     /**
+     * Method to get the floorMap object above the current one
      * @param int currentMapID
      * @param int currentBuildingID
      * @return Map object of the floor above
@@ -545,6 +515,7 @@ public final class DataProcessor {
     }
 
     /**
+     * Method to get the floorMap object below the current one
      * @param currentMapID
      * @return Map object of the floor below
      * @throws IOException If there is an error reading the map metadata file.
@@ -560,7 +531,10 @@ public final class DataProcessor {
         return null;
     }
 
-
+    /**
+     * Method to make a new POI ID based on the length of the current POI metadata list
+     * @return int new POI ID
+     */
     public int makeNewPOIID() {
         FileReader reader = null;
 
@@ -568,7 +542,7 @@ public final class DataProcessor {
          * attempts to read file 
          */
         try {
-            reader = new FileReader("data/PointOfInterests/PointOfInterestMetadata.json");
+            reader = new FileReader(POIMetadataFile);
             JsonArray POIDataArray= JsonParser.parseReader(reader).getAsJsonArray();
             return POIDataArray.size() + 1;
         } catch (FileNotFoundException e) {
@@ -577,7 +551,10 @@ public final class DataProcessor {
         return 0;
     }
     
-
+    /**
+     * Method to make a new Building POI ID based on the length of the current Building POI metadata list
+     * @return int new Building POI ID
+     */
     public int makeNewBuildingPOIID() {
         FileReader reader = null;
 
@@ -585,7 +562,7 @@ public final class DataProcessor {
          * attempts to read file 
          */
         try {
-            reader = new FileReader("data/PointOfInterests/BuildingsPOIMetadata.json");
+            reader = new FileReader(buildingPOIMetadataFile);
             JsonArray POIDataArray= JsonParser.parseReader(reader).getAsJsonArray();
             return POIDataArray.size() + 1;
         } catch (FileNotFoundException e) {
@@ -594,7 +571,11 @@ public final class DataProcessor {
         return 0;
     }
 
-
+    /**
+     * Method to  get a POI based on a POI ID
+     * @param int poiID
+     * @return PointOfInterest poi
+     */
     public PointOfInterest getPOI(int poiID) {
         FileReader reader = null;
 
@@ -603,7 +584,7 @@ public final class DataProcessor {
          */
         try {
 
-            reader = new FileReader("data/PointOfInterests/PointOfInterestMetadata.json");
+            reader = new FileReader(POIMetadataFile);
             JsonArray POIDataArray= JsonParser.parseReader(reader).getAsJsonArray();
 
             /*
@@ -626,7 +607,9 @@ public final class DataProcessor {
                     }
                 }
 
-                // either developer made or user made POIs
+                /*
+                 * either developer made or user made POIs
+                 */
                 if (poiObject.get("ID").getAsInt() == poiID){
                     /*
                     * declares all data from json file
@@ -670,7 +653,11 @@ public final class DataProcessor {
         return null;
     }
 
-
+    /**
+     * Method to  get a POI based on a POI ID
+     * @param int poiID
+     * @return PointOfInterest poi
+     */
     public BuildingPointOfInterest getBuildingPOI(int poiID) {
         FileReader reader = null;
 
@@ -679,7 +666,7 @@ public final class DataProcessor {
          */
         try {
 
-            reader = new FileReader("data/PointOfInterests/BuildingsPOIMetadata.json");
+            reader = new FileReader(buildingPOIMetadataFile);
             JsonArray POIDataArray= JsonParser.parseReader(reader).getAsJsonArray();
 
             /*
@@ -701,8 +688,9 @@ public final class DataProcessor {
                         userFavouritesData.add(userFavourite);
                     }
                 }
-
-                // either developer made or user made POIs
+                /*
+                 * either developer made or user made POIs
+                 */
                 if (poiObject.get("ID").getAsInt() == poiID){
                     /*
                     * declares all data from json file
@@ -908,7 +896,7 @@ public final class DataProcessor {
                 /** 
                  * Check if the usernames match
                  */
-                if (username.equals(user.getString("username"))) {                  System.out.println("Error: account already exists");
+                if (username.equals(user.getString("username"))) {
                     return false;
                 }
             }

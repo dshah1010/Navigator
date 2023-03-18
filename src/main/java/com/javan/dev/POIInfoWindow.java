@@ -57,7 +57,7 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
          */
         if (mapComponent.getIsCampusMap()) {
             frame = new JFrame(this.buildingPOI.getName());
-        } else{
+        } else {
             frame = new JFrame(this.poi.getName());
         }
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -147,7 +147,7 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
            favourite.setHorizontalAlignment(SwingConstants.CENTER);
        }
         else {
-           /**
+            /**
              * Make JButton with icon image
              */ 
             favourite = new JButton();

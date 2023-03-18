@@ -1,7 +1,6 @@
 package com.javan.dev;
 import java.io.IOException;
 import java.util.ArrayList;
-import org.json.JSONObject;
 
 /**
  * @author: Brad McGlynn <bmcglyn4@uwo.ca>
@@ -71,15 +70,6 @@ public final class CampusMap implements Map{
         return this.mapID;
     }
 
-    /**
-     * Updates Map (WIP)
-     * @param None
-     * @return int
-     */
-    public void updateMap(int mapID) {
-        this.mapID = mapID;
-        // Perform update of Campus Map
-    }
 
     /**
      * Getter for mapType
@@ -90,29 +80,6 @@ public final class CampusMap implements Map{
         return this.mapType;
     }
 
-    /**
-     * Adds Bulding to BuildingArray
-     * @param PointOfInterest
-     * @return POI
-     */
-    public String addBuilding(BuildingMap newBuilding) {
-        this.buildingArray.add(newBuilding);
-        return null;
-    }
-
-    /**
-     * Getter for the BuildingMap
-     * @param PointOfInterest
-     * @return POI
-     */
-    public BuildingMap getBuilding(int buildingId) {
-        for (int i = 0; i < this.buildingArray.size(); i++) {
-            if (this.buildingArray.get(i).getMapID() == buildingId) {
-                return this.buildingArray.get(i);
-            }
-        }
-        return null;
-    }
 
     /**
      * Getter for the BuildingArray
@@ -121,7 +88,4 @@ public final class CampusMap implements Map{
         return this.buildingArray;
     }
 
-    public JSONObject toJSON() {
-        return null;
-    }
 }

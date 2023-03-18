@@ -31,7 +31,7 @@ public class App
         */
         String directoryPath = "data/images/maps/floorPlans";
         String jsonFilePath = "data/images/maps/metadata/mapMetadata.json";
-        MapDirectoryReader.addMapInfoToJSON(directoryPath, jsonFilePath);
+        JsonReader.addMapInfoToJSON(directoryPath, jsonFilePath);
 
         /**
          * Create UserInterface object to create the UI -> this will remain for the session
