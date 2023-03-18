@@ -255,7 +255,7 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
                  * Edit POI object with the new POI data with setters
                  */
                 poi.setName(newPOIData.get(0));
-                poi.setRoomNumber(Integer.parseInt(newPOIData.get(1)));
+                poi.setRoomNumber(newPOIData.get(1));
                 poi.setDescription(newPOIData.get(2));
                 poi.setPOItype(layerType);
 

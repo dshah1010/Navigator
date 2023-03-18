@@ -63,6 +63,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      */
     private boolean isCampusMap;
     private int currentMapID;
+    private int currentBuildingID;
     private FloorMap floorMap = null;
     private Map campus = MapFactory.createMap("CAMPUS", 0, 0);
     private String mapType = "CAMPUS";
@@ -219,6 +220,14 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     }
 
     /**
+     * Method to get current Building ID
+     * @return
+     */
+    public int getCurrentBuildingID() {
+        return currentBuildingID;
+    }
+
+    /**
      * Getter for the user of the MapComponent
      * @return  user
      */
@@ -290,6 +299,9 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          */
         this.mapObject = newMap;
         this.currentMapID = newMap.getMapID();
+        if (this.mapType.contains("FLOOR")) {
+            this.currentBuildingID = this.floorMap.getBuildingID();
+        }
     }
     
     /**

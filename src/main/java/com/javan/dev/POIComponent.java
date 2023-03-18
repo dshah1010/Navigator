@@ -58,6 +58,8 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
     private JToggleButton classroomsButton;
     private JToggleButton labsButton;
     private JToggleButton userButton;
+    private JToggleButton washroomsButton;
+    private JToggleButton navigationButton;
 
 
 
@@ -166,6 +168,8 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
          * Create 5 toggle buttons for the different POI layers
          */
         accessibilityButton = createPOILayerToggleButton("Accessibility");
+        washroomsButton = createPOILayerToggleButton("Washrooms");
+        navigationButton = createPOILayerToggleButton("Navigation");
         restaurantsButton = createPOILayerToggleButton("Restaurants");
         classroomsButton = createPOILayerToggleButton("Classrooms");
         labsButton = createPOILayerToggleButton("Labs");
@@ -203,35 +207,32 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
         gridConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridConstraints.gridx = 1;
         gridConstraints.gridy = 1;
-        gridConstraints.gridwidth = 1;
-        gridConstraints.gridheight = 1;
-        gridConstraints.weightx = 0.5;
-        gridConstraints.weighty = 0.25;
-        POIPanels.get(0).add(restaurantsButton, gridConstraints);
+        POIPanels.get(0).add(washroomsButton, gridConstraints);
 
         gridConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridConstraints.gridx = 0;
         gridConstraints.gridy = 2;
-        gridConstraints.gridwidth = 1;
-        gridConstraints.gridheight = 1;
-        gridConstraints.weightx = 0.5;
-        gridConstraints.weighty = 0.25;
-        POIPanels.get(0).add(classroomsButton, gridConstraints);
+        POIPanels.get(0).add(navigationButton, gridConstraints);
 
         gridConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridConstraints.gridx = 1;
         gridConstraints.gridy = 2;
-        gridConstraints.gridwidth = 1;
-        gridConstraints.gridheight = 1;
-        gridConstraints.weightx = 0.5;
-        gridConstraints.weighty = 0.25;
-        POIPanels.get(0).add(labsButton, gridConstraints);
+        POIPanels.get(0).add(restaurantsButton, gridConstraints);
 
         gridConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridConstraints.gridx = 0;
         gridConstraints.gridy = 3;
+        POIPanels.get(0).add(classroomsButton, gridConstraints);
+
+        gridConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridConstraints.gridx = 1;
+        gridConstraints.gridy = 3;
+        POIPanels.get(0).add(labsButton, gridConstraints);
+
+        gridConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridConstraints.gridx = 0;
+        gridConstraints.gridy = 4;
         gridConstraints.gridwidth = 2;
-        gridConstraints.gridheight = 1;
         gridConstraints.weightx = 1.0;
         gridConstraints.weighty = 0.25;
         POIPanels.get(0).add(userButton, gridConstraints);

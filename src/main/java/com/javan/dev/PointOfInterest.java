@@ -21,7 +21,7 @@ public class PointOfInterest {
     private int buildingID;
     private ArrayList<Integer> userFavouritesList = new ArrayList<Integer> ();
     private String description;
-    private int roomNumber;
+    private String roomNumber;
     private String mapFilePath;
     private boolean isVisible;
 
@@ -35,7 +35,7 @@ public class PointOfInterest {
      * Constructor for the POI
      * @param name, the name of the POI
      */
-    public PointOfInterest(String name, int userID, boolean isUsermade, String POI_Type, int coordinatesX, int coordinatesY, int floorID, int buildingID, ArrayList<Integer> userFavouritesList, String description, int roomNumber, boolean isVisible)  {
+    public PointOfInterest(String name, int userID, boolean isUsermade, String POI_Type, int coordinatesX, int coordinatesY, int floorID, int buildingID, ArrayList<Integer> userFavouritesList, String description, String roomNumber, boolean isVisible)  {
         this.name = name;
         this.userID = userID;
         this.isUserMade = isUsermade;
@@ -179,7 +179,7 @@ public class PointOfInterest {
         this.name = newName;
     }
 
-    public void setRoomNumber(int newRoomNumber) {
+    public void setRoomNumber(String newRoomNumber) {
         this.roomNumber = newRoomNumber;
     }
 
@@ -214,9 +214,9 @@ public class PointOfInterest {
 
     /**
      * Getter for the room number of the POI
-     * @return int of the room number 
+     * @return String of the room number 
      */
-    public int getRoomNumber() {
+    public String getRoomNumber() {
         return this.roomNumber;
     }
     /**
