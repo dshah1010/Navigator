@@ -489,7 +489,8 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
             /**
              * Update map component to display Floor POIs
              */
-            mapComponent.clearPois();
+            
+            //mapComponent.clearPois();
             mapComponent.displayPOIs();
             mapComponent.setNavigationMode();
             /**

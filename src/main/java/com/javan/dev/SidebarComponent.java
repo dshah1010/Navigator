@@ -472,7 +472,7 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
                 }
 
                 if (searchMatch.size() == 0) {
-                    ArrayList<PointOfInterest> currBuildingPOIS = JsonReader.buildingPOIS(mapComponent.getUser().getUserID(), currBuildingID);
+                    ArrayList<PointOfInterest> currBuildingPOIS = JsonReader.currentBuildingPOIS(mapComponent.getUser().getUserID(), currBuildingID);
                     for (PointOfInterest poi : currBuildingPOIS) {
                         /**
                          * Convert the room number of the current poi to a string.

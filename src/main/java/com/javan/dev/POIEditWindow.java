@@ -40,12 +40,21 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
     private SidebarComponent sidebar = SidebarComponent.getInstance();
 
     private PointOfInterest poi;
+    private BuildingPointOfInterest buildingPOI;
 
     /**
      * Constructor for POICreationWindow given x and y coordinates
      */
-    public POIEditWindow (PointOfInterest poi) {
-        this.poi = poi;
+    public POIEditWindow (int poiID) {
+        /*
+         * Fills buildigPOI if on campus map
+         */
+        if (mapComponent.getIsCampusMap()) {
+            this.buildingPOI = processor.getBuildingPOI(poiID);
+        }
+        else {
+            this.poi = processor.getPOI(poiID);
+        }
 
         /**
          * Create Frame and Panel
@@ -95,18 +104,29 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
          */
         ArrayList<String> metadata = new ArrayList<String>();
         metadata.add("Name");
-        metadata.add("Room Number");
+        if (!mapComponent.getIsCampusMap()) {
+            metadata.add("Room Number");
+        }
         metadata.add("Description");
         if (user.getIsAdmin()) {
             metadata.add("Layer Type");
         }
 
         ArrayList<String> currentPOIData = new ArrayList<String>();
-        currentPOIData.add(poi.getName());
-        currentPOIData.add(String.valueOf(poi.getRoomNumber()));
-        currentPOIData.add(poi.getDescription());
-        if (user.getIsAdmin()) {
-            currentPOIData.add(poi.getPOItype());
+        if (!mapComponent.getIsCampusMap()) {
+            currentPOIData.add(this.poi.getName());
+            currentPOIData.add(String.valueOf(this.poi.getRoomNumber()));
+            currentPOIData.add(this.poi.getDescription());
+            if (user.getIsAdmin()) {
+                currentPOIData.add(this.poi.getPOItype());
+            }
+        }
+        else {
+            currentPOIData.add(this.buildingPOI.getName());
+            currentPOIData.add(this.buildingPOI.getDescription());
+            if (user.getIsAdmin()) {
+                currentPOIData.add(this.buildingPOI.getPOItype());
+            }
         }
         
 
@@ -226,36 +246,71 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
                 layerType = "USER";
             }
 
-            /**
-             * Edit POI object with the new POI data with setters
+            /*
+             * Determines what to do based on what type of map the user is on
              */
-            poi.setName(newPOIData.get(0));
-            poi.setRoomNumber(Integer.parseInt(newPOIData.get(1)));
-            poi.setDescription(newPOIData.get(2));
-            poi.setPOItype(layerType);
-
-            try {
-                boolean editedSuccessfully = processor.editPointOfInterestInJsonFile(poi);
-                /*
-                 * Gives an error message if the POI already exists for the user
+            if (!mapComponent.getIsCampusMap()) {
+                System.out.println(mapComponent.getIsCampusMap());
+                /**
+                 * Edit POI object with the new POI data with setters
                  */
-                if (!editedSuccessfully) {
-                    JPanel errorPanel = new JPanel();
-                    JLabel errorMessage = new JLabel("Error: POI editing failed");
-                    errorPanel.add(errorMessage);
-                
-                    JOptionPane.showMessageDialog(null, errorPanel, "Error", JOptionPane.ERROR_MESSAGE);
+                poi.setName(newPOIData.get(0));
+                poi.setRoomNumber(Integer.parseInt(newPOIData.get(1)));
+                poi.setDescription(newPOIData.get(2));
+                poi.setPOItype(layerType);
+
+                try {
+                    boolean editedSuccessfully = processor.editPointOfInterestInJsonFile(poi);
+                    /*
+                    * Gives an error message if the POI already exists for the user
+                    */
+                    if (!editedSuccessfully) {
+                        JPanel errorPanel = new JPanel();
+                        JLabel errorMessage = new JLabel("Error: POI editing failed");
+                        errorPanel.add(errorMessage);
+                    
+                        JOptionPane.showMessageDialog(null, errorPanel, "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (IOException err) {
+                    err.printStackTrace();
                 }
-            } catch (IOException err) {
-                err.printStackTrace();
+                mapComponent.displayPOIs();
+                poiComponent.changeDisplayIfCampusMap(mapComponent.getMapObject().getMapID());
+                /**
+                 * Update the sidebar component to display the new POI
+                 */
+                poiComponent.updatePOIComponent();
+                frame.dispose();
             }
-            mapComponent.displayPOIs();
-            poiComponent.changeDisplayIfCampusMap(mapComponent.getMapObject().getMapID());
-            /**
-             * Update the sidebar component to display the new POI
-             */
-            poiComponent.updatePOIComponent();
-            frame.dispose();
+            
+            else {
+                buildingPOI.setName(newPOIData.get(0));
+                buildingPOI.setDescription(newPOIData.get(1));
+                buildingPOI.setPOItype(layerType);
+
+                try {
+                    boolean editedSuccessfully = processor.editBuildingPointOfInterestInJsonFile(buildingPOI);
+                    /*
+                    * Gives an error message if the POI already exists for the user
+                    */
+                    if (!editedSuccessfully) {
+                        JPanel errorPanel = new JPanel();
+                        JLabel errorMessage = new JLabel("Error: POI editing failed");
+                        errorPanel.add(errorMessage);
+                    
+                        JOptionPane.showMessageDialog(null, errorPanel, "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (IOException err) {
+                    err.printStackTrace();
+                }
+                mapComponent.displayPOIs();
+                poiComponent.changeDisplayIfCampusMap(mapComponent.getMapObject().getMapID());
+                /**
+                 * Update the sidebar component to display the new POI
+                 */
+                poiComponent.updatePOIComponent();
+                frame.dispose();
+            }
         }
         /**
          * When the cancel button is clicked, close the window

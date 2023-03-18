@@ -783,7 +783,7 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
                  */
                 mapComponent.changeMap(dataProcessor.getFloorMapFromMapID(currSelected.getBuildingID(), currSelected.getFloorID()));
                 mapComponent.navigateToPOI(poiID);
-                POIInfoWindow poiWindow = new POIInfoWindow(currSelected);
+                POIInfoWindow poiWindow = new POIInfoWindow(poiID);
                 poiWindow.getFrame().setLocationRelativeTo(mapComponent.getMapPanel());
                 poiWindow.setVisibleFrame();
             }

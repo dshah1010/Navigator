@@ -7,7 +7,7 @@ import java.awt.event.*;
 import java.io.IOException;
 
 /**
- * @author: Riley Emma Gavigan <rgavigan@uwo.ca>, Deep Ashishkumar Shah <dshah228@uwo.ca>
+ * @author: Riley Emma Gavigan <rgavigan@uwo.ca>, Deep Ashishkumar Shah <dshah228@uwo.ca>, Brad McGLynn <bmcglyn4@uwo.ca>
  * @version: 1.0
  * @since: 1.0
  */
@@ -16,6 +16,7 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
     private JFrame frame;
     private ArrayList<JLabel> labels;
     private PointOfInterest poi;
+    private BuildingPointOfInterest buildingPOI;
     private JButton favourite;
     private ImageIcon favouriteIcon = new ImageIcon("data/images/favourited_poi.png");
     private ImageIcon unfavouriteIcon = new ImageIcon("data/images/unfavourited_poi.png");
@@ -32,8 +33,12 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
     /**
      * Constructor that creates the POI information window given the PointOfInterest object
      */
-    public POIInfoWindow(PointOfInterest poi) {
-        this.poi = poi;
+    public POIInfoWindow(int poiId) {
+        if (mapComponent.getIsCampusMap()) {
+            this.buildingPOI = processor.getBuildingPOI(poiId);
+        } else {
+            this.poi = processor.getPOI(poiId);
+        }
 
         /**
          * Update icons
@@ -50,7 +55,11 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
         /**
          * Create JFrame Window
          */
-        frame = new JFrame(poi.getName());
+        if (mapComponent.getIsCampusMap()) {
+            frame = new JFrame(this.buildingPOI.getName());
+        } else{
+            frame = new JFrame(this.poi.getName());
+        }
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(350, 350);
         frame.setMinimumSize(new Dimension(200, 200));
@@ -79,21 +88,34 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
         /**
          * Create JLabels to hold the POI information
          */
-        labels.get(0).setText(poi.getName());
-        labels.get(1).setText("POI ID: " + poi.getID());
-        labels.get(2).setText("RoomNumber: " + poi.getRoomNumber());
-        labels.get(3).setText("Description: " + poi.getDescription());
-        labels.get(4).setText("Layer Type: " + poi.getPOItype());
-        labels.get(5).setText("X-Value: " + poi.getCoordinates()[0]);
-        labels.get(6).setText("Y-Value: " + poi.getCoordinates()[1]);
-        if (userInstance.getIsAdmin() == true) {
-            labels.get(7).setText("User ID: " + poi.getUserID());
+        if (!mapComponent.getIsCampusMap()){
+            labels.get(0).setText(poi.getName());
+            labels.get(1).setText("POI ID: " + poi.getID());
+            labels.get(2).setText("RoomNumber: " + poi.getRoomNumber());
+            labels.get(3).setText("Description: " + poi.getDescription());
+            labels.get(4).setText("Layer Type: " + poi.getPOItype());
+            labels.get(5).setText("X-Value: " + poi.getCoordinates()[0]);
+            labels.get(6).setText("Y-Value: " + poi.getCoordinates()[1]);
+            if (userInstance.getIsAdmin() == true) {
+                labels.get(7).setText("User ID: " + poi.getUserID());
+            }
+        } else {
+            labels.get(0).setText(buildingPOI.getName());
+            labels.get(1).setText("BuildingPOI ID: " + buildingPOI.getID());
+            labels.get(2).setText("Building ID: " + buildingPOI.getBuildingID());
+            labels.get(3).setText("Description: " + buildingPOI.getDescription());
+            labels.get(4).setText("Layer Type: " + buildingPOI.getPOItype());
+            labels.get(5).setText("X-Value: " + buildingPOI.getCoordinates()[0]);
+            labels.get(6).setText("Y-Value: " + buildingPOI.getCoordinates()[1]);
+            if (userInstance.getIsAdmin() == true) {
+                labels.get(7).setText("User ID: " + buildingPOI.getUserID());
+            }
         }
 
         /**
          * Add the favourite button to the panel
          */
-        if (!poi.getIsFavourited(userInstance.getUserID())) {
+        if (!mapComponent.getIsCampusMap() && !poi.getIsFavourited(userInstance.getUserID()) ) {
             /**
              * Make JButton with icon image
              */
@@ -107,6 +129,23 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
             favourite.setVerticalAlignment(SwingConstants.CENTER);
             favourite.setHorizontalAlignment(SwingConstants.CENTER);
         }
+        /**
+        * Add the favourite button to the panel of Building POI
+        */
+        else if (!buildingPOI.getIsFavourited(userInstance.getUserID()) && mapComponent.getIsCampusMap()) {
+           /**
+            * Make JButton with icon image
+            */
+           favourite = new JButton();
+           favourite.setIcon(unfavouriteIcon);
+
+
+           /**
+            * Add icon to center of button
+            */
+           favourite.setVerticalAlignment(SwingConstants.CENTER);
+           favourite.setHorizontalAlignment(SwingConstants.CENTER);
+       }
         else {
            /**
              * Make JButton with icon image

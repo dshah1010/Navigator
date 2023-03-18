@@ -17,11 +17,11 @@ public class BuildingPointOfInterest {
     private Boolean isUserMade;
     private String POI_type;
     private int[] coordinates = {0,0};
-    private int floorID;
     private int buildingID;
     private ArrayList<Integer> userFavouritesList = new ArrayList<Integer> ();
     private String mapFilePath;
     private boolean isVisible;
+    private String description;
 
     /**
      * Private variable to hold the instance of the data processor
@@ -33,7 +33,7 @@ public class BuildingPointOfInterest {
      * Constructor for the building POI
      * @param name, the name of the building POI
      */
-    public BuildingPointOfInterest(String name, int userID, boolean isUsermade, String POI_Type, int coordinatesX, int coordinatesY, int buildingID, ArrayList<Integer> userFavouritesList, boolean isVisible)  {
+    public BuildingPointOfInterest(String name, int userID, boolean isUsermade, String POI_Type, int coordinatesX, int coordinatesY, int buildingID, ArrayList<Integer> userFavouritesList, String description, boolean isVisible)  {
         this.name = name;
         this.userID = userID;
         this.isUserMade = isUsermade;
@@ -42,11 +42,20 @@ public class BuildingPointOfInterest {
         this.coordinates[1] = coordinatesY;
         this.buildingID = buildingID;
         this.userFavouritesList = userFavouritesList;
-        this.ID = processor.makeNewPOIID();
-        this.mapFilePath = processor.loadMapFilePath(this.buildingID, this.floorID, "BUILDING");
+        this.ID = processor.makeNewBuildingPOIID();
+        this.description = description;
+        this.mapFilePath = processor.loadMapFilePath(this.buildingID, 1, "BUILDING");
         this.isVisible = isVisible;
     }
     
+
+    /**
+     * Getter for the description of the POI
+     * @return String of the description 
+     */
+    public String getDescription() {
+        return this.description;
+    }
 
     /**
      * Getter for the building POI Id
@@ -113,20 +122,25 @@ public class BuildingPointOfInterest {
         return this.coordinates;
     }
 
-    /** 
-     * Getter for the floor ID of the POI
-     * @return int of the floor ID
-     */
-    public int getFloorID() {
-        return this.floorID;
-    }
-
     /**
      * Getter for the building ID of the POI
      * @return int of the building ID
      */
     public int getBuildingID() {
         return this.buildingID;
+    }
+
+    /** 
+     * Getter for the favourited POI
+     * @return int of the favourited 
+     */
+    public Boolean getIsFavourited(int userID) {
+        for (int id : this.userFavouritesList) {
+            if(id == userID) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public JSONObject toJSON() {
@@ -139,6 +153,7 @@ public class BuildingPointOfInterest {
         json.put("coordinates", new JSONArray(this.coordinates));
         json.put("buildingID", this.buildingID);
         json.put("userFavouritesList", this.userFavouritesList);
+        json.put("description", this.description);
         json.put("isVisible", this.isVisible);
         return json;
     }
@@ -157,6 +172,11 @@ public class BuildingPointOfInterest {
 
     public void setPOItype(String newLayer) {
         this.POI_type = newLayer;
+    }
+
+    
+    public void setDescription(String newDesc) {
+        this.description = newDesc;
     }
 
     /** 

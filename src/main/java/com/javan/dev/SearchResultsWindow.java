@@ -134,7 +134,7 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
                  * Close the current frame and go to currently selected POI.
                  */
                 frame.dispose();
-                POIInfoWindow poiWindow = new POIInfoWindow(currSelected);
+                POIInfoWindow poiWindow = new POIInfoWindow(currSelected.getID());
 
                 if (currSelected.getFloorID() == currMap.getFloorMapObject().getMapID()) {
                     currMap.navigateToPOI(currSelected.getID());
