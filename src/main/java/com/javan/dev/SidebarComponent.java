@@ -425,17 +425,18 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
              * Check if user is currently on campus map or a floor map.
              */
             ArrayList<PointOfInterest> searchMatch = new ArrayList<PointOfInterest>();
+            ArrayList<BuildingPointOfInterest> buildingSearchMatch = new ArrayList<BuildingPointOfInterest>();
             if (mapComponent.getIsCampusMap()) {
                 /**
                  * Temporary solution for getting the list of all buildings (as POIs haven't been created for them yet).
                  */
-                ArrayList<PointOfInterest> buildingList = processor.getUniversalPOIs(true, mapComponent.getUser().getUserID());
+                ArrayList<BuildingPointOfInterest> buildingList = processor.getBuildingUniversalPOIs(true, mapComponent.getUser().getUserID());
                 /**
                  * Compare the search to the available buildings on the campus.
                  */
-                for (PointOfInterest building : buildingList) {
+                for (BuildingPointOfInterest building : buildingList) {
                     if (building.getName().toLowerCase().contains(text.toLowerCase())) {
-                        searchMatch.add(building);
+                        buildingSearchMatch.add(building);
                     }
                 }
             }
@@ -471,7 +472,7 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
                     }
                 }
 
-                if (searchMatch.size() == 0) {
+                if (searchMatch.size() == 0 && buildingSearchMatch.size() == 0) {
                     ArrayList<PointOfInterest> currBuildingPOIS = JsonReader.currentBuildingPOIS(mapComponent.getUser().getUserID(), currBuildingID);
                     for (PointOfInterest poi : currBuildingPOIS) {
                         /**
@@ -490,18 +491,25 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
             /**
              * If there are at most 20 POIs found on the current map, or within the building.
              */
-            if (searchMatch.size() > 0 && searchMatch.size() <= 20) {
+            if ((searchMatch.size() > 0 && searchMatch.size() <= 20) || (buildingSearchMatch.size() > 0 && buildingSearchMatch.size() <= 20)) {
                 /**
                  * Create new Search Results Window listning all the results.
                  */
-                SearchResultsWindow resultWindow = new SearchResultsWindow(searchMatch, text.toLowerCase(), mapComponent, processor);
-                resultWindow.getFrame().setLocationRelativeTo(mapComponent.getMapPanel());
-                resultWindow.openSearchResults();
+                if (buildingSearchMatch.size() > 0) {
+                    SearchResultsWindow resultWindow = new SearchResultsWindow(buildingSearchMatch, text.toLowerCase(), mapComponent);
+                    resultWindow.getFrame().setLocationRelativeTo(mapComponent.getMapPanel());
+                    resultWindow.openSearchResults();
+                }
+                else {
+                    SearchResultsWindow resultWindow = new SearchResultsWindow(searchMatch, text.toLowerCase(), mapComponent, processor);
+                    resultWindow.getFrame().setLocationRelativeTo(mapComponent.getMapPanel());
+                    resultWindow.openSearchResults();
+                }
             }
             /**
              * If there are more than 20 POIs found on the current map, or within the building.
              */
-            else if (searchMatch.size() > 20) {
+            else if (searchMatch.size() > 20 || buildingSearchMatch.size() > 20) {
                 /**
                  * Display a JOptionPane to the user to inform them that the search was too broad.
                  */
