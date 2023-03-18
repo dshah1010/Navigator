@@ -1223,7 +1223,6 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
             }
         }
 }
-
     public void mouseMoved(MouseEvent e) {
     }
 }
