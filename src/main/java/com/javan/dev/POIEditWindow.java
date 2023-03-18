@@ -322,28 +322,54 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
          * When the delete button is clicked, delete the POI from the map and JSON file
          */
         if (e.getSource() == delete) {
-            try {
-                boolean deletedSuccessfully = processor.deletePointOfInterestFromJsonFile(poi);
-                /*
-                 * Gives an error message if the POI already exists for the user
-                 */
-                if (!deletedSuccessfully) {
-                    JPanel errorPanel = new JPanel();
-                    JLabel errorMessage = new JLabel("Error: POI deletion failed");
-                    errorPanel.add(errorMessage);
-                
-                    JOptionPane.showMessageDialog(null, errorPanel, "Error", JOptionPane.ERROR_MESSAGE);
+            if (!mapComponent.getIsCampusMap()) {
+                try {
+                    boolean deletedSuccessfully = processor.deletePointOfInterestFromJsonFile(poi);
+                    /*
+                     * Gives an error message if the POI already exists for the user
+                     */
+                    if (!deletedSuccessfully) {
+                        JPanel errorPanel = new JPanel();
+                        JLabel errorMessage = new JLabel("Error: POI deletion failed");
+                        errorPanel.add(errorMessage);
+                    
+                        JOptionPane.showMessageDialog(null, errorPanel, "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (IOException err) {
+                    err.printStackTrace();
                 }
-            } catch (IOException err) {
-                err.printStackTrace();
+                mapComponent.displayPOIs();
+                poiComponent.changeDisplayIfCampusMap(mapComponent.getMapObject().getMapID());
+                /**
+                 * Update the sidebar component to display the new POI
+                 */
+                poiComponent.updatePOIComponent();
+                frame.dispose();
             }
-            mapComponent.displayPOIs();
-            poiComponent.changeDisplayIfCampusMap(mapComponent.getMapObject().getMapID());
-            /**
-             * Update the sidebar component to display the new POI
-             */
-            poiComponent.updatePOIComponent();
-            frame.dispose();
+            else {
+                try {
+                    boolean deletedSuccessfully = processor.deleteBuildingPointOfInterestFromJsonFile(buildingPOI);
+                    /*
+                     * Gives an error message if the POI already exists for the user
+                     */
+                    if (!deletedSuccessfully) {
+                        JPanel errorPanel = new JPanel();
+                        JLabel errorMessage = new JLabel("Error: POI deletion failed");
+                        errorPanel.add(errorMessage);
+                    
+                        JOptionPane.showMessageDialog(null, errorPanel, "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (IOException err) {
+                    err.printStackTrace();
+                }
+                mapComponent.displayPOIs();
+                poiComponent.changeDisplayIfCampusMap(mapComponent.getMapObject().getMapID());
+                /**
+                 * Update the sidebar component to display the new POI
+                 */
+                poiComponent.updatePOIComponent();
+                frame.dispose();
+            }
         }
     }
 

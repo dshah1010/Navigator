@@ -2,6 +2,9 @@ package com.javan.dev;
 
 // Import Necessary Libraries
 import javax.swing.*;
+
+import org.json.JSONException;
+
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.awt.*;
@@ -925,27 +928,65 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
             if (e.getSource() == map) {
                 return;
             }
-            /**
-             * Get the label that was clicked
-             */
-            else if (e.getSource() instanceof JLabel) {
-                JLabel label = (JLabel) e.getSource();
+            if (isCampusMap) {
+                if (e.getSource() instanceof JLabel) {
+                    /**
+                     * Get the label that was clicked
+                     */
+                    JLabel label = (JLabel) e.getSource();
+                
+                    /**
+                     * Get the POI Id of the label
+                     */
+                    String id = label.getText();
 
-                /**
-                 * Get the POI Id of the label
-                 */
-                String id = label.getText();
+                    /**
+                     * Get the POI object from the POI Id
+                     */
+                    BuildingPointOfInterest poi = dataProcessor.getBuildingPOI(Integer.parseInt(id));
 
-                /**
-                 * Create a new POIInfoWindow object and pass the POI object to it
-                 */
-                POIInfoWindow poiInfoWindow = new POIInfoWindow(Integer.parseInt(id));
+                    /**
+                     * Get the building ID of the POI
+                     */
+                    int buildingID = poi.getBuildingID();
+                    System.out.println(buildingID);
 
+                    /**
+                     * Get the filepath of the first floor of the POI given the buildingID by searching BuildignsPOIMetadata.json
+                     */
+                    Map floorMap = dataProcessor.getFloorMapFromMapID(buildingID, 1);
+
+                    /**
+                     * Change the map to floorMap
+                     */
+                    if (floorMap != null) {
+                        changeMap(floorMap);
+                    }
+                }
+            }
+            else {
                 /**
-                 * Display the POIInfoWindow right on top of the map
+                 * Get the label that was clicked
                  */
-                poiInfoWindow.getFrame().setLocationRelativeTo(mapPanel);
-                poiInfoWindow.setVisibleFrame();
+                if (e.getSource() instanceof JLabel) {
+                    JLabel label = (JLabel) e.getSource();
+
+                    /**
+                     * Get the POI Id of the label
+                     */
+                    String id = label.getText();
+
+                    /**
+                     * Create a new POIInfoWindow object and pass the POI object to it
+                     */
+                    POIInfoWindow poiInfoWindow = new POIInfoWindow(Integer.parseInt(id));
+
+                    /**
+                     * Display the POIInfoWindow right on top of the map
+                     */
+                    poiInfoWindow.getFrame().setLocationRelativeTo(mapPanel);
+                    poiInfoWindow.setVisibleFrame();
+                }
             }
         }
         /**

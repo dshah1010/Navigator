@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -383,6 +384,81 @@ public final class DataProcessor {
             e.printStackTrace();
         }
         return isDeleted;
+    }
+
+    /**
+     * Method to delete point of interest from BuildingsPOIMetadata.json file
+     */
+    public boolean deleteBuildingPointOfInterestFromJsonFile(BuildingPointOfInterest poi) throws IOException {
+        String jsonString = new String(JsonReader.read("data/PointOfInterests/BuildingsPOIMetadata.json"));
+        JSONArray jsonArray = new JSONArray(jsonString);
+        
+        JSONObject poiJson = poi.toJSON();
+        boolean isDeleted = false;
+        JSONArray newJsonArray = new JSONArray();
+        for (Object poiObject : jsonArray) {
+            JSONObject currentPoi = (JSONObject) poiObject;
+
+            /**
+             * Check to see if the POI ID matches a POI
+             */
+            if (currentPoi.get("ID") == poiJson.get("ID")) {
+                isDeleted = true;
+            }
+            else if (isDeleted == true) {
+                /**
+                 * Change the POI ID of every POI following to ID - 1 and update jsonArray
+                 */
+                currentPoi.put("ID", currentPoi.getInt("ID") - 1);
+                newJsonArray.put(currentPoi);
+            }
+            else {
+                /**
+                 * Add the POI to the new JSON Array
+                 */
+                newJsonArray.put(currentPoi);
+            }
+        }
+        FileWriter fileWriter;
+        try {
+            fileWriter = new FileWriter("data/PointOfInterests/BuildingsPOIMetadata.json");
+            fileWriter.write(newJsonArray.toString());
+            fileWriter.flush();
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return isDeleted;
+    }
+
+    /**
+     * Method that gets the filepath of the first floor of a building given the building ID
+     * @throws IOException
+     * @throws JSONException
+     */
+    public String getFirstFloorFilePath(int buildingID) throws JSONException, IOException {
+
+        /**
+         * Read the JSON file
+         */
+        JSONArray metadataArray = new JSONArray(new String(JsonReader.read(mapJsonFilePath)));
+        
+        /**
+         * Get the first floor of the building
+         */
+        for (int i = 0; i < metadataArray.length(); i++) {
+            JSONObject metadata = metadataArray.getJSONObject(i);
+            if (metadata.getInt("buildingID") == buildingID) {
+                JSONArray floorMaps = metadata.getJSONArray("floorMaps");
+                for (int j = 0; j < floorMaps.length(); j++) {
+                    JSONObject floorMap = floorMaps.getJSONObject(j);
+                    if (floorMap.getInt("mapID") == 1) {
+                        return floorMap.getString("filePath");
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     /**
