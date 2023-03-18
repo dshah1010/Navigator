@@ -29,8 +29,8 @@ class TestPOIInfoWindow {
      */
     @BeforeEach
     void setUp() {
-        poi = new PointOfInterest("Test");
-        poiInfoWindow = new POIInfoWindow(poi);
+        poi = new PointOfInterest(null, 0, false, null, 0, 0, 0, 0, null, null, null, false);
+        poiInfoWindow = new POIInfoWindow(poi.getID());
     }
 
     /**

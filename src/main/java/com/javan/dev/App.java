@@ -1,9 +1,7 @@
 package com.javan.dev;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import com.google.gson.JsonIOException;
 
 /**
  * @author: Riley Emma Gavigan <rgavigan@uwo.ca>
@@ -38,6 +36,6 @@ public class App
         /**
          * Create UserInterface object to create the UI -> this will remain for the session
         */
-        UserInterface ui = UserInterface.getInstance();
+        UserInterface.getInstance();
     }
 }

@@ -11,7 +11,6 @@ public final class User {
      */
     private String username;
     private int userID;
-    private String password;
     private boolean isAdmin;
 
     /**
@@ -26,7 +25,6 @@ public final class User {
      */
     private User(String username, String password, int userID) {
         this.username = username;
-        this.password = password;
         this.isAdmin = false;
         this.userID = userID;
     }
@@ -84,15 +82,6 @@ public final class User {
      */
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    /**
-     * Setter for password
-     * @param String password
-     * @return None
-     */
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     /**

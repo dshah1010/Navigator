@@ -20,10 +20,6 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
      */
     private JFrame frame;
     private JPanel panel;
-    private JLabel title;
-    private JLabel description;
-    private int x;
-    private int y;
     private JButton create;
     private JButton cancel;
     private JPanel buttonPanel;
@@ -35,19 +31,12 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
     private User user = User.getInstance();
     private MapComponent mapComponent = MapComponent.getInstance();
     private POIComponent poiComponent = POIComponent.getInstance();
-    private SidebarComponent sidebar = SidebarComponent.getInstance();
 
 
     /**
      * Constructor for POICreationWindow given x and y coordinates
      */
     public POICreationWindow(int x, int y) {
-        /**
-         * Get Coordinates from click
-         */
-        this.x = x;
-        this.y = y;
-
         /**
          * Create Frame and Panel
          */
@@ -66,11 +55,16 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
          */
         ArrayList<String> metadata = new ArrayList<String>();
         metadata.add("Name");
-        metadata.add("Room Number");
+        if (!mapComponent.getIsCampusMap()){
+            metadata.add("Room Number");
+        }
+        else {
+            metadata.add("Building ID");
+        }
         metadata.add("Description");
         metadata.add("X-Value");
         metadata.add("Y-value");
-        if (user.getIsAdmin()) {
+        if (user.getIsAdmin() && !mapComponent.getIsCampusMap()) {
             metadata.add("Layer Type");
         }
         
@@ -86,6 +80,7 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
             labelHolder.setBackground(Color.WHITE);
             JLabel tempLabel = new JLabel(metadata.get(i));
             labelHolder.add(tempLabel);
+
             if (i == 3) {
                 JTextField tempField = createTextField(Integer.toString(x));
                 tempPanel.add(labelHolder);
@@ -244,37 +239,79 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
                 }
             }
             String layerType; 
-            if (user.getIsAdmin()) {
+            if (user.getIsAdmin() && !mapComponent.getIsCampusMap()) {
                 layerType = newPOIData.get(5);
+            }
+            else if (user.getIsAdmin() && mapComponent.getIsCampusMap()) {
+                layerType = "Building";
             }
             else {
                 layerType = "User POI";
             }
-            PointOfInterest poi = new PointOfInterest(
-                newPOIData.get(0), user.getUserID(), 
-                !user.getIsAdmin(), layerType, 
-                Integer.parseInt(newPOIData.get(3)), 
-                Integer.parseInt(newPOIData.get(4)), 
-                mapComponent.getMapObject().getMapID(), 
-                mapComponent.getFloorMapObject().getBuildingID(), 
-                new ArrayList<Integer>(), newPOIData.get(2), 
-                newPOIData.get(1), true
-                );
-            try {
-                boolean addedSuccessfully = processor.addPointOfInterestToJsonFile(poi);
-                /*
-                 * Gives an error message if the POI already exists for the user
-                 */
-                if (!addedSuccessfully) {
-                    JPanel errorPanel = new JPanel();
-                    JLabel errorMessage = new JLabel("Error: POI already exists");
-                    errorPanel.add(errorMessage);
-                
-                    JOptionPane.showMessageDialog(null, errorPanel, "Error", JOptionPane.ERROR_MESSAGE);
+            /**
+             * condition if user on campus map
+             */
+            if (mapComponent.getIsCampusMap()){
+                BuildingPointOfInterest buildingPOI = new BuildingPointOfInterest(
+                    newPOIData.get(0), user.getUserID(),
+                    !user.getIsAdmin(), layerType,
+                    Integer.parseInt(newPOIData.get(3)), 
+                    Integer.parseInt(newPOIData.get(4)), 
+                    Integer.parseInt(newPOIData.get(1)), 
+                    new ArrayList<Integer>(), newPOIData.get(2), true
+                    );
+                try{
+                    boolean addedSuccessfully = processor.addBuildingPointOfInterestToJsonFile(buildingPOI);
+                    /*
+                    * Gives an error message if the POI already exists for the user
+                    */
+                    if (!addedSuccessfully) {
+                        JPanel errorPanel = new JPanel();
+                        JLabel errorMessage = new JLabel("Error: POI already exists");
+                        errorPanel.add(errorMessage);
+                    
+                        JOptionPane.showMessageDialog(null, errorPanel, "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }catch (IOException err) {
+                    err.printStackTrace();
                 }
-            } catch (IOException err) {
-                err.printStackTrace();
+                mapComponent.displayPOIs();
+                poiComponent.changeDisplayIfCampusMap(mapComponent.getMapObject().getMapID());
+                /**
+                * Update the sidebar component to display the new POI
+                */
+                poiComponent.updatePOIComponent();
+                frame.dispose();
             }
+            /*
+             * condition if not on campus map
+             */
+            else{
+                PointOfInterest poi = new PointOfInterest(
+                    newPOIData.get(0), user.getUserID(), 
+                    !user.getIsAdmin(), layerType, 
+                    Integer.parseInt(newPOIData.get(3)), 
+                    Integer.parseInt(newPOIData.get(4)), 
+                    mapComponent.getMapObject().getMapID(), 
+                    mapComponent.getFloorMapObject().getBuildingID(), 
+                    new ArrayList<Integer>(), newPOIData.get(2), 
+                    newPOIData.get(1), true
+                    );
+                try {
+                    boolean addedSuccessfully = processor.addPointOfInterestToJsonFile(poi);
+                    /*
+                    * Gives an error message if the POI already exists for the user
+                    */
+                    if (!addedSuccessfully) {
+                        JPanel errorPanel = new JPanel();
+                        JLabel errorMessage = new JLabel("Error: POI already exists");
+                        errorPanel.add(errorMessage);
+                    
+                        JOptionPane.showMessageDialog(null, errorPanel, "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (IOException err) {
+                    err.printStackTrace();
+                }
             mapComponent.displayPOIs();
             poiComponent.changeDisplayIfCampusMap(mapComponent.getMapObject().getMapID());
             /**
@@ -282,6 +319,8 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
              */
             poiComponent.updatePOIComponent();
             frame.dispose();
+            }
+           
         }
         /**
          * When the cancel button is clicked, close the window
@@ -312,17 +351,11 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
     }
 
     public void mouseClicked(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
     }
 
     public void mousePressed(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
     }
 
     public void mouseReleased(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
     }
 }

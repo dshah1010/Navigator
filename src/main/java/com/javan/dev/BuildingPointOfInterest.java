@@ -4,11 +4,11 @@ import org.json.JSONArray;
 import java.util.*;
 
 /**
- * @author: Deep Shah <dshah228@uwo.ca>
+ * @author: Dylan Sta Ana <dstaana@uwo.ca>
  * @version: 1.0
  * @since: 1.0
  */
-public class PointOfInterest {
+public class BuildingPointOfInterest {
     
     private int ID;
     private String name; 
@@ -16,13 +16,11 @@ public class PointOfInterest {
     private Boolean isUserMade;
     private String POI_type;
     private int[] coordinates = {0,0};
-    private int floorID;
     private int buildingID;
     private ArrayList<Integer> userFavouritesList = new ArrayList<Integer> ();
-    private String description;
-    private String roomNumber;
     private String mapFilePath;
     private boolean isVisible;
+    private String description;
 
     /**
      * Private variable to hold the instance of the data processor
@@ -31,40 +29,39 @@ public class PointOfInterest {
 
 
     /**
-     * Constructor for the POI
-     * @param name, the name of the POI
+     * Constructor for the building POI
+     * @param name, the name of the building POI
      */
-    public PointOfInterest(String name, int userID, boolean isUsermade, String POI_Type, int coordinatesX, int coordinatesY, int floorID, int buildingID, ArrayList<Integer> userFavouritesList, String description, String roomNumber, boolean isVisible)  {
+    public BuildingPointOfInterest(String name, int userID, boolean isUsermade, String POI_Type, int coordinatesX, int coordinatesY, int buildingID, ArrayList<Integer> userFavouritesList, String description, boolean isVisible)  {
         this.name = name;
         this.userID = userID;
         this.isUserMade = isUsermade;
         this.POI_type = POI_Type;
         this.coordinates[0] = coordinatesX;
         this.coordinates[1] = coordinatesY;
-        this.floorID = floorID;
         this.buildingID = buildingID;
         this.userFavouritesList = userFavouritesList;
+        this.ID = processor.makeNewBuildingPOIID();
         this.description = description;
-        this.roomNumber = roomNumber;
-        this.ID = processor.makeNewPOIID();
-        this.mapFilePath = processor.loadMapFilePath(this.buildingID, this.floorID, "FLOOR");
+        this.mapFilePath = processor.loadMapFilePath(this.buildingID, 1, "BUILDING");
         this.isVisible = isVisible;
+    }
+    
+
+    /**
+     * Getter for the description of the POI
+     * @return String of the description 
+     */
+    public String getDescription() {
+        return this.description;
     }
 
     /**
-     * Getter for the POI Id
-     * @return int of the ID
+     * Getter for the building POI Id
+     * @return int of the ID 
      */
     public int getID() {
         return ID;
-    }
-
-    /**
-     * Getter for building / floor ID
-     * @return
-     */
-    public String getBuildingFloorID() {
-        return buildingID + " " + floorID;
     }
 
     /**
@@ -73,14 +70,6 @@ public class PointOfInterest {
      */
     public int setBuildingID(int buildingID) {
         return this.buildingID = buildingID;
-    }
-
-    /**
-     * Set floor ID
-     * @return
-     */
-    public int setFloorID(int floorID) {
-        return this.floorID = floorID;
     }
 
 
@@ -114,7 +103,6 @@ public class PointOfInterest {
      */
     public boolean getIsUserMade() {
         return this.isUserMade;
-        
     }
 
     /**
@@ -133,20 +121,25 @@ public class PointOfInterest {
         return this.coordinates;
     }
 
-    /** 
-     * Getter for the floor ID of the POI
-     * @return int of the floor ID
-     */
-    public int getFloorID() {
-        return this.floorID;
-    }
-
     /**
      * Getter for the building ID of the POI
      * @return int of the building ID
      */
     public int getBuildingID() {
         return this.buildingID;
+    }
+
+    /** 
+     * Getter for the favourited POI
+     * @return int of the favourited 
+     */
+    public Boolean getIsFavourited(int userID) {
+        for (int id : this.userFavouritesList) {
+            if(id == userID) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public JSONObject toJSON() {
@@ -157,11 +150,9 @@ public class PointOfInterest {
         json.put("isUserMade", this.isUserMade);
         json.put("POI_type", this.POI_type);
         json.put("coordinates", new JSONArray(this.coordinates));
-        json.put("floorID", this.floorID);
         json.put("buildingID", this.buildingID);
         json.put("userFavouritesList", this.userFavouritesList);
         json.put("description", this.description);
-        json.put("roomNumber", this.roomNumber);
         json.put("isVisible", this.isVisible);
         return json;
     }
@@ -178,46 +169,23 @@ public class PointOfInterest {
         this.name = newName;
     }
 
-    public void setRoomNumber(String newRoomNumber) {
-        this.roomNumber = newRoomNumber;
-    }
-
-    public void setDescription(String newDesc) {
-        this.description = newDesc;
-    }
-
     public void setPOItype(String newLayer) {
         this.POI_type = newLayer;
+    }
+
+    
+    public void setDescription(String newDesc) {
+        this.description = newDesc;
     }
 
     /** 
      * Getter for the favourited POI
      * @return int of the favourited 
      */
-    public Boolean getIsFavourited(int userID) {
-        for (int id : this.userFavouritesList) {
-            if(id == userID) {
-                return true;
-            }
-        }
-        return false;
+    public ArrayList<Integer> getIsFavourited() {
+        return this.userFavouritesList;
     }
 
-    /**
-     * Getter for the description of the POI
-     * @return String of the description 
-     */
-    public String getDescription() {
-        return this.description;
-    }
-
-    /**
-     * Getter for the room number of the POI
-     * @return String of the room number 
-     */
-    public String getRoomNumber() {
-        return this.roomNumber;
-    }
     /**
      * Getter for the isVisible state of POI
      * @return boolena of isVisible state
@@ -230,14 +198,13 @@ public class PointOfInterest {
         Boolean in = false;
         for (int i = 0; i < userFavouritesList.size(); i++) {
             if (userFavouritesList.get(i) == userID) {
-                this.userFavouritesList.remove(i);
+                userFavouritesList.remove(i);
                 in = true;
             }
         }
         if (!in) {
-            this.userFavouritesList.add(userID);
+            userFavouritesList.add(userID);
         }
-        
     }
 
     /**

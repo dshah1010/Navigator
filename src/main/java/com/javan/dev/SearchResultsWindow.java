@@ -2,13 +2,8 @@ package com.javan.dev;
 
 // Import necessary libraries
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 /**
@@ -25,12 +20,14 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
     private JPanel panel;
     private JScrollPane scrollPane;
     private JList<PointOfInterest> resultList;
+    private JList<BuildingPointOfInterest> buildingResultList;
     private JButton okay;
 
     /** 
      * Track the currently selected POI on the list.
      */
     private PointOfInterest currSelected;
+    private BuildingPointOfInterest currBuildingSelected;
 
     private static SearchResultsWindow INSTANCE = SearchResultsWindow.getInstance();
 
@@ -51,6 +48,19 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
          * Create the new frame.
          */
         createFrame(listData, searchText);
+    }
+
+    /**
+     * Building Constructor
+     */
+    public SearchResultsWindow(ArrayList<BuildingPointOfInterest> buildingSearchMatch, String lowerCase, MapComponent mapComponent) {
+        currBuildingSelected = null;
+        this.currMap = mapComponent;
+        this.currProcessor = DataProcessor.getInstance();
+        /**
+         * Create the new frame.
+         */
+        createBuildingFrame(buildingSearchMatch, lowerCase);
     }
 
     /**
@@ -98,24 +108,45 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
      * @param e     The mouse event
      * @return  
      */
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public void mouseClicked(MouseEvent e) {
         /**
          * Check if the mouse click event was on an item on the JList.
          */
         if (e.getSource() instanceof JList && e.getClickCount() == 1) {
-            JList<PointOfInterest> poiList = (JList) e.getSource();
-            /**
-             * Restrict the clicking for within the items available in the list. The mouse click on any empty space within the JList scroll pane will do nothing.
-             */
-            Rectangle r = poiList.getCellBounds(0, poiList.getLastVisibleIndex());
-            if (r != null && r.contains(e.getPoint())) { 
+            if (currMap.getIsCampusMap()) {
+                JList<BuildingPointOfInterest> buildingList = (JList) e.getSource();
                 /**
-                 * Set currently selected POI to the POI selected by the user (by click).
+                 * Restrict the clicking for within the items available in the list. The mouse click on any empty space within the JList scroll pane will do nothing.
                  */
-                int index = poiList.locationToIndex(e.getPoint()); 
-                if (index >= 0) {
-                    PointOfInterest o = poiList.getModel().getElementAt(index);
-                    currSelected = o;
+                Rectangle r = buildingList.getCellBounds(0, buildingList.getLastVisibleIndex());
+                if (r != null && r.contains(e.getPoint())) { 
+                    /**
+                     * Set currently selected POI to the POI selected by the user (by click).
+                     */
+                    int index = buildingList.locationToIndex(e.getPoint()); 
+                    if (index >= 0) {
+                        BuildingPointOfInterest o = buildingList.getModel().getElementAt(index);
+                        currBuildingSelected = o;
+                    }
+                }
+            }
+            else {
+                JList<PointOfInterest> poiList = (JList) e.getSource();
+                
+                /**
+                 * Restrict the clicking for within the items available in the list. The mouse click on any empty space within the JList scroll pane will do nothing.
+                 */
+                Rectangle r = poiList.getCellBounds(0, poiList.getLastVisibleIndex());
+                if (r != null && r.contains(e.getPoint())) { 
+                    /**
+                     * Set currently selected POI to the POI selected by the user (by click).
+                     */
+                    int index = poiList.locationToIndex(e.getPoint()); 
+                    if (index >= 0) {
+                        PointOfInterest o = poiList.getModel().getElementAt(index);
+                        currSelected = o;
+                    }
                 }
             }
         }
@@ -123,30 +154,48 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
          * Check if the mouse click event was on the "Okay" JButton.
          */
         else if (e.getSource() instanceof JButton && e.getClickCount() == 1) {
-            /**
-             * Check if any POI was selected by the user. If no POI was selected, prompt user to select a POI to jump to on the map.
-             */
-            if (currSelected == null) {
-                JOptionPane.showMessageDialog(null, "No POI/building was selected. Please select one to jump to.", "Point of Interest/Building Not Selected", JOptionPane.ERROR_MESSAGE);
+            if (currMap.getIsCampusMap()) {
+                /**
+                 * Check if any POI was selected by the user. If no POI was selected, prompt user to select a POI to jump to on the map.
+                 */
+                if (currBuildingSelected == null) {
+                    JOptionPane.showMessageDialog(null, "No POI/building was selected. Please select one to jump to.", "Point of Interest/Building Not Selected", JOptionPane.ERROR_MESSAGE);
+                }
+                else {
+                    /**
+                     * Close the current frame and change the map to the floor map of the building selected.
+                     */
+                    frame.dispose();
+                    currMap.changeMap(currProcessor.getFloorMapFromMapID(currBuildingSelected.getBuildingID(), 1));
+                    currBuildingSelected = null;
+                }
             }
             else {
                 /**
-                 * Close the current frame and go to currently selected POI.
+                 * Check if any POI was selected by the user. If no POI was selected, prompt user to select a POI to jump to on the map.
                  */
-                frame.dispose();
-                POIInfoWindow poiWindow = new POIInfoWindow(currSelected);
-
-                if (currSelected.getFloorID() == currMap.getFloorMapObject().getMapID()) {
-                    currMap.navigateToPOI(currSelected.getID());
-                    currSelected = null;
+                if (currSelected == null) {
+                    JOptionPane.showMessageDialog(null, "No POI/building was selected. Please select one to jump to.", "Point of Interest/Building Not Selected", JOptionPane.ERROR_MESSAGE);
                 }
                 else {
-                    currMap.changeMap(currProcessor.getFloorMapFromMapID(currSelected.getBuildingID(), currSelected.getFloorID()));
-                    currMap.navigateToPOI(currSelected.getID());
-                    currSelected = null;
+                    /**
+                     * Close the current frame and go to currently selected POI.
+                     */
+                    frame.dispose();
+                    POIInfoWindow poiWindow = new POIInfoWindow(currSelected.getID());
+
+                    if (currSelected.getFloorID() == currMap.getFloorMapObject().getMapID()) {
+                        currMap.navigateToPOI(currSelected.getID());
+                        currSelected = null;
+                    }
+                    else {
+                        currMap.changeMap(currProcessor.getFloorMapFromMapID(currSelected.getBuildingID(), currSelected.getFloorID()));
+                        currMap.navigateToPOI(currSelected.getID());
+                        currSelected = null;
+                    }
+                    poiWindow.getFrame().setLocationRelativeTo(currMap.getMapPanel());
+                    poiWindow.setVisibleFrame();
                 }
-                poiWindow.getFrame().setLocationRelativeTo(currMap.getMapPanel());
-                poiWindow.setVisibleFrame();
             }
         }
     }
@@ -186,7 +235,7 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
         /**
          * Create a new JList based on the search results list.
          */
-        resultList = new JList(list.toArray());
+        resultList = new JList<PointOfInterest>(list.toArray(new PointOfInterest[list.size()]));
         resultList.addMouseListener(this);
         /**
          * Style the JList
@@ -222,6 +271,92 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
          * To enable scrolling if all items in list can't be showed in the frame.
          */
         scrollPane = new JScrollPane(resultList);
+        panel.add(scrollPane, BorderLayout.CENTER);
+        /**
+         * Create an "Okay" button at the bottom of the frame.
+         */
+        okay = new JButton("Okay");
+        okay.setMaximumSize(new Dimension(200, 100));
+        okay.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        okay.setBackground(Color.WHITE);
+
+        /**
+         * Add listeners to the "Okay" button
+         */
+        okay.addMouseListener(this);
+        panel.add(okay, BorderLayout.PAGE_END);
+
+        frame.add(panel);
+    }
+
+    /**
+     * Method to create frame for BuildingPointOfInterest
+     */
+    public void createBuildingFrame(ArrayList<BuildingPointOfInterest> list, String search) {
+        /**
+         * Create new frame.
+         */
+        frame = new JFrame("Search Results for \"" + search + "\"");
+        frame.setSize(650, 250);
+        /**
+         * Create new panel to include text, JList, and JButton.
+         */
+        panel = new JPanel(new BorderLayout());
+        panel.setBackground(Color.WHITE);
+        /**
+         * Output text on panel based on if it's a search from the campus map or from a floor.
+         */
+        if (currMap.getIsCampusMap()) {
+            JLabel textLabel = (new JLabel("Double click on your desired building, then click \"Okay\" at the bottom."));
+            textLabel.setBackground(Color.WHITE);
+            textLabel.setFont(new Font("Georgia", Font.BOLD, 15));
+            panel.add(textLabel, BorderLayout.PAGE_START);
+        }
+        else {
+            JLabel textLabel = (new JLabel("Double click on your desired POI, then click \"Okay\" at the bottom."));
+            textLabel.setBackground(Color.WHITE);
+            textLabel.setFont(new Font("Georgia", Font.BOLD, 15));
+            panel.add(textLabel, BorderLayout.PAGE_START);
+        }
+        /**
+         * Create a new JList based on the search results list.
+         */
+        buildingResultList = new JList<BuildingPointOfInterest>(list.toArray(new BuildingPointOfInterest[list.size()]));
+        buildingResultList.addMouseListener(this);
+        /**
+         * Style the JList
+         */
+        buildingResultList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        buildingResultList.setLayoutOrientation(JList.VERTICAL);
+        buildingResultList.setVisibleRowCount(-1);
+        buildingResultList.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        buildingResultList.setBackground(Color.WHITE);
+        /**
+         * Style the contents of the JList
+         */
+        buildingResultList.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (value instanceof BuildingPointOfInterest) {
+                    BuildingPointOfInterest poi = (BuildingPointOfInterest) value;
+                    /**
+                     * Set text to the name followed by the floor ID of the POI
+                     */
+                    setText(poi.getName());
+                    /**
+                     * Set the font of the JList items to be larger and Georgia
+                     */
+                    setFont(new Font("Georgia", Font.PLAIN, 17));
+                }
+                return c;
+            }
+        });
+
+        /**
+         * To enable scrolling if all items in list can't be showed in the frame.
+         */
+        scrollPane = new JScrollPane(buildingResultList);
         panel.add(scrollPane, BorderLayout.CENTER);
         /**
          * Create an "Okay" button at the bottom of the frame.

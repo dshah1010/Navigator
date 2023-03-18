@@ -1,7 +1,5 @@
 package com.javan.dev;
 
-import java.io.IOException;
-
 /**
  * @author: Brad McGlynn <bmcglyn4@uwo.ca>
  * @version: 1.0

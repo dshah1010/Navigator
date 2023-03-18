@@ -2,6 +2,7 @@ package com.javan.dev;
 
 // Import Necessary Libraries
 import javax.swing.*;
+
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.awt.*;
@@ -37,6 +38,13 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     private ArrayList<PointOfInterest> pois;
     private ArrayList<PointOfInterest> userPOIs;
     private ArrayList<PointOfInterest> favouritePOIs;
+
+    /**
+     * ArrayList to hold the building points of interest
+     */
+    private ArrayList<BuildingPointOfInterest> buildingpois;
+    private ArrayList<BuildingPointOfInterest> buildinguserPOIs;
+    private ArrayList<BuildingPointOfInterest> buildingfavouritePOIs;
 
     /**
      * ImageIcon for the flags
@@ -664,6 +672,24 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     }
 
     /**
+     * Method to clear Building POIs from the map
+     */
+    public void clearBuildingPois() {
+        buildingpois.clear();
+        buildingfavouritePOIs.clear();
+        buildinguserPOIs.clear();
+        imagePanel.remove(map);
+        mapImg = new ImageIcon(mapObject.getFilePath());
+        map = new JLabel(mapImg);
+        map.addMouseListener(this);
+        map.addMouseMotionListener(this);
+        map.setLayout(null);
+        map.setBounds(0, 0, mapImg.getIconWidth(), mapImg.getIconHeight());
+        imagePanel.setPreferredSize(new Dimension(mapImg.getIconWidth(), mapImg.getIconHeight()));
+        imagePanel.add(map);
+    }
+
+    /**
      * Method to display Floor POIs for the map currently being displayed on the map with a flag icon representing its location
      */
     public void displayPOIs() {
@@ -673,12 +699,28 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         if (this.pois != null) {
             clearPois();
         }
-        if (isCampusMap == true) {
-            pois = dataProcessor.getUniversalPOIs(true, user.getUserID());
+        if (this.buildingpois != null){
+            clearBuildingPois();
         }
+        /*
+         * gets building POIS if on campus map
+         */
+        if (isCampusMap) {
+
+            buildingpois = dataProcessor.getBuildingUniversalPOIs(true, user.getUserID());
+            buildingfavouritePOIs = dataProcessor.getBuildingFavouritePOIs(user.getUserID());
+            buildinguserPOIs = dataProcessor.getBuildingUserPOIs(user.getUserID());
+
+            addBuildingPOIList(buildingpois);
+            addBuildingPOIList(buildingfavouritePOIs);
+            addBuildingPOIList(buildinguserPOIs);
+
+        }
+        /*
+         * gets  POIS if on not on campus map
+         */
         else {
             pois = dataProcessor.getUniversalPOIs(false, user.getUserID());
-        }
         /**
          * Get the User and Favourite POIs for the map (based on userID)
          */
@@ -698,6 +740,63 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         mapPanel.requestFocusInWindow();
         mapPanel.repaint();
         mapPanel.revalidate();
+        }
+    }
+
+    /**
+     * Method to loop through POI arraylist and add to map
+     */
+    public void addBuildingPOIList(ArrayList<BuildingPointOfInterest> pois) {
+        /**
+         * Loop through the POIs and add a flag icon to the map at the POI's coordinates
+         */
+        for (BuildingPointOfInterest poi : pois) {
+            if (isCampusMap) {
+                /**
+                 * Get the POI's coordinates
+                 */
+                int[] coordinates = poi.getCoordinates();
+
+                /**
+                 * Add the flag icon to the map at the POI's coordinates (x and y position)
+                 */
+                ImageIcon flagIcon = flag;
+                /**
+                 * Get scaled version of 40x40 pixels as ImageIcon
+                 */
+                Image scaledFlag = flagIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+
+                /**
+                 * Create a JLabel with the scaled flag icon
+                 */
+                JLabel flag = new JLabel(new ImageIcon(scaledFlag));
+
+                /**
+                 * Add the ID of the POI to the flag icon as metadata
+                 */
+                flag.setText(Integer.toString(poi.getID()));
+
+
+                flag.setBounds(coordinates[0], coordinates[1], 40, 40);
+                
+                /**
+                 * Add a mouse listener to the flag icon to navigate to the POI when clicked
+                 */
+                flag.addMouseListener(this);
+
+                /**
+                 * Add the flag icon to the map
+                 */
+                map.add(flag);
+
+                /**
+                 * Repaint the map panel
+                 */
+                mapPanel.repaint();
+                flag.setVisible(true);
+                imagePanel.setVisible(true);
+                }
+        }
     }
 
     /**
@@ -796,19 +895,28 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          * If the button text is "Navigation Mode", change that button to "Editing Mode"
          */
         else if (buttonText.equals("Navigation Mode")) {
-            /**
-             * If admin, change to 'Developer Editing Mode'
-             */
-            if (user.getIsAdmin()) {
-                ((JButton) e.getSource()).setText("Developer Editing Mode");
+            if (isCampusMap && !user.getIsAdmin()) {
+                JPanel errorPanel = new JPanel();
+                JLabel errorMessage = new JLabel("Error: Users cannot create or edit points of interest on the campus map");
+                errorPanel.add(errorMessage);
+                JOptionPane.showMessageDialog(null, errorPanel, "Error", JOptionPane.ERROR_MESSAGE);
+
             }
-            /**
-             * If user, change to 'User Editing Mode'
-             */
             else {
-                ((JButton) e.getSource()).setText("User Editing Mode");
+                /**
+                 * If admin, change to 'Developer Editing Mode'
+                 */
+                if (user.getIsAdmin()) {
+                    ((JButton) e.getSource()).setText("Developer Editing Mode");
+                }
+                /**
+                 * If user, change to 'User Editing Mode'
+                 */
+                else {
+                    ((JButton) e.getSource()).setText("User Editing Mode");
+                }
+                isNavigationMode = false;
             }
-            isNavigationMode = false;
         }
         /**
          * If the button text is "Editing Mode", change that button to "Navigation Mode"
@@ -826,36 +934,69 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         /**
          * Navigation Mode -> Can View POIs
          */
-        if (isNavigationMode == true) {
+        if (isNavigationMode) {
             if (e.getSource() == map) {
                 return;
             }
-            /**
-             * Get the label that was clicked
-             */
-            else if (e.getSource() instanceof JLabel) {
-                JLabel label = (JLabel) e.getSource();
+            if (isCampusMap) {
+                if (e.getSource() instanceof JLabel) {
+                    /**
+                     * Get the label that was clicked
+                     */
+                    JLabel label = (JLabel) e.getSource();
+                
+                    /**
+                     * Get the POI Id of the label
+                     */
+                    String id = label.getText();
 
-                /**
-                 * Get the POI Id of the label
-                 */
-                String id = label.getText();
+                    /**
+                     * Get the POI object from the POI Id
+                     */
+                    BuildingPointOfInterest poi = dataProcessor.getBuildingPOI(Integer.parseInt(id));
 
-                /**
-                 * Get the POI object from the POI Id
-                 */
-                PointOfInterest poi = dataProcessor.getPOI(Integer.parseInt(id));
+                    /**
+                     * Get the building ID of the POI
+                     */
+                    int buildingID = poi.getBuildingID();
+                    System.out.println(buildingID);
 
-                /**
-                 * Create a new POIInfoWindow object and pass the POI object to it
-                 */
-                POIInfoWindow poiInfoWindow = new POIInfoWindow(poi);
+                    /**
+                     * Get the filepath of the first floor of the POI given the buildingID by searching BuildignsPOIMetadata.json
+                     */
+                    Map floorMap = dataProcessor.getFloorMapFromMapID(buildingID, 1);
 
+                    /**
+                     * Change the map to floorMap
+                     */
+                    if (floorMap != null) {
+                        changeMap(floorMap);
+                    }
+                }
+            }
+            else {
                 /**
-                 * Display the POIInfoWindow right on top of the map
+                 * Get the label that was clicked
                  */
-                poiInfoWindow.getFrame().setLocationRelativeTo(mapPanel);
-                poiInfoWindow.setVisibleFrame();
+                if (e.getSource() instanceof JLabel) {
+                    JLabel label = (JLabel) e.getSource();
+
+                    /**
+                     * Get the POI Id of the label
+                     */
+                    String id = label.getText();
+
+                    /**
+                     * Create a new POIInfoWindow object and pass the POI object to it
+                     */
+                    POIInfoWindow poiInfoWindow = new POIInfoWindow(Integer.parseInt(id));
+
+                    /**
+                     * Display the POIInfoWindow right on top of the map
+                     */
+                    poiInfoWindow.getFrame().setLocationRelativeTo(mapPanel);
+                    poiInfoWindow.setVisibleFrame();
+                }
             }
         }
         /**
@@ -867,20 +1008,48 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                  * If on the map
                  */
                 if (e.getSource() == map) {
-                    /**
-                     * Get the coordinates of the mouse click
-                     */
-                    JLabel label = (JLabel) e.getSource();
-                    int x = e.getX();
-                    int y = e.getY();
+                    if (isCampusMap) {
+                        /*
+                         * Only allowing developers to make building POIs
+                         */
+                        if (user.getIsAdmin()) {
+                            /**
+                             * Get the coordinates of the mouse click
+                             */
+                            int x = e.getX();
+                            int y = e.getY();
 
-                    /**
-                     * Create a new Point of Interest with EditingTool by opening POICreationWindow with the coordinates
-                     * This window will work with EditingTool to create a new POI
-                     */
-                    POICreationWindow poiCreationWindow = new POICreationWindow(x, y);
-                    poiCreationWindow.getFrame().setLocationRelativeTo(mapPanel);
-                    poiCreationWindow.setVisibleFrame();
+                            /**
+                             * Create a new Point of Interest with EditingTool by opening POICreationWindow with the coordinates
+                             * This window will work with EditingTool to create a new POI
+                             */
+                            POICreationWindow poiCreationWindow = new POICreationWindow(x, y);
+                            poiCreationWindow.getFrame().setLocationRelativeTo(mapPanel);
+                            poiCreationWindow.setVisibleFrame();
+                        }
+                        else {
+                            JPanel errorPanel = new JPanel();
+                            JLabel errorMessage = new JLabel("Error: Users cannot create points of interest on the campus map");
+                            errorPanel.add(errorMessage);
+                        
+                            JOptionPane.showMessageDialog(null, errorPanel, "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                    else {
+                        /**
+                         * Get the coordinates of the mouse click
+                         */
+                        int x = e.getX();
+                        int y = e.getY();
+
+                        /**
+                         * Create a new Point of Interest with EditingTool by opening POICreationWindow with the coordinates
+                         * This window will work with EditingTool to create a new POI
+                         */
+                        POICreationWindow poiCreationWindow = new POICreationWindow(x, y);
+                        poiCreationWindow.getFrame().setLocationRelativeTo(mapPanel);
+                        poiCreationWindow.setVisibleFrame();
+                    }
                 }
                 /**
                  * Open up an edit window for the POI object
@@ -899,29 +1068,69 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                     /**
                      * Get the POI object from the POI Id
                      */
-                    PointOfInterest poi = dataProcessor.getPOI(Integer.parseInt(id));
-
-                    /**
-                     * Check if user is an admin and POI type is not user
-                     */
-                    if (user.getIsAdmin() == false && !(poi.getPOItype().contains("User POI"))) {
-                        /**
-                         * Open up a pop-up window saying they can't edit this POI
+                    
+                    if (getIsCampusMap()) {
+                        /*
+                         * Only allow developers to edit buildingPOIs
                          */
-                        JOptionPane.showMessageDialog(null, "You can't edit this POI", "Error", JOptionPane.ERROR_MESSAGE);
-                        return;
+                        if (user.getIsAdmin()) {
+                            BuildingPointOfInterest poi = dataProcessor.getBuildingPOI(Integer.parseInt(id));
+                            /**
+                             * Check if user is an admin and POI type is not user
+                             */
+                            if (user.getIsAdmin() == false && !(poi.getPOItype().contains("User POI"))) {
+                                /**
+                                 * Open up a pop-up window saying they can't edit this POI
+                                 */
+                                JOptionPane.showMessageDialog(null, "You can't edit this POI", "Error", JOptionPane.ERROR_MESSAGE);
+                                return;
+                            }
+
+                            /**
+                             * Create a new POI Editing Window object and pass the POI object to it
+                             */
+                            POIEditWindow poiEditWindow = new POIEditWindow(poi.getID());
+
+                            /**
+                             * Display the POIInfoWindow right on top of the map
+                             */
+                            poiEditWindow.getFrame().setLocationRelativeTo(mapPanel);
+                            poiEditWindow.setVisibleFrame();
+                        }
+                        else {
+                            JPanel errorPanel = new JPanel();
+                            JLabel errorMessage = new JLabel("Error: Users cannot edit points of interest on the campus map");
+                            errorPanel.add(errorMessage);
+                        
+                            JOptionPane.showMessageDialog(null, errorPanel, "Error", JOptionPane.ERROR_MESSAGE);
+                        }
                     }
+                    else {
+                        PointOfInterest poi = dataProcessor.getPOI(Integer.parseInt(id));
+                        /**
+                         * Check if user is an admin and POI type is not user
+                         */
+                        if (user.getIsAdmin() == false && !(poi.getPOItype().contains("User POI"))) {
+                            /**
+                             * Open up a pop-up window saying they can't edit this POI
+                             */
+                            JOptionPane.showMessageDialog(null, "You can't edit this POI", "Error", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
 
-                    /**
-                     * Create a new POI Editing Window object and pass the POI object to it
-                     */
-                    POIEditWindow poiEditWindow = new POIEditWindow(poi);
+                        /**
+                         * Create a new POI Editing Window object and pass the POI object to it
+                         */
+                        POIEditWindow poiEditWindow = new POIEditWindow(poi.getID());
 
-                    /**
-                     * Display the POIInfoWindow right on top of the map
-                     */
-                    poiEditWindow.getFrame().setLocationRelativeTo(mapPanel);
-                    poiEditWindow.setVisibleFrame();
+                        /**
+                         * Display the POIInfoWindow right on top of the map
+                         */
+                        poiEditWindow.getFrame().setLocationRelativeTo(mapPanel);
+                        poiEditWindow.setVisibleFrame();
+                        }
+
+                    
                 }
             }
         }
@@ -1014,9 +1223,6 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
             }
         }
 }
-
     public void mouseMoved(MouseEvent e) {
-        // TODO Auto-generated method stub
     }
-    
 }

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -143,6 +144,10 @@ public final class DataProcessor {
         return JsonReader.favouritesList(userID);
     }
 
+    public ArrayList<BuildingPointOfInterest> getBuildingFavouritePOIs(int userID) {
+        return JsonReader.buildingfavouritesList(userID);
+    }
+
     /**
      * Method to return the POIs created by a user 
      * @param int userID - the ID of the user
@@ -150,6 +155,10 @@ public final class DataProcessor {
      */
     public ArrayList<PointOfInterest> getUserPOIs(int userID) {
         return JsonReader.userPOIList(userID);
+    }  
+
+    public ArrayList<BuildingPointOfInterest> getBuildingUserPOIs(int userID) {
+        return JsonReader.buildingUserPOIList(userID);
     }  
 
     public ArrayList<PointOfInterest> getUniversalPOIs(boolean isCampusMap, int userID) {
@@ -179,6 +188,10 @@ public final class DataProcessor {
         }
 
         return universalPOIs;
+    }
+
+    public ArrayList<BuildingPointOfInterest> getBuildingUniversalPOIs(boolean isCampusMap, int userID) {
+        return JsonReader.universalBuildingPOIs(userID);
     }
 
     /**
@@ -213,6 +226,34 @@ public final class DataProcessor {
         jsonArray.put(poiJson);
         
         FileWriter fileWriter = new FileWriter("data/PointOfInterests/PointOfInterestMetadata.json");
+        fileWriter.write(jsonArray.toString());
+        fileWriter.flush();
+        fileWriter.close();
+        return true;
+    }
+    /*
+     * method to add new buildingPOI to BuildingsPointOfInterestMetadata.json file array
+     */
+
+    public boolean addBuildingPointOfInterestToJsonFile(BuildingPointOfInterest POI) throws IOException {
+        
+        String jsonString = new String(Files.readAllBytes(Paths.get("data/PointOfInterests/BuildingsPOIMetadata.json")));
+        JSONArray jsonArray = new JSONArray(jsonString);
+        
+        JSONObject poiJson = POI.toJSON();
+        for (Object poi : jsonArray) {
+            JSONObject currentPoi = (JSONObject) poi;
+            /*
+             * Checks to see if the POI user + floorNumber already exists
+             */
+            if (currentPoi.get("userID") == poiJson.get("userID") 
+            && currentPoi.get("buildingID") == poiJson.get("buildingID")) {
+                return false;
+            }
+        }
+        jsonArray.put(poiJson);
+        
+        FileWriter fileWriter = new FileWriter("data/PointOfInterests/BuildingsPOIMetadata.json");
         fileWriter.write(jsonArray.toString());
         fileWriter.flush();
         fileWriter.close();
@@ -257,6 +298,46 @@ public final class DataProcessor {
         return false;
     }
 
+
+    /**
+     * Method to edit the point of interest data for a POI given its ID in the PointOfInterestMetadata.json file
+     * @param poi
+     * @return
+     */
+    public boolean editBuildingPointOfInterestInJsonFile(BuildingPointOfInterest poi) throws IOException {
+        String jsonString = new String(JsonReader.read("data/PointOfInterests/BuildingsPOIMetadata.json"));
+        JSONArray jsonArray = new JSONArray(jsonString);
+        
+        JSONObject poiJson = poi.toJSON();
+        int counter = 0;
+        for (Object poiObject : jsonArray) {
+            JSONObject currentPoi = (JSONObject) poiObject;
+
+            /**
+             * Check to see if the POI ID matches a POI
+             */
+            if (currentPoi.get("ID") == poiJson.get("ID")) {
+                /**
+                 * Remove the current POI from the JSON Array
+                 */
+                jsonArray.remove(counter);
+
+                /**
+                 * Add the new POI to the JSON Array
+                 */
+                jsonArray.put(poiJson);
+                FileWriter fileWriter = new FileWriter("data/PointOfInterests/BuildingsPOIMetadata.json");
+                fileWriter.write(jsonArray.toString());
+                fileWriter.flush();
+                fileWriter.close();
+                return true;
+            }
+            counter += 1;
+        }
+        return false;
+    }
+
+
     /**
      * Method to delete a point of interest from the PointOfInterestMetadata.json file
      * @param poi
@@ -265,6 +346,51 @@ public final class DataProcessor {
      */
     public boolean deletePointOfInterestFromJsonFile(PointOfInterest poi) throws IOException {
         String jsonString = new String(JsonReader.read("data/PointOfInterests/PointOfInterestMetadata.json"));
+        JSONArray jsonArray = new JSONArray(jsonString);
+        
+        JSONObject poiJson = poi.toJSON();
+        boolean isDeleted = false;
+        JSONArray newJsonArray = new JSONArray();
+        for (Object poiObject : jsonArray) {
+            JSONObject currentPoi = (JSONObject) poiObject;
+
+            /**
+             * Check to see if the POI ID matches a POI
+             */
+            if (currentPoi.get("ID").equals(poiJson.get("ID"))) {
+                isDeleted = true;
+            }
+            else if (isDeleted == true) {
+                /**
+                 * Change the POI ID of every POI following to ID - 1 and update jsonArray
+                 */
+                currentPoi.put("ID", currentPoi.getInt("ID") - 1);
+                newJsonArray.put(currentPoi);
+            }
+            else {
+                /**
+                 * Add the POI to the new JSON Array
+                 */
+                newJsonArray.put(currentPoi);
+            }
+        }
+        FileWriter fileWriter;
+        try {
+            fileWriter = new FileWriter("data/PointOfInterests/PointOfInterestMetadata.json");
+            fileWriter.write(newJsonArray.toString());
+            fileWriter.flush();
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return isDeleted;
+    }
+
+    /**
+     * Method to delete point of interest from BuildingsPOIMetadata.json file
+     */
+    public boolean deleteBuildingPointOfInterestFromJsonFile(BuildingPointOfInterest poi) throws IOException {
+        String jsonString = new String(JsonReader.read("data/PointOfInterests/BuildingsPOIMetadata.json"));
         JSONArray jsonArray = new JSONArray(jsonString);
         
         JSONObject poiJson = poi.toJSON();
@@ -295,7 +421,7 @@ public final class DataProcessor {
         }
         FileWriter fileWriter;
         try {
-            fileWriter = new FileWriter("data/PointOfInterests/PointOfInterestMetadata.json");
+            fileWriter = new FileWriter("data/PointOfInterests/BuildingsPOIMetadata.json");
             fileWriter.write(newJsonArray.toString());
             fileWriter.flush();
             fileWriter.close();
@@ -303,6 +429,36 @@ public final class DataProcessor {
             e.printStackTrace();
         }
         return isDeleted;
+    }
+
+    /**
+     * Method that gets the filepath of the first floor of a building given the building ID
+     * @throws IOException
+     * @throws JSONException
+     */
+    public String getFirstFloorFilePath(int buildingID) throws JSONException, IOException {
+
+        /**
+         * Read the JSON file
+         */
+        JSONArray metadataArray = new JSONArray(new String(JsonReader.read(mapJsonFilePath)));
+        
+        /**
+         * Get the first floor of the building
+         */
+        for (int i = 0; i < metadataArray.length(); i++) {
+            JSONObject metadata = metadataArray.getJSONObject(i);
+            if (metadata.getInt("buildingID") == buildingID) {
+                JSONArray floorMaps = metadata.getJSONArray("floorMaps");
+                for (int j = 0; j < floorMaps.length(); j++) {
+                    JSONObject floorMap = floorMaps.getJSONObject(j);
+                    if (floorMap.getInt("mapID") == 1) {
+                        return floorMap.getString("filePath");
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -420,6 +576,23 @@ public final class DataProcessor {
         }
         return 0;
     }
+    
+
+    public int makeNewBuildingPOIID() {
+        FileReader reader = null;
+
+        /*
+         * attempts to read file 
+         */
+        try {
+            reader = new FileReader("data/PointOfInterests/BuildingsPOIMetadata.json");
+            JsonArray POIDataArray= JsonParser.parseReader(reader).getAsJsonArray();
+            return POIDataArray.size() + 1;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
 
     public PointOfInterest getPOI(int poiID) {
@@ -496,6 +669,80 @@ public final class DataProcessor {
         }
         return null;
     }
+
+
+    public BuildingPointOfInterest getBuildingPOI(int poiID) {
+        FileReader reader = null;
+
+        /*
+         * attempts to read file 
+         */
+        try {
+
+            reader = new FileReader("data/PointOfInterests/BuildingsPOIMetadata.json");
+            JsonArray POIDataArray= JsonParser.parseReader(reader).getAsJsonArray();
+
+            /*
+             * loops through json file to find POIs available to this user
+             */ 
+
+            for (JsonElement POI : POIDataArray) {
+
+                JsonObject poiObject = POI.getAsJsonObject();
+                JsonArray userFavouritesArray = poiObject.getAsJsonArray("userFavouritesList");
+                ArrayList<Integer> userFavouritesData = new ArrayList<Integer>();
+
+                if (userFavouritesArray != null) {
+                    for (int i =0; i < userFavouritesArray.size(); i++) {
+                        /**
+                         * Get current value from the userFavouritesArray and store as int, then add to array
+                         */
+                        int userFavourite = userFavouritesArray.get(i).getAsInt();
+                        userFavouritesData.add(userFavourite);
+                    }
+                }
+
+                // either developer made or user made POIs
+                if (poiObject.get("ID").getAsInt() == poiID){
+                    /*
+                    * declares all data from json file
+                    * then creates a POI object
+                    * which is then added to arraylist of type POI
+                    */
+                    String name  = poiObject.get("name").getAsString();
+                    int userID  = poiObject.get("userID").getAsInt();
+                    boolean isUserMade = poiObject.get("isUserMade").getAsBoolean();
+                    String POI_Type = poiObject.get("POI_type").getAsString();
+                    JsonArray jsoncoordinateArray = poiObject.get("coordinates").getAsJsonArray();
+                    int[] coordinateArray = new int[2];
+
+                    for (int i=0; i< coordinateArray.length; i++){
+                        coordinateArray[i] = jsoncoordinateArray.get(i).getAsInt();
+                    }
+                    int buildingID = poiObject.get("buildingID").getAsInt();
+                    ArrayList<Integer> userFavouritesList = new ArrayList<Integer>();
+
+                    for (int i = 0; i < userFavouritesData.size(); i++) {
+                        /**
+                         * Get current value from the userFavouritesArray and store as int, then add to array
+                         */
+                        int userFavourite = userFavouritesData.get(i);
+                        userFavouritesList.add(userFavourite);
+                    }
+
+                    String description = poiObject.get("description").getAsString();
+                    boolean isVisible = poiObject.get("isVisible").getAsBoolean();
+                    BuildingPointOfInterest POIdata = new BuildingPointOfInterest(name, userID, isUserMade, POI_Type, coordinateArray[0], coordinateArray[1], buildingID, userFavouritesList, description, isVisible);
+                    POIdata.setID(poiID);
+                    return POIdata;
+                }       
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 
     /**
@@ -580,7 +827,6 @@ public final class DataProcessor {
                  * Check if the username and decrypted password match
                  */
                 if (username.equals(user.getString("username")) && password.equals(decryptedPassword)) {
-                    String userType = user.getString("userType");
                     return (Integer) user.get("userID");
                 }
             }
