@@ -36,6 +36,7 @@ public final class UserHelp extends JFrame {
 
     /**
      * Constructor to create UserHelp JFrame Window with JPanels / tabs for each section of the help menu for the user to browse
+     * @param None
      */
      private UserHelp() {
         /**
@@ -91,6 +92,7 @@ public final class UserHelp extends JFrame {
 
     /**
      * Getter for the Singleton Instance of UserHelp
+     * @param None
      * @return UserHelp instance
     */
     public static UserHelp getInstance() {
@@ -102,6 +104,8 @@ public final class UserHelp extends JFrame {
 
     /**
      * Getter for the JFrame created
+     * @param None
+     * @return Jframe frame
      */
     public JFrame getFrame() {
         return frame;
@@ -109,6 +113,8 @@ public final class UserHelp extends JFrame {
 
     /**
      * Method to open the user help menu
+     * @param None
+     * @return None
      */
     public void openHelpMenu() {
         frame.setVisible(true);
@@ -116,6 +122,8 @@ public final class UserHelp extends JFrame {
 
     /**
      * Method to set background
+     * @param Jpanel panel
+     * @return None
      */
     public void setBackground(JPanel panel) {
         panel.setBackground(Color.WHITE);
@@ -123,6 +131,8 @@ public final class UserHelp extends JFrame {
 
     /**
      * Method to create the general tab
+     * @param None
+     * @return None
      */
     private void createGeneralTab() {
         /**
@@ -158,6 +168,8 @@ public final class UserHelp extends JFrame {
 
     /**
      * Method to create the login tab
+     * @param None
+     * @return None
      */
     private void createLoginTab() {
         /**
@@ -186,6 +198,8 @@ public final class UserHelp extends JFrame {
 
     /**
      * Method to create the navigate tab
+     * @param None
+     * @return None
      */
     private void createNavigateTab() {
         /**
@@ -217,6 +231,8 @@ public final class UserHelp extends JFrame {
 
     /**
      * Method to create the search tab
+     * @param None
+     * @return None
      */
     private void createSearchTab() {
         /**
@@ -243,6 +259,8 @@ public final class UserHelp extends JFrame {
 
     /**
      * Method to create the favourites tab
+     * @param None
+     * @return None
      */
     private void createFavouritesTab() {
         /**
@@ -275,6 +293,8 @@ public final class UserHelp extends JFrame {
 
     /**
      * Method to create the browse tab
+     * @param None
+     * @return None
      */
     private void createBrowseTab() {
         /**

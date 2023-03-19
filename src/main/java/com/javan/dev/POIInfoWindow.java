@@ -23,21 +23,26 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
     
 
     /**
-     * Private variables to hold the instance of the data processor and user
+     * Private variables to hold the instance of the data processor, user, mapComponent and poiComponent objects
      */
     private DataProcessor processor = DataProcessor.getInstance();
     private User userInstance = User.getInstance();
     private POIComponent poiComponent = POIComponent.getInstance();
-    MapComponent mapComponent = MapComponent.getInstance();
+    private MapComponent mapComponent = MapComponent.getInstance();
 
     /**
-     * Constructor that creates the POI information window given the PointOfInterest object
+     * Constructor that creates the POI information window given the POIs ID
+     * @param int poiID
+     * @return None
      */
-    public POIInfoWindow(int poiId) {
+    public POIInfoWindow(int poiID) {
+        /*
+         * determines what type of poi to proceed with
+         */
         if (mapComponent.getIsCampusMap()) {
-            this.buildingPOI = processor.getBuildingPOI(poiId);
+            this.buildingPOI = processor.getBuildingPOI(poiID);
         } else {
-            this.poi = processor.getPOI(poiId);
+            this.poi = processor.getPOI(poiID);
         }
 
         /**
@@ -57,7 +62,7 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
          */
         if (mapComponent.getIsCampusMap()) {
             frame = new JFrame(this.buildingPOI.getName());
-        } else{
+        } else {
             frame = new JFrame(this.poi.getName());
         }
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -129,25 +134,8 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
             favourite.setVerticalAlignment(SwingConstants.CENTER);
             favourite.setHorizontalAlignment(SwingConstants.CENTER);
         }
-        /**
-        * Add the favourite button to the panel of Building POI
-        */
-        else if (!buildingPOI.getIsFavourited(userInstance.getUserID()) && mapComponent.getIsCampusMap()) {
-           /**
-            * Make JButton with icon image
-            */
-           favourite = new JButton();
-           favourite.setIcon(unfavouriteIcon);
-
-
-           /**
-            * Add icon to center of button
-            */
-           favourite.setVerticalAlignment(SwingConstants.CENTER);
-           favourite.setHorizontalAlignment(SwingConstants.CENTER);
-       }
         else {
-           /**
+            /**
              * Make JButton with icon image
              */ 
             favourite = new JButton();
@@ -218,16 +206,29 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
         frame.add(panel);
     }
 
+    /**
+     * Method to set frame visibility
+     * @param None
+     * @return None
+     */
     public void setVisibleFrame() {
         frame.setVisible(true);
     }
 
+    /**
+     * Method to get creation windows Jpanel frame
+     * @param None
+     * @return Jpanel frame
+     */
     public JFrame getFrame() {
         return frame;
     }
 
     /**
      * Styling for the JLabel text and font
+     * @param JLabel label
+     * @param int n
+     * @retun None
      */
     private void style(JLabel label, int n) {
         label.setFont(new Font("Georgia", Font.PLAIN, n));
@@ -237,6 +238,8 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
 
     /**
      * Getter for the labels ArrayList
+     * @param None
+     * @return ArrayList<JLabel> labels
      */
     public ArrayList<JLabel> getLabels() {
         return labels;
@@ -244,9 +247,11 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
 
     /**
      * Method to change the favourite button appearance and update the POI object
+     * @param ActionEvent event
+     * @return None
      */
     
-    public void actionPerformed(ActionEvent e)  {
+    public void actionPerformed(ActionEvent event)  {
         /**
          * If favourited, change to unfavourited
          */
@@ -272,7 +277,7 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
         } catch (IOException err) {
             err.printStackTrace();
         }
-        poiComponent.changeDisplayIfCampusMap(mapComponent.getMapObject().getMapID());
+        poiComponent.changeDisplayIfCampusMap();
         /**
          * Update the sidebar component to display the new POI
          */
@@ -281,33 +286,35 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
 
     /**
      * Change mouse cursor when hovering over button
-     * @param e
+     * @param MouseEvent event
+     * @return None
      */
-    public void mouseEntered(MouseEvent e) {
-        if (e.getSource() == favourite) {
+    public void mouseEntered(MouseEvent event) {
+        if (event.getSource() == favourite) {
             frame.setCursor(new Cursor(Cursor.HAND_CURSOR));
         }
     }
 
     /**
      * Change mouse cursor when no longer hovering over button
-     * @param e
+     * @param Mouseevent
+     * @return None
      */
-    public void mouseExited(MouseEvent e) {
-        if (e.getSource() == favourite) {
+    public void mouseExited(MouseEvent event) {
+        if (event.getSource() == favourite) {
             frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
     }
 
-    public void mouseClicked(MouseEvent e) {
+    public void mouseClicked(MouseEvent event) {
         // Do nothing
     }
 
-    public void mousePressed(MouseEvent e) {
+    public void mousePressed(MouseEvent event) {
         // Do nothing
     }
 
-    public void mouseReleased(MouseEvent e) {
+    public void mouseReleased(MouseEvent event) {
         // Do nothing
     }
     

@@ -87,6 +87,7 @@ public final class User {
     /**
      * Setter for isAdmim
      * @param boolean adminStatus
+     * @return None
      */
     public void setIsAdmin(boolean adminStatus) {
         this.isAdmin = adminStatus;
@@ -95,6 +96,7 @@ public final class User {
     /**
      * Setter for userPassword
      * @param int userID
+     * @return None
      */
     public void setUserID(int userID) {
         this.userID = userID;

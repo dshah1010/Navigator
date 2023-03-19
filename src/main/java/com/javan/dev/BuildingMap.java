@@ -53,14 +53,13 @@ public class BuildingMap implements Map {
     }
 
     /**
-     * Updates Map (WIP)
-     * @param None
-     * @return int
+     * Getter for buildingID id
+     * @return map id int
      */
-    public void updateMap(int mapID) {
-        this.mapID = mapID;
-        // Perform update of Campus Map
+    public int getBuildingID() {
+        return this.mapID;
     }
+
 
     /**
      * Getter for mapType
@@ -78,18 +77,6 @@ public class BuildingMap implements Map {
         return this.mapName;
     }
 
-    public JSONObject toJSON() {
-        JSONObject json = new JSONObject();
-        json.put("filePath", this.filePath);
-        json.put("mapID", this.mapID);
-        json.put("mapType", this.mapType);
-        JSONArray floorArrayJson = new JSONArray();
-        for (FloorMap floorMap : this.floorArray) {
-            floorArrayJson.put(floorMap.toJSON());
-        }
-        json.put("floorArray", floorArrayJson);
-        return json;
-    }
 
     /**
      * Adds Floor to FloorArray
@@ -99,20 +86,9 @@ public class BuildingMap implements Map {
         this.floorArray.add(newFloor);
     }
 
-    /**
-     * Getter for the Floor
-     * @param FloorId
-     * @return FloorMap
+    /*
+     * Setter for building name
      */
-    public FloorMap getFloor(int floorID) {
-        for (int i = 0; i < this.floorArray.size(); i++) {
-            if (this.floorArray.get(i).getMapID() == floorID) {
-                return this.floorArray.get(i);
-            }
-        }
-        return null;
-    }
-
     public void setName(String buildingName) {
         this.mapName = buildingName;
     }

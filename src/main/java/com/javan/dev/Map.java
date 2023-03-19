@@ -1,7 +1,5 @@
 package com.javan.dev;
 
-import org.json.JSONObject;
-
 /**
  * @author: Brad McGlynn <bmcglyn4@uwo.ca>
  * @version: 1.0
@@ -21,11 +19,6 @@ public interface Map {
      */
     public int getMapID();
 
-    /**
-     * (WIP) Updates map
-     * @return None
-     */
-    public void updateMap(int mapID);
 
     /**
      * Getter for map type
@@ -33,5 +26,11 @@ public interface Map {
      */
     public String getMapType();
 
-    public JSONObject toJSON();
+
+    /**
+     * Getter for map id
+     * @return map id int
+     */
+    public int getBuildingID();
+
 }

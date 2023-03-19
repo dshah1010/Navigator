@@ -38,7 +38,7 @@ public final class Weather {
     /**
      * Variables to hold weather data
      */
-    private String temp_c;
+    private String tempInCelcius;
     private String condition;
     private String conditionIcon;
     /**
@@ -58,6 +58,8 @@ public final class Weather {
 
     /**
      * Constructor for Weather object
+     * @param None
+     * @return None
      * @throws IOException
      * @throws MalformedURLException
      */
@@ -108,6 +110,7 @@ public final class Weather {
 
     /**
      * Getter for the singleton instance
+     * @param None
      * @return Weather instance
      */
     public static Weather getInstance() {
@@ -123,6 +126,7 @@ public final class Weather {
 
     /**
      * Getter for the JSON object retrieved from the constructor
+     * @param None
      * @return String json, the unprocessed JSON object
      */
     public StringBuffer getJSON() {
@@ -130,7 +134,9 @@ public final class Weather {
     }
 
     /**
-     * Function to use DataProcessor to parse the weather JSON object
+     * method to use DataProcessor to parse the weather JSON object
+     * @param None
+     * @return None
      */
     public void parseWeather() {
         /**
@@ -144,21 +150,23 @@ public final class Weather {
          * Get the parsed data and store it in the current Weather objet
          */
         ArrayList<String> parsedData = processor.parseWeather(this.json);
-        this.temp_c = parsedData.get(0);
+        this.tempInCelcius = parsedData.get(0);
         this.condition = parsedData.get(1);
         this.conditionIcon = parsedData.get(2);
     }
 
     /**
      * Getter for the temperature in celsius
-     * @return String temp_c, the temperature in celsius
+     * @param None
+     * @return String tempInCelcius, the temperature in celsius
      */
     public String getTempC() {
-        return this.temp_c;
+        return this.tempInCelcius;
     }
 
     /**
      * Getter for the textual repreesntation of current weather condition
+     * @param None
      * @return String condition
     */
     public String getCondition() {
@@ -167,6 +175,7 @@ public final class Weather {
 
     /**
      * Getter for the link to the icon representing the current weather condition
+     * @param None
      * @return String conditionIcon, link to icon
      */
     public String getConditionIcon() {
@@ -175,6 +184,7 @@ public final class Weather {
 
     /**
      * Getter for the weather info panel
+     * @param None
      * @return JPanel weather info panel for UI
      */
     public JPanel getWeatherInfoPanel() {
@@ -184,6 +194,8 @@ public final class Weather {
     /**
      * Method to add information to the Weather Information panel using the Weather class getTempC and getConditionIcon
      * Reads getConditionIcon URL and convert to BufferedImage for use in UI.
+     * @param None
+     * @return None
      * @throws IOException
      * @throws MalformedURLException
      */

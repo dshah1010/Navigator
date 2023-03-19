@@ -85,8 +85,8 @@ public final class UserInterface extends JFrame implements ActionListener {
             while (!loginComponent.getLoginStatus()) {
                 try {
                     Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                } catch (InterruptedException event) {
+                    event.printStackTrace();
                 }
             }
             /**
@@ -103,8 +103,8 @@ public final class UserInterface extends JFrame implements ActionListener {
             while (loginComponent.getLoginStatus()) {
                 try {
                     Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                } catch (InterruptedException event) {
+                    event.printStackTrace();
                 }
             }
         }
@@ -112,15 +112,17 @@ public final class UserInterface extends JFrame implements ActionListener {
 
     /**
      * Method to get instance of the singleton
+     * @param None
+     * @return UserInterface INSTANCE
      */
     public static UserInterface getInstance() {
         if (INSTANCE == null) {
             try {
                 INSTANCE = new UserInterface();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (MalformedURLException event) {
+                event.printStackTrace();
+            } catch (IOException event) {
+                event.printStackTrace();
             }
         }
         return INSTANCE;
@@ -128,21 +130,21 @@ public final class UserInterface extends JFrame implements ActionListener {
 
     /**
      * Method to handle the actions of the menu items and other components
-     * @param e, the event that is triggered when a menu item is clicked
+     * @param Actionevent, the event that is triggered when a menu item is clicked
      * @return None
      */
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent event) {
         /**
          * Go to UserHelp page when help menu is clicked
          */
-        if (e.getSource() == helpItem) {
+        if (event.getSource() == helpItem) {
             userHelp.getFrame().setLocationRelativeTo(frame);
             userHelp.openHelpMenu();
         }
         /**
          * Go to LoginComponent page when logout is clicked
          */
-        else if (e.getSource() == logout) {
+        else if (event.getSource() == logout) {
             /**
              * Remove any other frames in the UI, then add login component to UI
              */
@@ -157,13 +159,13 @@ public final class UserInterface extends JFrame implements ActionListener {
         /**
          * Minimize the UI when minimize is clicked
          */
-        else if (e.getSource() == minimize) {
+        else if (event.getSource() == minimize) {
             frame.setState(JFrame.ICONIFIED);
         }
         /**
          * Exit the UI when exit is clicked
          */
-        else if (e.getSource() == exit) {
+        else if (event.getSource() == exit) {
             System.exit(0);
         }
     }
@@ -186,6 +188,8 @@ public final class UserInterface extends JFrame implements ActionListener {
     /**
      * Method that opens a MapComponent to the UI, allowing the user to view maps
      * This method will open the map component inside the same window as the main UI
+     * @param None
+     * @return None
      * @throws IOException
      * @throws MalformedURLException
      */

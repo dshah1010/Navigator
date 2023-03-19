@@ -88,6 +88,8 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Constructor to initialize the map component
+     * @param None
+     * @return None
      */
     private MapComponent() {
         /**
@@ -219,7 +221,8 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Method to get current Building ID
-     * @return
+     * @param None
+     * @return int currentBuildingID
      */
     public int getCurrentBuildingID() {
         return currentBuildingID;
@@ -227,7 +230,8 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Getter for the user of the MapComponent
-     * @return  user
+     * @param None
+     * @return  User user
      */
     public User getUser() {
         return user;
@@ -235,7 +239,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Getter for map panel
-     * @return mapPanel
+     * @param Nonl pane lmapPanel
      */
     public JPanel getMapPanel() {
         return mapPanel;
@@ -243,7 +247,8 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Getter for current map ID
-     * @return currentMapID
+     * @param None
+     * @return int currentMapID
      */
     public int getCurrentMapID() {
         return currentMapID;
@@ -259,7 +264,8 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Getter for the current Map object
-     * @return mapObject
+     * @param None
+     * @return Map mapObject
      */
     public Map getMapObject() {
         return mapObject;
@@ -267,7 +273,8 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Getter for the current floor object
-     * @return mapObject
+     * @param None
+     * @return FloorMap floorMap
      */
     public FloorMap getFloorMapObject() {
         return floorMap;
@@ -275,7 +282,8 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Setter for the Map object and Map ID, and isCampusMap status
-     * @param mapObject
+     * @param Map mapObject
+     * @return None
      */
     public void setMapDetails(Map newMap) {
 
@@ -285,7 +293,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         if (newMap.getMapType() == "FLOOR") {
             this.isCampusMap = false;
             this.mapType = "FLOOR";
-            this.floorMap = (FloorMap) newMap;
+            this.floorMap = (FloorMap) MapFactory.createMap(this.mapType, newMap.getBuildingID(), newMap.getMapID());
         }
         else if (newMap.getMapType() == "CAMPUS") {
             this.isCampusMap = true;
@@ -304,6 +312,8 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     
     /**
      * Method to update floor up/down buttons depending on if on campus map or a floor map
+     * @param None
+     * @return None
      */
     public void updateFloorButtons() {
         if (this.mapType.contains("CAMPUS")) {
@@ -323,7 +333,9 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     }
 
     /**
-     * Function to create a new button and style it
+     * Method to create a new button and style it
+     * @param None
+     * @return None
      */
     public JButton createMapButton(String text) {
         JButton button = new JButton(text);
@@ -337,13 +349,17 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
 
         return button;
     }
-
+    /**
+     * Method to change the floorMap object being displayed in the map panel based on FloorMap object provided
+     * @param Map newMap
+     * @return None
+     */
     public void changeFloorMap(FloorMap floorMap) {
         this.floorMap = floorMap;
     }
     /**
-     * Method to change the map being displayed in the map panel based on the String filepath being provided
-     * @param filepath, mapID
+     * Method to change the map being displayed in the map panel based on Map object provided
+     * @param Map newMap
      * @return None
      */
     public void changeMap(Map newMap) {
@@ -352,7 +368,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          * Set map details
          */
         setMapDetails(newMap);
-        poiComponent.changeDisplayIfCampusMap(this.currentMapID);
+        poiComponent.changeDisplayIfCampusMap();
 
         /**
          * Updates the map image and map object
@@ -397,6 +413,8 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Method to navigate to a POI's coordinates on the map when given the POI name by using DataProcessor to retrieve the POI's coordinates
+     * @param int poiID
+     * @return None
      */
     public void navigateToPOI(int poiID) {
         /**
@@ -459,6 +477,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * Method that changes the map to the floor above if there is a floor above the current one. Uses DataProcessor to get the Map of the floor above.
      * @param None
      * @return None
+     * @throws IOException
      */
     private void navigateToFloorAbove() throws IOException {
         if (floorMap.checkfloorAbove()) {
@@ -491,6 +510,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * Method that changes the map to the floor below if there is a floor below the current one. Uses DataProcessor to get the Map of the floor below.
      * @param None
      * @return None
+     * @throws IOException
      */
     private void navigateToFloorBelow() throws IOException {
         if (floorMap.checkFloorBelow()) {
@@ -522,6 +542,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     /**
      * Method that enables a POI layer on the map. This makes the POIs of that layer visible on the map.
      * @param text of the layer name
+     * @return None
      */
     public void enablePOILayer(String text) {
         for (PointOfInterest poi : userPOIs) {
@@ -567,6 +588,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     /**
      * Method that disables a POI layer on the map. This makes the POIs of that layer invisible on the map.
      * @param text of the layer name
+     * @return None
      */
     public void disablePOILayer(String text) {
         for (PointOfInterest poi : userPOIs) {
@@ -602,7 +624,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
             }
         }
         displayPOIs();
-        poiComponent.changeDisplayIfCampusMap(this.getMapObject().getMapID());
+        poiComponent.changeDisplayIfCampusMap();
             /**
              * Update the sidebar component to display the new POI
              */
@@ -611,23 +633,25 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Method to change mouse cursor when button hovered over and when a POI flag is hovered over
+     * @param MouseEvent event
+     * @return None
      */
-    public void mouseEntered(MouseEvent e) {
+    public void mouseEntered(MouseEvent event) {
         /**
          * Button hover
          */
-        if (e.getSource() instanceof JButton) {
-            JButton button = (JButton) e.getSource();
+        if (event.getSource() instanceof JButton) {
+            JButton button = (JButton) event.getSource();
             button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         }
         /**
          * POI Flag hovered over
          */
-        else if (e.getSource() instanceof JLabel) {
-            if (e.getSource() == map) {
+        else if (event.getSource() instanceof JLabel) {
+            if (event.getSource() == map) {
                 return;
             }
-            JLabel label = (JLabel) e.getSource();
+            JLabel label = (JLabel) event.getSource();
             label.setCursor(new Cursor(Cursor.HAND_CURSOR));
         }
     }
@@ -635,26 +659,30 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     /**
      * Method to change mouse cursor back to default when button not hovered over
      * Also changes back to default when POI flag not hovered over
+     * @param MouseEvent event
+     * @return None
      */
-    public void mouseExited(MouseEvent e) {
+    public void mouseExited(MouseEvent event) {
         /**
          * Button hover off
          */
-        if (e.getSource() instanceof JButton) {
-            JButton button = (JButton) e.getSource();
+        if (event.getSource() instanceof JButton) {
+            JButton button = (JButton) event.getSource();
             button.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         } 
         /**
          * POI Flag hover off
          */
-        else if (e.getSource() instanceof JLabel) {
-            JLabel label = (JLabel) e.getSource();
+        else if (event.getSource() instanceof JLabel) {
+            JLabel label = (JLabel) event.getSource();
             label.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
     }
 
     /**
      * Method to clear Floor POIs from the map
+     * @param None
+     * @return None
      */
     public void clearPois() {
         pois.clear();
@@ -673,6 +701,8 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Method to clear Building POIs from the map
+     * @param None
+     * @return None
      */
     public void clearBuildingPois() {
         buildingpois.clear();
@@ -691,6 +721,8 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Method to display Floor POIs for the map currently being displayed on the map with a flag icon representing its location
+     * @param None
+     * @return None
      */
     public void displayPOIs() {
         /**
@@ -745,6 +777,8 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Method to loop through POI arraylist and add to map
+     * @param ArrayList<BuildingPointOfInterest> pois
+     * @return None
      */
     public void addBuildingPOIList(ArrayList<BuildingPointOfInterest> pois) {
         /**
@@ -801,6 +835,8 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Method to loop through POI arraylist and add to map
+     * @param ArrayList<PointOfInterest> pois
+     * @return None
      */
     public void addPOIList(ArrayList<PointOfInterest> pois) {
         /**
@@ -857,13 +893,15 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     }
 
     /**
-     * Method to handle button clicks by delegating to other functions that will make the appropriate changes to the map and use other classes
+     * Method to handle button clicks by delegating to other methods that will make the appropriate changes to the map and use other classes
+     * @param ActionEvent event
+     * @return None
      */
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent event) {
         /**
          * Get button text
          */
-        String buttonText = ((JButton) e.getSource()).getText();
+        String buttonText = ((JButton) event.getSource()).getText();
 
         /**
          * If the button text is "Campus Map", change the map to the campus map
@@ -907,13 +945,13 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                  * If admin, change to 'Developer Editing Mode'
                  */
                 if (user.getIsAdmin()) {
-                    ((JButton) e.getSource()).setText("Developer Editing Mode");
+                    ((JButton) event.getSource()).setText("Developer Editing Mode");
                 }
                 /**
                  * If user, change to 'User Editing Mode'
                  */
                 else {
-                    ((JButton) e.getSource()).setText("User Editing Mode");
+                    ((JButton) event.getSource()).setText("User Editing Mode");
                 }
                 isNavigationMode = false;
             }
@@ -922,28 +960,30 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          * If the button text is "Editing Mode", change that button to "Navigation Mode"
          */
         else if (buttonText.equals("User Editing Mode") || buttonText.equals("Developer Editing Mode")) {
-            ((JButton) e.getSource()).setText("Navigation Mode");
+            ((JButton) event.getSource()).setText("Navigation Mode");
             isNavigationMode = true;
         }
     }
 
     /**
      * Method to handle mouse clicks on a POI on the map. When a POI is clicked, opens up a small pop-up window with the POI's information
+     * @param MouseEvent event
+     * @return None
      */
-    public void mouseClicked(MouseEvent e) {
+    public void mouseClicked(MouseEvent event) {
         /**
          * Navigation Mode -> Can View POIs
          */
         if (isNavigationMode) {
-            if (e.getSource() == map) {
+            if (event.getSource() == map) {
                 return;
             }
             if (isCampusMap) {
-                if (e.getSource() instanceof JLabel) {
+                if (event.getSource() instanceof JLabel) {
                     /**
                      * Get the label that was clicked
                      */
-                    JLabel label = (JLabel) e.getSource();
+                    JLabel label = (JLabel) event.getSource();
                 
                     /**
                      * Get the POI Id of the label
@@ -959,7 +999,6 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                      * Get the building ID of the POI
                      */
                     int buildingID = poi.getBuildingID();
-                    System.out.println(buildingID);
 
                     /**
                      * Get the filepath of the first floor of the POI given the buildingID by searching BuildignsPOIMetadata.json
@@ -978,8 +1017,8 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                 /**
                  * Get the label that was clicked
                  */
-                if (e.getSource() instanceof JLabel) {
-                    JLabel label = (JLabel) e.getSource();
+                if (event.getSource() instanceof JLabel) {
+                    JLabel label = (JLabel) event.getSource();
 
                     /**
                      * Get the POI Id of the label
@@ -1003,11 +1042,11 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          * Editing Mode -> Create POIs wherever clicked on the map image ()
          */
         else if (isNavigationMode == false) {
-            if (e.getSource() instanceof JLabel) {
+            if (event.getSource() instanceof JLabel) {
                 /**
                  * If on the map
                  */
-                if (e.getSource() == map) {
+                if (event.getSource() == map) {
                     if (isCampusMap) {
                         /*
                          * Only allowing developers to make building POIs
@@ -1016,8 +1055,8 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                             /**
                              * Get the coordinates of the mouse click
                              */
-                            int x = e.getX();
-                            int y = e.getY();
+                            int x = event.getX();
+                            int y = event.getY();
 
                             /**
                              * Create a new Point of Interest with EditingTool by opening POICreationWindow with the coordinates
@@ -1039,8 +1078,8 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                         /**
                          * Get the coordinates of the mouse click
                          */
-                        int x = e.getX();
-                        int y = e.getY();
+                        int x = event.getX();
+                        int y = event.getY();
 
                         /**
                          * Create a new Point of Interest with EditingTool by opening POICreationWindow with the coordinates
@@ -1058,7 +1097,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                     /**
                      * Get the label that was clicked
                      */
-                    JLabel label = (JLabel) e.getSource();
+                    JLabel label = (JLabel) event.getSource();
 
                     /**
                      * Get the POI Id of the label
@@ -1138,6 +1177,8 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Method to change map to campus map
+     * @param None
+     * @return None
      */
     public void changeToCampusMap() {
         /**
@@ -1146,18 +1187,27 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         changeMap(campus);
     }
 
-    public void mousePressed(MouseEvent e) {
-        if (e.getSource() == map) {
-            mouseStartX = e.getX();
-            mouseStartY = e.getY();
+    /**
+     * Method to detect if mouse has been pressed, moving map appropriately if so
+     * @param MouseEvent event
+     * @return None
+     */
+    public void mousePressed(MouseEvent event) {
+        if (event.getSource() == map) {
+            mouseStartX = event.getX();
+            mouseStartY = event.getY();
         }
     }
-
-    public void mouseDragged(MouseEvent e) {
-        if (e.getSource() == map) {
+    /**
+     * Method to detect if mouse is beeing pressed and dragged, moving map appropriately if so
+     * @param MouseEvent event
+     * @return None
+     */
+    public void mouseDragged(MouseEvent event) {
+        if (event.getSource() == map) {
             JViewport viewPort = scrollPane.getViewport();
             Point vpp = viewPort.getViewPosition();
-            vpp.translate(mouseStartX-e.getX(), mouseStartY-e.getY());
+            vpp.translate(mouseStartX-event.getX(), mouseStartY-event.getY());
             map.scrollRectToVisible(new Rectangle(vpp, viewPort.getSize()));
         }
     }
@@ -1171,13 +1221,15 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     }
 
     /**
-     * Method to update POI coordinates on map
+     * Method to update POI coordinates on map once mouse button is released
+     * @param MouseEvent event
+     * @return None
      */
-    public void mouseReleased(MouseEvent e) {
-        if (e.getSource() != map) {
+    public void mouseReleased(MouseEvent event) {
+        if (event.getSource() != map) {
             if (isNavigationMode == false) {
-                if (e.getSource() instanceof JLabel && e.isAltDown()) {
-                    JLabel label = (JLabel) e.getSource();
+                if (event.getSource() instanceof JLabel && event.isAltDown()) {
+                    JLabel label = (JLabel) event.getSource();
                     /**
                      * Get the POI Id of the label
                      */
@@ -1201,8 +1253,8 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                     /**
                      * Get the coordinates of the mouse relative to the map's dimensions
                      */
-                    int x = poi.getCoordinates()[0] + e.getX();
-                    int y = poi.getCoordinates()[1] + e.getY();
+                    int x = poi.getCoordinates()[0] + event.getX();
+                    int y = poi.getCoordinates()[1] + event.getY();
 
                     /**
                      * Update the POI coordinates
@@ -1223,6 +1275,11 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
             }
         }
 }
-    public void mouseMoved(MouseEvent e) {
+    /**
+     * Unneeded method from mouse listener
+     * @param MouseEvent event
+     * @return None
+     */
+    public void mouseMoved(MouseEvent event) {
     }
 }
