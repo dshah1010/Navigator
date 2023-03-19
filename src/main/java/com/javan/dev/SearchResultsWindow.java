@@ -6,6 +6,9 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+
 /**
  * @author: Jake Choi <jchoi492@uwo.ca>
  * @version: 1.0
@@ -29,51 +32,71 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
     private PointOfInterest currSelected;
     private BuildingPointOfInterest currBuildingSelected;
 
-    private static SearchResultsWindow INSTANCE = SearchResultsWindow.getInstance();
+    private static SearchResultsWindow INSTANCE;
 
-    private MapComponent currMap;
+    private MapComponent mapComponent = MapComponent.getInstance();
 
-    private DataProcessor currProcessor;
+    private DataProcessor currProcessor = DataProcessor.getInstance();
 
     /**
-     * This is the constructor of a SearchResults object. 
-     * It will create a JList and JFrame to show a new window with the search results.
-     * @param listData  This is the arra of Points of Interest that were found based on the search.
+     * Constructor for searchResults object, placeholder as other functionsdo main search results
+     * @param None
+     * @return None
      */
-    public SearchResultsWindow(ArrayList<PointOfInterest> listData, String searchText, MapComponent currMap, DataProcessor processor) {
+    public SearchResultsWindow () {}
+
+    /**
+     * Method to create a JList and JFrame to show a new window with the search results.
+     * @param ArrayList<PointOfInterest> listData  This is the array of Points of Interest that were found based on the search.
+     * @param String searchText
+     * @return None
+     */
+    public void SearchResultsWindowFloorMap(ArrayList<PointOfInterest> listData, String searchText) {
         currSelected = null;
-        this.currMap = currMap;
-        this.currProcessor = processor;
         /**
          * Create the new frame.
          */
         createFrame(listData, searchText);
+        getFrame().setLocationRelativeTo(mapComponent.getMapPanel());
+        openSearchResults();
     }
 
     /**
-     * Building Constructor
+     * Method to create a JList and JFrame to show a new window with the search results on te campus map
+     * @param ArrayList<BuildingPointOfInterest> buildingSearchMatch  This is the array of Building Points of Interest that were found based on the search.
+     * @param String searchText
+     * @return None
      */
-    public SearchResultsWindow(ArrayList<BuildingPointOfInterest> buildingSearchMatch, String lowerCase, MapComponent mapComponent) {
+    public void SearchResultsWindowCampusMap(ArrayList<BuildingPointOfInterest> buildingSearchMatch, String searchText) {
         currBuildingSelected = null;
-        this.currMap = mapComponent;
-        this.currProcessor = DataProcessor.getInstance();
         /**
          * Create the new frame.
          */
-        createBuildingFrame(buildingSearchMatch, lowerCase);
+        createBuildingFrame(buildingSearchMatch, searchText);
+        getFrame().setLocationRelativeTo(mapComponent.getMapPanel());
+        openSearchResults();
     }
 
     /**
-     * Returns the instance of the current search results window. 
-     * @return  Instance of current search results window.
+     * Getter for the instance of SearchResultsWindow
+     * @param None
+     * @return SearchResultsWindow instance
      */
     public static SearchResultsWindow getInstance() {
+        if (INSTANCE == null) {
+            try {
+                INSTANCE = new SearchResultsWindow();
+            } catch (Exception event) {
+                event.printStackTrace();
+            }
+        }
         return INSTANCE;
     }
 
     /**
      * Open the search results window.
-     * @return
+     * @param None
+     * @return None
      */
     public void openSearchResults() {
         frame.setVisible(true);
@@ -81,7 +104,8 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
 
     /**
      * Getter method for the frame of the search results window.
-     * @return      Return the frame
+     * @param None
+     * @return JFram Return the frame
      */
     public JFrame getFrame() {
         return frame;
@@ -89,7 +113,8 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
 
     /**
      * Getter method for the JList of the search results.
-     * @return      The search results as a JList
+     * @param None
+     * @return Jlist The search results as a JList
      */
     public JList<PointOfInterest> getList() {
         return resultList;
@@ -97,7 +122,8 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
 
     /**
      * Getter method for the currently selected POI in the JList.
-     * @return      The Point of Interest curently selected by user.
+     * @param None
+     * @return PointOfInterest The Point of Interest curently selected by user.
      */
     public PointOfInterest getCurrentSelected() {
         return currSelected;
@@ -105,26 +131,26 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
 
     /**
      * This method is to check what to do based on where the user clicks their mouse within the window.
-     * @param e     The mouse event
-     * @return  
+     * @param MouseEvent event - The mouse event
+     * @return  None
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public void mouseClicked(MouseEvent e) {
+    public void mouseClicked(MouseEvent event) {
         /**
          * Check if the mouse click event was on an item on the JList.
          */
-        if (e.getSource() instanceof JList && e.getClickCount() == 1) {
-            if (currMap.getIsCampusMap()) {
-                JList<BuildingPointOfInterest> buildingList = (JList) e.getSource();
+        if (event.getSource() instanceof JList && event.getClickCount() == 1) {
+            if (mapComponent.getIsCampusMap()) {
+                JList<BuildingPointOfInterest> buildingList = (JList) event.getSource();
                 /**
                  * Restrict the clicking for within the items available in the list. The mouse click on any empty space within the JList scroll pane will do nothing.
                  */
                 Rectangle r = buildingList.getCellBounds(0, buildingList.getLastVisibleIndex());
-                if (r != null && r.contains(e.getPoint())) { 
+                if (r != null && r.contains(event.getPoint())) { 
                     /**
                      * Set currently selected POI to the POI selected by the user (by click).
                      */
-                    int index = buildingList.locationToIndex(e.getPoint()); 
+                    int index = buildingList.locationToIndex(event.getPoint()); 
                     if (index >= 0) {
                         BuildingPointOfInterest o = buildingList.getModel().getElementAt(index);
                         currBuildingSelected = o;
@@ -132,17 +158,17 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
                 }
             }
             else {
-                JList<PointOfInterest> poiList = (JList) e.getSource();
+                JList<PointOfInterest> poiList = (JList) event.getSource();
                 
                 /**
                  * Restrict the clicking for within the items available in the list. The mouse click on any empty space within the JList scroll pane will do nothing.
                  */
                 Rectangle r = poiList.getCellBounds(0, poiList.getLastVisibleIndex());
-                if (r != null && r.contains(e.getPoint())) { 
+                if (r != null && r.contains(event.getPoint())) { 
                     /**
                      * Set currently selected POI to the POI selected by the user (by click).
                      */
-                    int index = poiList.locationToIndex(e.getPoint()); 
+                    int index = poiList.locationToIndex(event.getPoint()); 
                     if (index >= 0) {
                         PointOfInterest o = poiList.getModel().getElementAt(index);
                         currSelected = o;
@@ -153,8 +179,8 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
         /**
          * Check if the mouse click event was on the "Okay" JButton.
          */
-        else if (e.getSource() instanceof JButton && e.getClickCount() == 1) {
-            if (currMap.getIsCampusMap()) {
+        else if (event.getSource() instanceof JButton && event.getClickCount() == 1) {
+            if (mapComponent.getIsCampusMap()) {
                 /**
                  * Check if any POI was selected by the user. If no POI was selected, prompt user to select a POI to jump to on the map.
                  */
@@ -166,7 +192,7 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
                      * Close the current frame and change the map to the floor map of the building selected.
                      */
                     frame.dispose();
-                    currMap.changeMap(currProcessor.getFloorMapFromMapID(currBuildingSelected.getBuildingID(), 1));
+                    mapComponent.changeMap(currProcessor.getFloorMapFromMapID(currBuildingSelected.getBuildingID(), 1));
                     currBuildingSelected = null;
                 }
             }
@@ -184,16 +210,16 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
                     frame.dispose();
                     POIInfoWindow poiWindow = new POIInfoWindow(currSelected.getID());
 
-                    if (currSelected.getFloorID() == currMap.getFloorMapObject().getMapID()) {
-                        currMap.navigateToPOI(currSelected.getID());
+                    if (currSelected.getFloorID() == mapComponent.getFloorMapObject().getMapID()) {
+                        mapComponent.navigateToPOI(currSelected.getID());
                         currSelected = null;
                     }
                     else {
-                        currMap.changeMap(currProcessor.getFloorMapFromMapID(currSelected.getBuildingID(), currSelected.getFloorID()));
-                        currMap.navigateToPOI(currSelected.getID());
+                        mapComponent.changeMap(currProcessor.getFloorMapFromMapID(currSelected.getBuildingID(), currSelected.getFloorID()));
+                        mapComponent.navigateToPOI(currSelected.getID());
                         currSelected = null;
                     }
-                    poiWindow.getFrame().setLocationRelativeTo(currMap.getMapPanel());
+                    poiWindow.getFrame().setLocationRelativeTo(mapComponent.getMapPanel());
                     poiWindow.setVisibleFrame();
                 }
             }
@@ -202,9 +228,9 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
 
     /**
      * Create the search results window frame.
-     * @param list      the list of POIs that match the search
-     * @param search    the searched text
-     * @return
+     * @param ArrayList<PointOfInterest> list - the list of POIs that match the search
+     * @param String search -the searched text
+     * @return None
      */
     private void createFrame(ArrayList<PointOfInterest> list, String search) {
         /**
@@ -220,7 +246,7 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
         /**
          * Output text on panel based on if it's a search from the campus map or from a floor.
          */
-        if (currMap.getIsCampusMap()) {
+        if (mapComponent.getIsCampusMap()) {
             JLabel textLabel = (new JLabel("Double click on your desired building, then click \"Okay\" at the bottom."));
             textLabel.setBackground(Color.WHITE);
             textLabel.setFont(new Font("Georgia", Font.BOLD, 15));
@@ -291,12 +317,15 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
 
     /**
      * Method to create frame for BuildingPointOfInterest
+     * @param ArrayList<BuildingPointOfInterest> list
+     * @param String searchResults
+     * @return None
      */
-    public void createBuildingFrame(ArrayList<BuildingPointOfInterest> list, String search) {
+    public void createBuildingFrame(ArrayList<BuildingPointOfInterest> list, String searchResult) {
         /**
          * Create new frame.
          */
-        frame = new JFrame("Search Results for \"" + search + "\"");
+        frame = new JFrame("Search Results for \"" + searchResult + "\"");
         frame.setSize(650, 250);
         /**
          * Create new panel to include text, JList, and JButton.
@@ -306,7 +335,7 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
         /**
          * Output text on panel based on if it's a search from the campus map or from a floor.
          */
-        if (currMap.getIsCampusMap()) {
+        if (mapComponent.getIsCampusMap()) {
             JLabel textLabel = (new JLabel("Double click on your desired building, then click \"Okay\" at the bottom."));
             textLabel.setBackground(Color.WHITE);
             textLabel.setFont(new Font("Georgia", Font.BOLD, 15));
@@ -378,44 +407,48 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
     /**
      * Unused method from the implemented class MouseListener
      */
-    public void mousePressed(MouseEvent e) {
+    public void mousePressed(MouseEvent event) {
     }
 
     /**
      * Unused method from the implemented class MouseListener
      */
-    public void mouseReleased(MouseEvent e) {
+    public void mouseReleased(MouseEvent event) {
     }
 
     /**
      * Mouse cursor change on button
+     * @param MouseEvent event
+     * @return None
      */
-    public void mouseEntered(MouseEvent e) {
+    public void mouseEntered(MouseEvent event) {
         /**
          * Change mouse pointer to hand when hovering over the button
          */
-        if (e.getSource() instanceof JButton) {
-            ((JButton) e.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        if (event.getSource() instanceof JButton) {
+            ((JButton) event.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             /**
              * Change background to gray
              */
-            ((JButton) e.getSource()).setBackground(Color.LIGHT_GRAY);
+            ((JButton) event.getSource()).setBackground(Color.LIGHT_GRAY);
         }
     }
 
     /**
      * Mouse cursor change on not on button
+     * @param MouseEvent event
+     * @return None
      */
-    public void mouseExited(MouseEvent e) {
+    public void mouseExited(MouseEvent event) {
         /**
          * Change mouse pointer to default when not hovering over the button
          */
-        if (e.getSource() instanceof JButton) {
-            ((JButton) e.getSource()).setCursor(Cursor.getDefaultCursor());
+        if (event.getSource() instanceof JButton) {
+            ((JButton) event.getSource()).setCursor(Cursor.getDefaultCursor());
             /**
              * Change background to white
              */
-            ((JButton) e.getSource()).setBackground(Color.WHITE);
+            ((JButton) event.getSource()).setBackground(Color.WHITE);
         }
     }
     

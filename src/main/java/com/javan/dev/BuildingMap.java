@@ -52,6 +52,14 @@ public class BuildingMap implements Map {
         return this.mapID;
     }
 
+    /**
+     * Getter for buildingID id
+     * @return map id int
+     */
+    public int getBuildingID() {
+        return this.mapID;
+    }
+
 
     /**
      * Getter for mapType

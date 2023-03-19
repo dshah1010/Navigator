@@ -14,7 +14,7 @@ public class BuildingPointOfInterest {
     private String name; 
     private int userID;
     private Boolean isUserMade;
-    private String POI_type;
+    private String poiType;
     private int[] coordinates = {0,0};
     private int buildingID;
     private ArrayList<Integer> userFavouritesList = new ArrayList<Integer> ();
@@ -32,11 +32,11 @@ public class BuildingPointOfInterest {
      * Constructor for the building POI
      * @param name, the name of the building POI
      */
-    public BuildingPointOfInterest(String name, int userID, boolean isUsermade, String POI_Type, int coordinatesX, int coordinatesY, int buildingID, ArrayList<Integer> userFavouritesList, String description, boolean isVisible)  {
+    public BuildingPointOfInterest(String name, int userID, boolean isUsermade, String poiType, int coordinatesX, int coordinatesY, int buildingID, ArrayList<Integer> userFavouritesList, String description, boolean isVisible)  {
         this.name = name;
         this.userID = userID;
         this.isUserMade = isUsermade;
-        this.POI_type = POI_Type;
+        this.poiType = poiType;
         this.coordinates[0] = coordinatesX;
         this.coordinates[1] = coordinatesY;
         this.buildingID = buildingID;
@@ -110,7 +110,7 @@ public class BuildingPointOfInterest {
      * @return String of the type
      */
     public String getPOItype() {
-        return POI_type;
+        return poiType;
     }
 
     /**
@@ -148,7 +148,7 @@ public class BuildingPointOfInterest {
         json.put("ID", this.ID);
         json.put("userID", this.userID);
         json.put("isUserMade", this.isUserMade);
-        json.put("POI_type", this.POI_type);
+        json.put("poiType", this.poiType);
         json.put("coordinates", new JSONArray(this.coordinates));
         json.put("buildingID", this.buildingID);
         json.put("userFavouritesList", this.userFavouritesList);
@@ -170,7 +170,7 @@ public class BuildingPointOfInterest {
     }
 
     public void setPOItype(String newLayer) {
-        this.POI_type = newLayer;
+        this.poiType = newLayer;
     }
 
     

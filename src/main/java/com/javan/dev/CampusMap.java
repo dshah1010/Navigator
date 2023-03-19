@@ -70,6 +70,14 @@ public final class CampusMap implements Map{
         return this.mapID;
     }
 
+    /**
+     * Getter for buildingID id
+     * @return building id int
+     */
+    public int getBuildingID() {
+        return -1;
+    }
+
 
     /**
      * Getter for mapType

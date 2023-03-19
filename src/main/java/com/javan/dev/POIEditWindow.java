@@ -27,7 +27,7 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
     private JPanel deletePanel;
 
     /**
-     * Private variables to hold the instance of the data processor and user
+     * Private variables to hold the instance of the data processor, user, mapCOmponent and poiComponent objects
      */
     private DataProcessor processor = DataProcessor.getInstance();
     private User user = User.getInstance();
@@ -38,7 +38,9 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
     private BuildingPointOfInterest buildingPOI;
 
     /**
-     * Constructor for POICreationWindow given x and y coordinates
+     * Constructor for POICreationWindow given a POIs ID
+     * @param int poiID
+     * @return None
      */
     public POIEditWindow (int poiID) {
         /*
@@ -171,10 +173,20 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
     
+    /**
+     * Method to set frame visibility
+     * @param None
+     * @return None
+     */
     public void setVisibleFrame() {
         frame.setVisible(true);
     }
 
+    /**
+     * Method to get creation windows Jpanel frame
+     * @param None
+     * @return Jpanel frame
+     */
     public JFrame getFrame() {
         return frame;
     }
@@ -198,6 +210,8 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
 
     /**
      * Function to create a new button and style it
+     * @param String text
+     * @return JButton button
      */
     public JButton createMapButton(String text) {
         JButton button = new JButton(text);
@@ -212,12 +226,16 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
     }
 
 
-
-    public void actionPerformed(ActionEvent e) {
+    /**
+     * Method to determine what methods to call based on where / what the mouse is pressing
+     * @param ActionEvent event
+     * @return None
+     */
+    public void actionPerformed(ActionEvent event) {
         /**
          * When the edit button is clicked, edit a new POI
          */
-        if (e.getSource() == edit) {
+        if (event.getSource() == edit) {
             Component[] children = panel.getComponents();
             // iterate over all subPanels...
             ArrayList<String> newPOIData = new ArrayList<String>();
@@ -269,7 +287,7 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
                     err.printStackTrace();
                 }
                 mapComponent.displayPOIs();
-                poiComponent.changeDisplayIfCampusMap(mapComponent.getMapObject().getMapID());
+                poiComponent.changeDisplayIfCampusMap();
                 /**
                  * Update the sidebar component to display the new POI
                  */
@@ -298,7 +316,7 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
                     err.printStackTrace();
                 }
                 mapComponent.displayPOIs();
-                poiComponent.changeDisplayIfCampusMap(mapComponent.getMapObject().getMapID());
+                poiComponent.changeDisplayIfCampusMap();
                 /**
                  * Update the sidebar component to display the new POI
                  */
@@ -309,13 +327,13 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
         /**
          * When the cancel button is clicked, close the window
          */
-        if (e.getSource() == cancel) {
+        if (event.getSource() == cancel) {
             frame.dispose();
         }
         /**
          * When the delete button is clicked, delete the POI from the map and JSON file
          */
-        if (e.getSource() == delete) {
+        if (event.getSource() == delete) {
             if (!mapComponent.getIsCampusMap()) {
                 try {
                     boolean deletedSuccessfully = processor.deletePointOfInterestFromJsonFile(poi);
@@ -333,7 +351,7 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
                     err.printStackTrace();
                 }
                 mapComponent.displayPOIs();
-                poiComponent.changeDisplayIfCampusMap(mapComponent.getMapObject().getMapID());
+                poiComponent.changeDisplayIfCampusMap();
                 /**
                  * Update the sidebar component to display the new POI
                  */
@@ -357,7 +375,7 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
                     err.printStackTrace();
                 }
                 mapComponent.displayPOIs();
-                poiComponent.changeDisplayIfCampusMap(mapComponent.getMapObject().getMapID());
+                poiComponent.changeDisplayIfCampusMap();
                 /**
                  * Update the sidebar component to display the new POI
                  */
@@ -367,32 +385,42 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
         }
     }
 
-    public void mouseEntered(MouseEvent e) {
+    /**
+     * Method to determine what cursor looks like depending on what type of object it is over
+     * @param MouseEvent event
+     * @return None
+     */
+    public void mouseEntered(MouseEvent event) {
         /**
          * Button hover
          */
-        if (e.getSource() instanceof JButton) {
-            JButton button = (JButton) e.getSource();
+        if (event.getSource() instanceof JButton) {
+            JButton button = (JButton) event.getSource();
             button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         }
     }
 
-    public void mouseExited(MouseEvent e) {
+    /**
+     * Method to determine what cursor looks like depending on what type of object it is over
+     * @param MouseEvent event
+     * @return None
+     */
+    public void mouseExited(MouseEvent event) {
         /**
          * Button hover off
          */
-        if (e.getSource() instanceof JButton) {
-            JButton button = (JButton) e.getSource();
+        if (event.getSource() instanceof JButton) {
+            JButton button = (JButton) event.getSource();
             button.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
     }
 
-    public void mouseClicked(MouseEvent e) {
+    public void mouseClicked(MouseEvent event) {
     }
 
-    public void mousePressed(MouseEvent e) {
+    public void mousePressed(MouseEvent event) {
     }
 
-    public void mouseReleased(MouseEvent e) {
+    public void mouseReleased(MouseEvent event) {
     }
 }

@@ -148,6 +148,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
 
     /**
      * Getter for login status
+     * @return boolean to see if currently logged in
      */
     public boolean getLoginStatus() {
         return isLoggedIn;
@@ -155,6 +156,8 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
 
     /**
      * Setter for login status
+     * @param boolean status
+     * @return None
      */
     public void setLoginStatus(boolean status) {
         isLoggedIn = status;
@@ -162,6 +165,8 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
 
     /**
      * Method to open the login panel
+     * @param None
+     * @return None
      */
     public void openLoginPanel() {
         /**
@@ -181,6 +186,8 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
 
     /**
      * Method to open the create account panel
+     * @param None
+     * @return None
      */
     public void openCreateAccountPanel() {
         /**
@@ -200,7 +207,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
 
     /**
      * Method to create the Login and Create Account buttons and style them appropriately
-     * @param None
+     * @param String text
      * @return JButton of the button
      */
     public JButton createButton(String text) {
@@ -284,6 +291,8 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
 
     /**
      * Method to create an appealing background for components
+     * @param None
+     * @return None
      */
     public void createBackground(JPanel panel) {
         /**
@@ -294,6 +303,8 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
 
     /**
      * Method to create the Login panel
+     * @param None
+     * @return None
      */
     public void loginPanel() {
         /**
@@ -445,6 +456,8 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
 
     /**
      * Method to do login button actions
+     * @param None
+     * @return None
      */
     public void loginButtonAction() {
         /**
@@ -516,6 +529,8 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
 
     /**
      * Method to do create account button actions
+     * @param None
+     * @return None
      */
     public void createAccountButtonAction() {
         /**
@@ -585,20 +600,20 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
     /**
      * Method to get username and password when login button is pressed, creating a User class to verify login\
      * Also gets username and password when create account button is pressed, creating a User class to verify create account
-     * @param e
+     * @param ActionEvent event
      * @return None
      */
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent event) {
         /**
          * Logging In
          */
-        if (e.getSource() == loginButton) {
+        if (event.getSource() == loginButton) {
             loginButtonAction();
         }
         /**
          * Creating Account
          */
-        else if (e.getSource() == createAccountButton) {
+        else if (event.getSource() == createAccountButton) {
             createAccountButtonAction();
         }
     }
@@ -607,32 +622,32 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
      * Method for when focus is gained
      * Applies for password input, create account password, and confirming password
      * Also applies for the username input for both login and create account page
-     * @param e
+     * @param FocusEvent event
      * @return None
      */
-    public void focusGained(FocusEvent e) {
+    public void focusGained(FocusEvent event) {
         /**
          * If the password input is the default text of Password, then set the text to blank and set the echo char to *
          */
-        if (e.getSource() == passwordInput || e.getSource() == createAccountPassword) {
+        if (event.getSource() == passwordInput || event.getSource() == createAccountPassword) {
             if (passwordFlag) {
-                ((JPasswordField) e.getSource()).setText("");
-                ((JPasswordField) e.getSource()).setEchoChar('*');
+                ((JPasswordField) event.getSource()).setText("");
+                ((JPasswordField) event.getSource()).setEchoChar('*');
                 passwordFlag = false;
             }
         }
-        else if (e.getSource() == createAccountConfirmPassword) {
+        else if (event.getSource() == createAccountConfirmPassword) {
             if (confirmPassFlag) {
-                ((JPasswordField) e.getSource()).setText("");
-                ((JPasswordField) e.getSource()).setEchoChar('*');
+                ((JPasswordField) event.getSource()).setText("");
+                ((JPasswordField) event.getSource()).setEchoChar('*');
                 confirmPassFlag = false;
             }
         }
         /**
          * If the username input is the default text of Username, then set the text to blank
          */
-        else if (e.getSource() == usernameInput || e.getSource() == createAccountUsername) {
-            ((JTextField) e.getSource()).setText("");
+        else if (event.getSource() == usernameInput || event.getSource() == createAccountUsername) {
+            ((JTextField) event.getSource()).setText("");
         }
     }
 
@@ -640,33 +655,33 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
     /**
      * Method for when focus is lost on all 3 passport input fields
      * Also for when username input is blank and focus is lost, setting default text again if no input given
-     * @param e
+     * @param FocusEvent event
      * @return None
      */
-    public void focusLost(FocusEvent e) {
+    public void focusLost(FocusEvent event) {
         /**
          * If no password input, then set the text to Password again (length of 0)
          */
-        if (e.getSource() == passwordInput || e.getSource() == createAccountPassword) {
-            if (((JPasswordField) e.getSource()).getPassword().length == 0) {
-                ((JPasswordField) e.getSource()).setText("Password:");
-                ((JPasswordField) e.getSource()).setEchoChar((char) 0);
+        if (event.getSource() == passwordInput || event.getSource() == createAccountPassword) {
+            if (((JPasswordField) event.getSource()).getPassword().length == 0) {
+                ((JPasswordField) event.getSource()).setText("Password:");
+                ((JPasswordField) event.getSource()).setEchoChar((char) 0);
                 passwordFlag = true;
             }
         }
-        else if (e.getSource() == createAccountConfirmPassword) {
-            if (((JPasswordField) e.getSource()).getPassword().length == 0) {
-                ((JPasswordField) e.getSource()).setText("Confirm Password:");
-                ((JPasswordField) e.getSource()).setEchoChar((char) 0);
+        else if (event.getSource() == createAccountConfirmPassword) {
+            if (((JPasswordField) event.getSource()).getPassword().length == 0) {
+                ((JPasswordField) event.getSource()).setText("Confirm Password:");
+                ((JPasswordField) event.getSource()).setEchoChar((char) 0);
                 confirmPassFlag = true;
             }
         }
         /**
          * If the username input is blank, then set the text to Username again
          */
-        else if (e.getSource() == usernameInput || e.getSource() == createAccountUsername) {
-            if (((JTextField) e.getSource()).getText().length() == 0) {
-                ((JTextField) e.getSource()).setText("Username:");
+        else if (event.getSource() == usernameInput || event.getSource() == createAccountUsername) {
+            if (((JTextField) event.getSource()).getText().length() == 0) {
+                ((JTextField) event.getSource()).setText("Username:");
             }
         }   
     }
@@ -674,56 +689,56 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
     /**
      * Method for mouse listener for button on hovering over the button (login/create account) to change appearance
      * Also mouse entered listened for the labels for forgot password, create account, and login if account exists
-     * @param e
+     * @param MouseEvent event
      * @return None
      */
-    public void mouseEntered(MouseEvent e) {
-        if (e.getSource() == loginButton || e.getSource() == createAccountButton) {
+    public void mouseEntered(MouseEvent event) {
+        if (event.getSource() == loginButton || event.getSource() == createAccountButton) {
             /**
              * Set background colour and mouse appearance to hover
              */
-            ((Component) e.getSource()).setBackground(Color.DARK_GRAY);
-            ((Component) e.getSource()).setForeground(Color.WHITE);
-            ((Component) e.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            ((Component) event.getSource()).setBackground(Color.DARK_GRAY);
+            ((Component) event.getSource()).setForeground(Color.WHITE);
+            ((Component) event.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
-        else if (e.getSource() == forgotPassword || e.getSource() == createAccount || e.getSource() == loginLabel) {
+        else if (event.getSource() == forgotPassword || event.getSource() == createAccount || event.getSource() == loginLabel) {
             /**
              * Set mouse appearance to hover
              */
-            ((Component) e.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            ((Component) event.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
     }
 
     /**
      * Method to change back appearance of button (login / create account) when no longer hovering over the buttom
      * Also applies for Forgot your Password and Create Account labels, as well as Login Label from Create Account page
-     * @param e
+     * @param MouseEvent event
      * @return None
      */
-    public void mouseExited(MouseEvent e) {
-        if (e.getSource() == loginButton || e.getSource() == createAccountButton) {
+    public void mouseExited(MouseEvent event) {
+        if (event.getSource() == loginButton || event.getSource() == createAccountButton) {
             /**
              * Reset background colour and mouse appearance to default
              */
-            ((Component) e.getSource()).setBackground(Color.BLACK);
-            ((Component) e.getSource()).setForeground(Color.WHITE);
-            ((Component) e.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            ((Component) event.getSource()).setBackground(Color.BLACK);
+            ((Component) event.getSource()).setForeground(Color.WHITE);
+            ((Component) event.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         }
-        else if (e.getSource() == forgotPassword || e.getSource() == createAccount || e.getSource() == loginLabel) {
+        else if (event.getSource() == forgotPassword || event.getSource() == createAccount || event.getSource() == loginLabel) {
             /**
              * Set mouse appearance to default
              */
-            ((Component) e.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            ((Component) event.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         }
     }
 
     /**
      * Method to handle mouse click events for Forgot your Password and for Create Account labels, as well as Login Label from Create Account page
-     * @param e
+     * @param MouseEvent event
      * @return None
      */
-    public void mouseClicked(MouseEvent e) {
-        if (e.getSource() == forgotPassword) {
+    public void mouseClicked(MouseEvent event) {
+        if (event.getSource() == forgotPassword) {
             /**
              * Get the username from the username input field, and if it is empty inform user to enter a username
              */
@@ -738,13 +753,13 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
             }
             JOptionPane.showMessageDialog(null, "Your password is: " + password);
         }
-        else if (e.getSource() == createAccount) {
+        else if (event.getSource() == createAccount) {
             /**
              * Convert the loginPanel into a createAccountPanel
              */
             openCreateAccountPanel();
         }
-        else if (e.getSource() == loginLabel) {
+        else if (event.getSource() == loginLabel) {
             /**
              * Convert the createAccountPanel into a loginPanel
              */
@@ -754,25 +769,27 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
 
     /**
      * Unneeded method from mouse listener
-     * @param e
+     * @param MouseEvent event
      * @return None
      */
-    public void mousePressed(MouseEvent e) {
+    public void mousePressed(MouseEvent event) {
     }
 
     /**
      * Unneeded method from mouse listener
-     * @param e
+     * @param MouseEvent event
      * @return None
      */
-    public void mouseReleased(MouseEvent e) {
+    public void mouseReleased(MouseEvent event) {
     }
 
     /**
      * Method to make login button / create account button do what it does in actionListener when Enter key is pressed
+     * @param None
+     * @return None
      */
-    public void keyTyped(KeyEvent e) {
-        if (e.getKeyChar() == KeyEvent.VK_ENTER) {
+    public void keyTyped(KeyEvent event) {
+        if (event.getKeyChar() == KeyEvent.VK_ENTER) {
             if (isLoginWindowOpen == true) {
                 loginButtonAction();
             }
@@ -782,10 +799,20 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
         }
     }
 
-    public void keyPressed(KeyEvent e) {
+    /**
+     * Unneeded method from mouse listener
+     * @param KeyEvent event
+     * @return None
+     */
+    public void keyPressed(KeyEvent event) {
     }
 
-    public void keyReleased(KeyEvent e) {
+    /**
+     * Unneeded method from mouse listener
+     * @param KeyEvent event
+     * @return None
+     */
+    public void keyReleased(KeyEvent event) {
 
     }
 }

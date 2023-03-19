@@ -43,8 +43,15 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
      */
     private MapComponent mapComponent = MapComponent.getInstance();
 
+
+    /**
+     * private instance of searchResultsWindow to receive information from
+     */ 
+    private SearchResultsWindow searchResultsWindow = SearchResultsWindow.getInstance();
+
     /**
      * Constructor to initialize the sidebar component
+     * @param None
      * @throws IOException
      * @throws MalformedURLException
      */
@@ -113,16 +120,17 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
 
     /**
      * Getter for the instance of SidebarComponent
+     * @param None
      * @return SidebarComponent instance
      */
     public static SidebarComponent getInstance() {
         if (INSTANCE == null) {
             try {
                 INSTANCE = new SidebarComponent();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (MalformedURLException event) {
+                event.printStackTrace();
+            } catch (IOException event) {
+                event.printStackTrace();
             }
         }
         return INSTANCE;
@@ -140,22 +148,22 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
 
     /**
      * Method to change cursor when search button is entered
-     * @param e
+     * @param event
      * @return None
      */
-    public void mouseEntered(MouseEvent e) {
+    public void mouseEntered(MouseEvent event) {
         /**
          * If mouse enters the search button, change to a hold icon
          */
-        if (e.getSource() == searchButton) {
+        if (event.getSource() == searchButton) {
             searchButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
         /**
          * If the mouse hovers over either Points of Interest or Weather Information buttons, change cursor to hold and background to gray
          */
-        if (e.getSource() == poiList || e.getSource() == weatherInfo) {
-            ((Component) e.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-            ((JComponent) e.getSource()).setBackground(Color.LIGHT_GRAY);
+        if (event.getSource() == poiList || event.getSource() == weatherInfo) {
+            ((Component) event.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            ((JComponent) event.getSource()).setBackground(Color.LIGHT_GRAY);
         }
         
     }
@@ -243,6 +251,8 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
 
     /**
      * Method to make it so the poiList button takes up the entire vertical space of the sidebar
+     * @param None
+     * @return None
      */
     public void increasePOIButtonSize() {
         GridBagConstraints gridConstraints = new GridBagConstraints();
@@ -254,6 +264,8 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
 
     /**
      * Method to create GridLayout for POI List Panel
+     * @param None
+     * @return None
      */
     public void createPOIListGridBagLayout() {
         poiListContentPanel.setLayout(new GridBagLayout());
@@ -321,15 +333,15 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
 
     /**
      * Method to handle the action of a button being toggled on or off
-     * @param e
+     * @param ActionEvent event
      * @return None
      */
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent event) {
         /**
          * Button is a JToggleButton
          */
-        if (e.getSource() instanceof JToggleButton) {
-            JToggleButton button = (JToggleButton) e.getSource();
+        if (event.getSource() instanceof JToggleButton) {
+            JToggleButton button = (JToggleButton) event.getSource();
             if (button.isSelected()) {
                 /**
                  * Get the name of the button and show the JFrame associated with it
@@ -362,14 +374,14 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
         /**
          * Button is the search button
          */
-        else if (e.getSource() instanceof JButton) {
+        else if (event.getSource() instanceof JButton) {
             searchPOI();
         }
     }
 
     /**
      * Method to create a JToggleButton and style it, as well as add event listeners
-     * @param text
+     * @param String text
      * @return
      */
     public JToggleButton createToggleButton(String text) {
@@ -395,20 +407,22 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
 
     /**
      * Method to change search bar text when it is focused on
-     * @param e
+     * @param FocusEvent event
      * @return None
      */
-    public void focusGained(FocusEvent e) {
+    public void focusGained(FocusEvent event) {
         /**
          * Set to empty string when the search bar is clicked
          */
-        if (e.getSource() == searchText) {
-            ((JTextField) e.getSource()).setText("");
+        if (event.getSource() == searchText) {
+            ((JTextField) event.getSource()).setText("");
         }
     }
 
     /**
      * Method to perform search
+     * @param None
+     * @return None
      */
     public void searchPOI() {
         /**
@@ -494,14 +508,11 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
                  * Create new Search Results Window listning all the results.
                  */
                 if (buildingSearchMatch.size() > 0) {
-                    SearchResultsWindow resultWindow = new SearchResultsWindow(buildingSearchMatch, text.toLowerCase(), mapComponent);
-                    resultWindow.getFrame().setLocationRelativeTo(mapComponent.getMapPanel());
-                    resultWindow.openSearchResults();
+                    searchResultsWindow.SearchResultsWindowCampusMap(buildingSearchMatch, text.toLowerCase());
+                    
                 }
                 else {
-                    SearchResultsWindow resultWindow = new SearchResultsWindow(searchMatch, text.toLowerCase(), mapComponent, processor);
-                    resultWindow.getFrame().setLocationRelativeTo(mapComponent.getMapPanel());
-                    resultWindow.openSearchResults();
+                    searchResultsWindow.SearchResultsWindowFloorMap(searchMatch, text.toLowerCase());
                 }
             }
             /**
@@ -530,31 +541,32 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
 
     /**
      * Method to change search bar text when it is no longer focused on
-     * @param e
+     * @param FocusEvent event
      * @return None
      */
-    public void focusLost(FocusEvent e) {
+    public void focusLost(FocusEvent event) {
         /**
          * Set to "Search for a Point of Interest" when the search bar is no longer clicked and is empty
          */
-        if (e.getSource() == searchText) {
-            if (((JTextField) e.getSource()).getText().length() == 0) {
-                ((JTextField) e.getSource()).setText("Search for a Point of Interest");
+        if (event.getSource() == searchText) {
+            if (((JTextField) event.getSource()).getText().length() == 0) {
+                ((JTextField) event.getSource()).setText("Search for a Point of Interest");
             }
         }   
     }
 
-    public void mouseExited(MouseEvent e) {
+    public void mouseExited(MouseEvent event) {
         /**
          * When the mouse exits from the POI or Weather button, change the background colour to white
         */
-        if (e.getSource() instanceof JToggleButton) {
-            JToggleButton button = (JToggleButton) e.getSource();
+        if (event.getSource() instanceof JToggleButton) {
+            JToggleButton button = (JToggleButton) event.getSource();
             button.setBackground(Color.WHITE);
         }
     }
     /**
      * Getter for POI list content panel
+     * @param None
      * @return poiListContentPanel
      */
     public JPanel getPOIListContentPanel() {
@@ -563,6 +575,7 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
 
     /**
      * Getter for Weather info content panel
+     * @param None
      * @return weatherInfoContentPane
      */
     public JPanel getWeatherInfoContentPanel() {
@@ -571,6 +584,7 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
 
     /**
      * Getter for POI list button
+     * @param None
      * @return poiList
      */
     public JToggleButton getPOIListBtn() {
@@ -579,6 +593,7 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
 
     /**
      * Getter for weather info toggle button
+     * @param None
      * @return weatherInfo
      */
     public JToggleButton getWeatherInfoBtn() {
@@ -588,33 +603,35 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
     /**
      * Unused method from MouseListener interface
      */
-    public void mouseClicked(MouseEvent e) {
+    public void mouseClicked(MouseEvent event) {
     }
 
     /**
      * Unused method from MouseListener interface
      */
-    public void mousePressed(MouseEvent e) {
+    public void mousePressed(MouseEvent event) {
     }
 
     /**
      * Unused method from MouseListener interface
      */
-    public void mouseReleased(MouseEvent e) {
+    public void mouseReleased(MouseEvent event) {
     }
 
     /**
      * Complete search when Enter hit
+     * @param KeyEvent event
+     * @return None
      */
-    public void keyTyped(KeyEvent e) {
-        if (e.getKeyChar() == KeyEvent.VK_ENTER) {
+    public void keyTyped(KeyEvent event) {
+        if (event.getKeyChar() == KeyEvent.VK_ENTER) {
             searchPOI();
         }
     }
 
-    public void keyPressed(KeyEvent e) {
+    public void keyPressed(KeyEvent event) {
     }
 
-    public void keyReleased(KeyEvent e) {
+    public void keyReleased(KeyEvent event) {
     }
 }
