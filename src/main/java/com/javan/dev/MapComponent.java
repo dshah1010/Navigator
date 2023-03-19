@@ -959,7 +959,6 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                      * Get the building ID of the POI
                      */
                     int buildingID = poi.getBuildingID();
-                    System.out.println(buildingID);
 
                     /**
                      * Get the filepath of the first floor of the POI given the buildingID by searching BuildignsPOIMetadata.json

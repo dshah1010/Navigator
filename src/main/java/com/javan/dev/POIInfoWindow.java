@@ -129,23 +129,6 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
             favourite.setVerticalAlignment(SwingConstants.CENTER);
             favourite.setHorizontalAlignment(SwingConstants.CENTER);
         }
-        /**
-        * Add the favourite button to the panel of Building POI
-        */
-        else if (!buildingPOI.getIsFavourited(userInstance.getUserID()) && mapComponent.getIsCampusMap()) {
-           /**
-            * Make JButton with icon image
-            */
-           favourite = new JButton();
-           favourite.setIcon(unfavouriteIcon);
-
-
-           /**
-            * Add icon to center of button
-            */
-           favourite.setVerticalAlignment(SwingConstants.CENTER);
-           favourite.setHorizontalAlignment(SwingConstants.CENTER);
-       }
         else {
             /**
              * Make JButton with icon image

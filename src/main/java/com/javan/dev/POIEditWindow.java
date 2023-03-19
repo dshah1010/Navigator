@@ -245,7 +245,6 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
              * Determines what to do based on what type of map the user is on
              */
             if (!mapComponent.getIsCampusMap()) {
-                System.out.println(mapComponent.getIsCampusMap());
                 /**
                  * Edit POI object with the new POI data with setters
                  */
