@@ -45,12 +45,12 @@ public class TestMapComponent {
     }
 
     /**
-     * This method is called to check that the current map ID is 1, meaning the campusMap is open on default
+     * This method is called to check that the current map ID is 0, meaning the campusMap is open on default
      */
     @Test
-    void testGetCurrentMapIDReturns1() {
+    void testGetCurrentMapIDReturns0() {
         int currentMapID = mapComponent.getCurrentMapID();
-        assertEquals(1, currentMapID);
+        assertEquals(0, currentMapID);
     }
 
     /**

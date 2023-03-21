@@ -439,7 +439,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      */
     private void isFloorAbove() {
         if (this.mapType.contains("FLOOR")) {
-            if (floorMap.checkfloorAbove()) {
+            if (floorMap.checkFloorAbove()) {
                 /**
                  * Enable the button "Floor Up"
                  */
@@ -480,7 +480,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * @throws IOException
      */
     private void navigateToFloorAbove() throws IOException {
-        if (floorMap.checkfloorAbove()) {
+        if (floorMap.checkFloorAbove()) {
             /**
              * Get the map of the floor above
              */

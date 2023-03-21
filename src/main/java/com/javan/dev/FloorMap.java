@@ -75,7 +75,7 @@ public class FloorMap implements Map{
      * Method to check if there is a floorMap above this one
      * @return boolean that determines if the above floor exists
      */
-    public boolean checkfloorAbove() {
+    public boolean checkFloorAbove() {
         return this.processor.checkFloorAbove(this.mapID, this.buildingID);
     }
 

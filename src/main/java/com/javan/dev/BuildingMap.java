@@ -1,7 +1,5 @@
 package com.javan.dev;
 import java.util.ArrayList;
-import org.json.JSONObject;
-import org.json.JSONArray;
 
 /**
  * @author: Brad McGlynn <bmcglyn4@uwo.ca>
@@ -31,7 +29,6 @@ public class BuildingMap implements Map {
         this.filePath = processor.loadMapFilePath(mapID, 0, "BUILDING");
         this.mapID = mapID;
         this.mapType = "BUILDING";
-        this.mapName = null;
     }
 
     /**
@@ -75,6 +72,13 @@ public class BuildingMap implements Map {
      */
     public String getMapName() {
         return this.mapName;
+    }
+
+    /**
+     * Getter for map name
+     */
+    public ArrayList<FloorMap> getFloors() {
+        return this.floorArray;
     }
 
 
