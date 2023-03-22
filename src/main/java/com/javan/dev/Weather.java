@@ -38,9 +38,9 @@ public final class Weather {
     /**
      * Variables to hold weather data
      */
-    private String tempInCelcius;
+    private String tempInCelcius = null;
     private String condition;
-    private String conditionIcon;
+    private String conditionIcon = null;
     /**
      * Weather panel
      */
@@ -203,24 +203,22 @@ public final class Weather {
         weatherInfoPanel = new JPanel();
         Weather weather = Weather.getInstance();
         weather.parseWeather();
-        /**
-         * Get the temperature and icon link from the Weather class
-         */
-        String temp = weather.getTempC();
-        String iconLink = weather.getConditionIcon();
 
         /**
          * If the temperature or icon are null, simply return null to not display weather information
          */
-        if (temp == null || iconLink == null) {
+        if (weather.getTempC() == null || weather.getConditionIcon() == null) {
             return null;
         }
-        temp = weather.getTempC() + "°C";
+        /**
+         * Get the temperature from the Weather class.
+         */
+        String temp = weather.getTempC() + "°C";
 
         /**
-         * processor iconLink to allow it to be read by ImageIO
+         * Process iconLink from Weather class to allow it to be read by ImageIO
          */
-        iconLink = "http:" + iconLink;
+        String iconLink = "http:" + weather.getConditionIcon();
 
         /**
          * Read the URL and convert to BufferedImage
