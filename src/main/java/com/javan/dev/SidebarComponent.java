@@ -304,20 +304,21 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
      * @return None
      */
     public void createWeatherInfoPanel() throws MalformedURLException, IOException {
+
+        /**
+         * If there is no weather information, do not add the weather panel to the sidebar
+         */
+        if (this.weather == null) {
+            weatherInfoContentPanel = null;
+            weatherInfoPanel = null;
+            return;
+        }
+
         weatherInfoContentPanel = new JPanel();
         weatherInfoPanel = new JPanel();
         weather = Weather.getInstance();
         weather.parseWeather();
         JPanel weatherContent = weather.addWeatherInfo();
-
-        /**
-         * If there is no weather information, do not add the weather panel to the sidebar
-         */
-        if (weatherContent == null) {
-            weatherInfoContentPanel = null;
-            weatherInfoPanel = null;
-            return;
-        }
 
         /**
          * Add content to weather panel
