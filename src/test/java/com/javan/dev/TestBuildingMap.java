@@ -71,16 +71,6 @@ public class TestBuildingMap {
         assertEquals("Test Building", buildingMap.getMapName());
     }
 
-    /**
-     * Method to test that a floorMap is properly added to the currently empty buildingMap floor array
-     */
-    @Test
-    @DisplayName("Should assert the length of the array is 1")
-    public void testAddBuilding() {
-        FloorMap floorMap = new FloorMap(buildingMap.getBuildingID(), 1);
-        buildingMap.addBuilding(floorMap);
-        assertEquals(1, buildingMap.getFloors().size());
-    }
 
     
 

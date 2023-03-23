@@ -13,7 +13,6 @@ public class BuildingMap implements Map {
     private String filePath;
     private int mapID;
     private String mapType;
-    private ArrayList<FloorMap> floorArray = new ArrayList<FloorMap>();
     private String mapName;
 
     /**
@@ -74,21 +73,6 @@ public class BuildingMap implements Map {
         return this.mapName;
     }
 
-    /**
-     * Getter for map name
-     */
-    public ArrayList<FloorMap> getFloors() {
-        return this.floorArray;
-    }
-
-
-    /**
-     * Adds Floor to FloorArray
-     * @param FloorMap
-     */
-    public void addBuilding(FloorMap newFloor) {
-        this.floorArray.add(newFloor);
-    }
 
     /*
      * Setter for building name
