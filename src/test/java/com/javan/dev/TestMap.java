@@ -10,7 +10,7 @@ public class TestMap {
      * Method to test that filePath is not null when valid parameters are added
      */
     @Test
-    @DisplayName("Should create confirm password text field")
+    @DisplayName("Should confirm file path was set properly")
     public void testGetFilePath() {
         Map map = new FloorMap(1, 1);
         assertNotNull(map.getFilePath());
