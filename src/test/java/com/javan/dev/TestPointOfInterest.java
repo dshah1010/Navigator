@@ -114,4 +114,20 @@ public class TestPointOfInterest {
         assertArrayEquals(new int[]{15, 25}, poi.getCoordinates());
         assertEquals("new description", poi.getDescription());
     }
+
+    /**
+     * Method to test that getIsFavourited returns the appropriate values based on the provided userIDs
+     */
+    @Test
+    @DisplayName("Should confirm that appropriate user ID is added to the favourites list / that the right boolean value shows up depending on userID")
+    public void testGetIsFavourited() {
+        ArrayList<Integer> userFavouritesList = new ArrayList<Integer>();
+        userFavouritesList.add(1);
+        userFavouritesList.add(2);
+        for (Integer i : userFavouritesList){
+            poi.setIsFavourited(i);
+            assertTrue(poi.getIsFavourited(i));
+        }
+        assertFalse(poi.getIsFavourited(3));
+    }
 }

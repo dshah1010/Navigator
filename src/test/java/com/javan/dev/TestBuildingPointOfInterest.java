@@ -1,5 +1,6 @@
 package com.javan.dev;
 
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
@@ -66,17 +67,58 @@ public class TestBuildingPointOfInterest {
      * Method to test that getIsFavourited returns the appropriate values based on the provided userIDs
      */
     @Test
-    @DisplayName("Should confirm that user")
+    @DisplayName("Should confirm that appropriate user ID is added to the favourites list / that the right boolean value shows up depending on userID")
     public void testGetIsFavourited() {
         ArrayList<Integer> userFavouritesList = new ArrayList<Integer>();
         userFavouritesList.add(1);
         userFavouritesList.add(2);
-        for (Integer i : userFavouritesList)
-            {poi.setIsFavourited(i);
+        for (Integer i : userFavouritesList){
+            poi.setIsFavourited(i);
             assertTrue(poi.getIsFavourited(i));
         }
         assertFalse(poi.getIsFavourited(3));
     }
 
+    /**
+     * Method to test that the toJSON method creates an accurately made JSON object
+     */
+    @Test
+    @DisplayName("Should confirm a valid and correct JSON object is constructed")
+    public void testToJSON() {
+
+        JSONObject json = poi.toJSON();
+        String expectedName = "POI 1";
+        int expectedID = poi.getID();
+        int expectedUserID = 1;
+        boolean expectedIsUserMade = true;
+        String expectedPoiType = "type";
+        int expectedCoordinatesX = 10;
+        int expectedCoordinatesY = 20;
+        int expectedBuildingID = 1;
+        ArrayList<Integer> expectedUserFavouritesList = new ArrayList<Integer>();
+        String expectedDescription = "description";
+        boolean expectedIsVisible = true;
+
+        assertEquals(expectedName, json.getString("name"));
+        assertEquals(expectedID, json.getInt("ID"));
+        assertEquals(expectedUserID, json.getInt("userID"));
+        assertEquals(expectedIsUserMade, json.getBoolean("isUserMade"));
+        assertEquals(expectedPoiType, json.getString("poiType"));
+        ArrayList<Integer> jsonCoordinates = new ArrayList<Integer>();
+        for (Object i : json.getJSONArray("coordinates")) {
+            jsonCoordinates.add((Integer) i);
+        }
+        assertEquals(expectedCoordinatesX, jsonCoordinates.get(0));
+        assertEquals(expectedCoordinatesY, jsonCoordinates.get(1));
+        assertEquals(expectedBuildingID, json.getInt("buildingID"));
+        ArrayList<Integer> jsonUserFavouritesList = new ArrayList<Integer>();
+        for (Object i : json.getJSONArray("userFavouritesList")) {
+            jsonUserFavouritesList.add((Integer) i);
+        }
+        assertEquals(expectedUserFavouritesList, jsonUserFavouritesList);
+
+        assertEquals(expectedDescription, json.getString("description"));
+        assertEquals(expectedIsVisible, json.getBoolean("isVisible"));
+    }
     
 }

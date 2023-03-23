@@ -82,5 +82,7 @@ public class TestBuildingMap {
         assertEquals(1, buildingMap.getFloors().size());
     }
 
+    
+
 }
 
