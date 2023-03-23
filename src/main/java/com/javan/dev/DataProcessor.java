@@ -619,7 +619,7 @@ public final class DataProcessor {
                     String name  = poiObject.get("name").getAsString();
                     int userID  = poiObject.get("userID").getAsInt();
                     boolean isUserMade = poiObject.get("isUserMade").getAsBoolean();
-                    String POI_Type = poiObject.get("POI_type").getAsString();
+                    String poiType = poiObject.get("poiType").getAsString();
                     JsonArray jsoncoordinateArray = poiObject.get("coordinates").getAsJsonArray();
                     int[] coordinateArray = new int[2];
 
@@ -642,7 +642,7 @@ public final class DataProcessor {
                     String description = poiObject.get("description").getAsString();
                     String roomNumber = poiObject.get("roomNumber").getAsString();
                     boolean isVisible = poiObject.get("isVisible").getAsBoolean();
-                    PointOfInterest POIdata = new PointOfInterest(name, userID, isUserMade, POI_Type, coordinateArray[0], coordinateArray[1], floorID, buildingID, userFavouritesList, description, roomNumber, isVisible);
+                    PointOfInterest POIdata = new PointOfInterest(name, userID, isUserMade, poiType, coordinateArray[0], coordinateArray[1], floorID, buildingID, userFavouritesList, description, roomNumber, isVisible);
                     POIdata.setID(poiID);
                     return POIdata;
                 }       
@@ -700,7 +700,7 @@ public final class DataProcessor {
                     String name  = poiObject.get("name").getAsString();
                     int userID  = poiObject.get("userID").getAsInt();
                     boolean isUserMade = poiObject.get("isUserMade").getAsBoolean();
-                    String POI_Type = poiObject.get("POI_type").getAsString();
+                    String poiType = poiObject.get("poiType").getAsString();
                     JsonArray jsoncoordinateArray = poiObject.get("coordinates").getAsJsonArray();
                     int[] coordinateArray = new int[2];
 
@@ -720,7 +720,7 @@ public final class DataProcessor {
 
                     String description = poiObject.get("description").getAsString();
                     boolean isVisible = poiObject.get("isVisible").getAsBoolean();
-                    BuildingPointOfInterest POIdata = new BuildingPointOfInterest(name, userID, isUserMade, POI_Type, coordinateArray[0], coordinateArray[1], buildingID, userFavouritesList, description, isVisible);
+                    BuildingPointOfInterest POIdata = new BuildingPointOfInterest(name, userID, isUserMade, poiType, coordinateArray[0], coordinateArray[1], buildingID, userFavouritesList, description, isVisible);
                     POIdata.setID(poiID);
                     return POIdata;
                 }       
