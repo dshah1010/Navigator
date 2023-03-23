@@ -81,8 +81,6 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
         gridBagConstraints.gridy = 0;
         deletePanel.setBackground(Color.WHITE);
         delete = createMapButton("Delete POI");
-        delete.setBackground(Color.BLACK);
-        delete.setForeground(Color.WHITE);
         deletePanel.add(delete, gridBagConstraints);
 
         /**
@@ -215,13 +213,20 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
      */
     public JButton createMapButton(String text) {
         JButton button = new JButton(text);
-        button.setBackground(Color.WHITE);
-        button.setForeground(Color.BLACK);
+        if (text.contains("Delete POI")) {
+            button.setBackground(Color.BLACK);
+            button.setForeground(Color.WHITE);
+            button.setBorderPainted(false);
+        }
+        else {
+            button.setBackground(Color.WHITE);
+            button.setForeground(Color.BLACK);
+        }
         button.setFocusPainted(false);
         button.setFont(new Font("Georgia", Font.PLAIN, 19));
         button.addActionListener(this);
         button.addMouseListener(this);
-
+        button.setOpaque(true);
         return button;
     }
 
