@@ -25,11 +25,8 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
      */
     private ArrayList<JScrollPane> POIScrollPanes = new ArrayList<JScrollPane>();
     private ArrayList<PointOfInterest> favouritePOIList;
-    private ArrayList<String> favouritePOIStrings = new ArrayList<String>();
     private ArrayList<PointOfInterest> userPOIList;
-    private ArrayList<String> userPOIStrings = new ArrayList<String>();
     private ArrayList<PointOfInterest> otherPOIList;
-    private ArrayList<String> otherPOIStrings = new ArrayList<String>();
     private JButton otherPOIButton;
 
     /**
@@ -263,7 +260,7 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
         /**
          * Update the list of Strings representing the favourite POIs 
          */
-        updateFavouritePOIList();
+        favouritePOIList = dataProcessor.getFavouritePOIs(user.getUserID());
         
         /**
          * Add the POIs to the panel
@@ -281,35 +278,6 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
          */
         POIPanels.get(1).setVisible(true);
     }
-
-    /**
-     * Method to update the favourites POI list by calling DataProcessor to get a user's favourite POIs
-     * @param None
-     * @return None
-     */
-    public void updateFavouritePOIList() {
-
-        /**
-         * Get list of favourite PointOfInterest objects from DataProcessor
-         */
-
-        favouritePOIList = dataProcessor.getFavouritePOIs(user.getUserID());
-
-
-         /**
-          * Empty out favouritePOIStrings before adding updated list of favourite POIs
-          */
-        favouritePOIStrings.clear();
-
-        /**
-         * Get the strings representing the name of each POI and put into favouritePOIStrings
-         */
-        for (PointOfInterest poi : favouritePOIList) {
-            favouritePOIStrings.add(poi.getName());
-        }
-    }
-
-
 
     /**
      * Method to add POIs that were created by users to the user POI panel, the same way Favourites POIs are added
@@ -338,9 +306,9 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
         POIPanels.get(2).add(titleUser);
 
         /**
-         * Update the list of Strings representing the user-created POIs 
+         * Get list of strings of user-created POIs from DataProcessor
          */
-        updateUserPOIList();
+        userPOIList = dataProcessor.getUserPOIs(user.getUserID());
 
         /**
          * Add the POIs to the panel
@@ -356,29 +324,6 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
          * Set the User POI Panel to be visible
          */
         POIPanels.get(2).setVisible(true);
-    }
-
-    /**
-     * Method to update the user POI list by calling DataProcessor to get user created POIs
-     * @param None
-     * @return None
-     */
-    public void updateUserPOIList() {
-        /**
-         * Get list of strings of user-created POIs from DataProcessor
-         */
-        userPOIList = dataProcessor.getUserPOIs(user.getUserID());
-         /**
-          * Empty out userPOIStrings before adding updated list of user-created POIs
-          */
-        userPOIStrings.clear();
-
-        /**
-         * Get the strings representing the name of each POI and put into userPOIStrings
-         */
-        for (PointOfInterest poi : userPOIList) {
-            userPOIStrings.add(poi.getName());
-        }
     }
 
     /**
@@ -418,9 +363,14 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
         POIPanels.get(3).add(titleOther, gridConstraints);
 
         /**
-         * Update the list of Strings representing the other POIs 
+         * Get list of strings of other POIs from DataProcessor
          */
-        updateOtherPOIList();
+        if (mapComponent.getIsCampusMap()) {
+            otherPOIList = dataProcessor.getUniversalPOIs(true, user.getUserID());
+        }
+        else {
+            otherPOIList = dataProcessor.getUniversalPOIs(false, user.getUserID());
+        }
 
         /**
          * Add the POIs to the panel
@@ -447,35 +397,6 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
     }
 
     /**
-     * Method to update the "other" POI list by calling DataProcessor to get non-user favourited POIs (i.event. grabs default POIs available ot user on current map)
-     * @param None
-     * @return None
-     */
-    public void updateOtherPOIList() {
-        /**
-         * Get list of strings of other POIs from DataProcessor
-         */
-        if (mapComponent.getIsCampusMap()) {
-            otherPOIList = dataProcessor.getUniversalPOIs(true, user.getUserID());
-        }
-        else {
-            otherPOIList = dataProcessor.getUniversalPOIs(false, user.getUserID());
-        }
-
-         /**
-          * Empty out otherPOIStrings before adding updated list of other POIs
-          */
-        otherPOIStrings.clear();
-
-        /**
-         * Get the strings representing the name of each POI and put into otherPOIStrings
-         */
-        for (PointOfInterest poi : otherPOIList) {
-            otherPOIStrings.add(poi.getName());
-        }
-    }
-
-    /**
      * Function to loop through list of POIs and add them to the POI panel (showing their string that is visible and POI id invisible)
      * @param POIList
      * @return int numRows to add
@@ -485,6 +406,9 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
          * Loop through Floor POIs in the list and add JPanels to the POI Panel on top of one another
          */
         for (PointOfInterest poi : POIList) {
+            /**
+             * Create JPanel for each POI and a panel for the name to display
+             */
             JPanel POIPanel = new JPanel();
             JLabel POIPanelName = new JLabel(poi.getName());
             POIPanelName.setHorizontalAlignment(JLabel.CENTER);
@@ -493,19 +417,18 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
             POIPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
             POIPanel.setBackground(Color.WHITE);
             POIPanel.add(POIPanelName);
+
             /**
-             * Get the ID of the POI and add it to the name as invisible text
-             * On campus map, these ID's will correspond to the MapID of the POI
-             * On floor map, these ID's simply correspond to the actual POI id
-             */
-            /**
-             * If campus map, get building ID and map ID and make that the label
+             * If campus map, get building ID and map ID and make that the hidden label
              */
             if (mapComponent.getIsCampusMap()) {
                 JLabel POIPanelID = new JLabel(poi.getBuildingFloorID());
                 POIPanelID.setVisible(false);
                 POIPanel.add(POIPanelID);
             }
+            /**
+             * If floor map, get POI ID and make that the hidden label
+             */
             else {
                 JLabel POIPanelID = new JLabel(String.valueOf((poi.getID())));
                 POIPanelID.setVisible(false);
@@ -520,10 +443,9 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
         }
 
         /**
-         * Layout POI panel, adding two POIs per row
+         * Return the number of rows to add to the grid layout
          */
-        int numRows = POIList.size();
-        return numRows;
+        return POIList.size();
     }
 
     /**

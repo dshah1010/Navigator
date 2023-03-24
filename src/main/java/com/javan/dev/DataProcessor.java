@@ -544,7 +544,17 @@ public final class DataProcessor {
         try {
             reader = new FileReader(POIMetadataFile);
             JsonArray POIDataArray= JsonParser.parseReader(reader).getAsJsonArray();
-            return POIDataArray.size() + 1;
+            /**
+             * Find the largest POI  id in the list
+             */
+            int largestID = 0;
+            for (int i = 0; i < POIDataArray.size(); i++) {
+                JsonObject POI = POIDataArray.get(i).getAsJsonObject();
+                if (POI.get("ID").getAsInt() > largestID) {
+                    largestID = POI.get("ID").getAsInt();
+                }
+            }
+            return largestID + 1;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -564,7 +574,16 @@ public final class DataProcessor {
         try {
             reader = new FileReader(buildingPOIMetadataFile);
             JsonArray POIDataArray= JsonParser.parseReader(reader).getAsJsonArray();
-            return POIDataArray.size() + 1;
+            /**
+             * Find the largest POI  id in the list
+             */
+            int largestID = 0;
+            for (int i = 0; i < POIDataArray.size(); i++) {
+                JsonObject POI = POIDataArray.get(i).getAsJsonObject();
+                if (POI.get("ID").getAsInt() > largestID) {
+                    largestID = POI.get("ID").getAsInt();
+                }
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
