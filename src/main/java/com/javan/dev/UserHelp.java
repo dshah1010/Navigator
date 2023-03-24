@@ -22,12 +22,16 @@ public final class UserHelp extends JFrame {
     private JPanel search;
     private JPanel favourite;
     private JPanel browse;
+    private JPanel create;
+    private JPanel editing;
     private JLabel generalTitle;
     private JLabel loginTitle;
     private JLabel navigateTitle;
     private JLabel searchTitle;
     private JLabel favouriteTitle;
     private JLabel browseTitle;
+    private JLabel createTitle;
+    private JLabel editTitle;
 
     /**
      * Initialize singleton instance of UserHelp
@@ -67,6 +71,8 @@ public final class UserHelp extends JFrame {
         search = new JPanel();
         favourite = new JPanel();
         browse = new JPanel();
+        create = new JPanel();
+        editing = new JPanel();
 
         /**
          * Creating the tabs
@@ -77,6 +83,8 @@ public final class UserHelp extends JFrame {
         createSearchTab();
         createFavouritesTab();
         createBrowseTab();
+        createCreatingPOIsTab();
+        createEditingPOIsTab();
 
         /**
          * Add JPanels to the JTabbedPane as well as the JTabbedPane to the JFrame
@@ -87,6 +95,8 @@ public final class UserHelp extends JFrame {
         tabbedPane.addTab("Searching", search);
         tabbedPane.addTab("Favouriting POIs", favourite);
         tabbedPane.addTab("Browsing Maps", browse);
+        tabbedPane.addTab("Creating POIs", create);
+        tabbedPane.addTab("Editing POIs", editing);
         frame.add(tabbedPane);
      }
 
@@ -312,5 +322,50 @@ public final class UserHelp extends JFrame {
         browse.add(new JLabel("You can browse the campus map and floor maps."));
         browse.add(new JLabel("To browse the campus map, you can either look at it as you open the application and log in, or go back from a floor map to the campus map by clicking the \"Back\" button"));
         browse.add(new JLabel("The options available for maps you are free to browse are displayed on the right side of your screen on the Campus Map tab, showing the available floor plans."));
+    }
+    
+
+    private void createCreatingPOIsTab() {
+        /**
+         * Setting layout of creating POI tab and title
+         */
+        create.setLayout(new BoxLayout(create, BoxLayout.Y_AXIS));
+        setBackground(create);
+        createTitle = new JLabel("Editing POIs");
+        createTitle.setFont(new Font("Georgia", Font.BOLD, 25));
+        create.add(createTitle);
+
+        /**
+         * Simply adding content via JLabels to the create POI tab
+         */
+        create.add(new JLabel("You can create new POIs exclusive to you on the Floor map."));
+        create.add(new JLabel("To create a new POI navigate to the building and floor you would like to add a POI to."));
+        create.add(new JLabel("Once on the floor map, check the top of the screen to see if you are in \"Navigation Mode\" or \"User Editing Mode\". "));
+        create.add(new JLabel("If you are in \"Navigation Mode\" press the button once to enter \"User Editing Mode\". "));
+        create.add(new JLabel("Once in \"User Editing Mode\", navigate to the POI location you would like to add and click on it."));
+        create.add(new JLabel("A window should pop up with information about the newly created POI. Fill out the information and press the \"Create POI\" button."));
+       
+    }
+    
+    private void createEditingPOIsTab() {
+        /**
+         * Setting layout of edit POI tab and title
+         */
+        editing.setLayout(new BoxLayout(editing, BoxLayout.Y_AXIS));
+        setBackground(editing);
+        editTitle = new JLabel("Editing POIs");
+        editTitle.setFont(new Font("Georgia", Font.BOLD, 25));
+        editing.add(editTitle);
+
+        /**
+         * Simply adding content via JLabels to the editing POI tab
+         */
+        editing.add(new JLabel("You can edit POIs that you have made on the floor maps."));
+        editing.add(new JLabel("To edit the POI, check the top of the screen to see if you are in \"Navigation Mode\" or if you are in \"User Editing Mode\"."));
+        editing.add(new JLabel("If you are in \"Navigation Mode\" press the button once to enter \"User Editing Mode\". "));
+        editing.add(new JLabel("Once in \"User Editing Mode\", navigate to the POI you would like to edit and click on it."));
+        editing.add(new JLabel("A window should pop up with information about the POI you selected, edit the information and press the \"Edit POI\" button."));
+        editing.add(Box.createVerticalStrut(25));
+        editing.add(new JLabel("To delete a POI instead press the \"User Editing Mode\" button at the top of the window."));
     }
 }   
