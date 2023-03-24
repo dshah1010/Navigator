@@ -611,7 +611,6 @@ public final class DataProcessor {
              */ 
 
             for (JsonElement POI : POIDataArray) {
-
                 JsonObject poiObject = POI.getAsJsonObject();
                 JsonArray userFavouritesArray = poiObject.getAsJsonArray("userFavouritesList");
                 ArrayList<Integer> userFavouritesData = new ArrayList<Integer>();
