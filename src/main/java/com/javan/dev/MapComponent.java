@@ -1114,16 +1114,6 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                          */
                         if (user.getIsAdmin()) {
                             BuildingPointOfInterest poi = dataProcessor.getBuildingPOI(Integer.parseInt(id));
-                            /**
-                             * Check if user is an admin and POI type is not user
-                             */
-                            if (user.getIsAdmin() == false && !(poi.getPOItype().contains("User POI"))) {
-                                /**
-                                 * Open up a pop-up window saying they can't edit this POI
-                                 */
-                                JOptionPane.showMessageDialog(null, "You can't edit this POI", "Error", JOptionPane.ERROR_MESSAGE);
-                                return;
-                            }
 
                             /**
                              * Create a new POI Editing Window object and pass the POI object to it
@@ -1237,12 +1227,13 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                     /**
                      * Get the POI object from the POI Id
                      */
+                    System.out.println(id);
                     PointOfInterest poi = dataProcessor.getPOI(Integer.parseInt(id));
 
                     /**
                      * Check if user is an admin and POI type is not user
                      */
-                    if (user.getIsAdmin() == false && !(poi.getPOItype().contains("USER"))) {
+                    if (user.getIsAdmin() == false && !(poi.getPOItype().contains("User POI"))) {
                         /**
                          * Open up a pop-up window saying they can't edit this POI
                          */
