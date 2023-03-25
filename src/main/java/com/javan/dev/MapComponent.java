@@ -1041,7 +1041,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         /**
          * Editing Mode -> Create POIs wherever clicked on the map image ()
          */
-        else if (isNavigationMode == false) {
+        else if (!isNavigationMode) {
             if (event.getSource() instanceof JLabel) {
                 /**
                  * If on the map
