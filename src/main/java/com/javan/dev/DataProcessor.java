@@ -209,6 +209,7 @@ public final class DataProcessor {
         JSONObject poiJson = POI.toJSON();
         for (Object poi : jsonArray) {
             JSONObject currentPoi = (JSONObject) poi;
+            
             /*
              * Checks to see if the POI user + floorNumber already exists
              */

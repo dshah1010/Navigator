@@ -96,7 +96,7 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
         if (!mapComponent.getIsCampusMap()){
             labels.get(0).setText(poi.getName());
             labels.get(1).setText("POI ID: " + poi.getID());
-            labels.get(2).setText("RoomNumber: " + poi.getRoomNumber());
+            labels.get(2).setText("Room Number: " + poi.getRoomNumber());
             labels.get(3).setText("Description: " + poi.getDescription());
             labels.get(4).setText("Layer Type: " + poi.getPOItype());
             labels.get(5).setText("X-Value: " + poi.getCoordinates()[0]);

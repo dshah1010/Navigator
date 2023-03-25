@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import javax.swing.*;
+
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,12 +23,12 @@ class TestPOIInfoWindow {
      * Private variables for POIInfoWindow tests
      */
     private POIInfoWindow poiInfoWindow;
-    private BuildingPointOfInterest buildingPOI;
 
     /**
      * Create new POIInfoWindow object before each test with POI name "Test"
      */
     @BeforeEach
+    @Test
     void setUp() {
         poiInfoWindow = new POIInfoWindow(1);
     }
@@ -48,6 +49,7 @@ class TestPOIInfoWindow {
     @DisplayName("Test POIInfoWindow Labels")
     void testLabels() {
         ArrayList<JLabel> labels = poiInfoWindow.getLabels();
+        
 
         assertEquals("Arts and Humanities", labels.get(0).getText(), "POI name label is incorrect");
         assertEquals("BuildingPOI ID: 1", labels.get(1).getText(), "POI ID label is incorrect");
