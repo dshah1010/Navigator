@@ -63,7 +63,7 @@ public final class UserHelp extends JFrame {
         tabbedPane.setBackground(Color.WHITE);
 
         /**
-         * JPanels for different menu sections (General, Logging In, Navigating, Searching, Favouiriting POIs, Browsing Maps)
+         * JPanels for different menu sections (General, Logging In, Navigating, Searching, Favouriting POIs, Browsing Maps, Creating POIs, Editing POIs)
          */
         general = new JPanel();
         login = new JPanel();
@@ -166,6 +166,12 @@ public final class UserHelp extends JFrame {
         general.add(new JLabel("Once you have logged in, you will be able to navigate the campus using the map."));
         general.add(new JLabel("For information regarding navigating the campus: Navigate to the \"Navigating\" tab."));
         general.add(Box.createVerticalStrut(25));
+        general.add(new JLabel("You can also create new POIs exclusive to you on the floor maps."));
+        general.add(new JLabel("For information regarding creating POIs: Navigate to the \"Creating POIs\" tab."));
+        general.add(Box.createVerticalStrut(25));
+        general.add(new JLabel("You can also edit your POIs you created on the floor maps."));
+        general.add(new JLabel("For information regarding creating POIs: Navigate to the \"Editing POIs\" tab."));
+        general.add(Box.createVerticalStrut(25));
         general.add(new JLabel("You are also able to search for different POIs within the Campus Map and Floor maps."));
         general.add(new JLabel("For information regarding searching for POIs: Navigate to the \"Searching\" tab."));
         general.add(Box.createVerticalStrut(25));
@@ -198,12 +204,9 @@ public final class UserHelp extends JFrame {
         login.add(new JLabel("If you do not have an account, you can create one by clicking the \"Create Account\" button."));
         login.add(new JLabel("If you have forgotten your password, you can retrieve it by clicking the \"Forgot Password\" button."));
         login.add(Box.createVerticalStrut(25));
-        login.add(new JLabel("To create an account, you must enter your first name, last name, username, and password."));
-        login.add(new JLabel("You must also enter your email address and phone number."));
-        login.add(new JLabel("You can also enter your student number, but it is not required."));
+        login.add(new JLabel("To create an account, you must enter a username and password that will be used to authenticate your login."));
+        login.add(new JLabel("You must also enter password once more to confirm your password is correct."));
         login.add(Box.createVerticalStrut(25));
-        login.add(new JLabel("To retrieve your password, you must enter your username and email address."));
-        login.add(new JLabel("You will then receive an email with your password."));
     }
 
     /**
@@ -225,18 +228,18 @@ public final class UserHelp extends JFrame {
          * Simply adding content via JLabels to the general tab
          */
         navigate.add(new JLabel("To navigate the campus, you can either use the search feature or the navigation feature."));
-        navigate.add(new JLabel("To use the search feature, you can either click on the search icon on the right side of the screen, or click on the search bar at the top of the screen."));
-        navigate.add(new JLabel("You can then enter the name of the POI you wish to navigate to."));
-        navigate.add(new JLabel("You can also use the search feature to navigate to a floor map."));
+        navigate.add(new JLabel("To use the search feature, you can either click on the \"search for Point of Interest\" box on the top right hand side of the screen, "));
+        navigate.add(new JLabel("You can then enter the name of the building you wish to navigate to."));
         navigate.add(Box.createVerticalStrut(25));
-        navigate.add(new JLabel("To use the navigation feature, you can either click on the navigation icon on the right side of the screen, or click on the navigation bar at the top of the screen."));
-        navigate.add(new JLabel("You can then enter the name of the POI you wish to navigate to."));
-        navigate.add(new JLabel("You can also use the navigation feature to navigate to a floor map."));
+        navigate.add(new JLabel("To use the navigation feature, you can check to see if you are in \"Navigation Mode\" or \"User Editing Mode\" at the top of the screen."));
+        navigate.add(new JLabel("If you are in \"User Editing Mode\" press the box once to switch to \"Navigation Mode\"."));
+        navigate.add(new JLabel("If you are on the campus map, you can use your mouse to navigate around campus or look through the avaliable buildings on the right hand side of the screen."));
+        navigate.add(new JLabel("You can also use the navigation feature to navigate and explore floor maps."));
         navigate.add(Box.createVerticalStrut(25));
-        navigate.add(new JLabel("To navigate to a floor map, you can either click on the floor map icon on the right side of the screen, or click on the floor map bar at the top of the screen."));
-        navigate.add(new JLabel("You can then enter the name of the floor map you wish to navigate to."));
+        navigate.add(new JLabel("To navigate to a floor map, navigate to the building you would like to see the floor map in."));
+        navigate.add(new JLabel("You can then use the \"Floor Down\" or \"Floor Up\" buttons to navigate the floor maps of the building."));
         navigate.add(Box.createVerticalStrut(25));
-        navigate.add(new JLabel("To navigate to a different building within a floor map, you can either click on the floor map icon on the right side of the screen, or click on the floor"));
+        navigate.add(new JLabel("To navigate to a different building within a floor map, click on the \"Campus Map\" button to return to see the avaliable buildings."));
     }
 
     /**
@@ -257,13 +260,10 @@ public final class UserHelp extends JFrame {
         /**
          * Simply adding content via JLabels to the general tab
          */
-        search.add(new JLabel("To search for a POI, you can either click on the search icon on the right side of the screen, or click on the search bar at the top of the screen."));
+        search.add(new JLabel("To search for a POI, you can click on the \"Search for Point of Interest\" on the right side of the screen."));
         search.add(new JLabel("You can then enter the name of the POI you wish to search for."));
         search.add(Box.createVerticalStrut(25));
-        search.add(new JLabel("To search for a floor within a floor map, you can either click on the floor map icon on the right side of the screen, or click on the floor map bar at the top of the screen."));
-        search.add(new JLabel("You can then enter the name of the floor you wish to search for."));
-        search.add(Box.createVerticalStrut(25));
-        search.add(new JLabel("To search for a building within a floor map, you can either click on the floor map icon on the right side of the screen, or click on the floor map bar at the top of the screen."));
+        search.add(new JLabel("To search for a building within a floor map, you must return to the campus map and use the \"search for Point of Interest\" on the right hand side of the screen"));
         search.add(new JLabel("You can then enter the name of the building you wish to search for."));
     }
 
@@ -285,20 +285,16 @@ public final class UserHelp extends JFrame {
         /**
          * Simply adding content via JLabels to the general tab
          */
-        favourite.add(new JLabel("To add a POI to your favourites, you can either click on the favourites icon on the right side of the screen, or click on the favourites bar at the top of the screen."));
-        favourite.add(new JLabel("You can then enter the name of the POI you wish to add to your favourites."));
-        favourite.add(Box.createVerticalStrut(25));
-        favourite.add(new JLabel("To add a floor map to your favourites, you can either click on the favourites icon on the right side of the screen, or click on the favourites bar at the top of the screen."));
-        favourite.add(new JLabel("You can then enter the name of the floor map you wish to add to your favourites."));
-        favourite.add(Box.createVerticalStrut(25));
-        favourite.add(new JLabel("To add a building within a floor map to your favourites, you can either click on the favourites icon on the right side of the screen, or click on the favourites bar at the top of the screen."));
-        favourite.add(new JLabel("You can then enter the name of the building you wish to add to your favourites."));
-        favourite.add(Box.createVerticalStrut(25));
-        favourite.add(new JLabel("To remove a POI from your favourites, you can either click on the favourites icon on the right side of the screen, or click on the favourites bar at the top of the screen."));
-        favourite.add(new JLabel("You can then enter the name of the POI you wish to remove from your favourites."));
-        favourite.add(Box.createVerticalStrut(25));
-        favourite.add(new JLabel("To favourite a POI within a floor map, you can click on the POI on the right side of the screen, use the search feature, or navigate to the POI."));
-        favourite.add(new JLabel("You will then see a star icon that allows you to favourite the POI and store it in your favourites list.."));
+        favourite.add(new JLabel("To add a POI to your favourites, you must be on a floor map with POIs."));
+        favourite.add(new JLabel("Navigate to the POI you would like to favourite and click on it."));
+        favourite.add(new JLabel("A window should pop up with a star and information about the POI."));
+        favourite.add(new JLabel("Click on the star to turn it into a filled star, which will add it to your favourites."));
+        favourite.add(Box.createVerticalStrut(25));;
+        favourite.add(new JLabel("To remove a POI from your favourites, you must be on a floor map with POIs. "));
+        favourite.add(new JLabel("Navigate to the POI you would like to unfavourite and click on it."));
+        favourite.add(new JLabel("A window should pop up with a star and information about the POI."));
+        favourite.add(new JLabel("Click on the star to turn it into a blank star, which will unadd it from your favourites."));
+     
     }
 
     /**
@@ -319,19 +315,24 @@ public final class UserHelp extends JFrame {
         /**
          * Simply adding content via JLabels to the general tab
          */
-        browse.add(new JLabel("You can browse the campus map and floor maps."));
-        browse.add(new JLabel("To browse the campus map, you can either look at it as you open the application and log in, or go back from a floor map to the campus map by clicking the \"Back\" button"));
-        browse.add(new JLabel("The options available for maps you are free to browse are displayed on the right side of your screen on the Campus Map tab, showing the available floor plans."));
+        browse.add(new JLabel("You can browse the campus map and the POIs of floor maps."));
+        browse.add(new JLabel("To browse the campus map, you can either look at it as you open the application and log in, or go back from a floor map to the campus map by clicking the \"Campus Map\" button"));
+        browse.add(new JLabel("The options available for maps you are free to browse are displayed on the right side of your screen on the Campus Map tab, showing the available buildings."));
+        browse.add(new JLabel("To browse the floor POIs navigate to a building and browse through the avaliable floor POIs on the right hand side of the screen."));
     }
     
-
+    /**
+     * Method to create the create POI tab
+     * @param None
+     * @return None
+     */
     private void createCreatingPOIsTab() {
         /**
          * Setting layout of creating POI tab and title
          */
         create.setLayout(new BoxLayout(create, BoxLayout.Y_AXIS));
         setBackground(create);
-        createTitle = new JLabel("Editing POIs");
+        createTitle = new JLabel("Creating POIs");
         createTitle.setFont(new Font("Georgia", Font.BOLD, 25));
         create.add(createTitle);
 
@@ -347,6 +348,11 @@ public final class UserHelp extends JFrame {
        
     }
     
+    /**
+     * Method to create the editing POIs tab
+     * @param None
+     * @return None
+     */
     private void createEditingPOIsTab() {
         /**
          * Setting layout of edit POI tab and title
@@ -365,6 +371,10 @@ public final class UserHelp extends JFrame {
         editing.add(new JLabel("If you are in \"Navigation Mode\" press the button once to enter \"User Editing Mode\". "));
         editing.add(new JLabel("Once in \"User Editing Mode\", navigate to the POI you would like to edit and click on it."));
         editing.add(new JLabel("A window should pop up with information about the POI you selected, edit the information and press the \"Edit POI\" button."));
+        editing.add(Box.createVerticalStrut(25));
+        editing.add(new JLabel("If you would like to move the location of the POI or drag the POI to a different tlocation without changing the information."));
+        editing.add(new JLabel("Check that you are in \"Editing User Mode\" and navigate to the POI you would like to change."));
+        editing.add(new JLabel("Hold down the left or right click on your mouse and hold the ALT key while dragging the POI to the new location.."));
         editing.add(Box.createVerticalStrut(25));
         editing.add(new JLabel("To delete a POI instead press the \"User Editing Mode\" button at the top of the window."));
     }
