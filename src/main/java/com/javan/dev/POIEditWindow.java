@@ -242,15 +242,26 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
          */
         if (event.getSource() == edit) {
             Component[] children = panel.getComponents();
-            // iterate over all subPanels...
+            /*
+             * iterate over all subPanels
+             */ 
             ArrayList<String> newPOIData = new ArrayList<String>();
             for (Component sp : children) {
                 if (sp instanceof JPanel) {
                     Component[] spChildren = ((JPanel)sp).getComponents();
-                    // now iterate over all JTextFields...
+                    /*
+                     * iterate over all JTextFields
+                     */ 
                     for (Component spChild : spChildren) {
                         if (spChild instanceof JTextField) {
                             String text = ((JTextField)spChild).getText();
+                            if (text.equals("")) {
+                                JPanel errorPanel = new JPanel();
+                                JLabel errorMessage = new JLabel("Error: A text field is blank in the editing window. POI cannot be edited.");
+                                errorPanel.add(errorMessage);
+                                JOptionPane.showMessageDialog(null, errorPanel, "Error", JOptionPane.ERROR_MESSAGE);
+                                return;
+                            }
                             newPOIData.add(text);
                         } 
                     }

@@ -231,12 +231,16 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
          */
         if (event.getSource() == create) {
             Component[] children = panel.getComponents();
-            // iterate over all subPanels...
+            /*
+             * iterate over all subPanels
+             */
             ArrayList<String> newPOIData = new ArrayList<String>();
             for (Component sp : children) {
                 if (sp instanceof JPanel) {
                     Component[] spChildren = ((JPanel)sp).getComponents();
-                    // now iterate over all JTextFields...
+                    /*
+                     *  iterate over all JTextFields
+                     */ 
                     for (Component spChild : spChildren) {
                         /**
                          * If it is a radio button get the radio button text
@@ -253,6 +257,13 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
                         }
                         else if (spChild instanceof JTextField) {
                             String text = ((JTextField)spChild).getText();
+                            if (text.equals("")) {
+                                JPanel errorPanel = new JPanel();
+                                JLabel errorMessage = new JLabel("Error: A text field is blank in the creation window. POI cannot be generated.");
+                                errorPanel.add(errorMessage);
+                                JOptionPane.showMessageDialog(null, errorPanel, "Error", JOptionPane.ERROR_MESSAGE);
+                                return;
+                            }
                             newPOIData.add(text);
                         } 
                     }
