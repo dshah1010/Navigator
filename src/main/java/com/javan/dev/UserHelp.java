@@ -377,5 +377,9 @@ public final class UserHelp extends JFrame {
         editing.add(new JLabel("Hold down the left or right click on your mouse and hold the ALT key while dragging the POI to the new location.."));
         editing.add(Box.createVerticalStrut(25));
         editing.add(new JLabel("To delete a POI instead press the \"User Editing Mode\" button at the top of the window."));
+        editing.add(new JLabel("If you are in \"Navigation Mode\" press the button once to enter \"User Editing Mode\". "));
+        editing.add(new JLabel("Once in \"User Editing Mode\", navigate to the POI you would like to edit and click on it."));
+        editing.add(new JLabel("A window should pop up with information about the POI you selected, press the \"Delete POI\" button."));
+        
     }
 }   
