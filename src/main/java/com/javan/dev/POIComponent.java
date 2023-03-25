@@ -727,7 +727,11 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
                  * Pass POI name to the MapPanel to be highlighted on the map
                  */
                 mapComponent.changeMap(dataProcessor.getFloorMapFromMapID(currSelected.getBuildingID(), currSelected.getFloorID()));
+                mapComponent.enablePOILayer(currSelected.getPOItype());
+                enableSelectToggleButtons(currSelected.getPOItype());
+
                 mapComponent.navigateToPOI(poiID);
+                
                 POIInfoWindow poiWindow = new POIInfoWindow(poiID);
                 poiWindow.getFrame().setLocationRelativeTo(mapComponent.getMapPanel());
                 poiWindow.setVisibleFrame();
@@ -796,10 +800,44 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
      */
     public void enableAllToggleButtons() {
         accessibilityButton.setSelected(true);
+        navigationButton.setSelected(true);
+        washroomsButton.setSelected(true);
         restaurantsButton.setSelected(true);
         classroomsButton.setSelected(true);
         labsButton.setSelected(true);
         userButton.setSelected(true);
+        
+        POIPanels.get(0).revalidate();
+        POIPanels.get(0).repaint();
+    }
+
+    /**
+     * Method to enable select toggle buttons in the POI Layers Panel
+     * @param None
+     * @return None
+     */
+    public void enableSelectToggleButtons(String layerType) {
+        if (layerType.equals("Accessibility")) {
+            accessibilityButton.setSelected(true);
+        }
+        else if (layerType.equals("Restaurants")) {
+            restaurantsButton.setSelected(true);
+        }
+        else if (layerType.equals("Classrooms")) {
+            classroomsButton.setSelected(true);
+        }
+        else if (layerType.equals("Labs")) {
+            labsButton.setSelected(true);
+        }
+        else if (layerType.equals("User POI")) {
+            userButton.setSelected(true);
+        }
+        else if (layerType.equals("Navigation")) {
+            navigationButton.setSelected(true);
+        }
+        else if (layerType.equals("Washrooms")) {
+            washroomsButton.setSelected(true);
+        }
         
         POIPanels.get(0).revalidate();
         POIPanels.get(0).repaint();

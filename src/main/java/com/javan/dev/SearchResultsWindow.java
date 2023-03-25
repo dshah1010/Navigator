@@ -6,8 +6,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 
 /**
  * @author: Jake Choi <jchoi492@uwo.ca>
@@ -35,8 +33,8 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
     private static SearchResultsWindow INSTANCE;
 
     private MapComponent mapComponent = MapComponent.getInstance();
-
-    private DataProcessor currProcessor = DataProcessor.getInstance();
+    private DataProcessor processor = DataProcessor.getInstance();
+    private POIComponent poiComponent = POIComponent.getInstance();
 
     /**
      * Constructor for searchResults object, placeholder as other functionsdo main search results
@@ -152,8 +150,8 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
                      */
                     int index = buildingList.locationToIndex(event.getPoint()); 
                     if (index >= 0) {
-                        BuildingPointOfInterest o = buildingList.getModel().getElementAt(index);
-                        currBuildingSelected = o;
+                        BuildingPointOfInterest newPOI = buildingList.getModel().getElementAt(index);
+                        currBuildingSelected = newPOI;
                     }
                 }
             }
@@ -170,8 +168,8 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
                      */
                     int index = poiList.locationToIndex(event.getPoint()); 
                     if (index >= 0) {
-                        PointOfInterest o = poiList.getModel().getElementAt(index);
-                        currSelected = o;
+                        PointOfInterest newPOI = poiList.getModel().getElementAt(index);
+                        currSelected = newPOI;
                     }
                 }
             }
@@ -192,7 +190,7 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
                      * Close the current frame and change the map to the floor map of the building selected.
                      */
                     frame.dispose();
-                    mapComponent.changeMap(currProcessor.getFloorMapFromMapID(currBuildingSelected.getBuildingID(), 1));
+                    mapComponent.changeMap(processor.getFloorMapFromMapID(currBuildingSelected.getBuildingID(), 1));
                     currBuildingSelected = null;
                 }
             }
@@ -208,6 +206,8 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
                      * Close the current frame and go to currently selected POI.
                      */
                     frame.dispose();
+                    mapComponent.enablePOILayer(currSelected.getPOItype());
+                    poiComponent.enableSelectToggleButtons(currSelected.getPOItype());
                     POIInfoWindow poiWindow = new POIInfoWindow(currSelected.getID());
 
                     if (currSelected.getFloorID() == mapComponent.getFloorMapObject().getMapID()) {
@@ -215,7 +215,7 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
                         currSelected = null;
                     }
                     else {
-                        mapComponent.changeMap(currProcessor.getFloorMapFromMapID(currSelected.getBuildingID(), currSelected.getFloorID()));
+                        mapComponent.changeMap(processor.getFloorMapFromMapID(currSelected.getBuildingID(), currSelected.getFloorID()));
                         mapComponent.navigateToPOI(currSelected.getID());
                         currSelected = null;
                     }
