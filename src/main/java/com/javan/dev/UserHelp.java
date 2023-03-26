@@ -157,7 +157,9 @@ public final class UserHelp extends JFrame {
         /**
          * Simply adding content via JLabels to the general tab
          */
-        general.add(new JLabel("This application was created by Riley Gavigan, Jake Choi, Bradley McGlynn, Deep Shah, and Dylan Sta Ana"));
+        general.add(new JLabel("This application was created by Riley Gavigan (rgavigan@uwo.ca), Jake Choi (jchoi492@uwo.ca), Bradley McGlynn (bmcglyn4@uwo.ca), Deep Shah (dshah228@uwo.ca), and Dylan Sta Ana (dstaana@uwo.ca)"));
+        general.add(new JLabel("Version 1.0"));
+        general.add(new JLabel("Release Date: April 6th, 2023"));
         general.add(Box.createVerticalStrut(25));
         general.add(new JLabel("This application is designed to help you navigate the Western University campus."));
         general.add(new JLabel("To begin, you must log in to the application with your username and password."));
