@@ -76,11 +76,8 @@ public final class DataProcessor {
         /**
          * If null just add null and return null arraylist to pass back to Weather
          */
-        if (json.toString() == null) {
-            weather.add(null);
-            weather.add(null);
-            weather.add(null);
-            return weather;
+        if (json == null) {
+            return null;
         }
         /**
          * Create JSON object with org.json library
