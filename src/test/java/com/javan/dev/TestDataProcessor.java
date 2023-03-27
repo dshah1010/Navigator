@@ -87,6 +87,7 @@ public class TestDataProcessor {
      */
     public void testGetUserPOIs() {
     }
+
     /**
      * Tested in TestJsonReader.java
      * This method in DataProcessor returns the value returned by a method in the JsonReader class.
@@ -94,8 +95,11 @@ public class TestDataProcessor {
     public void testGetBuildingUserPOIs() {
     }
 
+    /**
+     * Floor map test (when isCampusMap is passed as false) for getUniversalPOIs will be done in TestJsonReader.java, as this method returns the value returned by a method in the JsonReader class.
+     */
     @Test
-    @DisplayName("Should confirm if the correct list of POIs is returned for both the campus map and a floor map.")
+    @DisplayName("Should confirm if the correct list of POIs is returned for when it is the campus map.")
     public void testGetUniversalPOIs() {
         ArrayList<PointOfInterest> universalPOIS;
         /**
@@ -106,30 +110,35 @@ public class TestDataProcessor {
         assertFalse(universalPOIS.isEmpty());
         assertTrue(universalPOIS.get(0) instanceof PointOfInterest);
         assertEquals("3M, Thames, and Somerville", universalPOIS.get(0).getName());
-
-        /**
-         * Test for floor maps.
-         */
-        //need to add something here to set the mapInstance to a map.
-        universalPOIS = dataProcessor.getUniversalPOIs(false, 2);
-        assertNotNull(universalPOIS);
-        assertFalse(universalPOIS.isEmpty());
-        assertTrue(universalPOIS.get(0) instanceof PointOfInterest);
     }
 
-    @Test
+    /**
+     * Tested in TestJsonReader.java
+     * This method in DataProcessor returns the value returned by a method in the JsonReader class.
+     */
     public void testGetBuildingUniversalPOIs() {
-
     }
 
     @Test
+    @DisplayName("Should confirm if the correct POI coordinates are returned based on a POI ID.")
     public void testGetPOIPosition() {
-
+        /**
+         * Check actual existing POI.
+         */
+        int[] expectedPOIPos = {1452, 1794};
+        assertEquals(expectedPOIPos[0], dataProcessor.getPOIPosition(0)[0]);
+        assertEquals(expectedPOIPos[1], dataProcessor.getPOIPosition(0)[1]);
+        
+        /**
+         * Check if a non-existent POI ID input returns null.
+         */
+        assertNull(dataProcessor.getPOIPosition(1000));
     }
 
     @Test
+    @DisplayName("Should confirm that either a POI was added successfully or unsuccessfully to the Json File.")
     public void testAddPointOfInterestToJsonFile() {
-
+        
     }
 
     @Test

@@ -174,7 +174,12 @@ public final class DataProcessor {
      */
     public int[] getPOIPosition(int poiID) {
         PointOfInterest poi = getPOI(poiID);
-        return poi.getCoordinates();
+        if (poi != null) {
+            return poi.getCoordinates();
+        }
+        else {
+            return null;
+        }
     }
 
     
