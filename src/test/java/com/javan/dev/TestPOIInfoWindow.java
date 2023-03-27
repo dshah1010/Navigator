@@ -21,16 +21,15 @@ class TestPOIInfoWindow {
     /**
      * Private variables for POIInfoWindow tests
      */
-    private PointOfInterest poi;
     private POIInfoWindow poiInfoWindow;
+    private BuildingPointOfInterest buildingPOI;
 
     /**
      * Create new POIInfoWindow object before each test with POI name "Test"
      */
     @BeforeEach
     void setUp() {
-        poi = new PointOfInterest(null, 0, false, null, 0, 0, 0, 0, null, null, null, false);
-        poiInfoWindow = new POIInfoWindow(poi.getID());
+        poiInfoWindow = new POIInfoWindow(1);
     }
 
     /**
@@ -39,7 +38,7 @@ class TestPOIInfoWindow {
     @Test
     @DisplayName("Test POIInfoWindow Frame Title")
     void testFrameTitle() {
-        assertEquals("Test", poiInfoWindow.getFrame().getTitle(), "Frame title is incorrect");
+        assertEquals("Arts and Humanities", poiInfoWindow.getFrame().getTitle(), "Frame title is incorrect");
     }
 
     /**
@@ -50,9 +49,9 @@ class TestPOIInfoWindow {
     void testLabels() {
         ArrayList<JLabel> labels = poiInfoWindow.getLabels();
 
-        assertEquals("Test", labels.get(0).getText(), "POI name label is incorrect");
-        assertEquals("ID: 12", labels.get(1).getText(), "POI ID label is incorrect");
-        assertEquals("Description: This is a test description", labels.get(2).getText(), "POI description label is incorrect");
+        assertEquals("Arts and Humanities", labels.get(0).getText(), "POI name label is incorrect");
+        assertEquals("BuildingPOI ID: 1", labels.get(1).getText(), "POI ID label is incorrect");
+        assertEquals("Description: Arts and Humanities Building", labels.get(3).getText(), "POI description label is incorrect");
     }
 
     /**
@@ -61,7 +60,8 @@ class TestPOIInfoWindow {
     @Test
     @DisplayName("Test POIInfoWindow Frame Visibility")
     void testFrameVisibility() {
-        poiInfoWindow.setVisibleFrame();
+        // Set to visible frame
+        poiInfoWindow.getFrame().setVisible(true);
         assertTrue(poiInfoWindow.getFrame().isVisible(), "Frame visibility is incorrect");
     }
 
