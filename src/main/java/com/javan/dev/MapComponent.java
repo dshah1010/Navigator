@@ -617,39 +617,47 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * @return None
      */
     public void disablePOILayer(String text) {
-        for (PointOfInterest poi : userPOIs) {
-            if (poi.getPOItype().contains(text)) {
-                poi.setisVisible(false);
-                try {
-                    dataProcessor.editPointOfInterestInJsonFile(poi);
-                } catch (IOException e1) {
-                    e1.printStackTrace();
+        if (this.userPOIs != null) {
+            for (PointOfInterest poi : userPOIs) {
+                if (poi.getPOItype().contains(text)) {
+                    poi.setisVisible(false);
+                    try {
+                        dataProcessor.editPointOfInterestInJsonFile(poi);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
                 }
-            }
-        } 
-
-        for (PointOfInterest poi : favouritePOIs) {
-            if (poi.getPOItype().contains(text)) {
-                poi.setisVisible(false);
-                try {
-                    dataProcessor.editPointOfInterestInJsonFile(poi);
-                } catch (IOException e1) {
-                    e1.printStackTrace();
+            } 
+        }
+        if (this.favouritePOIs != null) {
+            for (PointOfInterest poi : favouritePOIs) {
+                if (poi.getPOItype().contains(text)) {
+                    poi.setisVisible(false);
+                    try {
+                        dataProcessor.editPointOfInterestInJsonFile(poi);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
                 }
-            }
-        } 
+            } 
+        }
 
-        for (PointOfInterest poi : pois) {
-            if (poi.getPOItype().contains(text)) {
-                poi.setisVisible(false);
-                try {
-                    dataProcessor.editPointOfInterestInJsonFile(poi);
-                } catch (IOException e1) {
-                    e1.printStackTrace();
+        if (this.pois != null) {
+            for (PointOfInterest poi : pois) {
+                if (poi.getPOItype().contains(text)) {
+                    poi.setisVisible(false);
+                    try {
+                        dataProcessor.editPointOfInterestInJsonFile(poi);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
                 }
             }
         }
         displayPOIs();
+        if (this.poiComponent == null) {
+            this.poiComponent = POIComponent.getInstance();
+        }
         poiComponent.changeDisplayIfCampusMap();
             /**
              * Update the sidebar component to display the new POI
