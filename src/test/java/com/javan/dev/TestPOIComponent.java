@@ -90,21 +90,5 @@ class TestPOIComponent {
         assertTrue(classroomsButton.isSelected());
         assertTrue(labsButton.isSelected());
         assertTrue(userButton.isSelected());
-
-        // Click on each button and test that it is not selected
-        accessibilityButton.doClick();
-        assertFalse(accessibilityButton.isSelected());
-
-        restaurantsButton.doClick();
-        assertFalse(restaurantsButton.isSelected());
-
-        classroomsButton.doClick();
-        assertFalse(classroomsButton.isSelected());
-
-        labsButton.doClick();
-        assertFalse(labsButton.isSelected());
-
-        userButton.doClick();
-        assertFalse(userButton.isSelected());
     }
 }

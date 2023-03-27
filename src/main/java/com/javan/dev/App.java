@@ -23,9 +23,6 @@ public class App
      */
     public static void main( String[] args ) throws MalformedURLException, IOException
     {
-        // Test print statement
-        System.out.println( "Hello World!" );
-
         /**
          * Load Map Metadata
         */
