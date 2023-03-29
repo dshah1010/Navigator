@@ -136,7 +136,7 @@ public final class DataProcessor {
         /**
          * Campus Map Condition: Get all Campus Map POIs for Building Directory
          */
-        if (isCampusMap == true) {
+        if (isCampusMap) {
             universalPOIs.clear();
             /**
              * Go through campusMap object building Array and create POIs for each building
@@ -246,8 +246,8 @@ public final class DataProcessor {
      * @return boolean - success of editing POI
      */
     public boolean editPointOfInterestInJsonFile(PointOfInterest poi) throws IOException {
-        String jsonString = new String(JsonReader.read(POIMetadataFile));
-        JSONArray jsonArray = new JSONArray(jsonString);
+        JSONArray jsonArray = new JSONArray(JsonReader.read(POIMetadataFile));
+        System.out.println(poi.getIsUserMade());
         
         JSONObject poiJson = poi.toJSON();
         int counter = 0;
@@ -285,8 +285,7 @@ public final class DataProcessor {
      * @return boolean - success of editing Building POI
      */
     public boolean editBuildingPointOfInterestInJsonFile(BuildingPointOfInterest poi) throws IOException {
-        String jsonString = new String(JsonReader.read(buildingPOIMetadataFile));
-        JSONArray jsonArray = new JSONArray(jsonString);
+        JSONArray jsonArray = new JSONArray(JsonReader.read(buildingPOIMetadataFile));
         
         JSONObject poiJson = poi.toJSON();
         int counter = 0;
@@ -325,8 +324,7 @@ public final class DataProcessor {
      * @throws IOException
      */
     public boolean deletePointOfInterestFromJsonFile(PointOfInterest poi) throws IOException {
-        String jsonString = new String(JsonReader.read(POIMetadataFile));
-        JSONArray jsonArray = new JSONArray(jsonString);
+        JSONArray jsonArray = new JSONArray(JsonReader.read(POIMetadataFile));
         
         JSONObject poiJson = poi.toJSON();
         boolean isDeleted = false;
@@ -373,8 +371,7 @@ public final class DataProcessor {
      * @throws IOException
      */
     public boolean deleteBuildingPointOfInterestFromJsonFile(BuildingPointOfInterest poi) throws IOException {
-        String jsonString = new String(JsonReader.read(buildingPOIMetadataFile));
-        JSONArray jsonArray = new JSONArray(jsonString);
+        JSONArray jsonArray = new JSONArray(JsonReader.read(buildingPOIMetadataFile));
         
         JSONObject poiJson = poi.toJSON();
         boolean isDeleted = false;
@@ -425,7 +422,7 @@ public final class DataProcessor {
             /**
              * Read the JSON file
              */
-            JSONArray metadataArray = new JSONArray(new String(JsonReader.read(mapJsonFilePath)));
+            JSONArray metadataArray = new JSONArray(JsonReader.read(mapJsonFilePath));
             /**
              * Loop through the metadata array
              */
@@ -459,7 +456,7 @@ public final class DataProcessor {
             /**
              * Read the JSON file
              */
-            JSONArray metadataArray = new JSONArray(new String(JsonReader.read(mapJsonFilePath)));
+            JSONArray metadataArray = new JSONArray(JsonReader.read(mapJsonFilePath));
 
             /**
              * Loop through the metadata array

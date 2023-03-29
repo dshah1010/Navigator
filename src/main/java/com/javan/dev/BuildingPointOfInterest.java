@@ -190,7 +190,7 @@ public class BuildingPointOfInterest {
      * Getter for the isVisible state of POI
      * @return boolena of isVisible state
      */
-    public Boolean getisVisible(){
+    public Boolean getIsVisible(){
         return this.isVisible;
     }
 

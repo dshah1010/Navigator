@@ -495,6 +495,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
             }
             else {
                 user.setIsAdmin(false);
+                System.out.println(user.getIsAdmin());
             }
             /**
              * Remove the login panel from the frame and set loggedIn to true for the rest of the program

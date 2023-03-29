@@ -46,7 +46,7 @@ public class TestPointOfInterest {
         assertEquals(isFavourited, poi.getIsFavourited(poi.getUserID()));
         assertEquals(description, poi.getDescription());
         assertEquals(roomNumber, poi.getRoomNumber());
-        assertEquals(isVisible, poi.getisVisible());
+        assertEquals(isVisible, poi.getIsVisible());
         assertEquals(processor.makeNewPOIID(), poi.getID());
         String expectedBuildingFloorID = "1 1";
         assertEquals(expectedBuildingFloorID, poi.getBuildingFloorID());
