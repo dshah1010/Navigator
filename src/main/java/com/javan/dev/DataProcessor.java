@@ -199,7 +199,7 @@ public final class DataProcessor {
              * Checks to see if the POI user + floorNumber already exists
              */
             if (currentPoi.get("userID") == poiJson.get("userID") 
-            && currentPoi.get("roomNumber") == poiJson.get("roomNumber") && currentPoi.get("floorID") == poiJson.get("floorID")) {
+            && currentPoi.get("roomNumber").toString().toLowerCase().equals(poiJson.get("roomNumber").toString().toLowerCase()) && currentPoi.get("floorID") == poiJson.get("floorID")) {
                 return false;
             }
         }
@@ -570,6 +570,7 @@ public final class DataProcessor {
                     largestID = POI.get("ID").getAsInt();
                 }
             }
+            return largestID + 1;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

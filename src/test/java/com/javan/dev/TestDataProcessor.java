@@ -5,11 +5,15 @@ package com.javan.dev;
  */
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 
 import java.awt.Point;
+import java.io.IOError;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -20,10 +24,14 @@ import java.util.ArrayList;
 
 public class TestDataProcessor {
     
-    DataProcessor dataProcessor;
+    private static DataProcessor dataProcessor;
+    private static MapComponent map;
 
-    @BeforeEach
-    public void setUp(){
+    @BeforeAll
+    public static void setUp(){
+        Map currMap = MapFactory.createMap("FLOOR", 38, 1);
+        map = MapComponent.getInstance();
+        map.setMapDetails(currMap);
         dataProcessor = DataProcessor.getInstance();
     }
 
@@ -33,12 +41,16 @@ public class TestDataProcessor {
         /**
          * Test for floor map.
          */
-        assertEquals("data/images/maps/floorPlans/3M, Thames, and Somerville/3M, Thames and Somerville Floor Plans-1.png", dataProcessor.loadMapFilePath(1, 1, "floor"));
+        String currMapFile = dataProcessor.loadMapFilePath(1, 1, "floor");
+        String testFilePathString = filePathFixer(currMapFile);
+        assertEquals("data/images/maps/floorPlans/3M, Thames, and Somerville/3M, Thames and Somerville Floor Plans-1.png", testFilePathString);
 
         /**
          * Test for building map.
          */
-        assertEquals("data/images/maps/floorPlans/3M, Thames, and Somerville", dataProcessor.loadMapFilePath(1, 1, "bUiLdiNG"));
+        currMapFile = dataProcessor.loadMapFilePath(1, 1, "bUiLdiNG");
+        testFilePathString = filePathFixer(currMapFile);
+        assertEquals("data/images/maps/floorPlans/3M, Thames, and Somerville", testFilePathString);
 
         /**
          * Test for null.
@@ -105,7 +117,7 @@ public class TestDataProcessor {
         /**
          * Test for for campus map.
          */
-        universalPOIS = dataProcessor.getUniversalPOIs(true, 1);
+        universalPOIS = dataProcessor.getUniversalPOIs(true, 7);
         assertNotNull(universalPOIS);
         assertFalse(universalPOIS.isEmpty());
         assertTrue(universalPOIS.get(0) instanceof PointOfInterest);
@@ -136,82 +148,327 @@ public class TestDataProcessor {
     }
 
     @Test
-    @DisplayName("Should confirm that either a POI was added successfully or unsuccessfully to the Json File.")
-    public void testAddPointOfInterestToJsonFile() {
+    @DisplayName("Should confirm that a POI was added, edited, and deleted successfully or unsuccessfully to the Json File.")
+    public void testAddEditDeletePointOfInterestToJsonFile() {
+
+        //////////////////////////////////////
+        //////// ADD POI TO JSON TEST ////////
+        //////////////////////////////////////
+
+        /**
+         * Check if the method will return false by passing in a POI that already exists.
+         */
+        ArrayList<PointOfInterest> existingPOIs;
+        try {
+            existingPOIs = dataProcessor.getUniversalPOIs(false, 7);
+            assertFalse(dataProcessor.addPointOfInterestToJsonFile(existingPOIs.get(0)));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        /**
+         * Add new POI and assert that the method returns true.
+         */
+        ArrayList<Integer> favourites = new ArrayList<Integer>(); 
+        PointOfInterest newPOI = new PointOfInterest("JUnit Tester", 1, false, "Classroom", 1750, 1856, 1, 38, favourites, "This is a JUnit Testing POI.", "1138B", false);
+        try {
+            assertTrue(dataProcessor.addPointOfInterestToJsonFile(newPOI));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ///////////////////////////////////////
+        //////// EDIT POI IN JSON TEST ////////
+        ///////////////////////////////////////
+
+        /**
+         * Edit existing POI and check if method returns true.
+         */
+        try {
+            existingPOIs = dataProcessor.getUniversalPOIs(false, 7);
+            PointOfInterest existingPOI = new PointOfInterest(null, 0, false, null, 0, 0, 0, 0, null, null, null, false);
+            for (PointOfInterest poi : existingPOIs) {
+                if (poi.getID() == 186) {
+                    existingPOI = poi;
+                    break;
+                }
+            }
+            existingPOI.setName("Edited JUnit Testing POI");
+            assertTrue(dataProcessor.editPointOfInterestInJsonFile(existingPOI));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        /**
+         * Attempt to edit non-existent POI, and 
+         */
+        try {
+            PointOfInterest nonExistPOI = new PointOfInterest(null, 0, false, null, 0, 0, 0, 0, null, null, null, false);
+            assertFalse(dataProcessor.editPointOfInterestInJsonFile(nonExistPOI));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        /////////////////////////////////////////
+        //////// DELETE POI IN JSON TEST ////////
+        /////////////////////////////////////////
+
+        /**
+         * Delete existing POI and check if method returns true.
+         */
+        try {
+            existingPOIs = dataProcessor.getUniversalPOIs(false, 7);
+            PointOfInterest existingPOI = new PointOfInterest(null, 0, false, null, 0, 0, 0, 0, null, null, null, false);
+            for (PointOfInterest poi : existingPOIs) {
+                if (poi.getID() == 186) {
+                    existingPOI = poi;
+                    break;
+                }
+            }
+            assertTrue(dataProcessor.deletePointOfInterestFromJsonFile(existingPOI));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        /**
+         * Attempt to delete non-existent POI from Json and check if method returns false.
+         */
+        try {
+            PointOfInterest nonExistPOI = new PointOfInterest(null, 0, false, null, 0, 0, 0, 0, null, null, null, false);
+            assertFalse(dataProcessor.deletePointOfInterestFromJsonFile(nonExistPOI));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    @DisplayName("Should confirm that a Building POI was added, edited, and deleted successfully or unsuccessfully to the Json File.")
+    public void testAddEditDeleteBuildingPointOfInterestToJsonFile() {
+
+        ///////////////////////////////////////////////
+        //////// ADD BUILDING POI TO JSON TEST ////////
+        ///////////////////////////////////////////////
+
+        /**
+         * Check if the method will return false by passing in a POI that already exists.
+         */
+        ArrayList<BuildingPointOfInterest> existingPOIs;
+        try {
+            existingPOIs = dataProcessor.getBuildingUniversalPOIs(true, 1);
+            assertFalse(dataProcessor.addBuildingPointOfInterestToJsonFile(existingPOIs.get(0)));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        /**
+         * Add new POI and assert that the method returns true.
+         */
+        try {
+            ArrayList<Integer> favourites = new ArrayList<Integer>(); 
+            BuildingPointOfInterest newPOI = new BuildingPointOfInterest("JUnit Tester", 1, false, "Building", 2600, 1900, 1000, favourites, "This is a JUnit Tester Created Building POI.", false);    
+            assertTrue(dataProcessor.addBuildingPointOfInterestToJsonFile(newPOI));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ////////////////////////////////////////////////
+        //////// EDIT BUILDING POI IN JSON TEST ////////
+        ////////////////////////////////////////////////
+
+        /**
+         * Edit existing POI and check if method returns true.
+         */
+        try {
+            existingPOIs = dataProcessor.getBuildingUniversalPOIs(true, 1);
+            BuildingPointOfInterest existingPOI = new BuildingPointOfInterest(null, 0, false, null, 0, 0, 0, null, null, false);
+            for (BuildingPointOfInterest poi : existingPOIs) {
+                if (poi.getBuildingID() == 1000) {
+                    existingPOI = poi;
+                    break;
+                }
+            }
+            existingPOI.setName("Edited JUnit Testing POI");
+            assertTrue(dataProcessor.editBuildingPointOfInterestInJsonFile(existingPOI));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        /**
+         * Attempt to edit non-existent POI, and 
+         */
+        try {
+            BuildingPointOfInterest nonExistPOI = new BuildingPointOfInterest(null, 0, false, null, 0, 0, 0, null, null, false);
+            assertFalse(dataProcessor.editBuildingPointOfInterestInJsonFile(nonExistPOI));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
         
+        //////////////////////////////////////////////////
+        //////// DELETE BUILDING POI IN JSON TEST ////////
+        //////////////////////////////////////////////////
+
+        /**
+         * Delete existing POI and check if method returns true.
+         */
+        try {
+            existingPOIs = dataProcessor.getBuildingUniversalPOIs(true, 1);
+            BuildingPointOfInterest existingPOI = new BuildingPointOfInterest(null, 0, false, null, 0, 0, 0, null, null, false);
+            for (BuildingPointOfInterest poi : existingPOIs) {
+                if (poi.getBuildingID() == 1000) {
+                    existingPOI = poi;
+                    break;
+                }
+            }
+            assertTrue(dataProcessor.deleteBuildingPointOfInterestFromJsonFile(existingPOI));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        /**
+         * Attempt to delete non-existent POI from Json and check if method returns false.
+         */
+        try {
+            BuildingPointOfInterest nonExistPOI = new BuildingPointOfInterest(null, 0, false, null, 0, 0, 0, null, null, false);
+            assertFalse(dataProcessor.deleteBuildingPointOfInterestFromJsonFile(nonExistPOI));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
-    public void testAddBuildingPointOfInterestToJsonFile() {
+    @DisplayName("Should confirm that the method can correctly identify if there is a floor above or below the current floor.")
+    public void testCheckFloorsAboveAndBelow() {
+        /**
+         * Test methods with a floor that we know has a floor above, but not a floor below.
+         */
+        assertTrue(dataProcessor.checkFloorAbove(1, 38));
+        assertFalse(dataProcessor.checkFloorBelow(1, 38));
 
+        /**
+         * Test methods with a floor that we know does not have a floor above, but has a floor below..
+         */
+        assertFalse(dataProcessor.checkFloorAbove(4, 38));
+        assertTrue(dataProcessor.checkFloorBelow(4, 38));
     }
 
     @Test
-    public void testEditPointOfInterestInJsonFile() {
+    @DisplayName("Should confirm that the method can correctly return the correct floor map that is above or below the current floor.")
+    public void testGetFloorAboveAndBelow() {
+        /**
+         * Test that methods return null for floors we know have no floor above or below.
+         */
+        try {
+            assertNull(dataProcessor.getFloorBelow(1, 38));
+            assertNull(dataProcessor.getFloorAbove(4, 38));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        /**
+         * Test that getFloorBelow returns correct FloorMap.
+         */
+        try {
+            FloorMap floorBelow = dataProcessor.getFloorBelow(2, 38);
+            assertNotNull(floorBelow);
+            assertEquals("data/images/maps/floorPlans/University College/University College Floor Plans-1.png", filePathFixer(floorBelow.getFilePath()));
+            assertEquals(1, floorBelow.getMapID());
+            assertEquals(38, floorBelow.getBuildingID());
+            assertEquals("FLOOR", floorBelow.getMapType());
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
 
-    }
+        /**
+         * Test that getFloorAbove returns correct FloorMap.
+         */
+        try {
+            FloorMap floorAbove = dataProcessor.getFloorAbove(2, 38);
+            assertNotNull(floorAbove);
+            assertEquals("data/images/maps/floorPlans/University College/University College Floor Plans-3.png", filePathFixer(floorAbove.getFilePath()));
+            assertEquals(3, floorAbove.getMapID());
+            assertEquals(38, floorAbove.getBuildingID());
+            assertEquals("FLOOR", floorAbove.getMapType());
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }  
 
     @Test
-    public void testEditBuildingPointOfInterestInJsonFile() {
-
-    }
-
-    @Test
-    public void testDeletePointOfInterestFromJsonFile() {
-
-    }
-
-    @Test
-    public void testDeleteBuildingPointOfInterestFromJsonFile() {
-
-    }
-
-    @Test
-    public void testCheckFloorAbove() {
-
-    }
-
-    @Test
-    public void testCheckFloorBelow() {
-
-    }
-
-    @Test
-    public void testGetFloorAbove() {
-
-    }
-
-    @Test
-    public void testGetFloorBelow() {
-
-    }
-
-    @Test
+    @DisplayName("Should confirm that this method does not return 0, since there are existing POIs built-in already.")
     public void testMakeNewPOIID() {
-
+        /**
+         * Test that making a new POI ID works properly and does not return 0.
+         */
+        assertNotEquals(0, dataProcessor.makeNewPOIID());
     }
 
     @Test
+    @DisplayName("Should confirm that this method does not return 0, since there are existing Building POIs built-in already.")
     public void testMakeNewBuildingPOIID() {
-
+        /**
+         * Test that making a new Building POI ID works properly and does not return 0.
+         */
+        assertNotEquals(0, dataProcessor.makeNewBuildingPOIID());
     }
 
     @Test
+    @DisplayName("Should confirm that this method returns the correct POI from an input POI ID.")
     public void testGetPOI() {
+        /**
+         * Test method to see if it will return null for a POI ID that does not exist.
+         */
+        assertNull(dataProcessor.getPOI(dataProcessor.makeNewPOIID()));
 
+        /**
+         * Test method with existing POI ID.
+         */
+        PointOfInterest poi = dataProcessor.getPOI(0);
+        assertEquals(1, poi.getFloorID());
+        assertEquals("1131", poi.getRoomNumber());
+        assertEquals(1452, poi.getCoordinates()[0]);
+        assertEquals(1794, poi.getCoordinates()[1]);
+        assertEquals(38, poi.getBuildingID());
     }
 
     @Test
+    @DisplayName("Should confirm that this method returns the correct Building POI from an input POI ID.")
     public void testGetBuildingPOI() {
+        /**
+         * Test method to see if it will return null for a Building POI ID that does not exist.
+         */
+        assertNull(dataProcessor.getBuildingPOI(dataProcessor.makeNewBuildingPOIID()));
 
+        /**
+         * Test method with existing Building POI ID.
+         */
+        BuildingPointOfInterest poi = dataProcessor.getBuildingPOI(1);
+        assertEquals(4, poi.getBuildingID());
+        assertEquals("Arts and Humanities", poi.getName());
+        assertEquals(2308, poi.getCoordinates()[0]);
+        assertEquals(3074, poi.getCoordinates()[1]);
     }
 
     @Test
+    @DisplayName("Should confirm that this method returns a correctly encrypted password based on the encryption algorithm.")
     public void testEncrypt() {
-
+        /**
+         * Check if an inputted password will encrypt correctly.
+         */
     }
 
     @Test
+    @DisplayName("Should confirm that this method returns a correctly decrypted password based on the encryption algorithm.")
     public void testDecrypt() {
 
     }
@@ -234,6 +491,25 @@ public class TestDataProcessor {
     @Test
     public void testGetFloorMapFromMapID() {
 
+    }
+
+    /**
+     * Helper method to fix file path format into a uniform format across all devices.
+     * Ex. you/are/amazing
+     * @param original  Input file path string
+     * @return          Formatted file path string
+     */
+    private String filePathFixer(String original) {
+        String fixedFilePath = "";
+        for (int i = 0; i < original.length(); i++) {
+            if (original.charAt(i) == '\\') {
+                fixedFilePath += '/';
+            }
+            else {
+                fixedFilePath += original.charAt(i);
+            }
+        }
+        return fixedFilePath;
     }
 
 }
