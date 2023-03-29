@@ -42,10 +42,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     /**
      * ArrayList to hold the building points of interest
      */
-    private ArrayList<BuildingPointOfInterest> buildingpois;
-    private ArrayList<BuildingPointOfInterest> buildinguserPOIs;
-    private ArrayList<BuildingPointOfInterest> buildingfavouritePOIs;
-
+    private ArrayList<BuildingPointOfInterest> buildingPOIs;
     /**
      * ImageIcon for the flags
      */
@@ -738,10 +735,8 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * @param None
      * @return None
      */
-    public void clearBuildingPois() {
-        buildingpois.clear();
-        buildingfavouritePOIs.clear();
-        buildinguserPOIs.clear();
+    public void clearbuildingPOIs() {
+        buildingPOIs.clear();
         imagePanel.remove(map);
         mapImg = new ImageIcon(mapObject.getFilePath());
         map = new JLabel(mapImg);
@@ -765,21 +760,17 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
         if (this.pois != null) {
             clearPois();
         }
-        if (this.buildingpois != null){
-            clearBuildingPois();
+        if (this.buildingPOIs != null){
+            clearbuildingPOIs();
         }
         /*
          * gets building POIS if on campus map
          */
         if (isCampusMap) {
 
-            buildingpois = dataProcessor.getBuildingUniversalPOIs(true, user.getUserID());
-            buildingfavouritePOIs = dataProcessor.getBuildingFavouritePOIs(user.getUserID());
-            buildinguserPOIs = dataProcessor.getBuildingUserPOIs(user.getUserID());
+            buildingPOIs = dataProcessor.getBuildingUniversalPOIs();
 
-            addBuildingPOIList(buildingpois);
-            addBuildingPOIList(buildingfavouritePOIs);
-            addBuildingPOIList(buildinguserPOIs);
+            addBuildingPOIList(buildingPOIs);
 
         }
         /*
@@ -863,7 +854,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                 mapPanel.repaint();
                 flag.setVisible(true);
                 imagePanel.setVisible(true);
-                }
+            }
         }
     }
 
@@ -1261,9 +1252,10 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                     /**
                      * Get the POI object from the POI Id
                      */
-                    System.out.println(id);
+                    BuildingPointOfInterest buildingPOI = dataProcessor.getBuildingPOI(Integer.parseInt(id));
                     PointOfInterest poi = dataProcessor.getPOI(Integer.parseInt(id));
-
+                    System.out.println(poi);
+                    System.out.println(buildingPOI);
                     /**
                      * Check if user is an admin and POI type is not user
                      */
@@ -1278,15 +1270,33 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                     /**
                      * Get the coordinates of the mouse relative to the map's dimensions
                      */
-                    int x = poi.getCoordinates()[0] + event.getX();
-                    int y = poi.getCoordinates()[1] + event.getY();
+                    int x, y;
+                    if (!getIsCampusMap()) {
+                        x = poi.getCoordinates()[0] + event.getX();
+                        y = poi.getCoordinates()[1] + event.getY();
+                    }
+                    else {
+                        x = buildingPOI.getCoordinates()[0] + event.getX();
+                        y = buildingPOI.getCoordinates()[1] + event.getY();
+                    }
+
 
                     /**
                      * Update the POI coordinates
                      */
-                    poi.setCoordinates(x, y);
+                    if (!getIsCampusMap()) {
+                        poi.setCoordinates(x, y);
+                    }
+                    else {
+                        buildingPOI.setCoordinates(x, y);
+                    }
                     try {
-                        dataProcessor.editPointOfInterestInJsonFile(poi);
+                        if (!getIsCampusMap()) {
+                            dataProcessor.editPointOfInterestInJsonFile(poi);
+                        }
+                        else {
+                            dataProcessor.editBuildingPointOfInterestInJsonFile(buildingPOI);
+                        }
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
@@ -1295,6 +1305,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                      * Refresh the map
                      */
                     displayPOIs();
+                    
                     
                 }
             }

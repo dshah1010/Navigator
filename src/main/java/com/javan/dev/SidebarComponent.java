@@ -445,7 +445,7 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
                 /**
                  * Temporary solution for getting the list of all buildings (as POIs haven't been created for them yet).
                  */
-                ArrayList<BuildingPointOfInterest> buildingList = processor.getBuildingUniversalPOIs(true, mapComponent.getUser().getUserID());
+                ArrayList<BuildingPointOfInterest> buildingList = processor.getBuildingUniversalPOIs();
                 /**
                  * Compare the search to the available buildings on the campus.
                  */
