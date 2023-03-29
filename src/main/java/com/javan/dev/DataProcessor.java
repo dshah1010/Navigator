@@ -76,11 +76,8 @@ public final class DataProcessor {
         /**
          * If null just add null and return null arraylist to pass back to Weather
          */
-        if (json.toString() == null) {
-            weather.add(null);
-            weather.add(null);
-            weather.add(null);
-            return weather;
+        if (json == null) {
+            return null;
         }
         /**
          * Create JSON object with org.json library
@@ -177,7 +174,12 @@ public final class DataProcessor {
      */
     public int[] getPOIPosition(int poiID) {
         PointOfInterest poi = getPOI(poiID);
-        return poi.getCoordinates();
+        if (poi != null) {
+            return poi.getCoordinates();
+        }
+        else {
+            return null;
+        }
     }
 
     
@@ -197,7 +199,7 @@ public final class DataProcessor {
              * Checks to see if the POI user + floorNumber already exists
              */
             if (currentPoi.get("userID") == poiJson.get("userID") 
-            && currentPoi.get("roomNumber") == poiJson.get("roomNumber") && currentPoi.get("floorID") == poiJson.get("floorID")) {
+            && currentPoi.get("roomNumber").toString().toLowerCase().equals(poiJson.get("roomNumber").toString().toLowerCase()) && currentPoi.get("floorID") == poiJson.get("floorID")) {
                 return false;
             }
         }
@@ -568,6 +570,7 @@ public final class DataProcessor {
                     largestID = POI.get("ID").getAsInt();
                 }
             }
+            return largestID + 1;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
