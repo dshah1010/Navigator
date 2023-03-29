@@ -263,6 +263,32 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
     }
 
     /**
+     * Setter for isCampusMap boolean
+     * @param boolean setMap
+     * @return none
+     */
+    public void setIsCampusMap(boolean setMap) {
+        this.isCampusMap = setMap;
+    }
+
+    /**
+     * Getter for mapType
+     * @return String mapType
+     */
+    public String getMapType() {
+        return this.mapType;
+    }
+
+    /**
+     * Setter for mapType
+     * @param String newMapType
+     * @return none
+     */
+    public void setMapType(String newMapType) {
+        this.mapType = newMapType;
+    }
+
+    /**
      * Getter for the current Map object
      * @param None
      * @return Map mapObject
@@ -291,13 +317,13 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          * Set Campus Map Boolean and Map Type
          */
         if (newMap.getMapType() == "FLOOR") {
-            this.isCampusMap = false;
-            this.mapType = "FLOOR";
-            this.floorMap = (FloorMap) MapFactory.createMap(this.mapType, newMap.getBuildingID(), newMap.getMapID());
+            setIsCampusMap(false);
+            setMapType("FLOOR");
+            this.floorMap = (FloorMap) MapFactory.createMap(getMapType(), newMap.getBuildingID(), newMap.getMapID());
         }
         else if (newMap.getMapType() == "CAMPUS") {
-            this.isCampusMap = true;
-            this.mapType = "CAMPUS";
+            setIsCampusMap(true);
+            setMapType("CAMPUS");
         }
 
         /**
@@ -305,7 +331,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          */
         this.mapObject = newMap;
         this.currentMapID = newMap.getMapID();
-        if (this.mapType.contains("FLOOR")) {
+        if (getMapType().contains("FLOOR")) {
             this.currentBuildingID = this.floorMap.getBuildingID();
         }
     }
@@ -316,7 +342,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * @return None
      */
     public void updateFloorButtons() {
-        if (this.mapType.contains("CAMPUS")) {
+        if (getMapType().contains("CAMPUS")) {
             floorBelow.setVisible(false);
             floorAbove.setVisible(false);
             buttonPanel.remove(floorBelow);
@@ -438,7 +464,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * @return None
      */
     private void isFloorAbove() {
-        if (this.mapType.contains("FLOOR")) {
+        if (getMapType().contains("FLOOR")) {
             if (floorMap.checkFloorAbove()) {
                 /**
                  * Enable the button "Floor Up"
@@ -459,7 +485,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * @return None
      */
     private void isFloorBelow() {
-        if (this.mapType.contains("FLOOR")) {
+        if (getMapType().contains("FLOOR")) {
             if (floorMap.checkFloorBelow()) {
                 /**
                  * Enable the button "Floor Down"
@@ -591,39 +617,47 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
      * @return None
      */
     public void disablePOILayer(String text) {
-        for (PointOfInterest poi : userPOIs) {
-            if (poi.getPOItype().contains(text)) {
-                poi.setisVisible(false);
-                try {
-                    dataProcessor.editPointOfInterestInJsonFile(poi);
-                } catch (IOException e1) {
-                    e1.printStackTrace();
+        if (this.userPOIs != null) {
+            for (PointOfInterest poi : userPOIs) {
+                if (poi.getPOItype().contains(text)) {
+                    poi.setisVisible(false);
+                    try {
+                        dataProcessor.editPointOfInterestInJsonFile(poi);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
                 }
-            }
-        } 
-
-        for (PointOfInterest poi : favouritePOIs) {
-            if (poi.getPOItype().contains(text)) {
-                poi.setisVisible(false);
-                try {
-                    dataProcessor.editPointOfInterestInJsonFile(poi);
-                } catch (IOException e1) {
-                    e1.printStackTrace();
+            } 
+        }
+        if (this.favouritePOIs != null) {
+            for (PointOfInterest poi : favouritePOIs) {
+                if (poi.getPOItype().contains(text)) {
+                    poi.setisVisible(false);
+                    try {
+                        dataProcessor.editPointOfInterestInJsonFile(poi);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
                 }
-            }
-        } 
+            } 
+        }
 
-        for (PointOfInterest poi : pois) {
-            if (poi.getPOItype().contains(text)) {
-                poi.setisVisible(false);
-                try {
-                    dataProcessor.editPointOfInterestInJsonFile(poi);
-                } catch (IOException e1) {
-                    e1.printStackTrace();
+        if (this.pois != null) {
+            for (PointOfInterest poi : pois) {
+                if (poi.getPOItype().contains(text)) {
+                    poi.setisVisible(false);
+                    try {
+                        dataProcessor.editPointOfInterestInJsonFile(poi);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
                 }
             }
         }
         displayPOIs();
+        if (this.poiComponent == null) {
+            this.poiComponent = POIComponent.getInstance();
+        }
         poiComponent.changeDisplayIfCampusMap();
             /**
              * Update the sidebar component to display the new POI

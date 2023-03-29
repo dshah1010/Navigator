@@ -5,6 +5,7 @@ package com.javan.dev;
  */
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import javax.swing.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -56,6 +57,7 @@ public class TestMapComponent {
     /**
      * This method is called to check that the current map is the campus map
      */
+    @Order(1)
     @Test
     void testGetIsCampusMapReturnsTrue() {
         boolean isCampusMap = mapComponent.getIsCampusMap();

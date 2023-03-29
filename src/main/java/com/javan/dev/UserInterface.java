@@ -150,7 +150,6 @@ public final class UserInterface extends JFrame implements ActionListener {
              */
             frame.getContentPane().removeAll();
             openLoginComponent();
-            //mapComponent.clearPois();
             loginComponent.setLoginStatus(false);
 
             frame.revalidate();
