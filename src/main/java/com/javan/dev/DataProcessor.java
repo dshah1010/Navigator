@@ -116,14 +116,6 @@ public final class DataProcessor {
         return JsonReader.favouritesList(userID);
     }
 
-    /**
-    * Method to get user's favourite POIs
-     * @param int userID - the ID of the user
-     * @return List of favourite POIs
-     */
-    public ArrayList<BuildingPointOfInterest> getBuildingFavouritePOIs(int userID) {
-        return JsonReader.buildingfavouritesList(userID);
-    }
 
     /**
      * Method to return the POIs created by a user 
@@ -133,16 +125,7 @@ public final class DataProcessor {
     public ArrayList<PointOfInterest> getUserPOIs(int userID) {
         return JsonReader.userPOIList(userID);
     }
-    
-    /**
-     * Method to return the Building POIs created by a user 
-     * @param int userID - the ID of the user
-     * @return List of user-created Building POIs
-     */
-
-    public ArrayList<BuildingPointOfInterest> getBuildingUserPOIs(int userID) {
-        return JsonReader.buildingUserPOIList(userID);
-    }  
+     
 
     /**
      * Method to return the all POIs created by a user or admin
@@ -183,8 +166,8 @@ public final class DataProcessor {
      * @param int userID - the ID of the user
      * @return List of all visible POIs to user
      */
-    public ArrayList<BuildingPointOfInterest> getBuildingUniversalPOIs(boolean isCampusMap, int userID) {
-        return JsonReader.universalBuildingPOIs(userID);
+    public ArrayList<BuildingPointOfInterest> getBuildingUniversalPOIs() {
+        return JsonReader.universalBuildingPOIs();
     }
 
     /**
