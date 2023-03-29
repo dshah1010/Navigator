@@ -1270,14 +1270,14 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                     /**
                      * Get the coordinates of the mouse relative to the map's dimensions
                      */
-                    int x, y;
+                    int xCoord, yCoord;
                     if (!getIsCampusMap()) {
-                        x = poi.getCoordinates()[0] + event.getX();
-                        y = poi.getCoordinates()[1] + event.getY();
+                        xCoord = poi.getCoordinates()[0] + event.getX();
+                        yCoord = poi.getCoordinates()[1] + event.getY();
                     }
                     else {
-                        x = buildingPOI.getCoordinates()[0] + event.getX();
-                        y = buildingPOI.getCoordinates()[1] + event.getY();
+                        xCoord = buildingPOI.getCoordinates()[0] + event.getX();
+                        yCoord = buildingPOI.getCoordinates()[1] + event.getY();
                     }
 
 
@@ -1285,10 +1285,10 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                      * Update the POI coordinates
                      */
                     if (!getIsCampusMap()) {
-                        poi.setCoordinates(x, y);
+                        poi.setCoordinates(xCoord, yCoord);
                     }
                     else {
-                        buildingPOI.setCoordinates(x, y);
+                        buildingPOI.setCoordinates(xCoord, yCoord);
                     }
                     try {
                         if (!getIsCampusMap()) {
@@ -1305,8 +1305,6 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                      * Refresh the map
                      */
                     displayPOIs();
-                    
-                    
                 }
             }
         }
