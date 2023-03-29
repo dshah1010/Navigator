@@ -6,15 +6,18 @@ package com.javan.dev;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 
-import java.awt.Point;
-import java.io.IOError;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.Iterator;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 /**
  * @author: Jake Choi <jchoi492@uwo.ca>
@@ -89,22 +92,8 @@ public class TestDataProcessor {
     /**
      * Tested in TestJsonReader.java
      * This method in DataProcessor returns the value returned by a method in the JsonReader class.
-     */    
-    public void testGetBuildingFavouritePOIs() {
-    }
-
-    /**
-     * Tested in TestJsonReader.java
-     * This method in DataProcessor returns the value returned by a method in the JsonReader class.
      */
     public void testGetUserPOIs() {
-    }
-
-    /**
-     * Tested in TestJsonReader.java
-     * This method in DataProcessor returns the value returned by a method in the JsonReader class.
-     */
-    public void testGetBuildingUserPOIs() {
     }
 
     /**
@@ -171,7 +160,7 @@ public class TestDataProcessor {
          * Add new POI and assert that the method returns true.
          */
         ArrayList<Integer> favourites = new ArrayList<Integer>(); 
-        PointOfInterest newPOI = new PointOfInterest("JUnit Tester", 1, false, "Classroom", 1750, 1856, 1, 38, favourites, "This is a JUnit Testing POI.", "1138B", false);
+        PointOfInterest newPOI = new PointOfInterest("DataProcessor JUnit Tester", 1, false, "Classroom", 1750, 1856, 1, 38, favourites, "This is a JUnit Testing POI.", "1138B", false);
         try {
             assertTrue(dataProcessor.addPointOfInterestToJsonFile(newPOI));
         }
@@ -190,12 +179,12 @@ public class TestDataProcessor {
             existingPOIs = dataProcessor.getUniversalPOIs(false, 7);
             PointOfInterest existingPOI = new PointOfInterest(null, 0, false, null, 0, 0, 0, 0, null, null, null, false);
             for (PointOfInterest poi : existingPOIs) {
-                if (poi.getID() == 186) {
+                if (poi.getName().equals("DataProcessor JUnit Tester")) {
                     existingPOI = poi;
                     break;
                 }
             }
-            existingPOI.setName("Edited JUnit Testing POI");
+            existingPOI.setName("Edited DataProcessor JUnit Testing POI");
             assertTrue(dataProcessor.editPointOfInterestInJsonFile(existingPOI));
         }
         catch (IOException e) {
@@ -223,7 +212,7 @@ public class TestDataProcessor {
             existingPOIs = dataProcessor.getUniversalPOIs(false, 7);
             PointOfInterest existingPOI = new PointOfInterest(null, 0, false, null, 0, 0, 0, 0, null, null, null, false);
             for (PointOfInterest poi : existingPOIs) {
-                if (poi.getID() == 186) {
+                if (poi.getName().equals("Edited DataProcessor JUnit Testing POI")) {
                     existingPOI = poi;
                     break;
                 }
@@ -465,32 +454,107 @@ public class TestDataProcessor {
         /**
          * Check if an inputted password will encrypt correctly.
          */
+        String passwordToEncrypt = "dA2j!";
+        assertEquals("jG2p!", DataProcessor.encrypt(passwordToEncrypt));
     }
 
     @Test
     @DisplayName("Should confirm that this method returns a correctly decrypted password based on the encryption algorithm.")
     public void testDecrypt() {
-
+        /**
+         * Check if an inputted password will be decrypted correctly.
+         */
+        String passwordToDecrypt = "jG2p!";
+        assertEquals("dA2j!", DataProcessor.decrypt(passwordToDecrypt));
     }
 
     @Test
+    @DisplayName("Should confirm that this method correctly checks for a matching username and password in the usersMetaData.json.")
     public void testAuthenticateLogin() {
+        /**
+         * Check if an existing login username and password is found using this method correctly.
+         */
+        assertEquals(1, dataProcessor.authenticateLogin("admin", "admin"));
 
+        /**
+         * Check if a non-existing login is dealt with by the method correctly.
+         */
+        assertEquals(-1, dataProcessor.authenticateLogin("IAmAUnitTest-Data", "DataProcessor"));
     }
 
     @Test
+    @DisplayName("Should confirm that this method returns a correctly decrypted password matching the username inputted.")
     public void testGetPasswordFromUsername() {
+        /**
+         * Check if the method will return the correct corresponding decrypted password to the inputted username.
+         */
+        assertEquals("admin", dataProcessor.getPasswordFromUsername("admin"));
 
+        /**
+         * Check if the method will return null for a non-existent username.
+         */
+        assertNull(dataProcessor.getPasswordFromUsername("IAmAUnitTest-Data"));
     }
 
     @Test
     public void testCreateAccount() {
+        /**
+         * Check if the method correctly returns false when creating an account with an already existing username.
+         */
+        assertFalse(dataProcessor.createAccount("a", "12345566"));
 
+        /**
+         * Check if the method correctly adds a new account with a new username.
+         */
+        assertTrue(dataProcessor.createAccount("ILovePizza", "HawaiianIsGreat"));
     }
 
     @Test
     public void testGetFloorMapFromMapID() {
+    
+    }
 
+    @AfterAll
+    public static void cleanUp() {
+        /**
+         * Clean up usersMetaData.json, since the newly created user was not deleted during testing.
+         */
+
+        /** 
+         * JSON file location
+         */
+        String filePath = "data/users/usersMetadata.json";
+
+        try {
+            /** 
+             * Read the JSON file
+             */
+            FileReader fileReader = new FileReader(filePath);
+            JSONTokener jsonTokener = new JSONTokener(fileReader);
+            JSONArray jsonArray = new JSONArray(jsonTokener);
+            JSONArray newJsonArray = new JSONArray();
+            String username = "ILovePizza";
+            
+            /** 
+             * Delete the most recently created account.
+             */
+            for (Iterator<Object> iterator = jsonArray.iterator(); iterator.hasNext();) {
+                JSONObject user = (JSONObject) iterator.next();
+                /** 
+                 * Check if we are at the end of the iterator.
+                 */
+                if (!username.equals(user.getString("username"))) {
+                    newJsonArray.put(user);
+                }
+            }
+            
+            FileWriter fileWriter = new FileWriter(filePath);
+            newJsonArray.write(fileWriter);
+            fileWriter.flush();
+            fileWriter.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } 
     }
 
     /**
