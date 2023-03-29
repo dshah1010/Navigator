@@ -497,6 +497,7 @@ public class TestDataProcessor {
     }
 
     @Test
+    @DisplayName("Should confirm that this method creates an account properly if a matching username does not already exist.")
     public void testCreateAccount() {
         /**
          * Check if the method correctly returns false when creating an account with an already existing username.
@@ -510,8 +511,14 @@ public class TestDataProcessor {
     }
 
     @Test
+    @DisplayName("Should confirm that this method returns the correct FloorMap object.")
     public void testGetFloorMapFromMapID() {
-    
+        /**
+         * Check if method returns correct FloorMap object based on the building and map ID.
+         */
+        FloorMap map = dataProcessor.getFloorMapFromMapID(1, 1);
+        assertEquals("data/images/maps/floorPlans/3M, Thames, and Somerville/3M, Thames and Somerville Floor Plans-1.png", filePathFixer(map.getFilePath()));
+        assertEquals("FLOOR", map.getMapType());
     }
 
     @AfterAll
@@ -541,7 +548,7 @@ public class TestDataProcessor {
             for (Iterator<Object> iterator = jsonArray.iterator(); iterator.hasNext();) {
                 JSONObject user = (JSONObject) iterator.next();
                 /** 
-                 * Check if we are at the end of the iterator.
+                 * Exclude the matching username to delete from the json file.
                  */
                 if (!username.equals(user.getString("username"))) {
                     newJsonArray.put(user);
