@@ -258,7 +258,7 @@ public class TestDataProcessor {
          */
         ArrayList<BuildingPointOfInterest> existingPOIs;
         try {
-            existingPOIs = dataProcessor.getBuildingUniversalPOIs(true, 1);
+            existingPOIs = dataProcessor.getBuildingUniversalPOIs();
             assertFalse(dataProcessor.addBuildingPointOfInterestToJsonFile(existingPOIs.get(0)));
         }
         catch (IOException e) {
@@ -285,7 +285,7 @@ public class TestDataProcessor {
          * Edit existing POI and check if method returns true.
          */
         try {
-            existingPOIs = dataProcessor.getBuildingUniversalPOIs(true, 1);
+            existingPOIs = dataProcessor.getBuildingUniversalPOIs();
             BuildingPointOfInterest existingPOI = new BuildingPointOfInterest(null, 0, false, null, 0, 0, 0, null, null, false);
             for (BuildingPointOfInterest poi : existingPOIs) {
                 if (poi.getBuildingID() == 1000) {
@@ -318,7 +318,7 @@ public class TestDataProcessor {
          * Delete existing POI and check if method returns true.
          */
         try {
-            existingPOIs = dataProcessor.getBuildingUniversalPOIs(true, 1);
+            existingPOIs = dataProcessor.getBuildingUniversalPOIs();
             BuildingPointOfInterest existingPOI = new BuildingPointOfInterest(null, 0, false, null, 0, 0, 0, null, null, false);
             for (BuildingPointOfInterest poi : existingPOIs) {
                 if (poi.getBuildingID() == 1000) {
