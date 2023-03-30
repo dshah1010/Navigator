@@ -6,8 +6,8 @@ package com.javan.dev;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 
 import java.io.IOException;
@@ -30,8 +30,8 @@ public class TestDataProcessor {
     private static DataProcessor dataProcessor;
     private static MapComponent map;
 
-    @BeforeAll
-    public static void setUp(){
+    @BeforeEach
+    public void setUp(){
         Map currMap = MapFactory.createMap("FLOOR", 38, 1);
         map = MapComponent.getInstance();
         map.setMapDetails(currMap);
@@ -149,7 +149,7 @@ public class TestDataProcessor {
          */
         ArrayList<PointOfInterest> existingPOIs;
         try {
-            existingPOIs = dataProcessor.getUniversalPOIs(false, 7);
+            existingPOIs = dataProcessor.getUniversalPOIs(false, 1);
             assertFalse(dataProcessor.addPointOfInterestToJsonFile(existingPOIs.get(0)));
         }
         catch (IOException e) {
@@ -516,16 +516,22 @@ public class TestDataProcessor {
         /**
          * Check if method returns correct FloorMap object based on the building and map ID.
          */
-        FloorMap map = dataProcessor.getFloorMapFromMapID(1, 1);
-        assertEquals("data/images/maps/floorPlans/3M, Thames, and Somerville/3M, Thames and Somerville Floor Plans-1.png", filePathFixer(map.getFilePath()));
-        assertEquals("FLOOR", map.getMapType());
+        FloorMap currMap = dataProcessor.getFloorMapFromMapID(1, 1);
+        assertEquals("data/images/maps/floorPlans/3M, Thames, and Somerville/3M, Thames and Somerville Floor Plans-1.png", filePathFixer(currMap.getFilePath()));
+        assertEquals("FLOOR", currMap.getMapType());
     }
 
-    @AfterAll
-    public static void cleanUp() {
+    @AfterEach
+    public void cleanUp() {
         /**
+         * Reset map to campus map for other tests.
          * Clean up usersMetaData.json, since the newly created user was not deleted during testing.
          */
+
+        Map currMap = MapFactory.createMap("CAMPUS", 0, 0);
+        map = MapComponent.getInstance();
+        map.setMapDetails(currMap);
+        dataProcessor = DataProcessor.getInstance();
 
         /** 
          * JSON file location
