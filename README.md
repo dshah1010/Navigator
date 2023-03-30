@@ -33,7 +33,7 @@ To run this program, use the following steps to building and run the application
 java -version
 ```  
 
-2. Download the latest NetBeans IDE or ensure that you have the latest version of NetBeans. You can download it here ([click here](https://netbeans.apache.org/download/nb17/)) This is because the latest NetBeans IDE have Maven bundled with the IDE. Maven is required to run our program, thus downloading NetBeans that has Maven already set up is recommended.
+2. Download the latest NetBeans IDE or ensure that you have the latest version of NetBeans. You can download it here ([click here](https://netbeans.apache.org/download/nb17/)) This is because the latest NetBeans IDE has Maven bundled with the IDE. Maven is required to run our program, thus downloading NetBeans is required as Maven is built-in.
 
 3. Open NetBeans and open an existing project. Ensure you open up the project named "CS2212-group1".
 
@@ -116,6 +116,7 @@ At the top of the application screen, you will see "Navigation Mode". If you cli
     * In editor mode, click on an area where a red flag does not exist. This will make a window pop up to create a new POI.
 * Edit:
     * Click on an existing POI. A window will pop up for the user to edit the information on the POI.
+    * Hold ALT and left click to move a POI around the display to update it's position.
 * Delete: 
     * Click on an existing POI. A window will pop up for the user, and click on the "Delete POI" button to delete the POI.
 
