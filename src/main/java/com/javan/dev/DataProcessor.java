@@ -9,12 +9,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import com.google.gson.*;
-import com.google.gson.JsonIOException;
 
 /**
  * @author: Riley Emma Gavigan <rgavigan@uwo.ca>, Dylan Sta Ana <dstaana@uwo.ca>, Brad McGlynn <bmcglyn4@uwo.ca>, Deep Ashishkumar Shah <dshah228@uwo.ca>, Jake Choi <jchoi492@uwo.ca>

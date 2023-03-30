@@ -11,7 +11,6 @@ import org.json.JSONArray;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.BeforeEach;
 
 
 public class TestJsonReader {
@@ -19,22 +18,40 @@ public class TestJsonReader {
     private MapComponent mapComponent = MapComponent.getInstance();
 
     @Test
+    @DisplayName("Should confirm that a file path was accurately generated based on the json file path entered.")
     public void testRead() throws IOException {
         String expected = "{\"filePath\":\"data/images/maps/floorPlans/3M, Thames, and Somerville\",\"floorMaps\":[{\"filePath\":\"data/images/maps/floorPlans/3M, Thames, and Somerville/3M, Thames and Somerville Floor Plans-1.png\",\"mapType\":\"FLOOR\",\"mapID\":1,\"mapName\":\"3M, Thames and Somerville Floor Plans-1.png\"},{\"filePath\":\"data/images/maps/floorPlans/3M, Thames, and Somerville/3M, Thames and Somerville Floor Plans-2.png\",\"mapType\":\"FLOOR\",\"mapID\":2,\"mapName\":\"3M, Thames and Somerville Floor Plans-2.png\"},{\"filePath\":\"data/images/maps/floorPlans/3M, Thames, and Somerville/3M, Thames and Somerville Floor Plans-3.png\",\"mapType\":\"FLOOR\",\"mapID\":3,\"mapName\":\"3M, Thames and Somerville Floor Plans-3.png\"},{\"filePath\":\"data/images/maps/floorPlans/3M, Thames, and Somerville/3M, Thames and Somerville Floor Plans-4.png\",\"mapType\":\"FLOOR\",\"mapID\":4,\"mapName\":\"3M, Thames and Somerville Floor Plans-4.png\"}],\"mapType\":\"BUILDING\",\"mapName\":\"3M, Thames, and Somerville\",\"buildingID\":1}";
+        expected = filePathFixer(expected);
         String actual = JsonReader.read("data/images/maps/metadata/mapMetadata.json");
+
         JSONArray jsonArray = new JSONArray(actual);
-        assertEquals(expected, jsonArray.get(0).toString());
+        actual = filePathFixer(jsonArray.get(0).toString());
+        actual = filePathFixer(actual);
+        assertEquals(expected, actual);
     }
 
     @Test
+    @DisplayName("Should confirm that an ArrayList of floorMaps is properly populated.")
     public void testGetFloorMaps() throws IOException {
-        String expected = "Arts and Humanities";
+        String expectedName = "Arts and Humanities";
+        int expectedFloor = 1;
         ArrayList<FloorMap> floorMaps = JsonReader.getFloorMaps("data/images/maps/metadata/mapMetadata.json");
         BuildingPointOfInterest building = processor.getBuildingPOI(floorMaps.get(0).getBuildingID());
+        assertEquals(expectedName, building.getName());
+        assertEquals(expectedFloor, floorMaps.get(0).getMapID());
+    }
+
+    @Test
+    @DisplayName("Should confirm that an ArrayList of buildingMaps is properly populated.")
+    public void testGetBuildingMaps() throws IOException {
+        String expected = "Arts and Humanities";
+        ArrayList<BuildingMap> buildingMaps = JsonReader.getBuildingMaps("data/images/maps/metadata/mapMetadata.json");
+        BuildingPointOfInterest building = processor.getBuildingPOI(buildingMaps.get(0).getBuildingID());
         assertEquals(expected, building.getName());
     }
 
     @Test
+    @DisplayName("Should confirm that a file path was accurately generated and added to a Json array.")
     public void testAddMapInfoToJSON() throws IOException {
         String directoryPath = "data/images/maps/floorPlans";
         String jsonFilePath = "data/images/maps/metadata/mapMetadata.json";
@@ -43,8 +60,29 @@ public class TestJsonReader {
         assertNotNull(expected);
     }
 
+    
+    @Test
+    @DisplayName("Should retrieve the correct floorMap file path based on the map ID.")
+    public void testGetFloorMapPathFromID() {
+        String filePath = "data/images/maps/floorPlans/3M, Thames, and Somerville/3M, Thames and Somerville Floor Plans-1.png";
+        filePath = filePathFixer(filePath);
+        String newFilePath = JsonReader.getFloorMapPathFromID(1, 1, "data/images/maps/metadata/mapMetadata.json");
+        newFilePath = filePathFixer(newFilePath);
+        assertEquals(filePath, newFilePath);
+    }
 
     @Test
+    @DisplayName("Should retrieve the correct buildingMap file path based on the map ID.")
+    public void testGetBuildingMapPathFromID() {      
+        String filePath = "data/images/maps/floorPlans/3M, Thames, and Somerville";
+        filePath = filePathFixer(filePath);
+        String newFilePath = JsonReader.getBuildingMapPathFromID(1, "data/images/maps/metadata/mapMetadata.json");
+        newFilePath = filePathFixer(newFilePath);
+        assertEquals(filePath, newFilePath);
+    }
+
+    @Test
+    @DisplayName("Should retrieve the user POI list, confirming that the POIs are accurately generated and retreived.")
     public void testUserPOIList() {
         /*
          * tests the user POIs available
@@ -86,6 +124,7 @@ public class TestJsonReader {
     }
 
     @Test
+    @DisplayName("Should retrieve the universal POI list, confirming that the POIs are accurately generated and retreived.")
     public void testUniversalPOIs() {
         /*
          * tests the universal POIs available on the first floor of the University College building
@@ -128,6 +167,7 @@ public class TestJsonReader {
     }
 
     @Test
+    @DisplayName("Should retrieve the user favourites POI list, confirming that the POIs are accurately generated and retreived.")
     public void testFavouritePOIs() {
         /*
          * tests the favourited POIs 
@@ -166,6 +206,110 @@ public class TestJsonReader {
         assertEquals("196", userPOIs.get(userPOIs.size() - 1).getRoomNumber());
         assertTrue(userPOIs.get(userPOIs.size() - 1).getIsVisible());
 
+    }
+
+    @Test
+    @DisplayName("Should retrieve the universal buildingPOI list on the campus map, confirming that the buildingPOIs are accurately generated and retreived.")
+    public void testUniversalBuildingPOIs() {
+        /*
+         * tests the universal POIs available on the campus map
+         */
+
+        ArrayList<BuildingPointOfInterest> userPOIs = JsonReader.universalBuildingPOIs();
+        assertNotNull(userPOIs);
+
+        /*
+         * testing first admin POI
+         */
+        assertEquals(45, userPOIs.size());
+        assertEquals("3M, Thames, and Somerville", userPOIs.get(0).getName());
+        assertEquals(1, userPOIs.get(0).getUserID());
+        assertFalse(userPOIs.get(0).getIsUserMade());
+        assertEquals("Building", userPOIs.get(0).getPOItype());
+        assertArrayEquals(new int[]{2097,3114}, userPOIs.get(0).getCoordinates());
+        assertEquals(1, userPOIs.get(0).getBuildingID());
+        assertFalse(userPOIs.get(0).getIsFavourited(1));
+        assertEquals("3M, Thames, and Somerville Buildings", userPOIs.get(0).getDescription());
+        assertTrue(userPOIs.get(0).getIsVisible());
+
+        /*
+         * testing last admin POI
+         */
+        assertEquals("Westminister Hall", userPOIs.get(userPOIs.size() - 1).getName());
+        assertEquals(1, userPOIs.get(userPOIs.size() - 1).getUserID());
+        assertFalse(userPOIs.get(userPOIs.size() - 1).getIsUserMade());
+        assertEquals("Building", userPOIs.get(userPOIs.size() - 1).getPOItype());
+        assertArrayEquals(new int[]{2180,989}, userPOIs.get(userPOIs.size() - 1).getCoordinates());
+        assertEquals(44, userPOIs.get(userPOIs.size() - 1).getBuildingID());
+        assertFalse(userPOIs.get(1).getIsFavourited(1));
+        assertEquals("Westminister Hall", userPOIs.get(userPOIs.size() - 1).getDescription());
+        assertTrue(userPOIs.get(userPOIs.size() - 1).getIsVisible());
+    }
+
+
+    @Test
+    @DisplayName("Should retrieve the user POI list available in the currect building, confirming that the POIs are accurately generated and retreived.")
+    public void testCurrentBuildingPOIS() {
+        
+        Map newMap = MapFactory.createMap("BUILDING", 38, 1);
+        mapComponent.changeMap(newMap);
+        ArrayList<PointOfInterest> currentBuildingPOIs = JsonReader.currentBuildingPOIS(1, 38);
+
+        /*
+         * testing first admin POI
+         */
+        assertEquals(47, currentBuildingPOIs.size());
+        assertEquals("Accessibility Bathroom", currentBuildingPOIs.get(0).getName());
+        assertEquals(1, currentBuildingPOIs.get(0).getUserID());
+        assertFalse(currentBuildingPOIs.get(0).getIsUserMade());
+        assertEquals("Washrooms", currentBuildingPOIs.get(0).getPOItype());
+        assertArrayEquals(new int[]{1435,1787}, currentBuildingPOIs.get(0).getCoordinates());
+        assertEquals(2, currentBuildingPOIs.get(0).getFloorID());
+        assertEquals(38, currentBuildingPOIs.get(0).getBuildingID());
+        assertFalse(currentBuildingPOIs.get(0).getIsFavourited(1));
+        assertEquals("Accessible, gender neutral bathroom on the 2nd floor of UC", currentBuildingPOIs.get(0).getDescription());
+        assertEquals("2131", currentBuildingPOIs.get(0).getRoomNumber());
+        assertTrue(currentBuildingPOIs.get(0).getIsVisible());
+
+        /*
+         * testing last admin POI
+         */
+        assertEquals("Classroom 3225", currentBuildingPOIs.get(currentBuildingPOIs.size() - 1).getName());
+        assertEquals(1, currentBuildingPOIs.get(currentBuildingPOIs.size() - 1).getUserID());
+        assertFalse(currentBuildingPOIs.get(currentBuildingPOIs.size() - 1).getIsUserMade());
+        assertEquals("Classrooms", currentBuildingPOIs.get(currentBuildingPOIs.size() - 1).getPOItype());
+        assertArrayEquals(new int[]{3144,2269}, currentBuildingPOIs.get(currentBuildingPOIs.size() - 1).getCoordinates());
+        assertEquals(3, currentBuildingPOIs.get(currentBuildingPOIs.size() - 1).getFloorID());
+        assertEquals(38, currentBuildingPOIs.get(currentBuildingPOIs.size() - 1).getBuildingID());
+        assertFalse(currentBuildingPOIs.get(1).getIsFavourited(1));
+        assertEquals("Classroom on the 3rd floor of UC", currentBuildingPOIs.get(currentBuildingPOIs.size() - 1).getDescription());
+        assertEquals("3225", currentBuildingPOIs.get(currentBuildingPOIs.size() - 1).getRoomNumber());
+        assertTrue(currentBuildingPOIs.get(currentBuildingPOIs.size() - 1).getIsVisible());
+        
+
+    }
+
+    /**
+     * Helper method to fix file path format into a uniform format across all devices.
+     * Ex. you/are/amazing
+     * @param original  Input file path string
+     * @return          Formatted file path string
+     */
+    private String filePathFixer(String original) {
+        String fixedFilePath = "";
+        for (int i = 0; i < original.length(); i++) {
+            if (original.charAt(i) == '\\') {
+                fixedFilePath += '/';
+            }
+            else if  (original.charAt(i) == '/' && i < original.length() - 1 && original.charAt(i + 1) == '/') {
+                fixedFilePath += '/';
+                i++;
+            }
+            else {
+                fixedFilePath += original.charAt(i);
+            }
+        }
+        return fixedFilePath;
     }
 
 }

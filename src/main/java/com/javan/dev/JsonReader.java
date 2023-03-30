@@ -561,6 +561,7 @@ public class JsonReader {
                     */
 
                     int poiID = poiObject.get("ID").getAsInt();
+                    userID = poiObject.get("userID").getAsInt();
                     String name  = poiObject.get("name").getAsString();
                     boolean isUserMade = poiObject.get("isUserMade").getAsBoolean();
                     String poiType = poiObject.get("poiType").getAsString();
@@ -742,6 +743,7 @@ public class JsonReader {
                     */
 
                     int poiID = poiObject.get("ID").getAsInt();
+                    userID = poiObject.get("userID").getAsInt();
                     String name  = poiObject.get("name").getAsString();
                     boolean isUserMade = poiObject.get("isUserMade").getAsBoolean();
                     String poiType = poiObject.get("poiType").getAsString();

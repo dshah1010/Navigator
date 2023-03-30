@@ -4,7 +4,7 @@ package com.javan.dev;
  * Include necessary libraries
  */
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
 import javax.swing.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,13 +16,13 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class TestMapComponent {
 
-    private MapComponent mapComponent;
+    private static MapComponent mapComponent;
 
     /**
      * Before each test method, get the Map instance
      */
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void setUp() {
         mapComponent = MapComponent.getInstance();
     }
 
@@ -50,6 +50,7 @@ public class TestMapComponent {
      */
     @Test
     void testGetCurrentMapIDReturns0() {
+        mapComponent.changeToCampusMap();
         int currentMapID = mapComponent.getCurrentMapID();
         assertEquals(0, currentMapID);
     }
@@ -60,6 +61,7 @@ public class TestMapComponent {
     @Order(1)
     @Test
     void testGetIsCampusMapReturnsTrue() {
+        mapComponent.changeToCampusMap();
         boolean isCampusMap = mapComponent.getIsCampusMap();
         assertTrue(isCampusMap);
     }
