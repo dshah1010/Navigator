@@ -592,7 +592,6 @@ public class JsonReader {
              * Sort arraylist by the POI name alphabetically (Each POI object's name attribute)
              * Put it into a new arraylist that will be returned
              */
-            System.out.println(arrayList.size());
             return sortPOIArray(arrayList);
 
         } catch (FileNotFoundException e) {

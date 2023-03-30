@@ -245,7 +245,6 @@ public final class DataProcessor {
      */
     public boolean editPointOfInterestInJsonFile(PointOfInterest poi) throws IOException {
         JSONArray jsonArray = new JSONArray(JsonReader.read(POIMetadataFile));
-        System.out.println(poi.getIsUserMade());
         
         JSONObject poiJson = poi.toJSON();
         int counter = 0;
