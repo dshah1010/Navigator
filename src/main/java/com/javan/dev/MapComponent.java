@@ -1254,8 +1254,6 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
                      */
                     BuildingPointOfInterest buildingPOI = dataProcessor.getBuildingPOI(Integer.parseInt(id));
                     PointOfInterest poi = dataProcessor.getPOI(Integer.parseInt(id));
-                    System.out.println(poi);
-                    System.out.println(buildingPOI);
                     /**
                      * Check if user is an admin and POI type is not user
                      */
