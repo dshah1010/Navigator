@@ -869,7 +869,7 @@ public final class MapComponent extends JPanel implements ActionListener, MouseL
          */
         for (PointOfInterest poi : pois) {
             if (this.floorMap != null && poi.getBuildingID() == this.floorMap.getBuildingID() 
-            && poi.getFloorID() == this.floorMap.getMapID() && poi.getisVisible()){
+            && poi.getFloorID() == this.floorMap.getMapID() && poi.getIsVisible()){
                 /**
                  * Get the POI's coordinates
                  */

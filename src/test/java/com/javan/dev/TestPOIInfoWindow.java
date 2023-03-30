@@ -23,6 +23,7 @@ class TestPOIInfoWindow {
      * Private variables for POIInfoWindow tests
      */
     private POIInfoWindow poiInfoWindow;
+    private MapComponent map = MapComponent.getInstance();
 
     /**
      * Create new POIInfoWindow object before each test with POI name "Test"
@@ -39,6 +40,8 @@ class TestPOIInfoWindow {
     @Test
     @DisplayName("Test POIInfoWindow Frame Title")
     void testFrameTitle() {
+        
+        map.changeToCampusMap();
         assertEquals("Arts and Humanities", poiInfoWindow.getFrame().getTitle(), "Frame title is incorrect");
     }
 
@@ -48,6 +51,7 @@ class TestPOIInfoWindow {
     @Test
     @DisplayName("Test POIInfoWindow Labels")
     void testLabels() {
+        map.changeToCampusMap();
         ArrayList<JLabel> labels = poiInfoWindow.getLabels();
         
 

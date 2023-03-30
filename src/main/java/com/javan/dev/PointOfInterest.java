@@ -179,7 +179,7 @@ public class PointOfInterest {
      * @param None
      * @return boolenan of isVisible state
      */
-    public Boolean getisVisible(){
+    public Boolean getIsVisible(){
         return this.isVisible;
     }
 

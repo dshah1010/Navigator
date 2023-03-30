@@ -40,7 +40,7 @@ public class TestBuildingPointOfInterest {
         assertEquals(1, poi.getUserID());
         assertEquals("description", poi.getDescription());
         assertFalse(poi.getIsFavourited(poi.getUserID()));
-        assertEquals(true, poi.getisVisible());
+        assertEquals(true, poi.getIsVisible());
         assertEquals(processor.makeNewBuildingPOIID(), poi.getID());
         
 

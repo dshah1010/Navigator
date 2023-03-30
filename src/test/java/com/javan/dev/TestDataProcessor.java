@@ -27,15 +27,13 @@ import org.json.JSONTokener;
 
 public class TestDataProcessor {
     
-    private static DataProcessor dataProcessor;
-    private static MapComponent map;
+    private static DataProcessor dataProcessor = DataProcessor.getInstance();
+    private static MapComponent map = MapComponent.getInstance();
 
     @BeforeEach
     public void setUp(){
         Map currMap = MapFactory.createMap("FLOOR", 38, 1);
-        map = MapComponent.getInstance();
         map.setMapDetails(currMap);
-        dataProcessor = DataProcessor.getInstance();
     }
 
     @Test
