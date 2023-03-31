@@ -8,9 +8,10 @@ import java.util.ArrayList;
 
 
 /**
- * @author: Jake Choi <jchoi492@uwo.ca>
- * @version: 1.0
- * @since: 1.0
+ * UI class that displays the result of search queries.
+ * @author : Jake Choi [jchoi492@uwo.ca]
+ * @version : 1.0
+ * @since : 1.0
  */
 
 public class SearchResultsWindow extends JFrame implements MouseListener {
@@ -37,17 +38,14 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
     private POIComponent poiComponent = POIComponent.getInstance();
 
     /**
-     * Constructor for searchResults object, placeholder as other functionsdo main search results
-     * @param None
-     * @return None
+     * Constructor for searchResults object, placeholder as other functions do main search results
      */
     public SearchResultsWindow () {}
 
     /**
      * Method to create a JList and JFrame to show a new window with the search results.
-     * @param ArrayList<PointOfInterest> listData  This is the array of Points of Interest that were found based on the search.
-     * @param String searchText
-     * @return None
+     * @param listData  This is the array of Points of Interest that were found based on the search.
+     * @param searchText - the text that was searched
      */
     public void SearchResultsWindowFloorMap(ArrayList<PointOfInterest> listData, String searchText) {
         currSelected = null;
@@ -61,9 +59,8 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
 
     /**
      * Method to create a JList and JFrame to show a new window with the search results on te campus map
-     * @param ArrayList<BuildingPointOfInterest> buildingSearchMatch  This is the array of Building Points of Interest that were found based on the search.
-     * @param String searchText
-     * @return None
+     * @param buildingSearchMatch  This is the array of Building Points of Interest that were found based on the search.
+     * @param searchText - the text that was searched
      */
     public void SearchResultsWindowCampusMap(ArrayList<BuildingPointOfInterest> buildingSearchMatch, String searchText) {
         currBuildingSelected = null;
@@ -77,7 +74,6 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
 
     /**
      * Getter for the instance of SearchResultsWindow
-     * @param None
      * @return SearchResultsWindow instance
      */
     public static SearchResultsWindow getInstance() {
@@ -93,8 +89,6 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
 
     /**
      * Open the search results window.
-     * @param None
-     * @return None
      */
     public void openSearchResults() {
         frame.setVisible(true);
@@ -102,8 +96,7 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
 
     /**
      * Getter method for the frame of the search results window.
-     * @param None
-     * @return JFram Return the frame
+     * @return JFrame Return the frame
      */
     public JFrame getFrame() {
         return frame;
@@ -111,8 +104,7 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
 
     /**
      * Getter method for the JList of the search results.
-     * @param None
-     * @return Jlist The search results as a JList
+     * @return resultList - The search results as a JList
      */
     public JList<PointOfInterest> getList() {
         return resultList;
@@ -120,8 +112,7 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
 
     /**
      * Getter method for the currently selected POI in the JList.
-     * @param None
-     * @return PointOfInterest The Point of Interest curently selected by user.
+     * @return PointOfInterest The Point of Interest currently selected by user.
      */
     public PointOfInterest getCurrentSelected() {
         return currSelected;
@@ -129,10 +120,10 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
 
     /**
      * This method is to check what to do based on where the user clicks their mouse within the window.
-     * @param MouseEvent event - The mouse event
-     * @return  None
+     * @param event - The mouse event
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
+    @Override
     public void mouseClicked(MouseEvent event) {
         /**
          * Check if the mouse click event was on an item on the JList.
@@ -228,8 +219,8 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
 
     /**
      * Create the search results window frame.
-     * @param ArrayList<PointOfInterest> list - the list of POIs that match the search
-     * @param String search -the searched text
+     * @param list - the list of POIs that match the search
+     * @param search - the searched text
      * @return None
      */
     private void createFrame(ArrayList<PointOfInterest> list, String search) {
@@ -261,7 +252,7 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
         /**
          * Create a new JList based on the search results list.
          */
-        resultList = new JList<PointOfInterest>(list.toArray(new PointOfInterest[list.size()]));
+        resultList = new JList<>(list.toArray(PointOfInterest[]::new));
         resultList.addMouseListener(this);
         /**
          * Style the JList
@@ -278,8 +269,7 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                if (value instanceof PointOfInterest) {
-                    PointOfInterest poi = (PointOfInterest) value;
+                if (value instanceof PointOfInterest poi) {
                     /**
                      * Set text to the name followed by the floor ID of the POI
                      */
@@ -317,9 +307,8 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
 
     /**
      * Method to create frame for BuildingPointOfInterest
-     * @param ArrayList<BuildingPointOfInterest> list
-     * @param String searchResults
-     * @return None
+     * @param list - the list of building POIs
+     * @param searchResult - the search result string
      */
     public void createBuildingFrame(ArrayList<BuildingPointOfInterest> list, String searchResult) {
         /**
@@ -350,7 +339,7 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
         /**
          * Create a new JList based on the search results list.
          */
-        buildingResultList = new JList<BuildingPointOfInterest>(list.toArray(new BuildingPointOfInterest[list.size()]));
+        buildingResultList = new JList<>(list.toArray(BuildingPointOfInterest[]::new));
         buildingResultList.addMouseListener(this);
         /**
          * Style the JList
@@ -367,8 +356,7 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                if (value instanceof BuildingPointOfInterest) {
-                    BuildingPointOfInterest poi = (BuildingPointOfInterest) value;
+                if (value instanceof BuildingPointOfInterest poi) {
                     /**
                      * Set text to the name followed by the floor ID of the POI
                      */
@@ -406,49 +394,53 @@ public class SearchResultsWindow extends JFrame implements MouseListener {
 
     /**
      * Unused method from the implemented class MouseListener
+     * @param event of the mouse listener
      */
+    @Override
     public void mousePressed(MouseEvent event) {
     }
 
     /**
      * Unused method from the implemented class MouseListener
+     * @param event of the mouse listener
      */
+    @Override
     public void mouseReleased(MouseEvent event) {
     }
 
     /**
      * Mouse cursor change on button
-     * @param MouseEvent event
-     * @return None
+     * @param event of the mouse listener
      */
+    @Override
     public void mouseEntered(MouseEvent event) {
         /**
          * Change mouse pointer to hand when hovering over the button
          */
-        if (event.getSource() instanceof JButton) {
-            ((JButton) event.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        if (event.getSource() instanceof JButton jButton) {
+            jButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             /**
              * Change background to gray
              */
-            ((JButton) event.getSource()).setBackground(Color.LIGHT_GRAY);
+            jButton.setBackground(Color.LIGHT_GRAY);
         }
     }
 
     /**
      * Mouse cursor change on not on button
-     * @param MouseEvent event
-     * @return None
+     * @param event of the mouse listener
      */
+    @Override
     public void mouseExited(MouseEvent event) {
         /**
          * Change mouse pointer to default when not hovering over the button
          */
-        if (event.getSource() instanceof JButton) {
-            ((JButton) event.getSource()).setCursor(Cursor.getDefaultCursor());
+        if (event.getSource() instanceof JButton jButton) {
+            jButton.setCursor(Cursor.getDefaultCursor());
             /**
              * Change background to white
              */
-            ((JButton) event.getSource()).setBackground(Color.WHITE);
+            jButton.setBackground(Color.WHITE);
         }
     }
     

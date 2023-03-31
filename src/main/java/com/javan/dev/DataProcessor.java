@@ -13,23 +13,26 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import com.google.gson.*;
+import org.json.JSONException;
 
 /**
- * @author: Riley Emma Gavigan <rgavigan@uwo.ca>, Dylan Sta Ana <dstaana@uwo.ca>, Brad McGlynn <bmcglyn4@uwo.ca>, Deep Ashishkumar Shah <dshah228@uwo.ca>, Jake Choi <jchoi492@uwo.ca>
- * @version: 1.1
- * @since: 1.0
+ * Main back-end class used to process and handle all data in the application. Works alongside JsonReader heavily.
+ * @author : Riley Emma Gavigan [rgavigan@uwo.ca], Dylan Sta Ana [dstaana@uwo.ca], Brad McGlynn [bmcglyn4@uwo.ca], Deep Ashishkumar Shah [dshah228@uwo.ca], Jake Choi [jchoi492@uwo.ca]
+ * @version : 1.1
+ * @since : 1.0
  */
 public final class DataProcessor {
     /**
      * Private variable to hold the DataProcessor singleton instance
      */
     private static DataProcessor INSTANCE;
-    private String mapJsonFilePath = "data/images/maps/metadata/mapMetadata.json";
-    private String POIMetadataFile = "data/PointOfInterests/PointOfInterestMetadata.json";
-    private String buildingPOIMetadataFile = "data/PointOfInterests/BuildingPOIMetadata.json";
+    private final String mapJsonFilePath = "data/images/maps/metadata/mapMetadata.json";
+    private final String POIMetadataFile = "data/PointOfInterests/PointOfInterestMetadata.json";
+    private final String buildingPOIMetadataFile = "data/PointOfInterests/BuildingPOIMetadata.json";
 
     /**
      * Getter for the DataProcessor singleton instance
+     * @return DataProcessor instance
      */
     public static DataProcessor getInstance() {
         if (INSTANCE == null) {
@@ -41,11 +44,10 @@ public final class DataProcessor {
 
     /**
      * Function to load map filePaths from our metadata JSON object using Gson
-     * @param int buildingID, buildingID of floorMap or BuilindMap object
-     * @param int mapID, mapID of associated object
-     * @param String mapType, differentiates between BuildingMap and FloorMap
+     * @param buildingID, buildingID of floorMap or BuilindMap object
+     * @param mapID, mapID of associated object
+     * @param mapType, differentiates between BuildingMap and FloorMap
      * @return String filePath
-     * @throws FileNotFoundException
      */
     public String loadMapFilePath(int buildingID, int mapID, String mapType) {
         if (mapType.equalsIgnoreCase("FLOOR")){
@@ -62,17 +64,17 @@ public final class DataProcessor {
 
     /**
      * Function to parse JSON string to get the current weather at Western University
-     * @param String json, the json string to be parsed
+     * @param json, the json string to be parsed
      * @return the current weather at Western University (temperature and condition) as a String
      */
     public ArrayList<String> parseWeather(StringBuffer json) {
         /**
          * Initialize ArrayList to hold the two strings
          */
-        ArrayList<String> weather = new ArrayList<String>();
+        ArrayList<String> weather = new ArrayList<>();
 
         /**
-         * If null just add null and return null arraylist to pass back to Weather
+         * If null just add null and return null ArrayList to pass back to Weather
          */
         if (json == null) {
             return null;
@@ -104,7 +106,7 @@ public final class DataProcessor {
 
     /**
      * Method to get user's favourite POIs
-     * @param int userID - the ID of the user
+     * @param userID - the ID of the user
      * @return List of favourite POIs
      */
     public ArrayList<PointOfInterest> getFavouritePOIs(int userID) {
@@ -114,7 +116,7 @@ public final class DataProcessor {
 
     /**
      * Method to return the POIs created by a user 
-     * @param int userID - the ID of the user
+     * @param userID - the ID of the user
      * @return List of user-created POIs
      */
     public ArrayList<PointOfInterest> getUserPOIs(int userID) {
@@ -124,12 +126,13 @@ public final class DataProcessor {
 
     /**
      * Method to return the all POIs created by a user or admin
-     * @param int userID - the ID of the user
+     * @param isCampusMap
+     * @param userID - the ID of the user
      * @return List of all POIs visible to user
      */
     public ArrayList<PointOfInterest> getUniversalPOIs(boolean isCampusMap, int userID) {
         CampusMap campusMap = CampusMap.getInstance(0);
-        ArrayList<PointOfInterest> universalPOIs = new ArrayList<PointOfInterest>();
+        ArrayList<PointOfInterest> universalPOIs = new ArrayList<>();
 
         /**
          * Campus Map Condition: Get all Campus Map POIs for Building Directory
@@ -158,7 +161,6 @@ public final class DataProcessor {
 
     /**
      * Method to return the all building POIs created by a user or admin
-     * @param int userID - the ID of the user
      * @return List of all visible POIs to user
      */
     public ArrayList<BuildingPointOfInterest> getBuildingUniversalPOIs() {
@@ -167,8 +169,8 @@ public final class DataProcessor {
 
     /**
      * Method to get the x,y coordinates of a POI based on its poiID
-     * @param int poiID - the ID of the POI
-     * @return coords, int[] of x and y coordinates
+     * @param poiID - the ID of the POI
+     * @return coordinates, int[] of x and y coordinates
      */
     public int[] getPOIPosition(int poiID) {
         PointOfInterest poi = getPOI(poiID);
@@ -183,7 +185,9 @@ public final class DataProcessor {
     
     /**
      * Method to add a new poi created to the PointOfInterestMetadata.json file array
-     * @param poi PointOfInterest object
+     * @param POI object
+     * @return true or false
+     * @throws java.io.IOException
      */
     public boolean addPointOfInterestToJsonFile(PointOfInterest POI) throws IOException {
         String jsonString = new String(Files.readAllBytes(Paths.get(POIMetadataFile)));
@@ -209,10 +213,13 @@ public final class DataProcessor {
         fileWriter.close();
         return true;
     }
-    /*
-     * method to add new buildingPOI to BuildingPOIMetadata.json file array
+    
+    /**
+     * Method to add new buildingPOI to BuildingPOIMetadata.json file array
+     * @param POI of Building POI
+     * @throws IOException if there is IO error in addition of POI
+     * @return true or false if added correctly
      */
-
     public boolean addBuildingPointOfInterestToJsonFile(BuildingPointOfInterest POI) throws IOException {
         
         String jsonString = new String(Files.readAllBytes(Paths.get(buildingPOIMetadataFile)));
@@ -240,8 +247,9 @@ public final class DataProcessor {
 
     /**
      * Method to edit the point of interest data for a POI given its ID in the PointOfInterestMetadata.json file
-     * @param PointOfInterest poi
-     * @return boolean - success of editing POI
+     * @param poi
+     * @return true or false - success of editing POI
+     * @throws java.io.IOException
      */
     public boolean editPointOfInterestInJsonFile(PointOfInterest poi) throws IOException {
         JSONArray jsonArray = new JSONArray(JsonReader.read(POIMetadataFile));
@@ -278,8 +286,9 @@ public final class DataProcessor {
 
     /**
      * Method to edit the building point of interest data for a POI given its ID in the PointOfInterestMetadata.json file
-     * @param BuildingPointOfInterest poi
-     * @return boolean - success of editing Building POI
+     * @param poi of BuildingPointOfInterest
+     * @return true or false - success of editing Building POI
+     * @throws java.io.IOException
      */
     public boolean editBuildingPointOfInterestInJsonFile(BuildingPointOfInterest poi) throws IOException {
         JSONArray jsonArray = new JSONArray(JsonReader.read(buildingPOIMetadataFile));
@@ -316,8 +325,8 @@ public final class DataProcessor {
 
     /**
      * Method to delete a point of interest from the PointOfInterestMetadata.json file
-     * @param PointOfInterest poi
-     * @return boolean - sucess of deleting POI
+     * @param poi of PointOfInterest
+     * @return true or false - success of deleting POI
      * @throws IOException
      */
     public boolean deletePointOfInterestFromJsonFile(PointOfInterest poi) throws IOException {
@@ -363,8 +372,8 @@ public final class DataProcessor {
 
     /**
      * Method to delete a building point of interest from the BuildingPOIMetadata.json file
-     * @param BuildingPointOfInterest poi
-     * @return boolean - sucess of deleting POI
+     * @param poi of BuildingPointOfInterest
+     * @return true or false - sucess of deleting POI
      * @throws IOException
      */
     public boolean deleteBuildingPointOfInterestFromJsonFile(BuildingPointOfInterest poi) throws IOException {
@@ -410,9 +419,9 @@ public final class DataProcessor {
 
     /**
      * Method to check if there is a floorMap above the current floor
-     * @param int currentMapID
-     * @Param int currentBuildingID
-     * @return boolean indicating if there is a floor above or not
+     * @param currentMapID
+     * @param currentBuildingID
+     * @return true or false indicating if there is a floor above or not
      */
     public boolean checkFloorAbove(int currentMapID, int currentBuildingID) {
         try {
@@ -435,7 +444,7 @@ public final class DataProcessor {
                     }
                 }
             }
-        } catch (Exception e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
         return false;
@@ -443,9 +452,9 @@ public final class DataProcessor {
 
     /**
      * Method that checks if there is a floorMap below the current one.
-     * @param int currentMapID
-     * @param int currentBuildingID
-     * @return boolean indicating if there is a floor below 
+     * @param currentMapID
+     * @param currentBuildingID
+     * @return true or false indicating if there is a floor below 
      */
     
     public boolean checkFloorBelow(int currentMapID, int currentBuildingID) {
@@ -470,7 +479,7 @@ public final class DataProcessor {
                     }
                 }
             }
-        } catch (Exception e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
         return false;
@@ -478,8 +487,8 @@ public final class DataProcessor {
 
     /**
      * Method to get the floorMap object above the current one
-     * @param int currentMapID
-     * @param int currentBuildingID
+     * @param currentMapID
+     * @param currentBuildingID
      * @return Map object of the floor above
      * @throws IOException If there is an error reading the map metadata file.
      */
@@ -497,6 +506,7 @@ public final class DataProcessor {
     /**
      * Method to get the floorMap object below the current one
      * @param currentMapID
+     * @param currentBuildingID
      * @return Map object of the floor below
      * @throws IOException If there is an error reading the map metadata file.
      */
@@ -516,7 +526,7 @@ public final class DataProcessor {
      * @return int new POI ID
      */
     public int makeNewPOIID() {
-        FileReader reader = null;
+        FileReader reader;
 
         /*
          * attempts to read file 
@@ -546,7 +556,7 @@ public final class DataProcessor {
      * @return int new Building POI ID
      */
     public int makeNewBuildingPOIID() {
-        FileReader reader = null;
+        FileReader reader;
 
         /*
          * attempts to read file 
@@ -573,11 +583,11 @@ public final class DataProcessor {
 
     /**
      * Method to  get a POI based on a POI ID
-     * @param int poiID
+     * @param poiID
      * @return PointOfInterest poi
      */
     public PointOfInterest getPOI(int poiID) {
-        FileReader reader = null;
+        FileReader reader;
 
         /*
          * attempts to read file 
@@ -654,11 +664,11 @@ public final class DataProcessor {
 
     /**
      * Method to  get a POI based on a POI ID
-     * @param int poiID
+     * @param poiID
      * @return PointOfInterest poi
      */
     public BuildingPointOfInterest getBuildingPOI(int poiID) {
-        FileReader reader = null;
+        FileReader reader;
 
         /*
          * attempts to read file 
@@ -734,7 +744,7 @@ public final class DataProcessor {
 
     /**
      * Method that encrypts user password using the Caesar Cipher algorithm with a key of 6
-     * @param String userPassword
+     * @param userPassword
      * @return String encrypted, the encrypted userPassword
      */
     public static String encrypt(String userPassword) {
@@ -756,8 +766,8 @@ public final class DataProcessor {
     }
     
     /**
-     * Method that decypts stored user password using the Caesar Cipher algorithm with a key of 6
-     * @param String encrypted, the stored encrypted password
+     * Method that decrypts stored user password using the Caesar Cipher algorithm with a key of 6
+     * @param encrypted, the stored encrypted password
      * @return String decrypted, the decrypted userPassword
      */
     public static String decrypt(String encrypted) {
@@ -780,9 +790,9 @@ public final class DataProcessor {
 
     /**
      * Method authenticates the login attempt made by the user, checking if the account exists
-     * @param String username
-     * @param String password, unencrypted password attempt
-     * @return boolean
+     * @param username
+     * @param password, non-encrypted password attempt
+     * @return true or false if valid
      */
     public Integer authenticateLogin(String username, String password) {
         /**
@@ -828,7 +838,7 @@ public final class DataProcessor {
 
     /**
      * Method to get a user's password from their username and return a string of the password
-     * @param String username
+     * @param username
      * @return String password
      */
     public String getPasswordFromUsername(String username) {
@@ -868,9 +878,9 @@ public final class DataProcessor {
 
     /**
      * Method to create a new user account provided that a user with the same username and password doesn't exist already
-     * @param String username
-     * @param String password, unencrypted password attempt
-     * @return boolean
+     * @param username
+     * @param password, unencrypted password attempt
+     * @return true or false
      */
     public boolean createAccount(String username, String password) {
         /** 
@@ -935,7 +945,7 @@ public final class DataProcessor {
             fileWriter.close();
             return true;
 
-        } catch (Exception e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
             return false;
         } 
@@ -943,6 +953,7 @@ public final class DataProcessor {
 
     /**
      * Method to get a FloorMap object from MapID and Building ID
+     * @param buildingID
      * @param mapID integer and buildingID integer
      * @return Map object retrieved from ID
      */

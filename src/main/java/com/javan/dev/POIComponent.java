@@ -7,9 +7,10 @@ import java.util.ArrayList;
 
 
 /**
- * @author: Riley Emma Gavigan <rgavigan@uwo.ca>
- * @version: 1.0
- * @since: 1.0
+ * Main POI handling UI class used within the SidebarComponent to handle specifics related to POIs.
+ * @author : Riley Emma Gavigan [rgavigan@uwo.ca]
+ * @version : 1.0
+ * @since : 1.0
  */
 public final class POIComponent extends JPanel implements ActionListener, MouseListener, FocusListener {
     /**
@@ -19,11 +20,11 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
     /**
      * {POILayerPanel, FavouritePOIPanel, UserPOIPanel, OtherPOIPanel}
      */
-    private ArrayList<JPanel> POIPanels = new ArrayList<JPanel>();
+    private ArrayList<JPanel> POIPanels = new ArrayList<>();
     /**
      * {POILayerScrollPane, FavouritePOIScrollPane, UserPOIScrollPane, OtherPOIScrollPane}
      */
-    private ArrayList<JScrollPane> POIScrollPanes = new ArrayList<JScrollPane>();
+    private ArrayList<JScrollPane> POIScrollPanes = new ArrayList<>();
     private ArrayList<PointOfInterest> favouritePOIList;
     private ArrayList<PointOfInterest> userPOIList;
     private ArrayList<PointOfInterest> otherPOIList;
@@ -50,8 +51,6 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Constructor to create POIPanel that holds the four other panels vertically, allowing them to display their information
-     * @param None
-     * @return None
      */
     private POIComponent() {
         /**
@@ -108,7 +107,6 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Getter for the instance of the POIComponent
-     * @param None
      * @return None
      */
     public static POIComponent getInstance() {
@@ -120,7 +118,7 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Method to create a button for the POI Panel
-     * @param String The text to be displayed on the button
+     * @param string - The text to be displayed on the button
      * @return JButton The button to be added to the POI Panel to toggle the visibility of the POI Panels
      */
     private JButton createPOIButton(String string) {
@@ -140,8 +138,6 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
      * Method to add the POI Layer Panel to the POI Panel
      * This panel contains the toggle buttons for the POI layers
      * The toggle buttons are styled and have action listeners for toggling
-     * @param None
-     * @return None
      */
     private void addPOILayerPanel() {
         /**
@@ -233,8 +229,6 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
     /**
      * Method to add user favourites to the Favourite POI Panel.
      * Has a title 'Favourite POIs' and a list of favourite POIs that can be scrolled through
-     * @param None
-     * @return None
      */
     public void addFavouritePOIPanel() {
         /**
@@ -281,8 +275,6 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Method to add POIs that were created by users to the user POI panel, the same way Favourites POIs are added
-     * @param None
-     * @return None
      */
     public void addUserPOIPanel() {
         /**
@@ -328,8 +320,6 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Method to add all other POIs to the other POI panel, the same way Favourites POIs and User POIs are added
-     * @param None
-     * @return None
      */
     public void addOtherPOIPanel() {
         /**
@@ -398,7 +388,8 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Function to loop through list of POIs and add them to the POI panel (showing their string that is visible and POI id invisible)
-     * @param POIList
+     * @param gridDisplay - the grid display JPanel
+     * @param POIList - the list of POIs to add
      * @return int numRows to add
      */
     public int addPOIsToPanel(JPanel gridDisplay, ArrayList<PointOfInterest> POIList) {
@@ -409,14 +400,14 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
             /**
              * Create JPanel for each POI and a panel for the name to display
              */
-            JPanel POIPanel = new JPanel();
+            JPanel POIDisplayPanel = new JPanel();
             JLabel POIPanelName = new JLabel(poi.getName());
             POIPanelName.setHorizontalAlignment(JLabel.CENTER);
             POIPanelName.setFont(new Font("Georgia", Font.PLAIN, 15));
             POIPanelName.setAlignmentX(Component.CENTER_ALIGNMENT);
-            POIPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-            POIPanel.setBackground(Color.WHITE);
-            POIPanel.add(POIPanelName);
+            POIDisplayPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+            POIDisplayPanel.setBackground(Color.WHITE);
+            POIDisplayPanel.add(POIPanelName);
 
             /**
              * If campus map, get building ID and map ID and make that the hidden label
@@ -424,7 +415,7 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
             if (mapComponent.getIsCampusMap()) {
                 JLabel POIPanelID = new JLabel(poi.getBuildingFloorID());
                 POIPanelID.setVisible(false);
-                POIPanel.add(POIPanelID);
+                POIDisplayPanel.add(POIPanelID);
             }
             /**
              * If floor map, get POI ID and make that the hidden label
@@ -432,14 +423,14 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
             else {
                 JLabel POIPanelID = new JLabel(String.valueOf((poi.getID())));
                 POIPanelID.setVisible(false);
-                POIPanel.add(POIPanelID);
+                POIDisplayPanel.add(POIPanelID);
             }
             
             /**
              * Add listeners to each name to allow for clicking on the name to open the POI
              */
-            POIPanel.addMouseListener(this);
-            gridDisplay.add(POIPanel);
+            POIDisplayPanel.addMouseListener(this);
+            gridDisplay.add(POIDisplayPanel);
         }
 
         /**
@@ -450,7 +441,6 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Getter to return the POIPanel
-     * @param None
      * @return POIPanel
      */
     public JPanel getPOIPanel() {
@@ -459,8 +449,8 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Method to create toggle buttons for the POI layers panel that are styled and have action listeners for toggling
-     * @param String text
-     * @return JToggleButton
+     * @param text - the text of the button
+     * @return JToggleButton button of POI layer toggling
      */
     public JToggleButton createPOILayerToggleButton(String text) {
         JToggleButton POILayerToggleButton = new JToggleButton(text);
@@ -481,8 +471,6 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Method to hide the POI layers panel, favourite POIs, and User POIs if the campus map is selected
-     * @param None
-     * @return None
      */
     public void changeDisplayIfCampusMap() {
         if (mapComponent.getIsCampusMap()) {
@@ -520,31 +508,28 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Method to determine what cursor looks like depending on what type of object it is over
-     * @param MouseEvent event
-     * @return None
+     * @param event of the mouse listener
      */
+    @Override
     public void mouseEntered(MouseEvent event) {
         /**
          * When the mouse enters a POI Layer Toggle Button, change the colour of the button to light gray and make the cursor a hover cursor
          */
-        if (event.getSource() instanceof JToggleButton) {
-            JToggleButton button = (JToggleButton) event.getSource();
+        if (event.getSource() instanceof JToggleButton button) {
             button.setBackground(Color.LIGHT_GRAY);
             button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         }
         /**
          * When the mouse enters the section of a POI name, change the colour of the POI to light gray and make the cursor a hover cursor
          */
-        else if (event.getSource() instanceof JPanel) {
-            JPanel panel = (JPanel) event.getSource();
+        else if (event.getSource() instanceof JPanel panel) {
             panel.setBackground(Color.LIGHT_GRAY);
             panel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         }
         /**
          * If hovering on one of the POI Layer Toggle Buttons, change the cursor to a hand cursor
          */
-        else if (event.getSource() instanceof JButton) {
-            JButton button = (JButton) event.getSource();
+        else if (event.getSource() instanceof JButton button) {
             button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         }
         
@@ -552,31 +537,28 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Method to determine what cursor looks like depending on what type of object it is over
-     * @param MouseEvent event
-     * @return None
+     * @param event of the mouse listener
      */
+    @Override
     public void mouseExited(MouseEvent event) {
         /**
          * When the mouse exits a POI Layer Toggle Button, change the colour of the button to white and make the cursor a default cursor
          */
-        if (event.getSource() instanceof JToggleButton) {
-            JToggleButton button = (JToggleButton) event.getSource();
+        if (event.getSource() instanceof JToggleButton button) {
             button.setBackground(Color.WHITE);
             button.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
         /**
          * When the mouse exits the section of a POI name, change the colour of the POI to white and make the cursor a default cursor
          */
-        else if (event.getSource() instanceof JPanel) {
-            JPanel panel = (JPanel) event.getSource();
+        else if (event.getSource() instanceof JPanel panel) {
             panel.setBackground(Color.WHITE);
             panel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
         /**
          * If hovering on one of the POI Layer Toggle Buttons, change the cursor to a default cursor
          */
-        else if (event.getSource() instanceof JButton) {
-            JButton button = (JButton) event.getSource();
+        else if (event.getSource() instanceof JButton button) {
             button.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
     
@@ -584,15 +566,13 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Method to determine what methods to call based on where / what the mouse is pressing
-     * @param ActionEvent event
-     * @return None
+     * @param event of the action listener
      */
     public void actionPerformed(ActionEvent event) {
         /**
          * When a POI Layer Toggle Button is pressed, toggle the layer on or off by sending the button's text to the MapPanel
          */
-        if (event.getSource() instanceof JToggleButton) {
-            JToggleButton button = (JToggleButton) event.getSource();
+        if (event.getSource() instanceof JToggleButton button) {
             if (button.isSelected()) {
                 mapComponent.enablePOILayer(button.getText());
             }
@@ -603,65 +583,65 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
         /**
          * When a POI button from createPOIButton is clicked, hide the gridDisplay panel associated with it
          */
-        else if (event.getSource() instanceof JButton) {
-            JButton button = (JButton) event.getSource();
-            if (button.getText().equals("POI Layers")) {
-                if (POIPanels.get(0).getComponent(1).isVisible()) {
-                    /**
-                     * Make everything but the button invisible and also resize the panel to be the size of the button
-                     */
-                    for (int i = 1; i < POIPanels.get(0).getComponentCount(); i++) {
-                        POIPanels.get(0).getComponent(i).setVisible(false);
+        else if (event.getSource() instanceof JButton button) {
+            switch (button.getText()) {
+                case "POI Layers":
+                    if (POIPanels.get(0).getComponent(1).isVisible()) {
+                        /**
+                         * Make everything but the button invisible and also resize the panel to be the size of the button
+                         */
+                        for (int i = 1; i < POIPanels.get(0).getComponentCount(); i++) {
+                            POIPanels.get(0).getComponent(i).setVisible(false);
+                        }
+                        POIPanels.get(0).setPreferredSize(new Dimension(POIPanels.get(0).getPreferredSize().width, POIPanels.get(0).getComponent(0).getPreferredSize().height));
+                        
+                        
                     }
-                    POIPanels.get(0).setPreferredSize(new Dimension(POIPanels.get(0).getPreferredSize().width, POIPanels.get(0).getComponent(0).getPreferredSize().height));
-
-                    
-                }
-                else {
-                    /**
-                     * Restore to original state
-                     */
-                    for (int i = 1; i < POIPanels.get(0).getComponentCount(); i++) {
-                        POIPanels.get(0).getComponent(i).setVisible(true);
+                    else {
+                        /**
+                         * Restore to original state
+                         */
+                        for (int i = 1; i < POIPanels.get(0).getComponentCount(); i++) {
+                            POIPanels.get(0).getComponent(i).setVisible(true);
+                        }
+                        POIPanels.get(0).setPreferredSize(new Dimension(POIPanels.get(0).getPreferredSize().width, POIPanels.get(0).getComponent(0).getPreferredSize().height + POIPanels.get(0).getComponent(1).getPreferredSize().height + POIPanels.get(0).getComponent(2).getPreferredSize().height + POIPanels.get(0).getComponent(3).getPreferredSize().height));
+                    }   break;
+                case "Favourite POIs":
+                    if (POIPanels.get(1).getComponent(1).isVisible()) {
+                        for (int i = 1; i < POIPanels.get(1).getComponentCount(); i++) {
+                            POIPanels.get(1).getComponent(i).setVisible(false);
+                        }
                     }
-                    POIPanels.get(0).setPreferredSize(new Dimension(POIPanels.get(0).getPreferredSize().width, POIPanels.get(0).getComponent(0).getPreferredSize().height + POIPanels.get(0).getComponent(1).getPreferredSize().height + POIPanels.get(0).getComponent(2).getPreferredSize().height + POIPanels.get(0).getComponent(3).getPreferredSize().height));
-                }
-            }
-            else if (button.getText().equals("Favourite POIs")) {
-                if (POIPanels.get(1).getComponent(1).isVisible()) {
-                    for (int i = 1; i < POIPanels.get(1).getComponentCount(); i++) {
-                        POIPanels.get(1).getComponent(i).setVisible(false);
+                    else {
+                        for (int i = 1; i < POIPanels.get(1).getComponentCount(); i++) {
+                            POIPanels.get(1).getComponent(i).setVisible(true);
+                        }
+                    }   break;
+                case "User POIs":
+                    if (POIPanels.get(2).getComponent(1).isVisible()) {
+                        for (int i = 1; i < POIPanels.get(2).getComponentCount(); i++) {
+                            POIPanels.get(2).getComponent(i).setVisible(false);
+                        }
                     }
-                }
-                else {
-                    for (int i = 1; i < POIPanels.get(1).getComponentCount(); i++) {
-                        POIPanels.get(1).getComponent(i).setVisible(true);
+                    else {
+                        for (int i = 1; i < POIPanels.get(2).getComponentCount(); i++) {
+                            POIPanels.get(2).getComponent(i).setVisible(true);
+                        }
+                    }   break;
+                case "Floor POIs":
+                case "Building Directory":
+                    if (POIPanels.get(3).getComponent(1).isVisible()) {
+                        for (int i = 1; i < POIPanels.get(3).getComponentCount(); i++) {
+                            POIPanels.get(3).getComponent(i).setVisible(false);
+                        }
                     }
-                }
-            }
-            else if (button.getText().equals("User POIs")) {
-                if (POIPanels.get(2).getComponent(1).isVisible()) {
-                    for (int i = 1; i < POIPanels.get(2).getComponentCount(); i++) {
-                        POIPanels.get(2).getComponent(i).setVisible(false);
-                    }
-                }
-                else {
-                    for (int i = 1; i < POIPanels.get(2).getComponentCount(); i++) {
-                        POIPanels.get(2).getComponent(i).setVisible(true);
-                    }
-                }
-            }
-            else if (button.getText().equals("Floor POIs") || button.getText().equals("Building Directory")) {
-                if (POIPanels.get(3).getComponent(1).isVisible()) {
-                    for (int i = 1; i < POIPanels.get(3).getComponentCount(); i++) {
-                        POIPanels.get(3).getComponent(i).setVisible(false);
-                    }
-                }
-                else {
-                    for (int i = 1; i < POIPanels.get(3).getComponentCount(); i++) {
-                        POIPanels.get(3).getComponent(i).setVisible(true);
-                    }
-                }
+                    else {
+                        for (int i = 1; i < POIPanels.get(3).getComponentCount(); i++) {
+                            POIPanels.get(3).getComponent(i).setVisible(true);
+                        }
+                    }   break;
+                default:
+                    break;
             }
             /**
              * Refresh the POI Panel to show the changes
@@ -674,20 +654,20 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Method to handle mouse clicks on different POI names, sending the name of the POI to the MapPanel to be highlighted
-     * @param MouseEvent event
-     * @return None
+     * @param event of the mouse listener
      */
+    @Override
     public void mouseClicked(MouseEvent event) {
         /**
          * If the mouse is clicked on a POI name, send the name of the POI to the MapPanel to be highlighted if not on campus map
          * If on campus map, change the map to that POI's map
          */
-        if (event.getSource() instanceof JPanel) {
+        if (event.getSource() instanceof JPanel jPanel) {
             /**
              * Campus map case
              */
             if (mapComponent.getIsCampusMap()) {
-                JPanel panel = (JPanel) event.getSource();
+                JPanel panel = jPanel;
                 JLabel label = (JLabel) panel.getComponent(1);
 
                 /**
@@ -715,7 +695,7 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
              * POI From Floor Map Case
              */
             else {
-                JPanel panel = (JPanel) event.getSource();
+                JPanel panel = jPanel;
                 JLabel label = (JLabel) panel.getComponent(1);
                 String poiName = label.getText();
                 int poiID = Integer.parseInt(poiName);
@@ -741,8 +721,6 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Method to update the POI Panel components
-     * @param None
-     * @return None
      */
     public void updatePOIComponent() {
         this.addOtherPOIPanel();
@@ -762,8 +740,7 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Getter for POI Panels
-     * @param None
-     * @return ArrayList<Jpanel> POIPanels
+     * @return POIPanels
      */
     public ArrayList<JPanel> getPOIPanels() {
         return POIPanels;
@@ -771,32 +748,38 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Unused method from FocusListener
+     * @param event of the focus listener
      */
+    @Override
     public void focusGained(FocusEvent event) {
     }
 
     /**
      * Unused method from FocusListener
+     * @param event of the focus listener
      */
+    @Override
     public void focusLost(FocusEvent event) {
     }
 
     /**
      * Unused method from MouseListener
+     * @param event of the mouse listener
      */
+    @Override
     public void mousePressed(MouseEvent event) {
     }
 
     /**
      * Unused method from MouseListener
+     * @param event of the mouse listener
      */
+    @Override
     public void mouseReleased(MouseEvent event) { 
     }
 
     /**
      * Method to enable all toggle buttons in the POI Layers Panel
-     * @param None
-     * @return None
      */
     public void enableAllToggleButtons() {
         accessibilityButton.setSelected(true);
@@ -813,30 +796,19 @@ public final class POIComponent extends JPanel implements ActionListener, MouseL
 
     /**
      * Method to enable select toggle buttons in the POI Layers Panel
-     * @param None
-     * @return None
+     * @param layerType - the type of layer
      */
     public void enableSelectToggleButtons(String layerType) {
-        if (layerType.equals("Accessibility")) {
-            accessibilityButton.setSelected(true);
-        }
-        else if (layerType.equals("Restaurants")) {
-            restaurantsButton.setSelected(true);
-        }
-        else if (layerType.equals("Classrooms")) {
-            classroomsButton.setSelected(true);
-        }
-        else if (layerType.equals("Labs")) {
-            labsButton.setSelected(true);
-        }
-        else if (layerType.equals("User POI")) {
-            userButton.setSelected(true);
-        }
-        else if (layerType.equals("Navigation")) {
-            navigationButton.setSelected(true);
-        }
-        else if (layerType.equals("Washrooms")) {
-            washroomsButton.setSelected(true);
+        switch (layerType) {
+            case "Accessibility" -> accessibilityButton.setSelected(true);
+            case "Restaurants" -> restaurantsButton.setSelected(true);
+            case "Classrooms" -> classroomsButton.setSelected(true);
+            case "Labs" -> labsButton.setSelected(true);
+            case "User POI" -> userButton.setSelected(true);
+            case "Navigation" -> navigationButton.setSelected(true);
+            case "Washrooms" -> washroomsButton.setSelected(true);
+            default -> {
+            }
         }
         
         POIPanels.get(0).revalidate();

@@ -1,18 +1,18 @@
 package com.javan.dev;
-import java.util.ArrayList;
 
 /**
- * @author: Brad McGlynn <bmcglyn4@uwo.ca>
- * @version: 1.0
- * @since: 1.0
+ * Class that is used to implement the objects for Building Maps in the application
+ * @author : Brad McGlynn [bmcglyn4@uwo.ca]
+ * @version : 1.0
+ * @since : 1.0
  */
 public class BuildingMap implements Map {
     /**
      * Declaring the name, ID, filePath and FloorArray of the Building.
      */
-    private String filePath;
-    private int mapID;
-    private String mapType;
+    private final String filePath;
+    private final int mapID;
+    private final String mapType;
     private String mapName;
 
     /**
@@ -22,7 +22,7 @@ public class BuildingMap implements Map {
 
     /**
      * Constructor for the BuildingMap class to initialize the ID, type and filePath
-     * @param mapID
+     * @param mapID - the ID of the map
      */
     public BuildingMap(int mapID) {
         this.filePath = processor.loadMapFilePath(mapID, 0, "BUILDING");
@@ -32,26 +32,27 @@ public class BuildingMap implements Map {
 
     /**
      * Getter for filePath
-     * @param None
-     * @return String
+     * @return String - the file path
      */
+    @Override
     public String getFilePath() {
         return this.filePath;
     }
 
     /**
      * Getter for mapID
-     * @param None
-     * @return int
+     * @return int - the map ID
      */
+    @Override
     public int getMapID() {
         return this.mapID;
     }
 
     /**
      * Getter for buildingID id
-     * @return map id int
+     * @return int - map ID of the building
      */
+    @Override
     public int getBuildingID() {
         return this.mapID;
     }
@@ -59,26 +60,26 @@ public class BuildingMap implements Map {
 
     /**
      * Getter for mapType
-     * @param None
-     * @return String
+     * @return String - the map type
      */
+    @Override
     public String getMapType() {
         return this.mapType;
     }
 
     /**
      * Getter for map name
+     * @return mapName - the map name
      */
     public String getMapName() {
         return this.mapName;
     }
 
-
-    /*
+    /**
      * Setter for building name
+     * @param buildingName - the name of the building
      */
     public void setName(String buildingName) {
         this.mapName = buildingName;
     }
-    
 }

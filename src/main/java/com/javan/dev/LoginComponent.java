@@ -8,9 +8,10 @@ import java.util.ArrayList;
 
 
 /**
- * @author: Riley Emma Gavigan <rgavigan@uwo.ca>
- * @version: 1.0
- * @since: 1.0
+ * UI class that handles all logging in and creation of accounts.
+ * @author : Riley Emma Gavigan [rgavigan@uwo.ca]
+ * @version : 1.0
+ * @since : 1.0
  */
 public final class LoginComponent extends JPanel implements ActionListener, FocusListener, MouseListener, KeyListener {
     /**
@@ -68,8 +69,6 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
     /**
      * Constructor to create Login Component of the UI. This will be in the main frame when the application is opened,
      * as well as when the user logs out. It will be removed when the user logs in successfully.
-     * @param None
-     * @return None
      */
     private LoginComponent() {
         /**
@@ -111,7 +110,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
 
     /**
      * Getter for the main JPanel
-     * @return Jpanel of mainPanel
+     * @return JPanel of mainPanel
      */
     public JPanel getMainPanel() {
         return mainPanel;
@@ -156,8 +155,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
 
     /**
      * Setter for login status
-     * @param boolean status
-     * @return None
+     * @param status - the login status
      */
     public void setLoginStatus(boolean status) {
         isLoggedIn = status;
@@ -165,8 +163,6 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
 
     /**
      * Method to open the login panel
-     * @param None
-     * @return None
      */
     public void openLoginPanel() {
         /**
@@ -186,8 +182,6 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
 
     /**
      * Method to open the create account panel
-     * @param None
-     * @return None
      */
     public void openCreateAccountPanel() {
         /**
@@ -207,7 +201,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
 
     /**
      * Method to create the Login and Create Account buttons and style them appropriately
-     * @param String text
+     * @param text - the text of the button
      * @return JButton of the button
      */
     public JButton createButton(String text) {
@@ -238,7 +232,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
 
     /**
      * Method to create JTextField for username input
-     * @param String text
+     * @param text - the text of the text field
      * @return JTextField of the text field
      */
     public JTextField createTextField(String text) {
@@ -262,7 +256,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
 
     /**
      * Method to create JPasswordField for password input
-     * @param String text
+     * @param text - the text of the password field
      * @return JPasswordField of the password field
      */
     public JPasswordField createPasswordField(String text) {
@@ -291,8 +285,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
 
     /**
      * Method to create an appealing background for components
-     * @param None
-     * @return None
+     * @param panel - the panel to change the background of
      */
     public void createBackground(JPanel panel) {
         /**
@@ -303,8 +296,6 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
 
     /**
      * Method to create the Login panel
-     * @param None
-     * @return None
      */
     public void loginPanel() {
         /**
@@ -317,7 +308,7 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
         /**
         * Initialize a list of JPanel objects for cards 1-6
         */
-        ArrayList<JPanel> cards = new ArrayList<JPanel>();
+        ArrayList<JPanel> cards = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
             cards.add(new JPanel());
             createBackground(cards.get(i));
@@ -381,8 +372,6 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
 
     /**
      * Method to create the Create Account panel
-     * @param None
-     * @return None
      */
     public void createAccountPanel() {
         /**
@@ -456,8 +445,6 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
 
     /**
      * Method to do login button actions
-     * @param None
-     * @return None
      */
     public void loginButtonAction() {
         /**
@@ -529,8 +516,6 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
 
     /**
      * Method to do create account button actions
-     * @param None
-     * @return None
      */
     public void createAccountButtonAction() {
         /**
@@ -561,14 +546,13 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
          */
         if (!password.equals(confirmPassword)) {
             JOptionPane.showMessageDialog(null, "Password and Confirm Password do not match.");
-            return;
         }
         else {
             user.setUsername(username);
             /**
              * Set admin status for admin
              */
-            if (user.getUsername() == "admin") {
+            if ("admin".equals(user.getUsername())) {
                 user.setIsAdmin(true);
             }
             else {
@@ -600,9 +584,9 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
     /**
      * Method to get username and password when login button is pressed, creating a User class to verify login\
      * Also gets username and password when create account button is pressed, creating a User class to verify create account
-     * @param ActionEvent event
-     * @return None
+     * @param event of the action listener
      */
+    @Override
     public void actionPerformed(ActionEvent event) {
         /**
          * Logging In
@@ -622,9 +606,9 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
      * Method for when focus is gained
      * Applies for password input, create account password, and confirming password
      * Also applies for the username input for both login and create account page
-     * @param FocusEvent event
-     * @return None
+     * @param event of the focus listener
      */
+    @Override
     public void focusGained(FocusEvent event) {
         /**
          * If the password input is the default text of Password, then set the text to blank and set the echo char to *
@@ -655,9 +639,9 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
     /**
      * Method for when focus is lost on all 3 passport input fields
      * Also for when username input is blank and focus is lost, setting default text again if no input given
-     * @param FocusEvent event
-     * @return None
+     * @param event of the focus listener
      */
+    @Override
     public void focusLost(FocusEvent event) {
         /**
          * If no password input, then set the text to Password again (length of 0)
@@ -689,9 +673,9 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
     /**
      * Method for mouse listener for button on hovering over the button (login/create account) to change appearance
      * Also mouse entered listened for the labels for forgot password, create account, and login if account exists
-     * @param MouseEvent event
-     * @return None
+     * @param event of the mouse listener
      */
+    @Override
     public void mouseEntered(MouseEvent event) {
         if (event.getSource() == loginButton || event.getSource() == createAccountButton) {
             /**
@@ -712,9 +696,9 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
     /**
      * Method to change back appearance of button (login / create account) when no longer hovering over the buttom
      * Also applies for Forgot your Password and Create Account labels, as well as Login Label from Create Account page
-     * @param MouseEvent event
-     * @return None
+     * @param event of the mouse listener
      */
+    @Override
     public void mouseExited(MouseEvent event) {
         if (event.getSource() == loginButton || event.getSource() == createAccountButton) {
             /**
@@ -734,9 +718,9 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
 
     /**
      * Method to handle mouse click events for Forgot your Password and for Create Account labels, as well as Login Label from Create Account page
-     * @param MouseEvent event
-     * @return None
+     * @param event of the mouse listener
      */
+    @Override
     public void mouseClicked(MouseEvent event) {
         if (event.getSource() == forgotPassword) {
             /**
@@ -769,25 +753,25 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
 
     /**
      * Unneeded method from mouse listener
-     * @param MouseEvent event
-     * @return None
+     * @param event of the mouse listener
      */
+    @Override
     public void mousePressed(MouseEvent event) {
     }
 
     /**
      * Unneeded method from mouse listener
-     * @param MouseEvent event
-     * @return None
+     * @param event of the mouse listener
      */
+    @Override
     public void mouseReleased(MouseEvent event) {
     }
 
     /**
      * Method to make login button / create account button do what it does in actionListener when Enter key is pressed
-     * @param None
-     * @return None
+     * @param event of the key listener
      */
+    @Override
     public void keyTyped(KeyEvent event) {
         if (event.getKeyChar() == KeyEvent.VK_ENTER) {
             if (isLoginWindowOpen == true) {
@@ -801,18 +785,17 @@ public final class LoginComponent extends JPanel implements ActionListener, Focu
 
     /**
      * Unneeded method from mouse listener
-     * @param KeyEvent event
-     * @return None
+     * @param event of the key listener
      */
+    @Override
     public void keyPressed(KeyEvent event) {
     }
 
     /**
      * Unneeded method from mouse listener
-     * @param KeyEvent event
-     * @return None
+     * @param event of the key listener
      */
+    @Override
     public void keyReleased(KeyEvent event) {
-
     }
 }

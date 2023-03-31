@@ -1,16 +1,17 @@
 package com.javan.dev;
 
 /**
- * @author: Brad McGlynn <bmcglyn4@uwo.ca>
- * @version: 1.0
- * @since: 1.0
+ * Factory class used in map creation.
+ * @author : Brad McGlynn [bmcglyn4@uwo.ca]
+ * @version : 1.0
+ * @since : 1.0
  */
 public class MapFactory {
     /**
      * Function to create map metadata based on images in directory
-     * @param String mapyType, type of map to be created
-     * @param int buildingID, building ID of relevant floor or building map
-     * @param int mapID, id of the map
+     * @param mapType type of map to be created
+     * @param buildingID building ID of relevant floor or building map
+     * @param mapID id of the map
      * @return Map object
      */
     public static Map createMap(String mapType, int buildingID, int mapID)

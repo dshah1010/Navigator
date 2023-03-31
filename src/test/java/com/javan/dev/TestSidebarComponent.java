@@ -11,9 +11,9 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.Test;
 
 /**
- * @author: Riley Emma Gavigan <rgavigan@uwo.ca>
- * @version: 1.0
- * @since: 1.0
+ * @author : Riley Emma Gavigan [rgavigan@uwo.ca]
+ * @version : 1.0
+ * @since : 1.0
  */
 class TestSidebarComponent {
     /**

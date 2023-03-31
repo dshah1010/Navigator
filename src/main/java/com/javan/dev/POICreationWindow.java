@@ -10,11 +10,12 @@ import java.io.IOException;
 
 
 /**
- * @author: Riley Emma Gavigan <rgavigan@uwo.ca>, Deep Ashishkumar Shah <dshah228@uwo.ca>
- * @version: 1.0
- * @since: 1.0
+ * UI class that allows users to create POI objects.
+ * @author : Riley Emma Gavigan [rgavigan@uwo.ca], Deep Ashishkumar Shah [dshah228@uwo.ca]
+ * @version : 1.0
+ * @since : 1.0
  */
-public class POICreationWindow extends JFrame implements ActionListener, MouseListener {
+public final class POICreationWindow extends JFrame implements ActionListener, MouseListener {
     /**
      * Private instance variables
      */
@@ -35,9 +36,8 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
 
     /**
      * Constructor for POICreationWindow given x and y coordinates
-     * @param int x - x coordinate
-     * @param int y - y coordinate
-     * @return None
+     * @param x - x coordinate
+     * @param y - y coordinate
      */
     public POICreationWindow(int x, int y) {
         /**
@@ -56,7 +56,7 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
         /**
          * Create ArrayList of different metadata String titles
          */
-        ArrayList<String> metadata = new ArrayList<String>();
+        ArrayList<String> metadata = new ArrayList<>();
         metadata.add("Name");
         if (!mapComponent.getIsCampusMap()){
             metadata.add("Room Number");
@@ -168,17 +168,14 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
 
     /**
      * Method to set frame visibility
-     * @param None
-     * @return None
      */
     public void setVisibleFrame() {
         frame.setVisible(true);
     }
 
     /**
-     * Method to get creation windows Jpanel frame
-     * @param None
-     * @return Jpanel frame
+     * Method to get creation windows JPanel frame
+     * @return frame
      */
     public JFrame getFrame() {
         return frame;
@@ -186,7 +183,7 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
 
     /**
      * Method to create JTextField
-     * @param String text
+     * @param text - the text of the text field
      * @return JTextField of the text field
      */
     public JTextField createTextField(String text) {
@@ -203,8 +200,8 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
 
     /**
      * method to create a new button and style it
-     * @param String text
-     * @return Jbutton button
+     * @param text - the text of the button
+     * @return button
      */
     public JButton createMapButton(String text) {
         JButton button = new JButton(text);
@@ -222,9 +219,9 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
 
     /**
      * Method to determine what methods to call based on where / what the mouse is pressing
-     * @param ActionEvent event
-     * @return None
+     * @param event of the action listener
      */
+    @Override
     public void actionPerformed(ActionEvent event) {
         /**
          * When the create button is clicked, create a new POI
@@ -289,7 +286,7 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
                     Integer.parseInt(newPOIData.get(3)), 
                     Integer.parseInt(newPOIData.get(4)), 
                     Integer.parseInt(newPOIData.get(1)), 
-                    new ArrayList<Integer>(), newPOIData.get(2), true
+                    new ArrayList<>(), newPOIData.get(2), true
                     );
                 try{
                     boolean addedSuccessfully = processor.addBuildingPointOfInterestToJsonFile(buildingPOI);
@@ -325,7 +322,7 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
                     Integer.parseInt(newPOIData.get(4)), 
                     mapComponent.getMapObject().getMapID(), 
                     mapComponent.getFloorMapObject().getBuildingID(), 
-                    new ArrayList<Integer>(), newPOIData.get(2), 
+                    new ArrayList<>(), newPOIData.get(2), 
                     newPOIData.get(1), true
                     );
                 try {
@@ -363,9 +360,9 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
 
     /**
      * Method to determine what cursor looks like depending on what type of object it is over
-     * @param MouseEvent event
-     * @return None
+     * @param event of the mouse listener
      */
+    @Override
     public void mouseEntered(MouseEvent event) {
         /**
          * Button hover
@@ -378,25 +375,39 @@ public class POICreationWindow extends JFrame implements ActionListener, MouseLi
 
     /**
      * Method to determine what cursor looks like depending on what type of object it is over
-     * @param MouseEvent event
-     * @return None
+     * @param event of the mouse listener
      */
+    @Override
     public void mouseExited(MouseEvent event) {
         /**
          * Button hover off
          */
-        if (event.getSource() instanceof JButton) {
-            JButton button = (JButton) event.getSource();
+        if (event.getSource() instanceof JButton button) {
             button.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
     }
 
+    /**
+     * Unused method from mouse listener
+     * @param event of the mouse listener
+     */
+    @Override
     public void mouseClicked(MouseEvent event) {
     }
 
+    /**
+     * Unused method from mouse listener
+     * @param event of the mouse listener
+     */
+    @Override
     public void mousePressed(MouseEvent event) {
     }
 
+    /**
+     * Unused method from mouse listener
+     * @param event of the mouse listener
+     */
+    @Override
     public void mouseReleased(MouseEvent event) {
     }
 }

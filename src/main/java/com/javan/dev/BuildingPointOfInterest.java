@@ -4,33 +4,43 @@ import org.json.JSONArray;
 import java.util.*;
 
 /**
- * @author: Dylan Sta Ana <dstaana@uwo.ca>
- * @version: 1.0
- * @since: 1.0
+ * Class used in association with all building points of interest. Creation, editing, etc.
+ * @author : Dylan Sta Ana [dstaana@uwo.ca]
+ * @version : 1.0
+ * @since : 1.0
  */
 public class BuildingPointOfInterest {
     
     private int ID;
     private String name; 
-    private int userID;
-    private Boolean isUserMade;
+    private final int userID;
+    private final Boolean isUserMade;
     private String poiType;
     private int[] coordinates = {0,0};
     private int buildingID;
-    private ArrayList<Integer> userFavouritesList = new ArrayList<Integer> ();
-    private String mapFilePath;
+    private ArrayList<Integer> userFavouritesList = new ArrayList<>();
+    private final String mapFilePath;
     private boolean isVisible;
     private String description;
 
     /**
      * Private variable to hold the instance of the data processor
      */
-    private DataProcessor processor = DataProcessor.getInstance();
+    private final DataProcessor processor = DataProcessor.getInstance();
 
 
     /**
      * Constructor for the building POI
-     * @param name, the name of the building POI
+     * @param name - the name of the building POI
+     * @param userID - the user ID
+     * @param isUsermade - if it is user made or not
+     * @param poiType - type of POI
+     * @param coordinatesX - x coordinate of POI
+     * @param isVisible - if the POI is visible
+     * @param coordinatesY - y coordinate of POI
+     * @param buildingID - the ID of the building 
+     * @param userFavouritesList - the list of favourited users
+     * @param description - the description
      */
     public BuildingPointOfInterest(String name, int userID, boolean isUsermade, String poiType, int coordinatesX, int coordinatesY, int buildingID, ArrayList<Integer> userFavouritesList, String description, boolean isVisible)  {
         this.name = name;
@@ -66,7 +76,8 @@ public class BuildingPointOfInterest {
 
     /**
      * Set building ID
-     * @return
+     * @param buildingID - the building ID
+     * @return buildingID - the new building ID
      */
     public int setBuildingID(int buildingID) {
         return this.buildingID = buildingID;
@@ -99,7 +110,7 @@ public class BuildingPointOfInterest {
 
     /**
      * Getter for the user made POI
-     * @return boolean of user made
+     * @return true or false of user made
      */
     public boolean getIsUserMade() {
         return this.isUserMade;
@@ -131,6 +142,7 @@ public class BuildingPointOfInterest {
 
     /** 
      * Getter for the favourited POI
+     * @param userID - the user ID
      * @return int of the favourited 
      */
     public Boolean getIsFavourited(int userID) {
@@ -142,6 +154,10 @@ public class BuildingPointOfInterest {
         return false;
     }
 
+    /**
+     * Creates a JSON object from the Building POI
+     * @return json object
+     */
     public JSONObject toJSON() {
         JSONObject json = new JSONObject();
         json.put("name", this.name);
@@ -159,28 +175,41 @@ public class BuildingPointOfInterest {
     
     /**
      * Setter for POI X and Y position
+     * @param x - the x coordinate
+     * @param y - the y coordinate
      */
     public void setCoordinates(int x, int y) {
         this.coordinates[0] = x;
         this.coordinates[1] = y;
     }
 
+    /**
+     * Setter for the name of the building POI
+     * @param newName 
+     */
     public void setName(String newName) {
         this.name = newName;
     }
 
+    /**
+     * Setter for the type of the POI
+     * @param newLayer 
+     */
     public void setPOItype(String newLayer) {
         this.poiType = newLayer;
     }
 
-    
+    /**
+     * Setter for the description of the POI
+     * @param newDesc 
+     */
     public void setDescription(String newDesc) {
         this.description = newDesc;
     }
 
     /** 
-     * Getter for the favourited POI
-     * @return int of the favourited 
+     * Getter for the favourited list
+     * @return the user favourites list
      */
     public ArrayList<Integer> getIsFavourited() {
         return this.userFavouritesList;
@@ -188,12 +217,16 @@ public class BuildingPointOfInterest {
 
     /**
      * Getter for the isVisible state of POI
-     * @return boolena of isVisible state
+     * @return true or false of isVisible state
      */
     public Boolean getIsVisible(){
         return this.isVisible;
     }
 
+    /**
+     * Setter for the favourited status of a given user ID for the building POI
+     * @param userID 
+     */
     public void setIsFavourited(int userID) {
         Boolean in = false;
         for (int i = 0; i < userFavouritesList.size(); i++) {
@@ -209,12 +242,15 @@ public class BuildingPointOfInterest {
 
     /**
      * Setter for ID
+     * @param ID - the ID of the POI
      */
     public void setID(int ID) {
         this.ID = ID;
     }
+    
     /*
      * Setter for isVisible 
+     * @param isVisible - if the POI is visible
      */
     public void setisVisible(boolean isVisible) {
         this.isVisible= isVisible;
