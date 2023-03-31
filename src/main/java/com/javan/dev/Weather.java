@@ -17,9 +17,10 @@ import java.awt.*;
 
 
 /**
- * @author: Riley Emma Gavigan <rgavigan@uwo.ca>
- * @version: 1.0
- * @since: 1.0
+ * Weather class that handles retrieving API data from HTTP requests.
+ * @author : Riley Emma Gavigan [rgavigan@uwo.ca]
+ * @version : 1.0
+ * @since : 1.0
  */
 public final class Weather {
     /**
@@ -58,8 +59,6 @@ public final class Weather {
 
     /**
      * Constructor for Weather object
-     * @param None
-     * @return None
      * @throws IOException
      * @throws MalformedURLException
      */
@@ -76,7 +75,7 @@ public final class Weather {
         connection.setRequestMethod("GET");
 
         /**
-         * Check if the connection was successful. If it wasnt, disconnect and return
+         * Check if the connection was successful. If it wasn't, disconnect and return
          */
         int responseCode = connection.getResponseCode();
         if (responseCode != 200) {
@@ -110,7 +109,6 @@ public final class Weather {
 
     /**
      * Getter for the singleton instance
-     * @param None
      * @return Weather instance
      */
     public static Weather getInstance() {
@@ -126,7 +124,6 @@ public final class Weather {
 
     /**
      * Getter for the JSON object retrieved from the constructor
-     * @param None
      * @return String json, the unprocessed JSON object
      */
     public StringBuffer getJSON() {
@@ -135,8 +132,6 @@ public final class Weather {
 
     /**
      * method to use DataProcessor to parse the weather JSON object
-     * @param None
-     * @return None
      */
     public void parseWeather() {
         /**
@@ -157,7 +152,6 @@ public final class Weather {
 
     /**
      * Getter for the temperature in celsius
-     * @param None
      * @return String tempInCelcius, the temperature in celsius
      */
     public String getTempC() {
@@ -165,8 +159,7 @@ public final class Weather {
     }
 
     /**
-     * Getter for the textual repreesntation of current weather condition
-     * @param None
+     * Getter for the textual representation of current weather condition
      * @return String condition
     */
     public String getCondition() {
@@ -175,7 +168,6 @@ public final class Weather {
 
     /**
      * Getter for the link to the icon representing the current weather condition
-     * @param None
      * @return String conditionIcon, link to icon
      */
     public String getConditionIcon() {
@@ -184,7 +176,6 @@ public final class Weather {
 
     /**
      * Getter for the weather info panel
-     * @param None
      * @return JPanel weather info panel for UI
      */
     public JPanel getWeatherInfoPanel() {
@@ -194,7 +185,6 @@ public final class Weather {
     /**
      * Method to add information to the Weather Information panel using the Weather class getTempC and getConditionIcon
      * Reads getConditionIcon URL and convert to BufferedImage for use in UI.
-     * @param None
      * @return None
      * @throws IOException
      * @throws MalformedURLException

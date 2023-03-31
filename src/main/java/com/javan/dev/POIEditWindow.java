@@ -10,11 +10,12 @@ import java.io.IOException;
 
 
 /**
- * @author: Riley Emma Gavigan <rgavigan@uwo.ca>
- * @version: 1.0
- * @since: 1.0
+ * UI class that allows users to edit POI objects.
+ * @author : Riley Emma Gavigan [rgavigan@uwo.ca]
+ * @version : 1.0
+ * @since : 1.0
  */
-public class POIEditWindow extends JFrame implements ActionListener, MouseListener {
+public final class POIEditWindow extends JFrame implements ActionListener, MouseListener {
     /**
      * Private instance variables
      */
@@ -39,8 +40,7 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
 
     /**
      * Constructor for POICreationWindow given a POIs ID
-     * @param int poiID
-     * @return None
+     * @param poiID - the POI ID
      */
     public POIEditWindow (int poiID) {
         /*
@@ -97,7 +97,7 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
         /**
          * Create ArrayList of different metadata String titles
          */
-        ArrayList<String> metadata = new ArrayList<String>();
+        ArrayList<String> metadata = new ArrayList<>();
         metadata.add("Name");
         if (!mapComponent.getIsCampusMap()) {
             metadata.add("Room Number");
@@ -107,7 +107,7 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
             metadata.add("Layer Type");
         }
 
-        ArrayList<String> currentPOIData = new ArrayList<String>();
+        ArrayList<String> currentPOIData = new ArrayList<>();
         if (!mapComponent.getIsCampusMap()) {
             currentPOIData.add(this.poi.getName());
             currentPOIData.add(String.valueOf(this.poi.getRoomNumber()));
@@ -173,17 +173,14 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
     
     /**
      * Method to set frame visibility
-     * @param None
-     * @return None
      */
     public void setVisibleFrame() {
         frame.setVisible(true);
     }
 
     /**
-     * Method to get creation windows Jpanel frame
-     * @param None
-     * @return Jpanel frame
+     * Method to get creation windows JPanel frame
+     * @return frame
      */
     public JFrame getFrame() {
         return frame;
@@ -191,7 +188,7 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
 
     /**
      * Method to create JTextField
-     * @param String text
+     * @param text - the text of the field
      * @return JTextField of the text field
      */
     public JTextField createTextField(String text) {
@@ -208,7 +205,7 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
 
     /**
      * Function to create a new button and style it
-     * @param String text
+     * @param text - the text of the button
      * @return JButton button
      */
     public JButton createMapButton(String text) {
@@ -233,9 +230,9 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
 
     /**
      * Method to determine what methods to call based on where / what the mouse is pressing
-     * @param ActionEvent event
-     * @return None
+     * @param event of the action listener
      */
+    @Override
     public void actionPerformed(ActionEvent event) {
         /**
          * When the edit button is clicked, edit a new POI
@@ -403,40 +400,53 @@ public class POIEditWindow extends JFrame implements ActionListener, MouseListen
 
     /**
      * Method to determine what cursor looks like depending on what type of object it is over
-     * @param MouseEvent event
-     * @return None
+     * @param event of the mouse listener
      */
+    @Override
     public void mouseEntered(MouseEvent event) {
         /**
          * Button hover
          */
-        if (event.getSource() instanceof JButton) {
-            JButton button = (JButton) event.getSource();
+        if (event.getSource() instanceof JButton button) {
             button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         }
     }
 
     /**
      * Method to determine what cursor looks like depending on what type of object it is over
-     * @param MouseEvent event
-     * @return None
+     * @param event of the mouse listener
      */
+    @Override
     public void mouseExited(MouseEvent event) {
         /**
          * Button hover off
          */
-        if (event.getSource() instanceof JButton) {
-            JButton button = (JButton) event.getSource();
+        if (event.getSource() instanceof JButton button) {
             button.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
     }
 
+    /**
+     *
+     * @param event of the mouse listener
+     */
+    @Override
     public void mouseClicked(MouseEvent event) {
     }
 
+    /**
+     *
+     * @param event of the mouse listener
+     */
+    @Override
     public void mousePressed(MouseEvent event) {
     }
 
+    /**
+     *
+     * @param event of the mouse listener
+     */
+    @Override
     public void mouseReleased(MouseEvent event) {
     }
 }

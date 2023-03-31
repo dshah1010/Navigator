@@ -13,9 +13,9 @@ import javax.swing.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * @author: Riley Emma Gavigan <rgavigan@uwo.ca>
- * @version: 1.0
- * @since: 1.0
+ * @author : Riley Emma Gavigan [rgavigan@uwo.ca]
+ * @version : 1.0
+ * @since : 1.0
  */
 class TestLoginComponent {
 

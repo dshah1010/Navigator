@@ -7,9 +7,9 @@ import org.junit.jupiter.api.BeforeEach;
 import java.util.ArrayList;
 
 /**
- * @author: Brad McGlynn <bmcglyn4@uwo.ca>
- * @version: 1.0
- * @since: 1.0
+ * @author : Brad McGlynn [bmcglyn4@uwo.ca]
+ * @version : 1.0
+ * @since : 1.0
  */
 
 public class TestCampusMap {

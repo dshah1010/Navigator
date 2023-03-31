@@ -6,24 +6,25 @@ import java.awt.*;
 
 
 /**
- * @author: Riley Emma Gavigan <rgavigan@uwo.ca>
- * @version: 1.0
- * @since: 1.0
+ * UI class that shows users a help menu to aid in using the application.
+ * @author : Riley Emma Gavigan [rgavigan@uwo.ca]
+ * @version : 1.0
+ * @since : 1.0
  */
 public final class UserHelp extends JFrame {
     /**
      * Initialize private variables for the JFrame and its contents
      */
-    private JFrame frame;
-    private JTabbedPane tabbedPane;
-    private JPanel general;
-    private JPanel login;
-    private JPanel navigate;
-    private JPanel search;
-    private JPanel favourite;
-    private JPanel browse;
-    private JPanel create;
-    private JPanel editing;
+    private final JFrame frame;
+    private final JTabbedPane tabbedPane;
+    private final JPanel general;
+    private final JPanel login;
+    private final JPanel navigate;
+    private final JPanel search;
+    private final JPanel favourite;
+    private final JPanel browse;
+    private final JPanel create;
+    private final JPanel editing;
     private JLabel generalTitle;
     private JLabel loginTitle;
     private JLabel navigateTitle;
@@ -40,7 +41,6 @@ public final class UserHelp extends JFrame {
 
     /**
      * Constructor to create UserHelp JFrame Window with JPanels / tabs for each section of the help menu for the user to browse
-     * @param None
      */
      private UserHelp() {
         /**
@@ -102,7 +102,6 @@ public final class UserHelp extends JFrame {
 
     /**
      * Getter for the Singleton Instance of UserHelp
-     * @param None
      * @return UserHelp instance
     */
     public static UserHelp getInstance() {
@@ -114,8 +113,7 @@ public final class UserHelp extends JFrame {
 
     /**
      * Getter for the JFrame created
-     * @param None
-     * @return Jframe frame
+     * @return frame that was created
      */
     public JFrame getFrame() {
         return frame;
@@ -123,8 +121,6 @@ public final class UserHelp extends JFrame {
 
     /**
      * Method to open the user help menu
-     * @param None
-     * @return None
      */
     public void openHelpMenu() {
         frame.setVisible(true);
@@ -132,8 +128,7 @@ public final class UserHelp extends JFrame {
 
     /**
      * Method to set background
-     * @param Jpanel panel
-     * @return None
+     * @param panel - the panel's to set the background for
      */
     public void setBackground(JPanel panel) {
         panel.setBackground(Color.WHITE);
@@ -141,8 +136,6 @@ public final class UserHelp extends JFrame {
 
     /**
      * Method to create the general tab
-     * @param None
-     * @return None
      */
     private void createGeneralTab() {
         /**
@@ -186,8 +179,6 @@ public final class UserHelp extends JFrame {
 
     /**
      * Method to create the login tab
-     * @param None
-     * @return None
      */
     private void createLoginTab() {
         /**
@@ -213,8 +204,6 @@ public final class UserHelp extends JFrame {
 
     /**
      * Method to create the navigate tab
-     * @param None
-     * @return None
      */
     private void createNavigateTab() {
         /**
@@ -246,8 +235,6 @@ public final class UserHelp extends JFrame {
 
     /**
      * Method to create the search tab
-     * @param None
-     * @return None
      */
     private void createSearchTab() {
         /**
@@ -271,8 +258,6 @@ public final class UserHelp extends JFrame {
 
     /**
      * Method to create the favourites tab
-     * @param None
-     * @return None
      */
     private void createFavouritesTab() {
         /**
@@ -301,8 +286,6 @@ public final class UserHelp extends JFrame {
 
     /**
      * Method to create the browse tab
-     * @param None
-     * @return None
      */
     private void createBrowseTab() {
         /**
@@ -326,8 +309,6 @@ public final class UserHelp extends JFrame {
     
     /**
      * Method to create the create POI tab
-     * @param None
-     * @return None
      */
     private void createCreatingPOIsTab() {
         /**
@@ -352,8 +333,6 @@ public final class UserHelp extends JFrame {
     
     /**
      * Method to create the editing POIs tab
-     * @param None
-     * @return None
      */
     private void createEditingPOIsTab() {
         /**
@@ -382,6 +361,5 @@ public final class UserHelp extends JFrame {
         editing.add(new JLabel("If you are in \"Navigation Mode\" press the button once to enter \"User Editing Mode\". "));
         editing.add(new JLabel("Once in \"User Editing Mode\", navigate to the POI you would like to edit and click on it."));
         editing.add(new JLabel("A window should pop up with information about the POI you selected, press the \"Delete POI\" button."));
-        
     }
 }   

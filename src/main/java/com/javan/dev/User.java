@@ -1,15 +1,17 @@
 package com.javan.dev;
 
 /**
- * @author: Riley Emma Gavigan <rgavigan@uwo.ca>, Dylan Sta Ana <dstaana@uwo.ca>
- * @version: 1.1
- * @since: 1.0
+ * User class that stores the instance of a user.
+ * @author : Riley Emma Gavigan [rgavigan@uwo.ca], Dylan Sta Ana [dstaana@uwo.ca]
+ * @version : 1.1
+ * @since : 1.0
  */
 public final class User {
     /**
      * Declaring variables of the user class
      */
     private String username;
+    private final String password;
     private int userID;
     private boolean isAdmin;
 
@@ -20,17 +22,20 @@ public final class User {
 
     /**
      * Constructor for the User class to initialize user/pass when account created
-     * @param username
-     * @param password
+     * @param username of the user
+     * @param password of the user
+     * @param userID of the user
      */
     private User(String username, String password, int userID) {
         this.username = username;
         this.isAdmin = false;
+        this.password = password;
         this.userID = userID;
     }
 
     /**
      * Getter for the instance of user
+     * @return user instance
      */
     public static User getInstance() {
         if (INSTANCE == null) {
@@ -41,8 +46,6 @@ public final class User {
 
     /**
      * Function to turn a user into an admin
-     * @param None
-     * @return None
      */
     public void makeAdmin() {
         this.isAdmin = true;
@@ -50,8 +53,7 @@ public final class User {
 
     /**
      * Getter for the username
-     * @param None
-     * @return None
+     * @return username of the user
      */
     public String getUsername() {
         return this.username;
@@ -59,8 +61,7 @@ public final class User {
 
     /**
      * Getter for the userID
-     * @param None
-     * @return int userID
+     * @return userID of the user
      */
     public int getUserID() {
         return this.userID;
@@ -68,8 +69,7 @@ public final class User {
 
     /**
      * Getter for isAdmin
-     * @param None
-     * @return boolean isAdmin
+     * @return isAdmin status of the user
      */
     public boolean getIsAdmin() {
         return this.isAdmin;
@@ -77,8 +77,7 @@ public final class User {
 
     /**
      * Setter for username
-     * @param String username
-     * @return None
+     * @param username of the user to be set
      */
     public void setUsername(String username) {
         this.username = username;
@@ -86,8 +85,7 @@ public final class User {
 
     /**
      * Setter for isAdmim
-     * @param boolean adminStatus
-     * @return None
+     * @param adminStatus of the user to be set
      */
     public void setIsAdmin(boolean adminStatus) {
         this.isAdmin = adminStatus;
@@ -95,8 +93,7 @@ public final class User {
 
     /**
      * Setter for userPassword
-     * @param int userID
-     * @return None
+     * @param userID of the user to be set
      */
     public void setUserID(int userID) {
         this.userID = userID;

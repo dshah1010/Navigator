@@ -20,9 +20,9 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 /**
- * @author: Jake Choi <jchoi492@uwo.ca>
- * @version: 1.0
- * @since: 1.0
+ * @author : Jake Choi [jchoi492@uwo.ca]
+ * @version : 1.0
+ * @since : 1.0
  */
 
 public class TestDataProcessor {

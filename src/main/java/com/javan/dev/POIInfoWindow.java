@@ -7,9 +7,10 @@ import java.awt.event.*;
 import java.io.IOException;
 
 /**
- * @author: Riley Emma Gavigan <rgavigan@uwo.ca>, Deep Ashishkumar Shah <dshah228@uwo.ca>, Brad McGLynn <bmcglyn4@uwo.ca>
- * @version: 1.0
- * @since: 1.0
+ * UI class that allows users to view details about POIs.
+ * @author : Riley Emma Gavigan [rgavigan@uwo.ca], Deep Ashishkumar Shah [dshah228@uwo.ca], Brad McGLynn [bmcglyn4@uwo.ca]
+ * @version : 1.0
+ * @since : 1.0
  */
 public class POIInfoWindow extends JFrame implements ActionListener, MouseListener {
     private JPanel panel;
@@ -32,8 +33,7 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
 
     /**
      * Constructor that creates the POI information window given the POIs ID
-     * @param int poiID
-     * @return None
+     * @param poiID - the ID of the POI
      */
     public POIInfoWindow(int poiID) {
         /*
@@ -84,7 +84,7 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
         /**
          * Initialize array of 5 JLabels to hold the POI information
          */
-        labels = new ArrayList<JLabel>();
+        labels = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
             labels.add(new JLabel());
         }
@@ -208,17 +208,14 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
 
     /**
      * Method to set frame visibility
-     * @param None
-     * @return None
      */
     public void setVisibleFrame() {
         frame.setVisible(true);
     }
 
     /**
-     * Method to get creation windows Jpanel frame
-     * @param None
-     * @return Jpanel frame
+     * Method to get creation windows JPanel frame
+     * @return frame
      */
     public JFrame getFrame() {
         return frame;
@@ -226,8 +223,8 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
 
     /**
      * Styling for the JLabel text and font
-     * @param JLabel label
-     * @param int n
+     * @param label - the label to style
+     * @param int n - the font size
      * @retun None
      */
     private void style(JLabel label, int n) {
@@ -238,8 +235,7 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
 
     /**
      * Getter for the labels ArrayList
-     * @param None
-     * @return ArrayList<JLabel> labels
+     * @return labels
      */
     public ArrayList<JLabel> getLabels() {
         return labels;
@@ -247,10 +243,10 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
 
     /**
      * Method to change the favourite button appearance and update the POI object
-     * @param ActionEvent event
-     * @return None
+     * @param event of the action listener
      */
     
+    @Override
     public void actionPerformed(ActionEvent event)  {
         /**
          * If favourited, change to unfavourited
@@ -286,9 +282,9 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
 
     /**
      * Change mouse cursor when hovering over button
-     * @param MouseEvent event
-     * @return None
+     * @param event of the mouse listener
      */
+    @Override
     public void mouseEntered(MouseEvent event) {
         if (event.getSource() == favourite) {
             frame.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -297,23 +293,38 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
 
     /**
      * Change mouse cursor when no longer hovering over button
-     * @param Mouseevent
-     * @return None
+     * @param event of the mouse listener
      */
+    @Override
     public void mouseExited(MouseEvent event) {
         if (event.getSource() == favourite) {
             frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
     }
 
+    /**
+     *
+     * @param event of the mouse listener
+     */
+    @Override
     public void mouseClicked(MouseEvent event) {
         // Do nothing
     }
 
+    /**
+     *
+     * @param event of the mouse listener
+     */
+    @Override
     public void mousePressed(MouseEvent event) {
         // Do nothing
     }
 
+    /**
+     *
+     * @param event of the mouse listener
+     */
+    @Override
     public void mouseReleased(MouseEvent event) {
         // Do nothing
     }

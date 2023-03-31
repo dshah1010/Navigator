@@ -2,9 +2,10 @@ package com.javan.dev;
 import java.io.IOException;
 
 /**
- * @author: Brad McGlynn <bmcglyn4@uwo.ca>
- * @version: 1.0
- * @since: 1.0
+ * Main class for the floor map objects in the application.
+ * @author : Brad McGlynn [bmcglyn4@uwo.ca]
+ * @version : 1.0
+ * @since : 1.0
  */
 public class FloorMap implements Map{
     /**
@@ -22,7 +23,8 @@ public class FloorMap implements Map{
 
     /**
      * Constructor for the FloorMap class to initialize the ID, type and filePath
-     * @param buildingID and mapID
+     * @param buildingID
+     * @param mapID
      */
     public FloorMap(int buildingID, int mapID) {
         this.filePath = processor.loadMapFilePath(buildingID, mapID, "FLOOR");
@@ -33,18 +35,18 @@ public class FloorMap implements Map{
 
     /**
      * Getter for filePath
-     * @param None
      * @return String
      */
+    @Override
     public String getFilePath() {
         return this.filePath;
     }
 
     /**
      * Getter for the mapID
-     * @param None
      * @return mapID
      */
+    @Override
     public int getMapID() {
         return this.mapID;
     }
@@ -53,9 +55,9 @@ public class FloorMap implements Map{
 
     /**
      * Getter for the buildingID
-     * @param None
      * @return mapID
      */
+    @Override
     public int getBuildingID() {
         return this.buildingID;
     }
@@ -63,9 +65,9 @@ public class FloorMap implements Map{
 
     /**
      * Getter for mapType
-     * @param None
      * @return String
      */
+    @Override
     public String getMapType() {
         return this.mapType;
     }

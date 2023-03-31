@@ -1,9 +1,10 @@
 package com.javan.dev;
 
 /**
- * @author: Brad McGlynn <bmcglyn4@uwo.ca>
- * @version: 1.0
- * @since: 1.0
+ * Map interface that is used by the 3 map types.
+ * @author : Brad McGlynn [bmcglyn4@uwo.ca]
+ * @version : 1.0
+ * @since : 1.0
  */
 public interface Map {
 

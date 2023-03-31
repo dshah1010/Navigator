@@ -4,9 +4,10 @@ import org.json.JSONArray;
 import java.util.*;
 
 /**
- * @author: Deep Shah <dshah228@uwo.ca>, Brad McGlynn <bmcglyn4@uwo.ca>
- * @version: 1.0
- * @since: 1.0
+ * POI class that handles the actual POI objects and works with other components in creation, editing, deletion, etc.
+ * @author : Deep Shah [dshah228@uwo.ca], Brad McGlynn [bmcglyn4@uwo.ca]
+ * @version : 1.0
+ * @since : 1.0
  */
 public class PointOfInterest {
     
@@ -18,7 +19,7 @@ public class PointOfInterest {
     private int[] coordinates = {0,0};
     private int floorID;
     private int buildingID;
-    private ArrayList<Integer> userFavouritesList = new ArrayList<Integer> ();
+    private ArrayList<Integer> userFavouritesList = new ArrayList<>();
     private String description;
     private String roomNumber;
     private String mapFilePath;
@@ -33,6 +34,17 @@ public class PointOfInterest {
     /**
      * Constructor for the POI
      * @param name, the name of the POI
+     * @param userID - the user ID
+     * @param isUsermade - if it is user made
+     * @param coordinatesX - the x coordinate
+     * @param poiType - the type of POI
+     * @param coordinatesY - the y coordinate
+     * @param floorID - the floor ID it is on
+     * @param userFavouritesList - the list of favourite users
+     * @param buildingID - the building ID it is on
+     * @param roomNumber - the room number it is at
+     * @param description - the description of the POI
+     * @param isVisible - the state of visibility of the POI
      */
     public PointOfInterest(String name, int userID, boolean isUsermade, String poiType, int coordinatesX, int coordinatesY, int floorID, int buildingID, ArrayList<Integer> userFavouritesList, String description, String roomNumber, boolean isVisible)  {
         this.name = name;
@@ -53,7 +65,6 @@ public class PointOfInterest {
 
     /**
      * Getter for the POI Id
-     * @param None
      * @return int of the ID
      */
     public int getID() {
@@ -62,7 +73,6 @@ public class PointOfInterest {
 
     /**
      * Getter for building / floor ID
-     * @param None
      * @return String combination of building and floor ID
      */
     public String getBuildingFloorID() {
@@ -72,7 +82,6 @@ public class PointOfInterest {
 
     /**
      * Getter for the name of the POI
-     * @param None
      * @return String of the name
      */
     public String getName() {
@@ -81,7 +90,6 @@ public class PointOfInterest {
 
     /**
      * Getter for the file path of the map that the POI is on
-     * @param None
      * @return String of the name
      */
     public String getMapFilePath() {
@@ -90,7 +98,6 @@ public class PointOfInterest {
 
     /**
      * Getter for the ID of the user
-     * @param None
      * @return int of the ID
      */
     public int getUserID() {
@@ -99,8 +106,7 @@ public class PointOfInterest {
 
     /**
      * Getter for the user made POI
-     * @param None
-     * @return boolean of user made
+     * @return true or false of user made
      */
     public boolean getIsUserMade() {
         return this.isUserMade;
@@ -109,7 +115,6 @@ public class PointOfInterest {
 
     /**
      * Getter for the type of the POI
-     * @param None
      * @return String of the type
      */
     public String getPOItype() {
@@ -118,7 +123,6 @@ public class PointOfInterest {
 
     /**
      * Getter for the coordinates of the POI 
-     * @param None
      * @return int[] of the coordinates
      */
     public int[] getCoordinates() {
@@ -127,7 +131,6 @@ public class PointOfInterest {
 
     /** 
      * Getter for the floor ID of the POI
-     * @param None
      * @return int of the floor ID
      */
     public int getFloorID() {
@@ -136,7 +139,6 @@ public class PointOfInterest {
 
     /**
      * Getter for the building ID of the POI
-     * @param None
      * @return int of the building ID
      */
     public int getBuildingID() {
@@ -145,7 +147,7 @@ public class PointOfInterest {
 
     /** 
      * Getter for the favourited POI
-     * @param int userID
+     * @param userID - the user ID
      * @return int of the favourited 
      */
     public Boolean getIsFavourited(int userID) {
@@ -159,7 +161,6 @@ public class PointOfInterest {
 
     /**
      * Getter for the description of the POI
-     * @param None
      * @return String of the description 
      */
     public String getDescription() {
@@ -168,7 +169,6 @@ public class PointOfInterest {
 
     /**
      * Getter for the room number of the POI
-     * @param None
      * @return String of the room number 
      */
     public String getRoomNumber() {
@@ -176,8 +176,7 @@ public class PointOfInterest {
     }
     /**
      * Getter for the isVisible state of POI
-     * @param None
-     * @return boolenan of isVisible state
+     * @return true or false of isVisible state
      */
     public Boolean getIsVisible(){
         return this.isVisible;
@@ -185,7 +184,6 @@ public class PointOfInterest {
 
     /**
      * Method to make POI into a JSON object
-     * @param None
      * @return JSONObject json
      */
     public JSONObject toJSON() {
@@ -207,9 +205,8 @@ public class PointOfInterest {
     
     /**
      * Setter for POI X and Y position
-     * @param int x
-     * @param int y
-     * @return None
+     * @param x - the x coordinate
+     * @param y - the y coordinate
      */
     public void setCoordinates(int x, int y) {
         this.coordinates[0] = x;
@@ -218,7 +215,7 @@ public class PointOfInterest {
 
     /**
      * Setter for POI building ID
-     * @param int buildingID
+     * @param buildingID - the building ID
      * @return None
      */
     public int setBuildingID(int buildingID) {
@@ -227,8 +224,7 @@ public class PointOfInterest {
 
     /**
      * Setter for POI floor ID
-     * @param int floorID
-     * @return None
+     * @param floorID - the floor ID
      */
     public void setFloorID(int floorID) {
         this.floorID = floorID;
@@ -236,8 +232,7 @@ public class PointOfInterest {
 
     /**
      * Setter for POI name
-     * @param String newName
-     * @return None
+     * @param newName - the new POI name
      */
     public void setName(String newName) {
         this.name = newName;
@@ -245,8 +240,7 @@ public class PointOfInterest {
 
     /**
      * Setter for POI room number
-     * @param int newRoomNumber
-     * @return None
+     * @param newRoomNumber - the new POI room number
      */
     public void setRoomNumber(String newRoomNumber) {
         this.roomNumber = newRoomNumber;
@@ -254,8 +248,7 @@ public class PointOfInterest {
 
     /**
      * Setter for POI description
-     * @param String newDesc
-     * @return None
+     * @param newDesc - the new POI description
      */
     public void setDescription(String newDesc) {
         this.description = newDesc;
@@ -263,8 +256,7 @@ public class PointOfInterest {
 
     /**
      * Setter for POI layer type
-     * @param String newLayer
-     * @return None
+     * @param newLayer - the new POI layer type
      */
     public void setPOItype(String newLayer) {
         this.poiType = newLayer;
@@ -273,8 +265,7 @@ public class PointOfInterest {
     
     /**
      * Setter for POI isFavourited status
-     * @param int userID
-     * @return None
+     * @param userID - the new POI user ID
      */
     public void setIsFavourited(int userID) {
         Boolean in = false;
@@ -292,8 +283,7 @@ public class PointOfInterest {
 
     /**
      * Setter for POI ID
-     * @param int ID
-     * @return None
+     * @param ID - the new POI ID
      */
     public void setID(int ID) {
         this.ID = ID;
@@ -301,8 +291,7 @@ public class PointOfInterest {
 
     /**
      * Setter for POI visibility state
-     * @param boolean isVisible
-     * @return None
+     * @param isVisible - the new visible state of the POI
      */
     public void setisVisible(boolean isVisible) {
         this.isVisible= isVisible;

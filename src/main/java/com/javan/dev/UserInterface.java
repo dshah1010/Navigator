@@ -8,13 +8,14 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 
 /**
- * @author: Riley Emma Gavigan <rgavigan@uwo.ca>
- * @version: 1.0
- * @since: 1.0
+ * Main UI class that handles the other UI classes that are visible and present within it.
+ * @author : Riley Emma Gavigan [rgavigan@uwo.ca]
+ * @version : 1.0
+ * @since : 1.0
  */
 public final class UserInterface extends JFrame implements ActionListener {
     /**
-     * Initialize the JFrame for the UI during its entire runtime
+     * Initialize the JFrame for the UI during its entire run-time
      */
     private JFrame frame = new JFrame("Enhanced Campus Navigation - Group 1");
 
@@ -43,8 +44,6 @@ public final class UserInterface extends JFrame implements ActionListener {
     
     /**
      * Constructor to create Main Frame of UI. This will be the main frame that will be used throughout the session.
-     * @param None
-     * @return None
      * @throws IOException
      * @throws MalformedURLException
      */
@@ -112,7 +111,6 @@ public final class UserInterface extends JFrame implements ActionListener {
 
     /**
      * Method to get instance of the singleton
-     * @param None
      * @return UserInterface INSTANCE
      */
     public static UserInterface getInstance() {
@@ -130,9 +128,9 @@ public final class UserInterface extends JFrame implements ActionListener {
 
     /**
      * Method to handle the actions of the menu items and other components
-     * @param Actionevent, the event that is triggered when a menu item is clicked
-     * @return None
+     * @param event of the action
      */
+    @Override
     public void actionPerformed(ActionEvent event) {
         /**
          * Go to UserHelp page when help menu is clicked
@@ -172,8 +170,6 @@ public final class UserInterface extends JFrame implements ActionListener {
     /**
      * Method that opens a LoginComponent to the UI, allowing the user to login
      * This method will open the login component inside the same window as the main UI
-     * @param None
-     * @return None
      */
     public void openLoginComponent() {
         /**
@@ -187,8 +183,6 @@ public final class UserInterface extends JFrame implements ActionListener {
     /**
      * Method that opens a MapComponent to the UI, allowing the user to view maps
      * This method will open the map component inside the same window as the main UI
-     * @param None
-     * @return None
      * @throws IOException
      * @throws MalformedURLException
      */
@@ -233,8 +227,6 @@ public final class UserInterface extends JFrame implements ActionListener {
 
     /**
      * Method to create the menu bar for the UI and add it to the UI
-     * @param None
-     * @return None
      */
     public void createMenuBar() {
         /**
