@@ -1,0 +1,50 @@
+@options
+@packages
+-classpath
+'C:/Users/Riley/.m2/repository/org/json/json/20220924/json-20220924.jar;C:/Users/Riley/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar'
+-encoding
+'UTF-8'
+-protected
+-source
+'19'
+-sourcepath
+'C:/Users/Riley/Documents/group1/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2023. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'C:/Users/Riley/Documents/group1/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'group1 1.0-SNAPSHOT API'
+-use
+-version
+-windowtitle
+'group1 1.0-SNAPSHOT API'
+com.javan.dev
+C:\Users\Riley\.m2\repository\org\json\json\20220924\json-20220924.jar = 1676649789863
+C:\Users\Riley\.m2\repository\com\google\code\gson\gson\2.10.1\gson-2.10.1.jar = 1675904036769
+C:\Users\Riley\Documents\group1\src\main\java = 1679062043124
+C:\Users\Riley\Documents\group1\target\site\apidocs\allclasses-index.html = 1680283858898
+C:\Users\Riley\Documents\group1\target\site\apidocs\allpackages-index.html = 1680283858899
+C:\Users\Riley\Documents\group1\target\site\apidocs\copy.svg = 1680283858937
+C:\Users\Riley\Documents\group1\target\site\apidocs\element-list = 1680283858737
+C:\Users\Riley\Documents\group1\target\site\apidocs\help-doc.html = 1680283858933
+C:\Users\Riley\Documents\group1\target\site\apidocs\index-all.html = 1680283858927
+C:\Users\Riley\Documents\group1\target\site\apidocs\index.html = 1680283858930
+C:\Users\Riley\Documents\group1\target\site\apidocs\jquery-ui.overrides.css = 1680283858947
+C:\Users\Riley\Documents\group1\target\site\apidocs\member-search-index.js = 1680283858903
+C:\Users\Riley\Documents\group1\target\site\apidocs\module-search-index.js = 1680283858900
+C:\Users\Riley\Documents\group1\target\site\apidocs\overview-tree.html = 1680283858878
+C:\Users\Riley\Documents\group1\target\site\apidocs\package-search-index.js = 1680283858901
+C:\Users\Riley\Documents\group1\target\site\apidocs\script.js = 1680283858936
+C:\Users\Riley\Documents\group1\target\site\apidocs\search-page.js = 1680283858941
+C:\Users\Riley\Documents\group1\target\site\apidocs\search.html = 1680283858929
+C:\Users\Riley\Documents\group1\target\site\apidocs\search.js = 1680283858940
+C:\Users\Riley\Documents\group1\target\site\apidocs\serialized-form.html = 1680283858786
+C:\Users\Riley\Documents\group1\target\site\apidocs\stylesheet.css = 1680283858935
+C:\Users\Riley\Documents\group1\target\site\apidocs\tag-search-index.js = 1680283858904
+C:\Users\Riley\Documents\group1\target\site\apidocs\type-search-index.js = 1680283858902
