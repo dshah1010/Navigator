@@ -50,7 +50,7 @@ public class BuildingMap implements Map {
 
     /**
      * Getter for buildingID id
-     * @return map id int
+     * @return int - map ID of the building
      */
     @Override
     public int getBuildingID() {
@@ -75,13 +75,11 @@ public class BuildingMap implements Map {
         return this.mapName;
     }
 
-
-    /*
+    /**
      * Setter for building name
      * @param buildingName - the name of the building
      */
     public void setName(String buildingName) {
         this.mapName = buildingName;
     }
-    
 }

@@ -427,7 +427,7 @@ public final class POIEditWindow extends JFrame implements ActionListener, Mouse
     }
 
     /**
-     *
+     * Unused method from mouse listener
      * @param event of the mouse listener
      */
     @Override
@@ -435,7 +435,7 @@ public final class POIEditWindow extends JFrame implements ActionListener, Mouse
     }
 
     /**
-     *
+     * Unused method from mouse listener
      * @param event of the mouse listener
      */
     @Override
@@ -443,7 +443,7 @@ public final class POIEditWindow extends JFrame implements ActionListener, Mouse
     }
 
     /**
-     *
+     * Unused method from mouse listener
      * @param event of the mouse listener
      */
     @Override

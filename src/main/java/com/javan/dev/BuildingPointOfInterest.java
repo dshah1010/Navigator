@@ -31,7 +31,7 @@ public class BuildingPointOfInterest {
 
     /**
      * Constructor for the building POI
-     * @param name, the name of the building POI
+     * @param name - the name of the building POI
      * @param userID - the user ID
      * @param isUsermade - if it is user made or not
      * @param poiType - type of POI
@@ -154,6 +154,10 @@ public class BuildingPointOfInterest {
         return false;
     }
 
+    /**
+     * Creates a JSON object from the Building POI
+     * @return json object
+     */
     public JSONObject toJSON() {
         JSONObject json = new JSONObject();
         json.put("name", this.name);
@@ -179,15 +183,26 @@ public class BuildingPointOfInterest {
         this.coordinates[1] = y;
     }
 
+    /**
+     * Setter for the name of the building POI
+     * @param newName 
+     */
     public void setName(String newName) {
         this.name = newName;
     }
 
+    /**
+     * Setter for the type of the POI
+     * @param newLayer 
+     */
     public void setPOItype(String newLayer) {
         this.poiType = newLayer;
     }
 
-    
+    /**
+     * Setter for the description of the POI
+     * @param newDesc 
+     */
     public void setDescription(String newDesc) {
         this.description = newDesc;
     }
@@ -208,6 +223,10 @@ public class BuildingPointOfInterest {
         return this.isVisible;
     }
 
+    /**
+     * Setter for the favourited status of a given user ID for the building POI
+     * @param userID 
+     */
     public void setIsFavourited(int userID) {
         Boolean in = false;
         for (int i = 0; i < userFavouritesList.size(); i++) {
@@ -228,6 +247,7 @@ public class BuildingPointOfInterest {
     public void setID(int ID) {
         this.ID = ID;
     }
+    
     /*
      * Setter for isVisible 
      * @param isVisible - if the POI is visible

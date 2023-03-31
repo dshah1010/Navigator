@@ -543,6 +543,7 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
     }
 
     /**
+     * Unused method from mouse listener
      * @param event of the mouse listener
      */
     @Override
@@ -622,7 +623,7 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
     }
 
     /**
-     *
+     * Unused method from key listener
      * @param event of the key being pressed
      */
     @Override
@@ -630,7 +631,7 @@ public final class SidebarComponent extends JPanel implements ActionListener, Mo
     }
 
     /**
-     *
+     * Unused method from key listener
      * @param event of the key being released
      */
     @Override

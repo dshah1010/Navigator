@@ -303,7 +303,7 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
     }
 
     /**
-     *
+     * Unused method from mouse listener
      * @param event of the mouse listener
      */
     @Override
@@ -312,7 +312,7 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
     }
 
     /**
-     *
+     * Unused method from mouse listener
      * @param event of the mouse listener
      */
     @Override
@@ -321,7 +321,7 @@ public class POIInfoWindow extends JFrame implements ActionListener, MouseListen
     }
 
     /**
-     *
+     * Unused method from mouse listener
      * @param event of the mouse listener
      */
     @Override

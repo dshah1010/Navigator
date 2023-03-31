@@ -388,7 +388,7 @@ public final class POICreationWindow extends JFrame implements ActionListener, M
     }
 
     /**
-     *
+     * Unused method from mouse listener
      * @param event of the mouse listener
      */
     @Override
@@ -396,7 +396,7 @@ public final class POICreationWindow extends JFrame implements ActionListener, M
     }
 
     /**
-     *
+     * Unused method from mouse listener
      * @param event of the mouse listener
      */
     @Override
@@ -404,7 +404,7 @@ public final class POICreationWindow extends JFrame implements ActionListener, M
     }
 
     /**
-     *
+     * Unused method from mouse listener
      * @param event of the mouse listener
      */
     @Override

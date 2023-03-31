@@ -213,10 +213,13 @@ public final class DataProcessor {
         fileWriter.close();
         return true;
     }
-    /*
-     * method to add new buildingPOI to BuildingPOIMetadata.json file array
+    
+    /**
+     * Method to add new buildingPOI to BuildingPOIMetadata.json file array
+     * @param POI of Building POI
+     * @throws IOException if there is IO error in addition of POI
+     * @return true or false if added correctly
      */
-
     public boolean addBuildingPointOfInterestToJsonFile(BuildingPointOfInterest POI) throws IOException {
         
         String jsonString = new String(Files.readAllBytes(Paths.get(buildingPOIMetadataFile)));
