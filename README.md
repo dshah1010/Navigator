@@ -43,6 +43,8 @@ java -version
 
 ### How to Run Built Application
 ---
+1. If the project has been built, you may simply open 'group1.jar' and it will run the application.
+Alternatively:
 1. If the project has been built already, you may run the application by clicking on the green play button in the top bar of icons.
 
 2. A window will pop up asking you to choose a main class to run the program. That will be the App.class, which may show up as "com.javan.dev.App" file in the case of our application. It will most likely be the only option available to you, but if not please select the one with app in the name.
