@@ -1,4 +1,5 @@
 com\javan\dev\TestBuildingPointOfInterest.class
+com\javan\dev\TestJsonReader.class
 com\javan\dev\TestBuildingMap.class
 com\javan\dev\TestSidebarComponent.class
 com\javan\dev\TestLoginComponent.class

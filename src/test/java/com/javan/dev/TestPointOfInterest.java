@@ -70,7 +70,7 @@ public class TestPointOfInterest {
         int expectedCoordinatesY = 5;
         int expectedFloorID = 1;
         int expectedBuildingID = 1;
-        ArrayList<Integer> expectedUserFavouritesList = new ArrayList<Integer>();
+        ArrayList<Integer> expectedUserFavouritesList = new ArrayList<>();
         String expectedDescription = "test description";
         String expectedRoomNumber = "test room number";
         boolean expectedIsVisible = true;
@@ -80,7 +80,7 @@ public class TestPointOfInterest {
         assertEquals(expectedUserID, json.getInt("userID"));
         assertEquals(expectedIsUserMade, json.getBoolean("isUserMade"));
         assertEquals(expectedPoiType, json.getString("poiType"));
-        ArrayList<Integer> jsonCoordinates = new ArrayList<Integer>();
+        ArrayList<Integer> jsonCoordinates = new ArrayList<>();
         for (Object i : json.getJSONArray("coordinates")) {
             jsonCoordinates.add((Integer) i);
         }
@@ -88,7 +88,7 @@ public class TestPointOfInterest {
         assertEquals(expectedCoordinatesY, jsonCoordinates.get(1));
         assertEquals(expectedFloorID, json.getInt("floorID"));
         assertEquals(expectedBuildingID, json.getInt("buildingID"));
-        ArrayList<Integer> jsonUserFavouritesList = new ArrayList<Integer>();
+        ArrayList<Integer> jsonUserFavouritesList = new ArrayList<>();
         for (Object i : json.getJSONArray("userFavouritesList")) {
             jsonUserFavouritesList.add((Integer) i);
         }
