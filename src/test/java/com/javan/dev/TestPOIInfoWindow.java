@@ -31,6 +31,7 @@ class TestPOIInfoWindow {
     @BeforeEach
     @Test
     void setUp() {
+        map.changeToCampusMap();
         poiInfoWindow = new POIInfoWindow(1);
     }
 
@@ -39,9 +40,7 @@ class TestPOIInfoWindow {
      */
     @Test
     @DisplayName("Test POIInfoWindow Frame Title")
-    void testFrameTitle() {
-        
-        map.changeToCampusMap();
+    void testFrameTitle() throws InterruptedException {
         assertEquals("Arts and Humanities", poiInfoWindow.getFrame().getTitle(), "Frame title is incorrect");
     }
 
