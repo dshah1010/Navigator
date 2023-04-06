@@ -43,7 +43,7 @@ java -version
 
 ### How to Run Built Application
 ---
-1. If the project has been built, you may simply open 'group1.jar' and it will run the application.
+1. If the project has been built, you may simply open 'group1.jar' and it will run the application. If you're on MacOS, make sure you are in the group1 directory and type 'java -jar group1.jar' to run the application
 
 - Alternatively:
 1. If the project has been built already, you may run the application by clicking on the green play button in the top bar of icons.
